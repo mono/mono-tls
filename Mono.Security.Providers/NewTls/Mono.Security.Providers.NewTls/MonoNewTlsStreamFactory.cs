@@ -25,11 +25,11 @@
 // THE SOFTWARE.
 
 extern alias PrebuiltSystem;
-extern alias NewMonoSource;
-using XEncryptionPolicy = NewMonoSource::System.Net.Security.EncryptionPolicy;
-using XSslPolicyErrors = NewMonoSource::System.Net.Security.SslPolicyErrors;
-using XLocalCertificateSelectionCallback = NewMonoSource::System.Net.Security.LocalCertificateSelectionCallback;
-using XRemoteCertificateValidationCallback = NewMonoSource::System.Net.Security.RemoteCertificateValidationCallback;
+extern alias NewSystemSource;
+using XEncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
+using XSslPolicyErrors = NewSystemSource::System.Net.Security.SslPolicyErrors;
+using XLocalCertificateSelectionCallback = NewSystemSource::System.Net.Security.LocalCertificateSelectionCallback;
+using XRemoteCertificateValidationCallback = NewSystemSource::System.Net.Security.RemoteCertificateValidationCallback;
 
 using System;
 using System.IO;

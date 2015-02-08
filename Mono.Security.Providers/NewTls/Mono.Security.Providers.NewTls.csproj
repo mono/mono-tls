@@ -47,8 +47,8 @@
     <Reference Include="System">
       <Aliases>PrebuiltSystem</Aliases>
     </Reference>
-    <Reference Include="Mono.Security.Providers.NewMonoSource">
-      <Aliases>NewMonoSource</Aliases>
+    <Reference Include="Mono.Security.Providers.NewSystemSource">
+      <Aliases>NewSystemSource</Aliases>
     </Reference>
     <Reference Include="Mono.Security" />
   </ItemGroup>

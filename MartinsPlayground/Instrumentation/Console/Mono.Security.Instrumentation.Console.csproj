@@ -91,8 +91,8 @@
       <Project>{93CE4A8C-9111-4211-9BE1-314134802473}</Project>
       <Name>Mono.Security.Instrumentation.Tests</Name>
     </ProjectReference>
-    <Reference Include="Mono.Security.Providers.NewMonoSource">
-      <Aliases>NewMonoSource</Aliases>
+    <Reference Include="Mono.Security.Providers.NewSystemSource">
+      <Aliases>NewSystemSource</Aliases>
     </Reference>
     <ProjectReference Include="..\nunit-console\nunit-console.csproj">
       <Project>{9367EC89-6A38-42BA-9607-0DC288E4BC3A}</Project>

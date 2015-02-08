@@ -1,4 +1,4 @@
-﻿extern alias NewMonoSource;
+﻿extern alias NewSystemSource;
 
 using System;
 using System.IO;
@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Authentication;
 
-using NewSslPolicyErrors = NewMonoSource::System.Net.Security.SslPolicyErrors;
+using NewSslPolicyErrors = NewSystemSource::System.Net.Security.SslPolicyErrors;
 using SslProtocols = System.Security.Authentication.SslProtocols;
-using EncryptionPolicy = NewMonoSource::System.Net.Security.EncryptionPolicy;
+using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
 
 using Mono.Security.Protocol.NewTls;
 using Mono.Security.Providers.NewTls;

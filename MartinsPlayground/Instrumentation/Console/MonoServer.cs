@@ -1,4 +1,4 @@
-﻿extern alias NewMonoSource;
+﻿extern alias NewSystemSource;
 
 using System;
 using System.IO;
@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 using SslProtocols = System.Security.Authentication.SslProtocols;
-using EncryptionPolicy = NewMonoSource::System.Net.Security.EncryptionPolicy;
+using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
 
 using Mono.Security.Protocol.NewTls;
 using Mono.Security.Providers.NewTls;

@@ -6,7 +6,7 @@ using System.Net.Security;
 using System.Threading.Tasks;
 using MonoSecurity::Mono.Security.Protocol.NewTls;
 
-namespace Mono.Security.NewMonoSource
+namespace Mono.Security.NewSystemSource
 {
     public class MonoSslStream : SslStream
     {

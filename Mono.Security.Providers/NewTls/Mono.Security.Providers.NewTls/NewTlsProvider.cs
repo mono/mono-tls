@@ -23,7 +23,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-extern alias NewMonoSource;
+extern alias NewSystemSource;
 extern alias PrebuiltSystem;
 
 using System;
@@ -114,7 +114,7 @@ namespace Mono.Security.Providers.NewTls
 				if (userCertificateValidationCallback != null) {
 					config.RemoteCertValidationCallback = (h, c, ch, p) => {
 						var ssc = new SSCX.X509Certificate (c.RawData);
-						return userCertificateValidationCallback (h, ssc, null, (SslPolicyErrors)p);
+						return userCertificateValidationCallback (h, ssc, null, (MonoSslPolicyErrors)p);
 					};
 				}
 			}

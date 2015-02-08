@@ -24,11 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-extern alias NewMonoSource;
-using EncryptionPolicy = NewMonoSource::System.Net.Security.EncryptionPolicy;
-using LocalCertificateSelectionCallback = NewMonoSource::System.Net.Security.LocalCertificateSelectionCallback;
-using RemoteCertificateValidationCallback = NewMonoSource::System.Net.Security.RemoteCertificateValidationCallback;
-using SslStream = NewMonoSource::System.Net.Security.SslStream;
+extern alias NewSystemSource;
+using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
+using LocalCertificateSelectionCallback = NewSystemSource::System.Net.Security.LocalCertificateSelectionCallback;
+using RemoteCertificateValidationCallback = NewSystemSource::System.Net.Security.RemoteCertificateValidationCallback;
+using SslStream = NewSystemSource::System.Net.Security.SslStream;
 
 using System;
 using System.IO;
