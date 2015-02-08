@@ -8,7 +8,7 @@
     <RootNamespace>Mono.Security.Providers.NewTls</RootNamespace>
     <AssemblyName>Mono.Security.Providers.NewTls</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\mono.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -32,15 +32,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\build\common\Locale.cs">
-      <Link>common\Locale.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\build\common\MonoTODOAttribute.cs">
-      <Link>common\MonoTODOAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\build\common\SR.cs">
-      <Link>common\SR.cs</Link>
-    </Compile>
     <Compile Include="Mono.Security.Providers.NewTls\NewTlsProvider.cs" />
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Protocol.NewTls\MonoNewTlsStream.cs">
       <Link>Mono.Security.Providers.NewTls\MonoNewTlsStream.cs</Link>

@@ -33,19 +33,19 @@
     <Reference Include="System" />
     <Reference Include="Mono.Security" />
     <Reference Include="nunit.core">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.core.interfaces">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.interfaces.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.interfaces.dll</HintPath>
     </Reference>
     <Reference Include="nunit.util">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.util.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.util.dll</HintPath>
     </Reference>
     <Reference Include="NUnit.VisualStudio.TestAdapter">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -86,7 +86,7 @@
       <Project>{43272ABC-8798-4B6F-A8CA-D7F082DBB440}</Project>
       <Name>Mono.Security.Instrumentation.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
+    <ProjectReference Include="..\..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
       <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>

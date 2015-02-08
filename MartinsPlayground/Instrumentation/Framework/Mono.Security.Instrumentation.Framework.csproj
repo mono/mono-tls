@@ -90,7 +90,7 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
+    <ProjectReference Include="..\..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
       <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>

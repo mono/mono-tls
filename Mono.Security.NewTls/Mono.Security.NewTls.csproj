@@ -8,7 +8,7 @@
     <RootNamespace>Mono.Security.NewTls</RootNamespace>
     <AssemblyName>Mono.Security.NewTls</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\new-tls.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -165,15 +165,6 @@
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">
       <Link>common\Consts.cs</Link>
-    </Compile>
-    <Compile Include="..\..\build\common\Locale.cs">
-      <Link>common\Locale.cs</Link>
-    </Compile>
-    <Compile Include="..\..\build\common\MonoTODOAttribute.cs">
-      <Link>common\MonoTODOAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\build\common\SR.cs">
-      <Link>common\SR.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

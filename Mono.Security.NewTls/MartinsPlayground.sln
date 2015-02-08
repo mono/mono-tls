@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Instrumentati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Providers.NewTls", "..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls.csproj", "{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Providers.DotNet", "..\Mono.Security.Providers\DotNet\Mono.Security.Providers.DotNet.csproj", "{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunit-console", "..\MartinsPlayground\Instrumentation\nunit-console\nunit-console.csproj", "{9367EC89-6A38-42BA-9607-0DC288E4BC3A}"
 EndProject
 Global
@@ -25,14 +23,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}.Debug|x86.Build.0 = Debug|Any CPU
-		{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}.Release|x86.ActiveCfg = Release|Any CPU
-		{3C7B65E9-AB8D-4BB4-A22E-8BCF086AD6F9}.Release|x86.Build.0 = Release|Any CPU
 		{43272ABC-8798-4B6F-A8CA-D7F082DBB440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43272ABC-8798-4B6F-A8CA-D7F082DBB440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43272ABC-8798-4B6F-A8CA-D7F082DBB440}.Debug|x86.ActiveCfg = Debug|Any CPU
