@@ -36,16 +36,16 @@
     <Reference Include="System" />
     <Reference Include="Mono.Security" />
     <Reference Include="nunit.core">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.core.interfaces">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.interfaces.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.interfaces.dll</HintPath>
     </Reference>
     <Reference Include="nunit.util">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.util.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.util.dll</HintPath>
     </Reference>
     <Reference Include="NUnit.VisualStudio.TestAdapter">
-      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+      <HintPath>..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
