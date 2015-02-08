@@ -117,12 +117,8 @@
     <Compile Include="Mono.Security.Protocol.NewTls.Negotiation\ServerFinished.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Negotiation\ServerHello.cs" />
     <Compile Include="Mono.Security.Cryptography\MD5SHA1.cs" />
-    <Compile Include="..\Mono.Security\Mono.Security.Cryptography\RSASslSignatureFormatter.cs">
-      <Link>Mono.Security.Cryptography\RSASslSignatureFormatter.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Security\Mono.Security.Cryptography\RSASslSignatureDeformatter.cs">
-      <Link>Mono.Security.Cryptography\RSASslSignatureDeformatter.cs</Link>
-    </Compile>
+    <Compile Include="Mono.Security.Cryptography\RSASslSignatureFormatter.cs" />
+    <Compile Include="Mono.Security.Cryptography\RSASslSignatureDeformatter.cs" />
     <Compile Include="System.Security.Cryptography\IRunningHash.cs" />
     <Compile Include="System.Security.Cryptography\MD5CryptoServiceProvider.cs" />
     <Compile Include="System.Security.Cryptography\SHA1CryptoServiceProvider.cs" />
