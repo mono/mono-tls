@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{43272ABC-8798-4B6F-A8CA-D7F082DBB440}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mono.Security.Instrumentation.Framework</RootNamespace>
+    <AssemblyName>Mono.Security.Instrumentation.Framework</AssemblyName>
+    <AssemblyOriginatorKeyFile>..\..\MartinsPlayground.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;INSIDE_INSTRUMENTATION</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Mono.Security" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PrivateFile.cs" />
+    <Compile Include="CertificateAndKeyAsPEM.cs" />
+    <Compile Include="CertificateAndKeyAsPFX.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="ClientAndServer.cs" />
+    <Compile Include="ConnectionParameters.cs" />
+    <Compile Include="ServerParameters.cs" />
+    <Compile Include="ClientParameters.cs" />
+    <Compile Include="ClientAndServerParameters.cs" />
+    <Compile Include="ConnectionException.cs" />
+    <Compile Include="CertificateAsPEM.cs" />
+    <Compile Include="IClientParameters.cs" />
+    <Compile Include="IConnectionParameters.cs" />
+    <Compile Include="IClientAndServerParameters.cs" />
+    <Compile Include="IServerParameters.cs" />
+    <Compile Include="IMonoClientAndServerParameters.cs" />
+    <Compile Include="IMonoClientParameters.cs" />
+    <Compile Include="IMonoServerParameters.cs" />
+    <Compile Include="MonoClientAndServerParameters.cs" />
+    <Compile Include="MonoClientParameters.cs" />
+    <Compile Include="MonoServerParameters.cs" />
+    <Compile Include="TestConfiguration.cs" />
+    <Compile Include="ServerCertificate.cs" />
+    <Compile Include="ClientCertificate.cs" />
+    <Compile Include="ConnectionHandler.cs" />
+    <Compile Include="ConnectionHandlerFactory.cs" />
+    <Compile Include="ILineBasedStream.cs" />
+    <Compile Include="StreamWrapper.cs" />
+    <Compile Include="CommonConnectionHandler.cs" />
+    <Compile Include="ClientAndServerHandler.cs" />
+    <Compile Include="IServer.cs" />
+    <Compile Include="IClient.cs" />
+    <Compile Include="IConnection.cs" />
+    <Compile Include="ICommonConnection.cs" />
+    <Compile Include="IConnectionFactoryProvider.cs" />
+    <Compile Include="ITestParameterProvider.cs" />
+    <Compile Include="ConnectionType.cs" />
+    <Compile Include="ICryptoTestProvider.cs" />
+    <Compile Include="ICryptoTestContext.cs" />
+    <Compile Include="SymmetricAlgorithmProxy.cs" />
+    <Compile Include="ConnectionFactoryParametersAttribute.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy inheritsSet="Mono" inheritsScope="text/plain" scope="text/x-csharp" />
+          <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
+      <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
+      <Name>Mono.Security.NewTls</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

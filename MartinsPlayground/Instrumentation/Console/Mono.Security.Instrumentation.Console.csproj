@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{C3E744E1-2FE5-4D62-9BB0-FE0BC58B3A73}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Mono.Security.Instrumentation.Console</RootNamespace>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\MartinsPlayground.snk</AssemblyOriginatorKeyFile>
+    <AssemblyName>Mono.Security.Instrumentation.Console</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>false</ConsolePause>
+    <Commandlineparameters>work</Commandlineparameters>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Mono.Security" />
+    <Reference Include="nunit.core">
+      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.core.interfaces">
+      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.core.interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.util">
+      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\nunit.util.dll</HintPath>
+    </Reference>
+    <Reference Include="NUnit.VisualStudio.TestAdapter">
+      <HintPath>..\..\..\..\Mono.Security.NewTls\packages\NUnitTestAdapter.1.2\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OpenSslServer.cs" />
+    <Compile Include="DotNetServer.cs" />
+    <Compile Include="OpenSslClient.cs" />
+    <Compile Include="Factory.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="DotNetClient.cs" />
+    <Compile Include="MonoClient.cs" />
+    <Compile Include="MonoServer.cs" />
+    <Compile Include="NativeOpenSsl.cs" />
+    <Compile Include="NativeOpenSslError.cs" />
+    <Compile Include="NativeOpenSslException.cs" />
+    <Compile Include="OpenSslConnection.cs" />
+    <Compile Include="DotNetConnection.cs" />
+    <Compile Include="ConnectionFactoryProvider.cs" />
+    <Compile Include="MonoConnection.cs" />
+    <Compile Include="NativeCryptoTest.cs" />
+    <Compile Include="MonoCryptoTest.cs" />
+    <Compile Include="CryptoTestFactory.cs" />
+    <Compile Include="MonoCryptoContext.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy inheritsSet="Mono" inheritsScope="text/plain" scope="text/x-csharp" />
+          <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework\Mono.Security.Instrumentation.Framework.csproj">
+      <Project>{43272ABC-8798-4B6F-A8CA-D7F082DBB440}</Project>
+      <Name>Mono.Security.Instrumentation.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tests\Mono.Security.Instrumentation.Tests.csproj">
+      <Project>{93CE4A8C-9111-4211-9BE1-314134802473}</Project>
+      <Name>Mono.Security.Instrumentation.Tests</Name>
+    </ProjectReference>
+    <Reference Include="Mono.Security.Providers.NewMonoSource">
+      <Aliases>NewMonoSource</Aliases>
+    </Reference>
+    <ProjectReference Include="..\..\..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls.csproj">
+      <Project>{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}</Project>
+      <Name>Mono.Security.Providers.NewTls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
+      <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
+      <Name>Mono.Security.NewTls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nunit-console\nunit-console.csproj">
+      <Project>{9367EC89-6A38-42BA-9607-0DC288E4BC3A}</Project>
+      <Name>nunit-console</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="..\Framework\CA\" />
+    <Folder Include="lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\lib\libNativeOpenSsl.dylib">
+      <Link>libNativeOpenSsl.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\lib\libcrypto.1.0.0.dylib">
+      <Link>libcrypto.1.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\lib\libssl.1.0.0.dylib">
+      <Link>libssl.1.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

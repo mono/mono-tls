@@ -1,0 +1,291 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5B387A081A29273A0048D5F1 /* NativeOpenSsl.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B387A061A29273A0048D5F1 /* NativeOpenSsl.c */; };
+		5B387A091A29273A0048D5F1 /* NativeOpenSsl.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B387A071A29273A0048D5F1 /* NativeOpenSsl.h */; };
+		5B387A0B1A2928E20048D5F1 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B387A0A1A2928E20048D5F1 /* libcrypto.1.0.0.dylib */; };
+		5B387A0D1A2928F50048D5F1 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B387A0C1A2928F50048D5F1 /* libssl.1.0.0.dylib */; };
+		5B387A101A292E2D0048D5F1 /* libssl.1.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B387A0C1A2928F50048D5F1 /* libssl.1.0.0.dylib */; };
+		5B387A111A292E2D0048D5F1 /* libcrypto.1.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B387A0A1A2928E20048D5F1 /* libcrypto.1.0.0.dylib */; };
+		5B387A121A292E2D0048D5F1 /* libNativeOpenSsl.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B31F1C91A292003001BA250 /* libNativeOpenSsl.dylib */; };
+		5BDAC29F1A2E64430044E015 /* NativeCryptoTest.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BDAC29D1A2E64430044E015 /* NativeCryptoTest.c */; };
+		5BDAC2A01A2E64430044E015 /* NativeCryptoTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BDAC29E1A2E64430044E015 /* NativeCryptoTest.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5B387A0F1A292E0F0048D5F1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "${SRCROOT}/../lib";
+			dstSubfolderSpec = 0;
+			files = (
+				5B387A101A292E2D0048D5F1 /* libssl.1.0.0.dylib in CopyFiles */,
+				5B387A111A292E2D0048D5F1 /* libcrypto.1.0.0.dylib in CopyFiles */,
+				5B387A121A292E2D0048D5F1 /* libNativeOpenSsl.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5B31F1C91A292003001BA250 /* libNativeOpenSsl.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libNativeOpenSsl.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B387A061A29273A0048D5F1 /* NativeOpenSsl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NativeOpenSsl.c; sourceTree = "<group>"; };
+		5B387A071A29273A0048D5F1 /* NativeOpenSsl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeOpenSsl.h; sourceTree = "<group>"; };
+		5B387A0A1A2928E20048D5F1 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = ../../../../../../INSTALL/lib/libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
+		5B387A0C1A2928F50048D5F1 /* libssl.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.1.0.0.dylib; path = ../../../../../../INSTALL/lib/libssl.1.0.0.dylib; sourceTree = "<group>"; };
+		5BDAC29D1A2E64430044E015 /* NativeCryptoTest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NativeCryptoTest.c; sourceTree = "<group>"; };
+		5BDAC29E1A2E64430044E015 /* NativeCryptoTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeCryptoTest.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5B31F1C61A292003001BA250 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B387A0D1A2928F50048D5F1 /* libssl.1.0.0.dylib in Frameworks */,
+				5B387A0B1A2928E20048D5F1 /* libcrypto.1.0.0.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5B31F1C01A292003001BA250 = {
+			isa = PBXGroup;
+			children = (
+				5BDAC29D1A2E64430044E015 /* NativeCryptoTest.c */,
+				5BDAC29E1A2E64430044E015 /* NativeCryptoTest.h */,
+				5B387A0C1A2928F50048D5F1 /* libssl.1.0.0.dylib */,
+				5B387A0A1A2928E20048D5F1 /* libcrypto.1.0.0.dylib */,
+				5B387A061A29273A0048D5F1 /* NativeOpenSsl.c */,
+				5B387A071A29273A0048D5F1 /* NativeOpenSsl.h */,
+				5B31F1CA1A292003001BA250 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5B31F1CA1A292003001BA250 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B31F1C91A292003001BA250 /* libNativeOpenSsl.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5B31F1C71A292003001BA250 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BDAC2A01A2E64430044E015 /* NativeCryptoTest.h in Headers */,
+				5B387A091A29273A0048D5F1 /* NativeOpenSsl.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5B31F1C81A292003001BA250 /* NativeOpenSsl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B31F1CD1A292003001BA250 /* Build configuration list for PBXNativeTarget "NativeOpenSsl" */;
+			buildPhases = (
+				5B31F1C51A292003001BA250 /* Sources */,
+				5B31F1C61A292003001BA250 /* Frameworks */,
+				5B31F1C71A292003001BA250 /* Headers */,
+				5B387A0F1A292E0F0048D5F1 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NativeOpenSsl;
+			productName = NativeOpenSsl;
+			productReference = 5B31F1C91A292003001BA250 /* libNativeOpenSsl.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5B31F1C11A292003001BA250 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Martin Baulig";
+				TargetAttributes = {
+					5B31F1C81A292003001BA250 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = 5B31F1C41A292003001BA250 /* Build configuration list for PBXProject "NativeOpenSsl" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5B31F1C01A292003001BA250;
+			productRefGroup = 5B31F1CA1A292003001BA250 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5B31F1C81A292003001BA250 /* NativeOpenSsl */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5B31F1C51A292003001BA250 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B387A081A29273A0048D5F1 /* NativeOpenSsl.c in Sources */,
+				5BDAC29F1A2E64430044E015 /* NativeCryptoTest.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5B31F1CB1A292003001BA250 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5B31F1CC1A292003001BA250 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5B31F1CE1A292003001BA250 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Workspace/INSTALL/include,
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INSTALL_PATH = /Workspace/INSTALL;
+				LIBRARY_SEARCH_PATHS = /Workspace/INSTALL/lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5B31F1CF1A292003001BA250 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Workspace/INSTALL/include,
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INSTALL_PATH = /Workspace/INSTALL;
+				LIBRARY_SEARCH_PATHS = /Workspace/INSTALL/lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5B31F1C41A292003001BA250 /* Build configuration list for PBXProject "NativeOpenSsl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B31F1CB1A292003001BA250 /* Debug */,
+				5B31F1CC1A292003001BA250 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B31F1CD1A292003001BA250 /* Build configuration list for PBXNativeTarget "NativeOpenSsl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B31F1CE1A292003001BA250 /* Debug */,
+				5B31F1CF1A292003001BA250 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5B31F1C11A292003001BA250 /* Project object */;
+}

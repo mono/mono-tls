@@ -1,0 +1,308 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5B31F1DD1A29202A001BA250 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B31F1DC1A29202A001BA250 /* main.c */; };
+		5B387A1F1A2933880048D5F1 /* libNativeOpenSsl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B387A1B1A2932D00048D5F1 /* libNativeOpenSsl.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5B387A1A1A2932D00048D5F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B387A161A2932D00048D5F1 /* NativeOpenSsl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5B31F1C91A292003001BA250;
+			remoteInfo = NativeOpenSsl;
+		};
+		5B387A1C1A2932DA0048D5F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B387A161A2932D00048D5F1 /* NativeOpenSsl.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B31F1C81A292003001BA250;
+			remoteInfo = NativeOpenSsl;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5B31F1D71A29202A001BA250 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = ../lib;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5B31F1D91A29202A001BA250 /* NativeConsoleTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NativeConsoleTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B31F1DC1A29202A001BA250 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		5B387A141A2932990048D5F1 /* libNativeOpenSsl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libNativeOpenSsl.dylib; path = "../../../../../../../../Users/martin/Library/Developer/Xcode/DerivedData/MartinsPlayground-endjisazkwvqzoemdbsuumyipryy/Build/Products/Debug/libNativeOpenSsl.dylib"; sourceTree = "<group>"; };
+		5B387A161A2932D00048D5F1 /* NativeOpenSsl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NativeOpenSsl.xcodeproj; path = ../NativeOpenSsl/NativeOpenSsl.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5B31F1D61A29202A001BA250 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B387A1F1A2933880048D5F1 /* libNativeOpenSsl.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5B31F1D01A29202A001BA250 = {
+			isa = PBXGroup;
+			children = (
+				5B387A161A2932D00048D5F1 /* NativeOpenSsl.xcodeproj */,
+				5B387A141A2932990048D5F1 /* libNativeOpenSsl.dylib */,
+				5B31F1DB1A29202A001BA250 /* NativeConsoleTest */,
+				5B31F1DA1A29202A001BA250 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5B31F1DA1A29202A001BA250 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B31F1D91A29202A001BA250 /* NativeConsoleTest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5B31F1DB1A29202A001BA250 /* NativeConsoleTest */ = {
+			isa = PBXGroup;
+			children = (
+				5B31F1DC1A29202A001BA250 /* main.c */,
+			);
+			path = NativeConsoleTest;
+			sourceTree = "<group>";
+		};
+		5B387A171A2932D00048D5F1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B387A1B1A2932D00048D5F1 /* libNativeOpenSsl.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5B31F1D81A29202A001BA250 /* NativeConsoleTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B31F1E01A29202A001BA250 /* Build configuration list for PBXNativeTarget "NativeConsoleTest" */;
+			buildPhases = (
+				5B31F1D51A29202A001BA250 /* Sources */,
+				5B31F1D61A29202A001BA250 /* Frameworks */,
+				5B31F1D71A29202A001BA250 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5B387A1D1A2932DA0048D5F1 /* PBXTargetDependency */,
+			);
+			name = NativeConsoleTest;
+			productName = NativeConsoleTest;
+			productReference = 5B31F1D91A29202A001BA250 /* NativeConsoleTest */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5B31F1D11A29202A001BA250 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Martin Baulig";
+				TargetAttributes = {
+					5B31F1D81A29202A001BA250 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = 5B31F1D41A29202A001BA250 /* Build configuration list for PBXProject "NativeConsoleTest" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5B31F1D01A29202A001BA250;
+			productRefGroup = 5B31F1DA1A29202A001BA250 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5B387A171A2932D00048D5F1 /* Products */;
+					ProjectRef = 5B387A161A2932D00048D5F1 /* NativeOpenSsl.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				5B31F1D81A29202A001BA250 /* NativeConsoleTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5B387A1B1A2932D00048D5F1 /* libNativeOpenSsl.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libNativeOpenSsl.dylib;
+			remoteRef = 5B387A1A1A2932D00048D5F1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5B31F1D51A29202A001BA250 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B31F1DD1A29202A001BA250 /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5B387A1D1A2932DA0048D5F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = NativeOpenSsl;
+			targetProxy = 5B387A1C1A2932DA0048D5F1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5B31F1DE1A29202A001BA250 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5B31F1DF1A29202A001BA250 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5B31F1E11A29202A001BA250 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Workspace/mono/mcs/class/Mono.Security/MartinsPlayground/NativeOpenSsl/build/Debug",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/MartinsPlayground-endjisazkwvqzoemdbsuumyipryy/Build/Products/Debug",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5B31F1E21A29202A001BA250 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Workspace/mono/mcs/class/Mono.Security/MartinsPlayground/NativeOpenSsl/build/Debug",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/MartinsPlayground-endjisazkwvqzoemdbsuumyipryy/Build/Products/Debug",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5B31F1D41A29202A001BA250 /* Build configuration list for PBXProject "NativeConsoleTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B31F1DE1A29202A001BA250 /* Debug */,
+				5B31F1DF1A29202A001BA250 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B31F1E01A29202A001BA250 /* Build configuration list for PBXNativeTarget "NativeConsoleTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B31F1E11A29202A001BA250 /* Debug */,
+				5B31F1E21A29202A001BA250 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5B31F1D11A29202A001BA250 /* Project object */;
+}
