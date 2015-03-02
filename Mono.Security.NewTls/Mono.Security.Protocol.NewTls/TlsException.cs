@@ -28,7 +28,6 @@ using System.Runtime.Serialization;
 
 namespace Mono.Security.Protocol.NewTls
 {
-	[Serializable]
 	public sealed class TlsException : Exception
 	{
 		#region Fields

@@ -24,25 +24,18 @@
 
 using System;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls
 {
 #if INSIDE_SYSTEM
 	internal
 #else
 	public
 #endif
-	enum CipherAlgorithmType
+	enum ExchangeAlgorithmType
 	{
-		Des,
 		None,
-		Rc2,
-		Rc4,
-		Rijndael,
-		SkipJack,
-		TripleDes,
-		Aes128,
-		Aes256,
-		AesGcm128,
-		AesGcm256
+		DiffieHellman,
+		RsaKeyX,
+		RsaSign
 	}
 }

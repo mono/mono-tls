@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls
 {
 	public class TlsStream : TlsBuffer
 	{

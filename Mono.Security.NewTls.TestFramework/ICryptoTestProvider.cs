@@ -1,10 +1,10 @@
 ﻿//
-// TlsStream2.cs
+// ICryptoTestProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2014 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2015 Xamarin, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,43 +25,19 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls.TestFramework
 {
-	public class TlsStream : TlsBuffer
+	public interface ICryptoTestProvider
 	{
-		const int ChunkSize = 16384;
+		byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length);
 
-		bool finished;
+		byte[] TestDigest (HandshakeHashType algorithm, byte[] data);
 
-		public void MakeRoom (int size)
-		{
-			MakeRoomInternal (size);
+		bool SupportsEncryption {
+			get;
 		}
 
-		protected override void MakeRoomInternal (int size)
-		{
-			if (Position + size <= EndOffset)
-				return;
-			if (finished)
-				throw new InvalidOperationException ();
-			var expandBy = ((size + ChunkSize - 1) / ChunkSize) * ChunkSize;
-			var newBuffer = new byte [Size + expandBy];
-			if (Buffer != null)
-				System.Buffer.BlockCopy (Buffer, 0, newBuffer, 0, Position);
-
-			SetBuffer (newBuffer, 0, newBuffer.Length);
-		}
-
-		public int Length {
-			get { return finished ? Size : Position; }
-		}
-
-		public void Finish ()
-		{
-			finished = true;
-			SetBuffer (Buffer, 0, Position);
-			Position = 0;
-		}
+		ICryptoTestContext CreateContext ();
 	}
 }
 

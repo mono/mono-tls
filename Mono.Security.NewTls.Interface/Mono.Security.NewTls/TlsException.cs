@@ -23,26 +23,60 @@
 //
 
 using System;
+using System.Text;
+using System.Runtime.Serialization;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls
 {
-#if INSIDE_SYSTEM
-	internal
-#else
-	public
-#endif
-	enum CipherAlgorithmType
+	public sealed class TlsException : Exception
 	{
-		Des,
-		None,
-		Rc2,
-		Rc4,
-		Rijndael,
-		SkipJack,
-		TripleDes,
-		Aes128,
-		Aes256,
-		AesGcm128,
-		AesGcm256
+		#region Fields
+
+		private Alert alert;
+
+		#endregion
+
+		#region Properties
+
+		public Alert Alert {
+			get { return this.alert; }
+		}
+
+		#endregion
+
+		#region Constructors
+
+		public TlsException (Alert alert)
+			: this (alert, alert.Description.ToString())
+		{
+		}
+
+		public TlsException (Alert alert, string message)
+			: base (message)
+		{
+			this.alert = alert;
+		}
+
+		public TlsException (AlertLevel level, AlertDescription description)
+			: this (new Alert (level, description))
+		{
+		}
+
+		public TlsException (AlertDescription description)
+			: this (new Alert (description))
+		{
+		}
+
+		public TlsException (AlertDescription description, string message)
+			: this (new Alert (description), message)
+		{
+		}
+
+		public TlsException (AlertDescription description, string format, params object[] args)
+			: this (new Alert (description), string.Format (format, args))
+		{
+		}
+
+		#endregion
 	}
 }

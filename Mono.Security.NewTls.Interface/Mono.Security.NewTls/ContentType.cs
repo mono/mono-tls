@@ -24,25 +24,13 @@
 
 using System;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls
 {
-#if INSIDE_SYSTEM
-	internal
-#else
-	public
-#endif
-	enum CipherAlgorithmType
+	public enum ContentType : byte
 	{
-		Des,
-		None,
-		Rc2,
-		Rc4,
-		Rijndael,
-		SkipJack,
-		TripleDes,
-		Aes128,
-		Aes256,
-		AesGcm128,
-		AesGcm256
+		ChangeCipherSpec	= 20,
+		Alert			= 21,
+		Handshake		= 22,
+		ApplicationData		= 23,
 	}
 }

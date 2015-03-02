@@ -1,10 +1,10 @@
 ﻿//
-// TlsStream2.cs
+// AssemblyInfo.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2014 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2015 Xamarin, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,45 +23,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-namespace Mono.Security.Protocol.NewTls
-{
-	public class TlsStream : TlsBuffer
-	{
-		const int ChunkSize = 16384;
+// Information about this assembly is defined by the following attributes.
+// Change them to the values specific to your project.
 
-		bool finished;
+[assembly: AssemblyTitle ("Facade")]
+[assembly: AssemblyDescription ("")]
+[assembly: AssemblyConfiguration ("")]
+[assembly: AssemblyCompany ("Xamarin")]
+[assembly: AssemblyProduct ("")]
+[assembly: AssemblyCopyright ("Xamarin, Inc.")]
+[assembly: AssemblyTrademark ("")]
+[assembly: AssemblyCulture ("")]
 
-		public void MakeRoom (int size)
-		{
-			MakeRoomInternal (size);
-		}
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-		protected override void MakeRoomInternal (int size)
-		{
-			if (Position + size <= EndOffset)
-				return;
-			if (finished)
-				throw new InvalidOperationException ();
-			var expandBy = ((size + ChunkSize - 1) / ChunkSize) * ChunkSize;
-			var newBuffer = new byte [Size + expandBy];
-			if (Buffer != null)
-				System.Buffer.BlockCopy (Buffer, 0, newBuffer, 0, Position);
+[assembly: AssemblyVersion ("1.0.*")]
 
-			SetBuffer (newBuffer, 0, newBuffer.Length);
-		}
+// The following attributes are used to specify the signing key for the assembly,
+// if desired. See the Mono documentation for more information about signing.
 
-		public int Length {
-			get { return finished ? Size : Position; }
-		}
-
-		public void Finish ()
-		{
-			finished = true;
-			SetBuffer (Buffer, 0, Position);
-			Position = 0;
-		}
-	}
-}
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]
 

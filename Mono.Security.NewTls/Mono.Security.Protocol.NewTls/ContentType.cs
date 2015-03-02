@@ -26,7 +26,6 @@ using System;
 
 namespace Mono.Security.Protocol.NewTls
 {
-	[Serializable]
 	public enum ContentType : byte
 	{
 		ChangeCipherSpec	= 20,

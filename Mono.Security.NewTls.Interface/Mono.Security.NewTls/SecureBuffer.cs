@@ -1,5 +1,5 @@
 ﻿//
-// TlsStream2.cs
+// SecureBuffer.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,42 +25,61 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls
 {
-	public class TlsStream : TlsBuffer
+	public class SecureBuffer : SecretParameters, IBufferOffsetSize
 	{
-		const int ChunkSize = 16384;
+		byte[] buffer;
 
-		bool finished;
-
-		public void MakeRoom (int size)
-		{
-			MakeRoomInternal (size);
+		public byte[] Buffer {
+			get {
+				CheckDisposed ();
+				return buffer;
+			}
 		}
 
-		protected override void MakeRoomInternal (int size)
-		{
-			if (Position + size <= EndOffset)
-				return;
-			if (finished)
-				throw new InvalidOperationException ();
-			var expandBy = ((size + ChunkSize - 1) / ChunkSize) * ChunkSize;
-			var newBuffer = new byte [Size + expandBy];
-			if (Buffer != null)
-				System.Buffer.BlockCopy (Buffer, 0, newBuffer, 0, Position);
-
-			SetBuffer (newBuffer, 0, newBuffer.Length);
+		public int Size {
+			get {
+				CheckDisposed ();
+				return buffer != null ? buffer.Length : 0;
+			}
 		}
 
-		public int Length {
-			get { return finished ? Size : Position; }
+		int IBufferOffsetSize.Offset {
+			get { return 0; }
 		}
 
-		public void Finish ()
+		public SecureBuffer (int size)
 		{
-			finished = true;
-			SetBuffer (Buffer, 0, Position);
-			Position = 0;
+			buffer = new byte [size];
+		}
+
+		public SecureBuffer (byte[] buffer)
+		{
+			this.buffer = buffer;
+		}
+
+		public byte[] StealBuffer ()
+		{
+			CheckDisposed ();
+			var retval = this.buffer;
+			this.buffer = null;
+			return retval;
+		}
+
+		public static SecureBuffer CreateCopy (byte[] buffer)
+		{
+			var copy = new byte [buffer.Length];
+			Array.Copy (buffer, copy, buffer.Length);
+			return new SecureBuffer (copy);
+		}
+
+		protected override void Clear ()
+		{
+			if (buffer != null) {
+				Array.Clear (buffer, 0, buffer.Length);
+				buffer = null;
+			}
 		}
 	}
 }

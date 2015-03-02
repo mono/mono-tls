@@ -1,5 +1,5 @@
 ﻿//
-// TlsStream2.cs
+// Disposables.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,43 +24,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls
 {
-	public class TlsStream : TlsBuffer
+	class DisposeContext : SecretParameters
 	{
-		const int ChunkSize = 16384;
+		List<IDisposable> disposables = new List<IDisposable> ();
 
-		bool finished;
-
-		public void MakeRoom (int size)
+		public DisposeContext (params IDisposable[] disposables)
 		{
-			MakeRoomInternal (size);
+			this.disposables.AddRange (disposables);
 		}
 
-		protected override void MakeRoomInternal (int size)
+		public T Add<T> (T disposable)
+			where T : IDisposable
 		{
-			if (Position + size <= EndOffset)
-				return;
-			if (finished)
-				throw new InvalidOperationException ();
-			var expandBy = ((size + ChunkSize - 1) / ChunkSize) * ChunkSize;
-			var newBuffer = new byte [Size + expandBy];
-			if (Buffer != null)
-				System.Buffer.BlockCopy (Buffer, 0, newBuffer, 0, Position);
-
-			SetBuffer (newBuffer, 0, newBuffer.Length);
+			if (disposable != null)
+				disposables.Add (disposable);
+			return disposable;
 		}
 
-		public int Length {
-			get { return finished ? Size : Position; }
+		public void Add (IDisposable disposable)
+		{
+			if (disposable != null)
+				disposables.Add (disposable);
 		}
 
-		public void Finish ()
+		public SecureBuffer Add (byte[] buffer)
 		{
-			finished = true;
-			SetBuffer (Buffer, 0, Position);
-			Position = 0;
+			return Add (new SecureBuffer (buffer));
+		}
+
+		public SecureBuffer CreateBuffer (int size)
+		{
+			var buffer = new SecureBuffer (size);
+			disposables.Add (buffer);
+			return buffer;
+		}
+
+		protected override void Clear ()
+		{
+			foreach (var disposable in disposables) {
+				try {
+					disposable.Dispose ();
+				} catch {
+					;
+				}
+			}
 		}
 	}
 }

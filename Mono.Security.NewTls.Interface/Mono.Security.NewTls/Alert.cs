@@ -24,7 +24,7 @@
 
 using System;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls
 {
 	#region Enumerations
 
