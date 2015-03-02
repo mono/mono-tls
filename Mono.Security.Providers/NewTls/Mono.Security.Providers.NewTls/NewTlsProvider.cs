@@ -30,7 +30,7 @@ using System;
 using System.IO;
 using PrebuiltSystem::System.Net;
 using PrebuiltSystem::System.Net.Security;
-using Mono.Security.Protocol.NewTls;
+using Mono.Security.NewTls;
 using Mono.Security.Interface;
 
 using MX = Mono.Security.X509;

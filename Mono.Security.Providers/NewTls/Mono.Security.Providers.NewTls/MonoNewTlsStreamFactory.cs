@@ -35,7 +35,7 @@ using System;
 using System.IO;
 using PrebuiltSystem::System.Net.Security;
 using PrebuiltSystem::System.Security.Authentication;
-using TlsSettings = Mono.Security.Protocol.NewTls.TlsSettings;
+using TlsSettings = Mono.Security.NewTls.TlsSettings;
 
 using PSSCX = PrebuiltSystem::System.Security.Cryptography.X509Certificates;
 using SSCX = System.Security.Cryptography.X509Certificates;

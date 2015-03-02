@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
-using TLS = Mono.Security.Protocol.NewTls;
+using TLS = Mono.Security.NewTls;
 using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using NUnit.Core;

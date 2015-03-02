@@ -34,7 +34,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Mono.Security.Interface;
-using Mono.Security.Protocol.NewTls;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Providers.NewTls
 {

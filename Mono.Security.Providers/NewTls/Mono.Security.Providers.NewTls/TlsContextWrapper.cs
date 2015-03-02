@@ -24,15 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Mono.Security.Interface;
-using Mono.Security.Protocol.NewTls;
+using Mono.Security.NewTls;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using MSI = Mono.Security.Interface;
 using MX = Mono.Security.X509;
 
 namespace Mono.Security.Providers.NewTls
 {
-	class TlsContextWrapper : SecretParameters, IMonoTlsContext
+	class TlsContextWrapper : SecretParameters, MSI.IMonoTlsContext
 	{
 		TlsConfiguration config;
 		TlsContext context;
@@ -86,31 +86,66 @@ namespace Mono.Security.Providers.NewTls
 			Configuration.SetCertificate (certificate, privateKey);
 		}
 
-		public int GenerateNextToken (IBufferOffsetSize incoming, out IBufferOffsetSize outgoing)
+		public int GenerateNextToken (MSI.IBufferOffsetSize incoming, out MSI.IBufferOffsetSize outgoing)
 		{
-			var input = incoming != null ? new TlsBuffer (incoming) : null;
+			var input = incoming != null ? new TlsBuffer (BOSWrapper.Wrap (incoming)) : null;
 			TlsMultiBuffer output = new TlsMultiBuffer ();
 			var retval = Context.GenerateNextToken (input, output);
 			if (output.IsEmpty)
 				outgoing = null;
-			outgoing = output.StealBuffer ();
+			outgoing = BOSWrapper.Wrap (output.StealBuffer ());
 			return (int)retval;
 		}
 
-		public int EncryptMessage (ref IBufferOffsetSize incoming)
+		public int EncryptMessage (ref MSI.IBufferOffsetSize incoming)
 		{
-			var buffer = new TlsBuffer (incoming);
+			var buffer = new TlsBuffer (BOSWrapper.Wrap (incoming));
 			var retval = Context.EncryptMessage (ref buffer);
-			incoming = buffer.GetRemaining ();
+			incoming = BOSWrapper.Wrap (buffer.GetRemaining ());
 			return (int)retval;
 		}
 
-		public int DecryptMessage (ref IBufferOffsetSize incoming)
+		public int DecryptMessage (ref MSI.IBufferOffsetSize incoming)
 		{
-			var buffer = new TlsBuffer (incoming);
+			var buffer = new TlsBuffer (BOSWrapper.Wrap (incoming));
 			var retval = Context.DecryptMessage (ref buffer);
-			incoming = buffer.GetRemaining ();
+			incoming = BOSWrapper.Wrap (buffer.GetRemaining ());
 			return (int)retval;
+		}
+
+		class BOSWrapper : MSI.IBufferOffsetSize, IBufferOffsetSize
+		{
+			public byte[] Buffer {
+				get;
+				private set;
+			}
+
+			public int Offset {
+				get;
+				private set;
+			}
+
+			public int Size {
+				get;
+				private set;
+			}
+
+			BOSWrapper (byte[] buffer, int offset, int size)
+			{
+				Buffer = buffer;
+				Offset = offset;
+				Size = size;
+			}
+
+			public static BOSWrapper Wrap (MSI.IBufferOffsetSize bos)
+			{
+				return bos != null ? new BOSWrapper (bos.Buffer, bos.Offset, bos.Size) : null;
+			}
+
+			public static BOSWrapper Wrap (IBufferOffsetSize bos)
+			{
+				return bos != null ? new BOSWrapper (bos.Buffer, bos.Offset, bos.Size) : null;
+			}
 		}
 
 		public byte[] CreateCloseNotify ()

@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using System.Reflection;
 using System.Security.Cryptography;
-using Mono.Security.Interface;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
 using NUnit.Framework;
