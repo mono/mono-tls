@@ -36,34 +36,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\Alert.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\BufferOffsetSize.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls\CertificateManager.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\ClientCertificateParameters.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\ClientCertificateType.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\ContentType.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\DebugHelper.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\DisposeContext.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\ExchangeAlgorithmType.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\HandshakeHashType.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls\HandshakeParameters.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\HashAlgorithmType.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\RenegotiationFlags.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\SecretParameters.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\SecureBuffer.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\SecurityStatus.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls\Session.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\SignatureAlgorithmType.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\SignatureAndHashAlgorithm.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\TlsBuffer.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls\TlsConfiguration.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\TlsConnectionInfo.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls\TlsContext.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\TlsException.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\TlsMultiBuffer.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\TlsProtocolCode.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls\TlsSettings.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls\TlsStream.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\BlockCipher.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\BlockCipherWithHMac.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\CbcBlockCipher.cs" />
@@ -176,5 +154,11 @@
     <Folder Include="Mono.Security.Protocol.NewTls.Instrumentation\" />
     <Folder Include="Mono.Security.Protocol.NewTls.Negotiation\" />
     <Folder Include="BouncyCastle\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
+      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
+      <Name>Mono.Security.NewTls.Interface</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
