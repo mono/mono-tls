@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Mono.Security.Protocol.NewTls.Handshake
+namespace Mono.Security.NewTls.Handshake
 {
 	using Extensions;
 	using Cipher;

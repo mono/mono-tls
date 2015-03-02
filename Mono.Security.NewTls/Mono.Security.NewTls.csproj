@@ -47,7 +47,6 @@
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\CbcBlockCipher.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\CipherAlgorithmType.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\CipherSuite.cs" />
-    <Compile Include="Mono.Security.Protocol.NewTls.Cipher\CipherSuiteCode.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\CipherSuiteCollection.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\CipherSuiteFactory.cs" />
     <Compile Include="Mono.Security.Protocol.NewTls.Cipher\CryptoParameters.cs" />

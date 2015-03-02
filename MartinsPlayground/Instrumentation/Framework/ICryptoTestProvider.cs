@@ -1,6 +1,6 @@
 ﻿using System;
-using Mono.Security.Protocol.NewTls;
-using Mono.Security.Protocol.NewTls.Cipher;
+using Mono.Security.NewTls;
+using Mono.Security.NewTls.Cipher;
 
 namespace Mono.Security.Instrumentation.Framework
 {

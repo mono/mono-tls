@@ -5,7 +5,7 @@ using Mono.Security.Interface;
 using MX = Mono.Security.X509;
 using SSCX = System.Security.Cryptography.X509Certificates;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls
 {
 	public delegate bool RemoteCertValidationCallback (string host, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);
 	public delegate bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);

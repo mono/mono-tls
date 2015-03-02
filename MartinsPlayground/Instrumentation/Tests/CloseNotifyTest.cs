@@ -27,10 +27,10 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Mono.Security.Protocol.NewTls;
-using Mono.Security.Protocol.NewTls.Instrumentation;
-using Mono.Security.Protocol.NewTls.Negotiation;
-using Mono.Security.Protocol.NewTls.Handshake;
+using Mono.Security.NewTls;
+using Mono.Security.NewTls.Instrumentation;
+using Mono.Security.NewTls.Negotiation;
+using Mono.Security.NewTls.Handshake;
 using NUnit.Framework;
 
 namespace Mono.Security.Instrumentation.Tests

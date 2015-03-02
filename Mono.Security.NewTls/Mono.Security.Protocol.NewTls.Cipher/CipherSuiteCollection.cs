@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	[CLSCompliant (false)]
 	public class CipherSuiteCollection : IList<CipherSuiteCode>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Mono.Security.Protocol.NewTls.Extensions
+namespace Mono.Security.NewTls.Extensions
 {
 	public class TlsExtensionCollection : List<TlsExtension>
 	{

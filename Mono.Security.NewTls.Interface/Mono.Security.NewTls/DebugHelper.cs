@@ -28,7 +28,7 @@ using System.Diagnostics;
 
 namespace Mono.Security.NewTls
 {
-	internal class DebugHelper
+	public class DebugHelper
 	{
 		private static bool isInitialized;
 

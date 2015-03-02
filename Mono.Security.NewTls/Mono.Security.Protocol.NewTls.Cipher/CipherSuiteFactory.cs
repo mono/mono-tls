@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	[CLSCompliant (false)]
 	public static class CipherSuiteFactory

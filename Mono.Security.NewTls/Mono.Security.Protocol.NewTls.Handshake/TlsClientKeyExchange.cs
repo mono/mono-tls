@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using Mono.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Handshake
+namespace Mono.Security.NewTls.Handshake
 {
 	using Cipher;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Mono.Security.Protocol.NewTls.Handshake
+namespace Mono.Security.NewTls.Handshake
 {
 	using X509;
 

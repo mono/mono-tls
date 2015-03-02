@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using Mono.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	static class SignatureHelper
 	{

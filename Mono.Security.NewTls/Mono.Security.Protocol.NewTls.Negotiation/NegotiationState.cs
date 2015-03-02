@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mono.Security.Protocol.NewTls.Negotiation
+namespace Mono.Security.NewTls.Negotiation
 {
 	public enum NegotiationState
 	{

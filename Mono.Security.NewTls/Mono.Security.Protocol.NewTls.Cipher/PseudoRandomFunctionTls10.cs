@@ -27,7 +27,7 @@ using System;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	class PseudoRandomFunctionTls10 : PseudoRandomFunction
 	{

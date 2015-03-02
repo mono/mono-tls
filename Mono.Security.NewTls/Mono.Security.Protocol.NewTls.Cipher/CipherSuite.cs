@@ -31,7 +31,7 @@ using Mono.Security;
 using Mono.Security.Cryptography;
 using M = Mono.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	using Handshake;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
-using Mono.Security.Protocol.NewTls;
-using Mono.Security.Protocol.NewTls.Cipher;
+using Mono.Security.NewTls;
+using Mono.Security.NewTls.Cipher;
 using NUnit.Framework;
 
 namespace Mono.Security.Instrumentation.Tests

@@ -2,7 +2,7 @@
 using System.Net.Security;
 using Mono.Security.Interface;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls
 {
 	using Cipher;
 	#if INSTRUMENTATION

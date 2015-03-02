@@ -24,7 +24,7 @@
 
 using System;
 
-namespace Mono.Security.Protocol.NewTls.Handshake
+namespace Mono.Security.NewTls.Handshake
 {
 	[Serializable]
 	internal enum HandshakeType : byte

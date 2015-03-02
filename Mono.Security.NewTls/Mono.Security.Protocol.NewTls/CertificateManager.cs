@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Security;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls
 {
 	using MX = Mono.Security.X509;
 	using SSCX = System.Security.Cryptography.X509Certificates;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Negotiation
+namespace Mono.Security.NewTls.Negotiation
 {
 	using Handshake;
 

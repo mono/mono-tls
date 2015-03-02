@@ -1,7 +1,7 @@
 ﻿using System;
 using Mono.Security.Interface;
 
-namespace Mono.Security.Protocol.NewTls.Handshake
+namespace Mono.Security.NewTls.Handshake
 {
 	internal abstract class HandshakeMessage : Message
 	{

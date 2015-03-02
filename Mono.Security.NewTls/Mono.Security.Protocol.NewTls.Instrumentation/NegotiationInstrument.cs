@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mono.Security.Protocol.NewTls.Instrumentation
+namespace Mono.Security.NewTls.Instrumentation
 {
 	using Negotiation;
 

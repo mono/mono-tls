@@ -90,6 +90,10 @@
       <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
+      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
+      <Name>Mono.Security.NewTls.Interface</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\CA\server-cert.pfx">

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-namespace Mono.Security.Protocol.NewTls.Extensions
+namespace Mono.Security.NewTls.Extensions
 {
 	public class ServerNameExtension : TlsExtension
 	{

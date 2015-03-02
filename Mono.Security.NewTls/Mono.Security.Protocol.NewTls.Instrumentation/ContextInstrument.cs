@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Mono.Security.Protocol.NewTls.Instrumentation
+namespace Mono.Security.NewTls.Instrumentation
 {
 	using Negotiation;
 

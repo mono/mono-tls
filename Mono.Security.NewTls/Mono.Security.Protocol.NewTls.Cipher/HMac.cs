@@ -30,7 +30,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	class HMac : DisposeContext
 	{

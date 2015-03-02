@@ -27,7 +27,7 @@ using System;
 using System.Security.Cryptography;
 using Mono.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	class RSAKeyExchange : KeyExchange
 	{

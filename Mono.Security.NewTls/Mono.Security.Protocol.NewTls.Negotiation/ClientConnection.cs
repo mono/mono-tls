@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Mono.Security.Protocol.NewTls.Negotiation
+namespace Mono.Security.NewTls.Negotiation
 {
 	using Handshake;
 	using Extensions;

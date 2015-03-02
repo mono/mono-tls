@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Mono.Security.Protocol.NewTls;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Instrumentation.Framework
 {

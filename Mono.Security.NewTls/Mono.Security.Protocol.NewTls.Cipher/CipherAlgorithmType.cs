@@ -24,7 +24,7 @@
 
 using System;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 #if INSIDE_SYSTEM
 	internal

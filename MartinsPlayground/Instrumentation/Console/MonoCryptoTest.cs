@@ -8,8 +8,8 @@ using System.Net.Security;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using Mono.Security.Protocol.NewTls;
-using Mono.Security.Protocol.NewTls.Cipher;
+using Mono.Security.NewTls;
+using Mono.Security.NewTls.Cipher;
 
 namespace Mono.Security.Instrumentation.Console
 {

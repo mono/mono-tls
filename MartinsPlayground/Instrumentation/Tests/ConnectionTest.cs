@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Mono.Security.Protocol.NewTls;
+using Mono.Security.NewTls;
 using NUnit.Framework;
 
 namespace Mono.Security.Instrumentation.Tests

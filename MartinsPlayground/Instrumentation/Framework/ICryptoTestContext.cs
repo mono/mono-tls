@@ -1,8 +1,7 @@
 ﻿using System;
-using Mono.Security.Interface;
-using Mono.Security.Protocol.NewTls;
-using Mono.Security.Protocol.NewTls.Cipher;
-using Mono.Security.Protocol.NewTls.Handshake;
+using Mono.Security.NewTls;
+using Mono.Security.NewTls.Cipher;
+using Mono.Security.NewTls.Handshake;
 
 namespace Mono.Security.Instrumentation.Framework
 {

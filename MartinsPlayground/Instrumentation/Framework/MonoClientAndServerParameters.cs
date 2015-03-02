@@ -1,5 +1,5 @@
-﻿using Mono.Security.Protocol.NewTls;
-using Mono.Security.Protocol.NewTls.Instrumentation;
+﻿using Mono.Security.NewTls;
+using Mono.Security.NewTls.Instrumentation;
 
 namespace Mono.Security.Instrumentation.Framework
 {

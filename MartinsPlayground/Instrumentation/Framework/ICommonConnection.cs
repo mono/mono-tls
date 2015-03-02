@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
-using Mono.Security.Protocol.NewTls;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Instrumentation.Framework
 {

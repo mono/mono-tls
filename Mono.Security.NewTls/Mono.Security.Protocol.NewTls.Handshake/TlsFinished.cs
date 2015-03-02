@@ -2,7 +2,7 @@
 using Mono.Security.Cryptography;
 using System.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Handshake
+namespace Mono.Security.NewTls.Handshake
 {
 	class TlsFinished : HandshakeMessage
 	{

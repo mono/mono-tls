@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mono.Security.Protocol.NewTls.Extensions
+namespace Mono.Security.NewTls.Extensions
 {
 	public class RenegotiationExtension : TlsExtension
 	{

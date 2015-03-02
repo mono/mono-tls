@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using SslProtocols = System.Security.Authentication.SslProtocols;
 using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
 
-using Mono.Security.Protocol.NewTls;
+using Mono.Security.NewTls;
 using Mono.Security.Providers.NewTls;
 
 using SSCX = System.Security.Cryptography.X509Certificates;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls
+namespace Mono.Security.NewTls
 {
 	using Cipher;
 	using Extensions;

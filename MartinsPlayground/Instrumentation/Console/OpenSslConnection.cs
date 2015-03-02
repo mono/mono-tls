@@ -28,8 +28,8 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Mono.Security.Protocol.NewTls;
-using Mono.Security.Protocol.NewTls.Cipher;
+using Mono.Security.NewTls;
+using Mono.Security.NewTls.Cipher;
 
 namespace Mono.Security.Instrumentation.Console
 {

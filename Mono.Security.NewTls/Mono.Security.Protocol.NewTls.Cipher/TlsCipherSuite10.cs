@@ -27,7 +27,7 @@ using System.IO;
 using System.Security.Cryptography;
 using Mono.Security.Cryptography;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	internal sealed class TlsCipherSuite10 : CipherSuite
 	{

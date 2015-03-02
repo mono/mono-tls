@@ -27,7 +27,7 @@ using System;
 using System.Security.Cryptography;
 using Mono.Security.Interface;
 
-namespace Mono.Security.Protocol.NewTls.Cipher
+namespace Mono.Security.NewTls.Cipher
 {
 	using Org.BouncyCastle.Crypto.Engines;
 	using Org.BouncyCastle.Crypto.Modes;

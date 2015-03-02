@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
-using Mono.Security.Protocol.NewTls;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Instrumentation.Framework
 {
