@@ -64,6 +64,7 @@ class SHA512Managed : SHA512
 	}
 
 #if INSIDE_MONO_SECURITY
+#pragma warning disable 436
 	static readonly byte[] empty = new byte [0];
 
 	SHA512Managed (SHA512Managed other)
@@ -97,6 +98,7 @@ class SHA512Managed : SHA512
 		copy.TransformFinalBlock (empty, 0, 0);
 		return copy.Hash;
 	}
+#pragma warning restore 436
 #endif
 
 	private void Initialize (bool reuse) 

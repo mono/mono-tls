@@ -63,8 +63,10 @@ namespace Mono.Security.Cryptography
 		public MD5SHA1() : base()
 		{
 			#if INSIDE_MONO_SECURITY
+			#pragma warning disable 436
 			this.md5 = new MD5CryptoServiceProvider ();
 			this.sha = new SHA1CryptoServiceProvider ();
+			#pragma warning restore 436
 			#else
 			this.md5 = MD5.Create();
 			this.sha = SHA1.Create();

@@ -58,6 +58,7 @@ namespace System.Security.Cryptography {
 		}
 
 		#if INSIDE_MONO_SECURITY
+		#pragma warning disable 436
 		static readonly byte[] empty = new byte [0];
 
 		SHA256Managed (SHA256Managed other)
@@ -83,6 +84,7 @@ namespace System.Security.Cryptography {
 			copy.TransformFinalBlock (empty, 0, 0);
 			return copy.Hash;
 		}
+		#pragma warning restore 436
 		#endif
 
 		protected override void HashCore (byte[] rgb, int ibStart, int cbSize) 

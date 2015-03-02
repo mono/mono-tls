@@ -144,7 +144,6 @@ namespace Mono.Security.NewTls
 			Position += 3;
 		}
 
-		[CLSCompliant (false)]
 		public void Write (ulong value)
 		{
 			MakeRoomInternal (8);
@@ -167,7 +166,6 @@ namespace Mono.Security.NewTls
 			buffer[offset+3] = ((byte)value);
 		}
 
-		[CLSCompliant (false)]
 		public static void WriteInt64 (byte[] buffer, int offset, ulong value)
 		{
 			buffer[offset] = (byte) (value >> 56);

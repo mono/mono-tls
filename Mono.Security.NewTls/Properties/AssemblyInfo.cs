@@ -40,7 +40,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription ("Mono.Security.NewTls.dll")]
 [assembly: AssemblyProduct ("MONO CLI")]
 [assembly: AssemblyTitle ("Mono.Security.Providers.dll")]
-[assembly: CLSCompliant (true)]
+[assembly: CLSCompliant (false)]
 [assembly: ComVisible (false)]
 [assembly: NeutralResourcesLanguage ("en-US")]
 

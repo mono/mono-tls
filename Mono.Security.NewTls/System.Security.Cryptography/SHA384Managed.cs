@@ -63,6 +63,7 @@ class SHA384Managed : SHA384
 	}
 
 #if INSIDE_MONO_SECURITY
+#pragma warning disable 436
 	static readonly byte[] empty = new byte [0];
 
 	SHA384Managed (SHA384Managed other)
@@ -96,6 +97,7 @@ class SHA384Managed : SHA384
 		copy.TransformFinalBlock (empty, 0, 0);
 		return copy.Hash;
 	}
+#pragma warning restore 436
 #endif
 
 	private void Initialize (bool reuse) 
