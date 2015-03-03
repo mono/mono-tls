@@ -1,0 +1,4 @@
+[submodule "external/web-tests"]
+	path = external/web-tests
+	url = git@github.com:xamarin/web-tests.git
+	branch = martin-newtls
