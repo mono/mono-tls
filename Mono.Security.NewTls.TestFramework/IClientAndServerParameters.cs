@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mono.Security.Instrumentation.Framework
+﻿namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IClientAndServerParameters : IClientParameters, IServerParameters
 	{

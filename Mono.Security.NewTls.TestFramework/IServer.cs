@@ -1,5 +1,5 @@
 ﻿//
-// IClient.cs
+// IServer.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -23,14 +23,15 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using Mono.Security.NewTls.TestFramework;
-
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IClient : ICommonConnection
+	public interface IServer : ICommonConnection
 	{
-		new IClientParameters Parameters {
+		IServerCertificate Certificate {
+			get;
+		}
+
+		new IServerParameters Parameters {
 			get;
 		}
 	}

@@ -47,6 +47,11 @@
     <Compile Include="IConnectionFactory.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="ICommonConnection.cs" />
+    <Compile Include="IClientParameters.cs" />
+    <Compile Include="IClientAndServerParameters.cs" />
+    <Compile Include="IServerParameters.cs" />
+    <Compile Include="IClient.cs" />
+    <Compile Include="IServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

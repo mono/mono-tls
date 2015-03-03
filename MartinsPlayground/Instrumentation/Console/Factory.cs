@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.Instrumentation.Console
 {

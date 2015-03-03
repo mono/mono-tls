@@ -17,6 +17,7 @@ using SslProtocols = System.Security.Authentication.SslProtocols;
 using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
 
 using Mono.Security.NewTls;
+using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Mono.Security.Providers.NewTls;
 

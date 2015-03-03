@@ -42,9 +42,6 @@
     <Compile Include="ClientParameters.cs" />
     <Compile Include="ClientAndServerParameters.cs" />
     <Compile Include="ConnectionException.cs" />
-    <Compile Include="IClientParameters.cs" />
-    <Compile Include="IClientAndServerParameters.cs" />
-    <Compile Include="IServerParameters.cs" />
     <Compile Include="IMonoClientAndServerParameters.cs" />
     <Compile Include="IMonoClientParameters.cs" />
     <Compile Include="IMonoServerParameters.cs" />
@@ -56,8 +53,6 @@
     <Compile Include="ConnectionHandlerFactory.cs" />
     <Compile Include="CommonConnectionHandler.cs" />
     <Compile Include="ClientAndServerHandler.cs" />
-    <Compile Include="IServer.cs" />
-    <Compile Include="IClient.cs" />
     <Compile Include="IConnectionFactoryProvider.cs" />
     <Compile Include="ITestParameterProvider.cs" />
     <Compile Include="ConnectionType.cs" />
