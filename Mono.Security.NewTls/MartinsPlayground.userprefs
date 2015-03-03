@@ -1,4 +1,4 @@
-﻿<Properties StartupItem="../MartinsPlayground/Instrumentation/Console/Mono.Security.Instrumentation.Console.csproj">
+﻿<Properties StartupItem="../Console/Mono.Security.NewTls.Console/Mono.Security.NewTls.Console.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ActiveRuntime="Mono 3.99.0 (3390afa)" />
   <MonoDevelop.Ide.Workbench ActiveDocument="../../../../mono-master/mcs/class/corlib/System.Runtime.ExceptionServices/ExceptionDispatchInfo.cs">
     <Files>

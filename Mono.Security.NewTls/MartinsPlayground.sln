@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Tests", "..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj", "{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{DEBB60D9-0226-481E-8743-82EABBF38546}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Console", "..\Console\Mono.Security.NewTls.Console\Mono.Security.NewTls.Console.csproj", "{8F077534-F58A-4390-A972-B93161381C84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,14 @@ Global
 		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Release|x86.ActiveCfg = Release|Any CPU
 		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Release|x86.Build.0 = Release|Any CPU
+		{8F077534-F58A-4390-A972-B93161381C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F077534-F58A-4390-A972-B93161381C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F077534-F58A-4390-A972-B93161381C84}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8F077534-F58A-4390-A972-B93161381C84}.Debug|x86.Build.0 = Debug|Any CPU
+		{8F077534-F58A-4390-A972-B93161381C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F077534-F58A-4390-A972-B93161381C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F077534-F58A-4390-A972-B93161381C84}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F077534-F58A-4390-A972-B93161381C84}.Release|x86.Build.0 = Release|Any CPU
 		{9367EC89-6A38-42BA-9607-0DC288E4BC3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9367EC89-6A38-42BA-9607-0DC288E4BC3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9367EC89-6A38-42BA-9607-0DC288E4BC3A}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -119,5 +131,8 @@ Global
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F077534-F58A-4390-A972-B93161381C84} = {DEBB60D9-0226-481E-8743-82EABBF38546}
 	EndGlobalSection
 EndGlobal
