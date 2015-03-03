@@ -42,7 +42,7 @@ using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public class MonoCryptoProvider : ICryptoTestProvider
+	public class MonoCryptoProvider : ICryptoTestHost
 	{
 		RandomNumberGenerator rng = RandomNumberGenerator.Create ();
 

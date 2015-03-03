@@ -21,7 +21,7 @@ namespace Mono.Security.Instrumentation.Tests
 			Context.InitializeCBC (CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA, GetField (TestKeyName), GetField (TestMacName), GetField (TestIvName));
 		}
 
-		public TestCbcBlockCipher (TestConfiguration config, ICryptoTestProvider provider)
+		public TestCbcBlockCipher (TestConfiguration config, ICryptoTestHost provider)
 			: base (config, provider)
 		{
 		}

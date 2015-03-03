@@ -1,5 +1,5 @@
 ﻿//
-// CryptoProviderType.cs
+// ICryptoTestProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,13 +24,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum CryptoProviderType
+	public interface ICryptoTestHost : ITestInstance
 	{
-		Mono,
-		OpenSsl
+		byte[] GetRandomBytes (int count);
+
+		byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length);
+
+		byte[] TestDigest (HandshakeHashType algorithm, byte[] data);
+
+		bool SupportsEncryption {
+			get;
+		}
+
+		ICryptoTestContext CreateContext ();
 	}
 }
 

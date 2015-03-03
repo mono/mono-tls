@@ -14,7 +14,7 @@ namespace Mono.Security.Instrumentation.Tests
 	using Framework;
 
 	[Explicit]
-	[ParameterizedTestFixture (typeof (ICryptoTestProvider))]
+	[ParameterizedTestFixture (typeof (ICryptoTestHost))]
 	public abstract class CipherTest
 	{
 		public TestConfiguration Configuration {
@@ -22,7 +22,7 @@ namespace Mono.Security.Instrumentation.Tests
 			private set;
 		}
 
-		public ICryptoTestProvider Provider {
+		public ICryptoTestHost Provider {
 			get;
 			private set;
 		}
@@ -52,7 +52,7 @@ namespace Mono.Security.Instrumentation.Tests
 			}
 		}
 
-		public CipherTest (TestConfiguration config, ICryptoTestProvider provider)
+		public CipherTest (TestConfiguration config, ICryptoTestHost provider)
 		{
 			Configuration = config;
 			Provider = provider;

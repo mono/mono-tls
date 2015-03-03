@@ -308,17 +308,17 @@ namespace Mono.Security.NewTls.Console
 
 		#region ICryptoProvider implementation
 
-		public bool IsSupported (CryptoProviderType type)
+		public bool IsSupported (CryptoTestHostType type)
 		{
-			if (type == CryptoProviderType.Mono)
+			if (type == CryptoTestHostType.Mono)
 				return true;
 			return false;
 		}
 
-		public ICryptoTestProvider GetProvider (CryptoProviderType type)
+		public ICryptoTestHost GetCryptoTestHost (CryptoTestHostType type)
 		{
 			switch (type) {
-			case CryptoProviderType.Mono:
+			case CryptoTestHostType.Mono:
 				return new MonoCryptoProvider ();
 
 			default:

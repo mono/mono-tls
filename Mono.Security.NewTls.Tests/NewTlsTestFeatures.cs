@@ -63,7 +63,7 @@ namespace Mono.Security.NewTls.Tests
 		static bool IsOpenSslSupported ()
 		{
 			var provider = DependencyInjector.Get<ICryptoProvider> ();
-			return provider.IsSupported (CryptoProviderType.OpenSsl);
+			return provider.IsSupported (CryptoTestHostType.OpenSsl);
 		}
 
 		static NewTlsTestFeatures ()
@@ -91,27 +91,27 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-		public class SelectCryptoProvider : TestParameterAttribute, ITestParameterSource<CryptoProviderType>
+		public class SelectCryptoProvider : TestParameterAttribute, ITestParameterSource<CryptoTestHostType>
 		{
 			public SelectCryptoProvider (string filter = null, TestFlags flags = TestFlags.Hidden)
 				: base (filter, flags)
 			{
 			}
 
-			public IEnumerable<CryptoProviderType> GetParameters (TestContext ctx, string filter)
+			public IEnumerable<CryptoTestHostType> GetParameters (TestContext ctx, string filter)
 			{
 				if (filter != null) {
 					if (filter.Equals ("mono"))
-						yield return CryptoProviderType.Mono;
+						yield return CryptoTestHostType.Mono;
 					else if (filter.Equals ("openssl"))
-						yield return CryptoProviderType.OpenSsl;
+						yield return CryptoTestHostType.OpenSsl;
 					yield break;
 				}
 
 				if (ctx.IsEnabled (MonoCryptoProvider))
-					yield return CryptoProviderType.Mono;
+					yield return CryptoTestHostType.Mono;
 				if (ctx.IsEnabled (OpenSslCryptoProvider))
-					yield return CryptoProviderType.OpenSsl;
+					yield return CryptoTestHostType.OpenSsl;
 			}
 		}
 

@@ -16,7 +16,7 @@ namespace Mono.Security.Instrumentation.Console
 {
 	using Framework;
 
-	public class MonoCryptoTest : ICryptoTestProvider
+	public class MonoCryptoTest : ICryptoTestHost
 	{
 		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.Initialize (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
 		{
@@ -38,7 +38,7 @@ namespace Mono.Security.Instrumentation.Console
 			throw new NotImplementedException ();
 		}
 
-		byte[] ICryptoTestProvider.GetRandomBytes (int count)
+		byte[] ICryptoTestHost.GetRandomBytes (int count)
 		{
 			throw new NotImplementedException ();
 		}

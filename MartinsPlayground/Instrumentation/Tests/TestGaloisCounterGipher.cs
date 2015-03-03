@@ -21,7 +21,7 @@ namespace Mono.Security.Instrumentation.Tests
 				GetField (ImplicitNonce), GetField (ExplicitNonce));
 		}
 
-		public TestGaloisCounterCipher (TestConfiguration config, ICryptoTestProvider provider)
+		public TestGaloisCounterCipher (TestConfiguration config, ICryptoTestHost provider)
 			: base (config, provider)
 		{
 		}

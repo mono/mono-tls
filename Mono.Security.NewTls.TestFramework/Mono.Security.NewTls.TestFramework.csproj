@@ -34,7 +34,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ICryptoTestContext.cs" />
-    <Compile Include="ICryptoTestProvider.cs" />
     <Compile Include="ILineBasedStream.cs" />
     <Compile Include="StreamWrapper.cs" />
     <Compile Include="ICertificate.cs" />
@@ -61,8 +60,9 @@
     <Compile Include="ConnectionHandlerFactory.cs" />
     <Compile Include="ConnectionException.cs" />
     <Compile Include="DependencyInjector.cs" />
-    <Compile Include="CryptoProviderType.cs" />
     <Compile Include="ICryptoProvider.cs" />
+    <Compile Include="ICryptoTestHost.cs" />
+    <Compile Include="CryptoTestHostType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

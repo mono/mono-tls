@@ -29,9 +29,9 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface ICryptoProvider
 	{
-		bool IsSupported (CryptoProviderType type);
+		bool IsSupported (CryptoTestHostType type);
 
-		ICryptoTestProvider GetProvider (CryptoProviderType type);
+		ICryptoTestHost GetCryptoTestHost (CryptoTestHostType type);
 	}
 }
 
