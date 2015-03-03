@@ -14,7 +14,7 @@ namespace Mono.Security.Instrumentation.Tests
 	using Framework;
 
 	[Explicit]
-	[ParameterizedTestFixture (typeof (ICryptoTestHost))]
+	[ParameterizedTestFixture (typeof (IHashTestHost))]
 	public abstract class CipherTest
 	{
 		public TestConfiguration Configuration {
@@ -22,7 +22,7 @@ namespace Mono.Security.Instrumentation.Tests
 			private set;
 		}
 
-		public ICryptoTestHost Provider {
+		public IHashTestHost Provider {
 			get;
 			private set;
 		}
@@ -32,14 +32,16 @@ namespace Mono.Security.Instrumentation.Tests
 			private set;
 		}
 
+		#if FIXME
 		[TestFixtureSetUp]
 		public virtual void SetUp ()
 		{
 			if (!Provider.SupportsEncryption)
 				throw new IgnoreException ("Cipher test provider does not support encryption.");
-			Context = Provider.CreateContext ();
+			// Context = Provider.CreateContext ();
 			Initialize ();
 		}
+		#endif
 
 		protected abstract void Initialize ();
 
@@ -52,7 +54,7 @@ namespace Mono.Security.Instrumentation.Tests
 			}
 		}
 
-		public CipherTest (TestConfiguration config, ICryptoTestHost provider)
+		public CipherTest (TestConfiguration config, IHashTestHost provider)
 		{
 			Configuration = config;
 			Provider = provider;

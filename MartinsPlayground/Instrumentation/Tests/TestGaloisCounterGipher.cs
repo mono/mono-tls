@@ -21,7 +21,7 @@ namespace Mono.Security.Instrumentation.Tests
 				GetField (ImplicitNonce), GetField (ExplicitNonce));
 		}
 
-		public TestGaloisCounterCipher (TestConfiguration config, ICryptoTestHost provider)
+		public TestGaloisCounterCipher (TestConfiguration config, IHashTestHost provider)
 			: base (config, provider)
 		{
 		}
@@ -56,7 +56,9 @@ namespace Mono.Security.Instrumentation.Tests
 
 			Generator.WriteOutput (HelloWorldName, Encoding.ASCII.GetBytes ("Hello World!"));
 
+			#if FIXME
 			SetUp ();
+			#endif
 			TestHelloWorld ();
 			TestData0 ();
 			TestData ();

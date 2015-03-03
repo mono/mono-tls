@@ -1,5 +1,5 @@
 ﻿//
-// ICryptoTestProvider.cs
+// ICryptoTestHost2.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,21 +24,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface ICryptoTestHost : ITestInstance, IRandomNumberGenerator
+	public interface IEncryptionTestHost : IHashTestHost
 	{
-		byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length);
+		void EncryptRecord (ContentType contentType, IBufferOffsetSize input, TlsStream output);
 
-		byte[] TestDigest (HandshakeHashType algorithm, byte[] data);
+		IBufferOffsetSize Encrypt (IBufferOffsetSize input);
 
-		bool SupportsEncryption {
+		int Encrypt (IBufferOffsetSize input, IBufferOffsetSize output);
+
+		IBufferOffsetSize Decrypt (IBufferOffsetSize input);
+
+		int Decrypt (IBufferOffsetSize input, IBufferOffsetSize output);
+
+		int BlockSize {
 			get;
 		}
 
-		ICryptoTestContext CreateContext ();
+		int GetEncryptedSize (int size);
+
+		int MinExtraEncryptedBytes {
+			get;
+		}
+
+		int MaxExtraEncryptedBytes {
+			get;
+		}
 	}
 }
 

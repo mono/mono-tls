@@ -32,12 +32,12 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 
 	[AsyncTestFixture]
-	public class CryptoTest : ITestHost<ICryptoTestHost>
+	public class CryptoTest : ITestHost<IHashTestHost>
 	{
-		public ICryptoTestHost CreateInstance (TestContext context)
+		public IHashTestHost CreateInstance (TestContext context)
 		{
 			var provider = DependencyInjector.Get<ICryptoProvider> ();
-			return provider.GetCryptoTestHost (ProviderType);
+			return provider.GetHashTestHost (ProviderType);
 		}
 
 		[NewTlsTestFeatures.SelectCryptoProvider]
@@ -187,7 +187,7 @@ namespace Mono.Security.NewTls.Tests
 		};
 
 		// Call this function to randomly generate these byte arrays.
-		public static void Generate (ICryptoTestHost provider)
+		public static void Generate (IHashTestHost provider)
 		{
 			var seed1 = "master secret";
 			DebugHelper.WriteCSharp ("TestSeed1", seed1);
@@ -253,49 +253,49 @@ namespace Mono.Security.NewTls.Tests
 		#endregion
 
 		[AsyncTest]
-		public void TestMasterSecret_Sha256 (TestContext ctx, [TestHost] ICryptoTestHost provider)
+		public void TestMasterSecret_Sha256 (TestContext ctx, [TestHost] IHashTestHost provider)
 		{
 			var output = provider.TestPRF (HandshakeHashType.SHA256, TestSecret1, TestSeed1, TestData1, PRF1.Length);
 			ctx.Assert (output, Is.EqualTo (PRF1));
 		}
 
 		[AsyncTest]
-		public void TestKeyExpansion_Sha256 (TestContext ctx, [TestHost] ICryptoTestHost provider)
+		public void TestKeyExpansion_Sha256 (TestContext ctx, [TestHost] IHashTestHost provider)
 		{
 			var output = provider.TestPRF (HandshakeHashType.SHA256, TestSecret2, TestSeed2, TestData2, KeyExpansion2.Length);
 			ctx.Assert (output, Is.EqualTo (KeyExpansion2));
 		}
 
 		[AsyncTest]
-		public void TestDigest_Sha256 (TestContext ctx, [TestHost] ICryptoTestHost provider)
+		public void TestDigest_Sha256 (TestContext ctx, [TestHost] IHashTestHost provider)
 		{
 			var output = provider.TestDigest (HandshakeHashType.SHA256, TestData4);
 			ctx.Assert (output, Is.EqualTo (Digest4));
 		}
 
 		[AsyncTest]
-		public void TestDigest_Sha384 (TestContext ctx, [TestHost] ICryptoTestHost provider)
+		public void TestDigest_Sha384 (TestContext ctx, [TestHost] IHashTestHost provider)
 		{
 			var output = provider.TestDigest (HandshakeHashType.SHA384, TestData5);
 			ctx.Assert (output, Is.EqualTo (Digest5));
 		}
 
 		[AsyncTest]
-		public void TestMasterSecret_Sha384 (TestContext ctx, [TestHost] ICryptoTestHost provider)
+		public void TestMasterSecret_Sha384 (TestContext ctx, [TestHost] IHashTestHost provider)
 		{
 			var output = provider.TestPRF (HandshakeHashType.SHA384, TestSecret3, TestSeed3, TestData3, PRF3.Length);
 			ctx.Assert (output, Is.EqualTo (PRF3));
 		}
 
 		[AsyncTest]
-		public void TestKeyExpansion_Sha384 (TestContext ctx, [TestHost] ICryptoTestHost provider)
+		public void TestKeyExpansion_Sha384 (TestContext ctx, [TestHost] IHashTestHost provider)
 		{
 			var output = provider.TestPRF (HandshakeHashType.SHA384, TestSecret6, TestSeed6, TestData6, KeyExpansion6.Length);
 			ctx.Assert (output, Is.EqualTo (KeyExpansion6));
 		}
 
 		[AsyncTest]
-		public void SimpleTest (TestContext ctx, [TestHost] ICryptoTestHost provider)
+		public void SimpleTest (TestContext ctx, [TestHost] IHashTestHost provider)
 		{
 			ctx.LogMessage ("SIMPLE TEST: {0}", provider);
 		}

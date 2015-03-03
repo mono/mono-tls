@@ -15,7 +15,7 @@ namespace Mono.Security.Instrumentation.Console
 {
 	using Framework;
 
-	public class NativeCryptoTest : ICryptoTestHost
+	public class NativeCryptoTest : IHashTestHost
 	{
 		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.Initialize (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
 		{
@@ -116,7 +116,7 @@ namespace Mono.Security.Instrumentation.Console
 			get { return false; }
 		}
 
-		public ICryptoTestContext CreateContext ()
+		public ICryptoTestContext CreateContext (CryptoTestParameters parameters)
 		{
 			throw new NotSupportedException ();
 		}

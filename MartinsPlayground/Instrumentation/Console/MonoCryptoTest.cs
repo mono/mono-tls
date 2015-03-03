@@ -16,7 +16,7 @@ namespace Mono.Security.Instrumentation.Console
 {
 	using Framework;
 
-	public class MonoCryptoTest : ICryptoTestHost
+	public class MonoCryptoTest : IHashTestHost
 	{
 		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.Initialize (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
 		{
@@ -74,7 +74,7 @@ namespace Mono.Security.Instrumentation.Console
 			get { return true; }
 		}
 
-		public ICryptoTestContext CreateContext ()
+		public ICryptoTestContext CreateContext (CryptoTestParameters parameters)
 		{
 			return new MonoCryptoContext (TlsProtocolCode.Tls12, true);
 		}

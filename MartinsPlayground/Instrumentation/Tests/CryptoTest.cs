@@ -10,7 +10,7 @@ namespace Mono.Security.Instrumentation.Tests
 	using Framework;
 
 	[Category ("Crypto")]
-	[ParameterizedTestFixture (typeof (ICryptoTestHost))]
+	[ParameterizedTestFixture (typeof (IHashTestHost))]
 	public class CryptoTest
 	{
 		public TestConfiguration Configuration {
@@ -18,12 +18,12 @@ namespace Mono.Security.Instrumentation.Tests
 			private set;
 		}
 
-		public ICryptoTestHost Provider {
+		public IHashTestHost Provider {
 			get;
 			private set;
 		}
 
-		public CryptoTest (TestConfiguration config, ICryptoTestHost provider)
+		public CryptoTest (TestConfiguration config, IHashTestHost provider)
 		{
 			Configuration = config;
 			Provider = provider;
@@ -170,7 +170,7 @@ namespace Mono.Security.Instrumentation.Tests
 		};
 
 		// Call this function to randomly generate these byte arrays.
-		public static void Generate (ICryptoTestHost provider)
+		public static void Generate (IHashTestHost provider)
 		{
 			var rng = RandomNumberGenerator.Create ();
 

@@ -10,10 +10,10 @@ namespace Mono.Security.Instrumentation.Console
 
 	public class CryptoTestFactory : ITestParameterProvider
 	{
-		IList<ICryptoTestHost> providers;
+		IList<IHashTestHost> providers;
 
 		public Type Type {
-			get { return typeof(ICryptoTestHost); }
+			get { return typeof(IHashTestHost); }
 		}
 
 		public string Name {
@@ -26,7 +26,7 @@ namespace Mono.Security.Instrumentation.Console
 
 		public CryptoTestFactory (params string[] names)
 		{
-			providers = new List<ICryptoTestHost> ();
+			providers = new List<IHashTestHost> ();
 			if (names != null && names.Length > 0) {
 				foreach (var name in names) {
 					providers.Add (GetProvider (name));
@@ -37,7 +37,7 @@ namespace Mono.Security.Instrumentation.Console
 			}
 		}
 
-		static ICryptoTestHost GetProvider (string name)
+		static IHashTestHost GetProvider (string name)
 		{
 			if (name == "mono")
 				return new MonoCryptoTest ();
