@@ -24,8 +24,6 @@ namespace Mono.Security.Instrumentation.Console
 		{
 		}
 
-		CertificateAndKeyAsPEM clientPEM;
-
 		protected override void Initialize ()
 		{
 			;
@@ -43,10 +41,6 @@ namespace Mono.Security.Instrumentation.Console
 		protected override void Stop ()
 		{
 			base.Stop ();
-			if (clientPEM != null) {
-				clientPEM.Dispose ();
-				clientPEM = null;
-			}
 		}
 	}
 }

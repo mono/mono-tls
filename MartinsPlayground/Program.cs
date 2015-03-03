@@ -87,6 +87,8 @@ namespace MartinsPlayground
             while (true)
             {
                 var line = reader.ReadLine();
+                if (line == null)
+                    break;
                 Console.WriteLine(line);
             }
 

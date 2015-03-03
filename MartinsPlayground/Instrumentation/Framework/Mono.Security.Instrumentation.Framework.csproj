@@ -36,7 +36,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PrivateFile.cs" />
-    <Compile Include="CertificateAndKeyAsPEM.cs" />
     <Compile Include="CertificateAndKeyAsPFX.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionFactory.cs" />
