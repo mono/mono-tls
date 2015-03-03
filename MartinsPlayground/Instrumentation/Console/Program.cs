@@ -11,6 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 using TLS = Mono.Security.NewTls;
 using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
+using Mono.Security.NewTls.TestFramework;
 using NUnit.Core;
 using NUnit.ConsoleRunner;
 using NDesk.Options;

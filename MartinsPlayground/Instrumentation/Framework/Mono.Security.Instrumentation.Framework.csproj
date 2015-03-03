@@ -38,7 +38,6 @@
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionFactory.cs" />
     <Compile Include="ClientAndServer.cs" />
-    <Compile Include="ServerParameters.cs" />
     <Compile Include="ClientParameters.cs" />
     <Compile Include="ClientAndServerParameters.cs" />
     <Compile Include="ConnectionException.cs" />
@@ -55,7 +54,6 @@
     <Compile Include="ClientAndServerHandler.cs" />
     <Compile Include="IConnectionFactoryProvider.cs" />
     <Compile Include="ITestParameterProvider.cs" />
-    <Compile Include="ConnectionType.cs" />
     <Compile Include="SymmetricAlgorithmProxy.cs" />
     <Compile Include="ConnectionFactoryParametersAttribute.cs" />
   </ItemGroup>

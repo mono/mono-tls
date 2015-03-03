@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestFramework
 {
 	[Flags]
 	public enum ConnectionType
