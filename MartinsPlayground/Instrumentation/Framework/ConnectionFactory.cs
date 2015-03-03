@@ -5,7 +5,7 @@ using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.Instrumentation.Framework
 {
-	public abstract class ConnectionFactory
+	public abstract class ConnectionFactory : IConnectionFactory
 	{
 		public abstract IConnection Create (IConnectionParameters parameters);
 

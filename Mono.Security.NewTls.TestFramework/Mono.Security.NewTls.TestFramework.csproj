@@ -44,6 +44,8 @@
     <Compile Include="ConnectionParameters.cs" />
     <Compile Include="ICertificateAndKeyAsPFX.cs" />
     <Compile Include="IClientCertificate.cs" />
+    <Compile Include="IConnectionFactory.cs" />
+    <Compile Include="IConnection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

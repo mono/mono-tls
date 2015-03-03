@@ -17,6 +17,10 @@ namespace Mono.Security.Instrumentation.Framework
 			private set;
 		}
 
+		IConnectionFactory IConnection.Factory {
+			get { return Factory; }
+		}
+
 		public IPEndPoint EndPoint {
 			get;
 			private set;

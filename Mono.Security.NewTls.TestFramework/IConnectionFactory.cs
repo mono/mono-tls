@@ -1,10 +1,10 @@
 ﻿//
-// ICommonConnection.cs
+// IConnectionFactory.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2014 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2015 Xamarin, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,19 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using Mono.Security.NewTls;
-using Mono.Security.NewTls.TestFramework;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestFramework
 {
-	public interface ICommonConnection : IConnection
+	public interface IConnectionFactory
 	{
-		Stream Stream {
+		bool SupportsCleanShutdown {
 			get;
 		}
-
-		TlsConnectionInfo GetConnectionInfo ();
 	}
 }
 
