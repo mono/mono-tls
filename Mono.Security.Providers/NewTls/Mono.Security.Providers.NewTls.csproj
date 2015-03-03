@@ -33,15 +33,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Mono.Security.Providers.NewTls\NewTlsProvider.cs" />
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Protocol.NewTls\MonoNewTlsStream.cs">
-      <Link>Mono.Security.Providers.NewTls\MonoNewTlsStream.cs</Link>
-    </Compile>
     <Compile Include="Mono.Security.Providers.NewTls\MonoNewTlsStreamFactory.cs" />
     <Compile Include="Mono.Security.Providers.NewTls\TlsContextWrapper.cs" />
     <Compile Include="..\common\Consts.cs">
       <Link>common\Consts.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\MonoNewTlsStream.cs">
+      <Link>Mono.Security.Providers.NewTls\MonoNewTlsStream.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System">
