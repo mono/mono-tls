@@ -37,7 +37,7 @@ namespace Mono.Security.Instrumentation.Framework
 			get;
 		}
 
-		IPEndPoint EndPoint {
+		string EndPoint {
 			get;
 		}
 

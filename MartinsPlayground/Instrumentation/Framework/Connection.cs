@@ -22,6 +22,10 @@ namespace Mono.Security.Instrumentation.Framework
 			private set;
 		}
 
+		string IConnection.EndPoint {
+			get { return PrintEndPoint (EndPoint); }
+		}
+
 		public IConnectionParameters Parameters {
 			get;
 			private set;
@@ -32,6 +36,26 @@ namespace Mono.Security.Instrumentation.Framework
 			Factory = factory;
 			EndPoint = endpoint;
 			Parameters = parameters;
+		}
+
+		protected Connection (ConnectionFactory factory, string endpoint, IConnectionParameters parameters)
+			: this (factory, ParseEndPoint (endpoint), parameters)
+		{
+		}
+
+		static string PrintEndPoint (IPEndPoint endpoint)
+		{
+			return string.Format ("{0}:{1}", endpoint.Address, endpoint.Port);
+		}
+
+		static IPEndPoint ParseEndPoint (string text)
+		{
+			var pos = text.IndexOf (":");
+			if (pos < 0)
+				return new IPEndPoint (IPAddress.Parse (text), 4433);
+			var address = IPAddress.Parse (text.Substring (0, pos));
+			var port = int.Parse (text.Substring (pos + 1));
+			return new IPEndPoint (address, port);
 		}
 
 		public abstract Task Start ();
