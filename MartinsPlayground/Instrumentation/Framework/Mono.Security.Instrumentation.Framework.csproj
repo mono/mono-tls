@@ -62,8 +62,6 @@
     <Compile Include="ClientCertificate.cs" />
     <Compile Include="ConnectionHandler.cs" />
     <Compile Include="ConnectionHandlerFactory.cs" />
-    <Compile Include="ILineBasedStream.cs" />
-    <Compile Include="StreamWrapper.cs" />
     <Compile Include="CommonConnectionHandler.cs" />
     <Compile Include="ClientAndServerHandler.cs" />
     <Compile Include="IServer.cs" />

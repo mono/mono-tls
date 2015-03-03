@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestFramework
 {
 	public class StreamWrapper : ILineBasedStream
 	{
@@ -19,8 +19,8 @@ namespace Mono.Security.Instrumentation.Framework
 		public StreamWrapper (Stream innerStream)
 		{
 			InnerStream = innerStream;
-			reader = new StreamReader (innerStream, Encoding.ASCII);
-			writer = new StreamWriter (innerStream, Encoding.ASCII);
+			reader = new StreamReader (innerStream, Encoding.UTF8);
+			writer = new StreamWriter (innerStream, Encoding.UTF8);
 			writer.AutoFlush = true;
 		}
 
