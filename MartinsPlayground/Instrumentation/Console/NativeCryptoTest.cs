@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
+using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.Instrumentation.Console
 {

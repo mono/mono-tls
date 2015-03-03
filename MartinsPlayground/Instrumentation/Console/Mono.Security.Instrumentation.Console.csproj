@@ -110,6 +110,10 @@
       <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
       <Name>Mono.Security.NewTls.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
+      <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
+      <Name>Mono.Security.NewTls.TestFramework</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="..\Framework\CA\" />

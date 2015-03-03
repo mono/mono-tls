@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.Instrumentation.Console
 {
