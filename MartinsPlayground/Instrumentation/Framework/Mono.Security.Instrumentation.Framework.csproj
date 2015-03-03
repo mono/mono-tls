@@ -40,7 +40,6 @@
     <Compile Include="ClientAndServer.cs" />
     <Compile Include="ClientParameters.cs" />
     <Compile Include="ClientAndServerParameters.cs" />
-    <Compile Include="ConnectionException.cs" />
     <Compile Include="IMonoClientAndServerParameters.cs" />
     <Compile Include="IMonoClientParameters.cs" />
     <Compile Include="IMonoServerParameters.cs" />
@@ -48,10 +47,6 @@
     <Compile Include="MonoClientParameters.cs" />
     <Compile Include="MonoServerParameters.cs" />
     <Compile Include="TestConfiguration.cs" />
-    <Compile Include="ConnectionHandler.cs" />
-    <Compile Include="ConnectionHandlerFactory.cs" />
-    <Compile Include="CommonConnectionHandler.cs" />
-    <Compile Include="ClientAndServerHandler.cs" />
     <Compile Include="IConnectionFactoryProvider.cs" />
     <Compile Include="ITestParameterProvider.cs" />
     <Compile Include="SymmetricAlgorithmProxy.cs" />

@@ -7,7 +7,7 @@ using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.Instrumentation.Framework
 {
-	public class ClientAndServer : Connection
+	public class ClientAndServer : Connection, IClientAndServer
 	{
 		IServer server;
 		IClient client;

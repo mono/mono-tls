@@ -2,9 +2,8 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Mono.Security.NewTls.TestFramework;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestFramework
 {
 	public abstract class CommonConnectionHandler : ConnectionHandler
 	{

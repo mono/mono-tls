@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NUnit.Core;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
+using Mono.Security.NewTls.TestFramework;
 using System.Security.Authentication;
 
 namespace Mono.Security.Instrumentation.Tests
