@@ -56,11 +56,6 @@ namespace Mono.Security.NewTls.Console
 			private set;
 		}
 
-		public IPEndPoint Endpoint {
-			get;
-			private set;
-		}
-
 		public SettingsBag Settings {
 			get { return settings; }
 		}
@@ -82,7 +77,7 @@ namespace Mono.Security.NewTls.Console
 			private set;
 		}
 
-		public bool Wait {
+		public bool Server {
 			get;
 			private set;
 		}
@@ -103,7 +98,7 @@ namespace Mono.Security.NewTls.Console
 			var program = new Program (support, args);
 
 			try {
-				var task = program.RunServer ();
+				var task = program.Run ();
 				task.Wait ();
 			} catch (Exception ex) {
 				Debug ("ERROR: {0}", ex);
@@ -118,8 +113,7 @@ namespace Mono.Security.NewTls.Console
 
 			var p = new OptionSet ();
 			p.Add ("settings=", v => SettingsFile = v);
-			p.Add ("connect=", v => Endpoint = GetEndpoint (v));
-			p.Add ("wait", v => Wait = true);
+			p.Add ("server", v => Server = true);
 			p.Add ("result=", v => ResultOutput = v);
 			p.Add ("log-level=", v => LogLevel = int.Parse (v));
 			var remaining = p.Parse (args);
@@ -188,6 +182,14 @@ namespace Mono.Security.NewTls.Console
 					xml.Flush ();
 				}
 			}
+		}
+
+		Task Run ()
+		{
+			if (Server)
+				return RunServer ();
+			else
+				return RunLocal ();
 		}
 
 		async Task RunServer ()
