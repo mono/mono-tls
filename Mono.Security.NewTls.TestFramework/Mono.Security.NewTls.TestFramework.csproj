@@ -37,6 +37,13 @@
     <Compile Include="ICryptoTestProvider.cs" />
     <Compile Include="ILineBasedStream.cs" />
     <Compile Include="StreamWrapper.cs" />
+    <Compile Include="ICertificate.cs" />
+    <Compile Include="IServerCertificate.cs" />
+    <Compile Include="ICertificateAsPEM.cs" />
+    <Compile Include="IConnectionParameters.cs" />
+    <Compile Include="ConnectionParameters.cs" />
+    <Compile Include="ICertificateAndKeyAsPFX.cs" />
+    <Compile Include="IClientCertificate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

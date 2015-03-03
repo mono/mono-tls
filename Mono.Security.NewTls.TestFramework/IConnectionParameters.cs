@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IConnectionParameters
 	{
@@ -12,7 +12,7 @@ namespace Mono.Security.Instrumentation.Framework
 			get; set;
 		}
 
-		CertificateAsPEM TrustedCA {
+		ICertificateAsPEM TrustedCA {
 			get; set;
 		}
 	}

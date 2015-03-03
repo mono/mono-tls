@@ -1,4 +1,4 @@
-﻿namespace Mono.Security.Instrumentation.Framework
+﻿namespace Mono.Security.NewTls.TestFramework
 {
 	public class ConnectionParameters : IConnectionParameters
 	{
@@ -13,7 +13,7 @@
 			get; set;
 		}
 
-		public CertificateAsPEM TrustedCA {
+		public ICertificateAsPEM TrustedCA {
 			get; set;
 		}
 	}

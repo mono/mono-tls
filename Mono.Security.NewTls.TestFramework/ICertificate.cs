@@ -1,10 +1,10 @@
 ﻿//
-// IConnection.cs
+// ICertificate.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2014 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2015 Xamarin, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,32 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Mono.Security.NewTls.TestFramework;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IConnection : IDisposable
+	public interface ICertificate
 	{
-		ConnectionFactory Factory {
+		byte[] Data {
 			get;
 		}
-
-		IPEndPoint EndPoint {
-			get;
-		}
-
-		IConnectionParameters Parameters {
-			get;
-		}
-
-		Task Start ();
-
-		Task WaitForConnection ();
-
-		Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply);
 	}
 }
 

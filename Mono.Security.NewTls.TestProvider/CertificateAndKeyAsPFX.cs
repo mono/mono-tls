@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestProvider
 {
 	public class CertificateAndKeyAsPFX : PrivateFile
 	{

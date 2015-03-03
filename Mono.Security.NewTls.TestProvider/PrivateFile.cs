@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestProvider
 {
 	public abstract class PrivateFile : IDisposable
 	{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.Instrumentation.Framework
 {

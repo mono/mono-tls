@@ -14,6 +14,8 @@ using SslProtocols = System.Security.Authentication.SslProtocols;
 using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
 
 using Mono.Security.NewTls;
+using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.TestProvider;
 using Mono.Security.Providers.NewTls;
 
 using SSCX = System.Security.Cryptography.X509Certificates;
@@ -28,6 +30,10 @@ namespace Mono.Security.Instrumentation.Console
 		public ServerCertificate Certificate {
 			get;
 			private set;
+		}
+
+		IServerCertificate IServer.Certificate {
+			get { return Certificate; }
 		}
 
 		new public IServerParameters Parameters {

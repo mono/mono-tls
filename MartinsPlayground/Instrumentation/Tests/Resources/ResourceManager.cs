@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Mono.Security.NewTls.TestProvider;
 
 namespace Mono.Security.Instrumentation.Resources
 {

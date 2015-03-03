@@ -30,6 +30,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
+using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.TestProvider;
 
 namespace Mono.Security.Instrumentation.Console
 {

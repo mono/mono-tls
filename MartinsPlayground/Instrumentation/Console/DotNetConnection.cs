@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
+using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.Instrumentation.Console
 {

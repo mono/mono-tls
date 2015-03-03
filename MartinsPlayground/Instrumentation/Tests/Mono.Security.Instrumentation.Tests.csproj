@@ -98,6 +98,10 @@
       <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
       <Name>Mono.Security.NewTls.TestFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj">
+      <Project>{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}</Project>
+      <Name>Mono.Security.NewTls.TestProvider</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\CA\server-cert.pfx">

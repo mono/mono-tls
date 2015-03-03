@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.TestProvider;
 
 namespace Mono.Security.Instrumentation.Console
 {
@@ -16,6 +18,10 @@ namespace Mono.Security.Instrumentation.Console
 		public ServerCertificate Certificate {
 			get;
 			private set;
+		}
+
+		IServerCertificate IServer.Certificate {
+			get { return Certificate; }
 		}
 
 		new public IServerParameters Parameters {

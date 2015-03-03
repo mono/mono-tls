@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
+using Mono.Security.NewTls.TestProvider;
 
 namespace Mono.Security.Instrumentation.Console
 {
@@ -30,8 +31,10 @@ namespace Mono.Security.Instrumentation.Console
 			Debug ("Connected.");
 
 			var clientCerts = new X509Certificate2Collection ();
-			if (Parameters.ClientCertificate != null)
-				clientCerts.Add (Parameters.ClientCertificate.Certificate);
+			if (Parameters.ClientCertificate != null) {
+				var clientCert = (ClientCertificate)Parameters.ClientCertificate;
+				clientCerts.Add (clientCert.Certificate);
+			}
 
 			var targetHost = "Hamiller-Tube.local";
 

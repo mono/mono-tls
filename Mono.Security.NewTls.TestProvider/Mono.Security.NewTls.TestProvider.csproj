@@ -34,6 +34,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PrivateFile.cs" />
+    <Compile Include="ServerCertificate.cs" />
+    <Compile Include="CertificateAndKeyAsPFX.cs" />
+    <Compile Include="CertificateAsPEM.cs" />
+    <Compile Include="ClientCertificate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -45,4 +50,10 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
+      <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
+      <Name>Mono.Security.NewTls.TestFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
