@@ -35,6 +35,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NDesk.Options;
 using Xamarin.WebTests.Portable;
+using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Console
 {
@@ -46,7 +47,7 @@ namespace Mono.Security.NewTls.Console
 	using Mono.Security.NewTls.TestProvider;
 	using Mono.Security.NewTls.Tests;
 
-	public class Program : TestApp, ICryptoProvider
+	public class Program : TestApp, ICryptoProvider, IRandomNumberGenerator
 	{
 		public string SettingsFile {
 			get;
@@ -91,6 +92,7 @@ namespace Mono.Security.NewTls.Console
 		SettingsBag settings;
 		TestFramework framework;
 		TestLogger logger;
+		RandomNumberGenerator rng;
 
 		public static void Main (string[] args)
 		{
@@ -112,6 +114,7 @@ namespace Mono.Security.NewTls.Console
 		Program (IPortableSupport support, string[] args)
 		{
 			this.support = support;
+			rng = RandomNumberGenerator.Create ();
 
 			DependencyInjector.Register<ICryptoProvider> (this);
 
@@ -307,6 +310,18 @@ namespace Mono.Security.NewTls.Console
 		}
 
 		#region ICryptoProvider implementation
+
+		public IRandomNumberGenerator GetRandomNumberGenerator ()
+		{
+			return this;
+		}
+
+		public byte[] GetRandomBytes (int count)
+		{
+			var data = new byte [count];
+			rng.GetBytes (data);
+			return data;
+		}
 
 		public bool IsSupported (CryptoTestHostType type)
 		{

@@ -32,7 +32,7 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 
 	[AsyncTestFixture]
-	public class SimpleCryptoTest : ITestHost<ICryptoTestHost>
+	public class CryptoTest : ITestHost<ICryptoTestHost>
 	{
 		public ICryptoTestHost CreateInstance (TestContext context)
 		{

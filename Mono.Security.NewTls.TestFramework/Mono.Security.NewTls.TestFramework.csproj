@@ -63,6 +63,8 @@
     <Compile Include="ICryptoProvider.cs" />
     <Compile Include="ICryptoTestHost.cs" />
     <Compile Include="CryptoTestHostType.cs" />
+    <Compile Include="CryptoTestParameters.cs" />
+    <Compile Include="IRandomNumberGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

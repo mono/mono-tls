@@ -38,7 +38,7 @@ namespace Mono.Security.Instrumentation.Console
 			throw new NotImplementedException ();
 		}
 
-		byte[] ICryptoTestHost.GetRandomBytes (int count)
+		byte[] IRandomNumberGenerator.GetRandomBytes (int count)
 		{
 			throw new NotImplementedException ();
 		}

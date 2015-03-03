@@ -1,5 +1,5 @@
 ﻿//
-// ICryptoProvider.cs
+// CryptoTestParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,13 +27,51 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface ICryptoProvider
+	public class CryptoTestParameters
 	{
-		IRandomNumberGenerator GetRandomNumberGenerator ();
+		public CipherSuiteCode Code {
+			get;
+			private set;
+		}
 
-		bool IsSupported (CryptoTestHostType type);
+		public byte[] Key {
+			get;
+			private set;
+		}
 
-		ICryptoTestHost GetCryptoTestHost (CryptoTestHostType type);
+		public byte[] ImplicitNonce {
+			get;
+			private set;
+		}
+
+		public byte[] ExplicitNonce {
+			get;
+			private set;
+		}
+
+		public byte[] MAC {
+			get;
+			private set;
+		}
+
+		public byte[] IV {
+			get;
+			private set;
+		}
+		
+		public static CryptoTestParameters InitializeCBC (CipherSuiteCode code, byte[] key, byte[] mac, byte[] iv)
+		{
+			return new CryptoTestParameters {
+				Code = code, Key = key, MAC = mac, IV = iv
+			};
+		}
+
+		public static CryptoTestParameters CreateGCM (CipherSuiteCode code, byte[] key, byte[] implNonce, byte[] explNonce)
+		{
+			return new CryptoTestParameters {
+				Code = code, Key = key, ImplicitNonce = implNonce, ExplicitNonce = explNonce
+			};
+		}
 	}
 }
 

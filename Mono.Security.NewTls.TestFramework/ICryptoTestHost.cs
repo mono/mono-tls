@@ -28,10 +28,8 @@ using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface ICryptoTestHost : ITestInstance
+	public interface ICryptoTestHost : ITestInstance, IRandomNumberGenerator
 	{
-		byte[] GetRandomBytes (int count);
-
 		byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length);
 
 		byte[] TestDigest (HandshakeHashType algorithm, byte[] data);

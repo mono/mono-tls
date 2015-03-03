@@ -1,5 +1,5 @@
 ﻿//
-// ICryptoProvider.cs
+// IRandomNumberGenerator.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,13 +27,9 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface ICryptoProvider
+	public interface IRandomNumberGenerator
 	{
-		IRandomNumberGenerator GetRandomNumberGenerator ();
-
-		bool IsSupported (CryptoTestHostType type);
-
-		ICryptoTestHost GetCryptoTestHost (CryptoTestHostType type);
+		byte[] GetRandomBytes (int count);
 	}
 }
 
