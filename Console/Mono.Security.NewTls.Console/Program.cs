@@ -42,9 +42,11 @@ namespace Mono.Security.NewTls.Console
 	using Xamarin.AsyncTests.Remoting;
 	using Xamarin.AsyncTests.Portable;
 	using Xamarin.AsyncTests.Framework;
+	using Mono.Security.NewTls.TestFramework;
+	using Mono.Security.NewTls.TestProvider;
 	using Mono.Security.NewTls.Tests;
 
-	public class Program : TestApp
+	public class Program : TestApp, ICryptoProvider
 	{
 		public string SettingsFile {
 			get;
@@ -110,6 +112,8 @@ namespace Mono.Security.NewTls.Console
 		Program (IPortableSupport support, string[] args)
 		{
 			this.support = support;
+
+			DependencyInjector.Register<ICryptoProvider> (this);
 
 			LogLevel = -1;
 
@@ -301,6 +305,28 @@ namespace Mono.Security.NewTls.Console
 				Program.OnStatisticsEvent (args);
 			}
 		}
+
+		#region ICryptoProvider implementation
+
+		public bool IsSupported (CryptoProviderType type)
+		{
+			if (type == CryptoProviderType.Mono)
+				return true;
+			return false;
+		}
+
+		public ICryptoTestProvider GetProvider (CryptoProviderType type)
+		{
+			switch (type) {
+			case CryptoProviderType.Mono:
+				return new MonoCryptoProvider ();
+
+			default:
+				throw new NotSupportedException ();
+			}
+		}
+
+		#endregion
 	}
 }
 

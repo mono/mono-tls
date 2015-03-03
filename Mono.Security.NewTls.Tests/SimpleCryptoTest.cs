@@ -1,5 +1,5 @@
 ﻿//
-// ICryptoTestProvider.cs
+// SimpleCryptoTest.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -26,19 +26,24 @@
 using System;
 using Xamarin.AsyncTests;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.Tests
 {
-	public interface ICryptoTestProvider : ITestInstance
+	using TestFramework;
+
+	[AsyncTestFixture]
+	public class SimpleCryptoTest : ITestHost<ICryptoTestProvider>
 	{
-		byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length);
-
-		byte[] TestDigest (HandshakeHashType algorithm, byte[] data);
-
-		bool SupportsEncryption {
-			get;
+		public ICryptoTestProvider CreateInstance (TestContext context)
+		{
+			var provider = DependencyInjector.Get<ICryptoProvider> ();
+			return provider.GetProvider (CryptoProviderType.Mono);
 		}
 
-		ICryptoTestContext CreateContext ();
+		[AsyncTest]
+		public void SimpleTest (TestContext ctx, [TestHost] ICryptoTestProvider provider)
+		{
+			ctx.LogMessage ("SIMPLE TEST: {0}", provider);
+		}
 	}
 }
 

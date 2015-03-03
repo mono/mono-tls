@@ -102,6 +102,10 @@
       <Project>{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}</Project>
       <Name>Mono.Security.NewTls.TestProvider</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
+      <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
+      <Name>Xamarin.AsyncTests</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\CA\server-cert.pfx">

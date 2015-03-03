@@ -17,6 +17,26 @@ namespace Mono.Security.Instrumentation.Console
 
 	public class NativeCryptoTest : ICryptoTestProvider
 	{
+		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.Initialize (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+
+		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.PreRun (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+
+		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.PostRun (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+
+		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.Destroy (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+
 		static NativeCryptoTest ()
 		{
 			native_crypto_test_init ();

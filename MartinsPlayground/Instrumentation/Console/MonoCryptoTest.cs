@@ -18,6 +18,26 @@ namespace Mono.Security.Instrumentation.Console
 
 	public class MonoCryptoTest : ICryptoTestProvider
 	{
+		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.Initialize (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+
+		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.PreRun (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+
+		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.PostRun (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+
+		System.Threading.Tasks.Task Xamarin.AsyncTests.ITestInstance.Destroy (Xamarin.AsyncTests.TestContext ctx, System.Threading.CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+
 		public byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length)
 		{
 			var prf = new PseudoRandomFunctionTls12 (algorithm);

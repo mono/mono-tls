@@ -26,6 +26,8 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -36,11 +38,32 @@ using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
 using Mono.Security.NewTls.TestFramework;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	public class MonoCryptoProvider : ICryptoTestProvider
 	{
+		public Task Initialize (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return Task.FromResult<object> (null);
+		}
+
+		public Task PreRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return Task.FromResult<object> (null);
+		}
+
+		public Task PostRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return Task.FromResult<object> (null);
+		}
+
+		public Task Destroy (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return Task.FromResult<object> (null);
+		}
+
 		public byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length)
 		{
 			var prf = new PseudoRandomFunctionTls12 (algorithm);
