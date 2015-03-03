@@ -36,7 +36,13 @@ namespace Mono.Security.NewTls.Tests
 		public ICryptoTestProvider CreateInstance (TestContext context)
 		{
 			var provider = DependencyInjector.Get<ICryptoProvider> ();
-			return provider.GetProvider (CryptoProviderType.Mono);
+			return provider.GetProvider (ProviderType);
+		}
+
+		[NewTlsTestFeatures.SelectCryptoProvider]
+		public CryptoProviderType ProviderType {
+			get;
+			private set;
 		}
 
 		[AsyncTest]
