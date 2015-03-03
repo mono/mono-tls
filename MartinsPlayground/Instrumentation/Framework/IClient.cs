@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.Instrumentation.Framework
 {

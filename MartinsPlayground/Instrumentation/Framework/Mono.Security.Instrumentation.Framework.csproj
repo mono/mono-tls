@@ -58,7 +58,6 @@
     <Compile Include="ClientAndServerHandler.cs" />
     <Compile Include="IServer.cs" />
     <Compile Include="IClient.cs" />
-    <Compile Include="ICommonConnection.cs" />
     <Compile Include="IConnectionFactoryProvider.cs" />
     <Compile Include="ITestParameterProvider.cs" />
     <Compile Include="ConnectionType.cs" />

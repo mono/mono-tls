@@ -25,10 +25,8 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
-using Mono.Security.NewTls;
-using Mono.Security.NewTls.TestFramework;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestFramework
 {
 	public interface ICommonConnection : IConnection
 	{
