@@ -1,5 +1,5 @@
 ﻿//
-// MyClass.cs
+// NewTlsTestSuite.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,14 +24,57 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using Xamarin.AsyncTests;
+
+[assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestSuite))]
 
 namespace Mono.Security.NewTls.Tests
 {
-	public class MyClass
+	public class NotWorkingAttribute : TestFeatureAttribute
 	{
-		public MyClass ()
-		{
+		public override TestFeature Feature {
+			get { return NewTlsTestSuite.NotWorking; }
 		}
 	}
+
+	public class WorkAttribute : TestCategoryAttribute
+	{
+		public override TestCategory Category {
+			get { return NewTlsTestSuite.Work; }
+		}
+	}
+
+	public class NewTlsTestSuite : ITestConfigurationProvider
+	{
+		public static readonly NewTlsTestSuite Instance;
+
+		public static readonly TestCategory Work = new TestCategory ("Work");
+		public static readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
+		public static readonly TestFeature NotWorking = new TestFeature ("NotWorking", "Not Working");
+
+		static NewTlsTestSuite ()
+		{
+			Instance = new NewTlsTestSuite ();
+		}
+
+		public string Name {
+			get { return "Mono.Security.NewTls.Tests"; }
+		}
+
+		public IEnumerable<TestFeature> Features {
+			get {
+				yield return Hello;
+				yield return NotWorking;
+			}
+		}
+
+		public IEnumerable<TestCategory> Categories {
+			get {
+				yield return Work;
+			}
+		}
+	}
+
 }
 
