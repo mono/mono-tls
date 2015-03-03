@@ -49,7 +49,6 @@
     <Compile Include="TestConfiguration.cs" />
     <Compile Include="IConnectionFactoryProvider.cs" />
     <Compile Include="ITestParameterProvider.cs" />
-    <Compile Include="SymmetricAlgorithmProxy.cs" />
     <Compile Include="ConnectionFactoryParametersAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

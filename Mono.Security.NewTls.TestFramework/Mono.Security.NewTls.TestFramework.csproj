@@ -61,6 +61,8 @@
     <Compile Include="ConnectionHandlerFactory.cs" />
     <Compile Include="ConnectionException.cs" />
     <Compile Include="DependencyInjector.cs" />
+    <Compile Include="CryptoProviderType.cs" />
+    <Compile Include="ICryptoProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>
