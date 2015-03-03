@@ -37,6 +37,11 @@ namespace Mono.Security.Instrumentation.Console
 			throw new NotImplementedException ();
 		}
 
+		byte[] ICryptoTestProvider.GetRandomBytes (int count)
+		{
+			throw new NotImplementedException ();
+		}
+
 		static NativeCryptoTest ()
 		{
 			native_crypto_test_init ();

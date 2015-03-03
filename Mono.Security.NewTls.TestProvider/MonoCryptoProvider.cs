@@ -44,6 +44,8 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class MonoCryptoProvider : ICryptoTestProvider
 	{
+		RandomNumberGenerator rng = RandomNumberGenerator.Create ();
+
 		public Task Initialize (TestContext ctx, CancellationToken cancellationToken)
 		{
 			return Task.FromResult<object> (null);
@@ -62,6 +64,13 @@ namespace Mono.Security.NewTls.TestProvider
 		public Task Destroy (TestContext ctx, CancellationToken cancellationToken)
 		{
 			return Task.FromResult<object> (null);
+		}
+
+		public byte[] GetRandomBytes (int count)
+		{
+			var buffer = new byte [count];
+			rng.GetBytes (buffer);
+			return buffer;
 		}
 
 		public byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length)

@@ -38,6 +38,11 @@ namespace Mono.Security.Instrumentation.Console
 			throw new NotImplementedException ();
 		}
 
+		byte[] ICryptoTestProvider.GetRandomBytes (int count)
+		{
+			throw new NotImplementedException ();
+		}
+
 		public byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length)
 		{
 			var prf = new PseudoRandomFunctionTls12 (algorithm);

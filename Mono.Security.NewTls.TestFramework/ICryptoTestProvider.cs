@@ -30,6 +30,8 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface ICryptoTestProvider : ITestInstance
 	{
+		byte[] GetRandomBytes (int count);
+
 		byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length);
 
 		byte[] TestDigest (HandshakeHashType algorithm, byte[] data);
