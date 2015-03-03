@@ -51,10 +51,7 @@ namespace Mono.Security.NewTls.Console
 			private set;
 		}
 
-		public string ResultOutput {
-			get;
-			private set;
-		}
+		const string XmlOutputFileName = "TestResult.xml";
 
 		public SettingsBag Settings {
 			get { return settings; }
@@ -78,6 +75,11 @@ namespace Mono.Security.NewTls.Console
 		}
 
 		public bool Server {
+			get;
+			private set;
+		}
+
+		public bool NoXml {
 			get;
 			private set;
 		}
@@ -114,7 +116,7 @@ namespace Mono.Security.NewTls.Console
 			var p = new OptionSet ();
 			p.Add ("settings=", v => SettingsFile = v);
 			p.Add ("server", v => Server = true);
-			p.Add ("result=", v => ResultOutput = v);
+			p.Add ("noxml", v => NoXml = true);
 			p.Add ("log-level=", v => LogLevel = int.Parse (v));
 			var remaining = p.Parse (args);
 
@@ -210,13 +212,13 @@ namespace Mono.Security.NewTls.Console
 
 			Debug ("{0} tests, {1} passed, {2} errors, {3} ignored.", countTests, countSuccess, countErrors, countIgnored);
 
-			if (ResultOutput != null) {
+			if (!NoXml) {
 				var serialized = TestSerializer.WriteTestResult (result);
 				var settings = new XmlWriterSettings ();
 				settings.Indent = true;
-				using (var writer = XmlTextWriter.Create (ResultOutput, settings))
+				using (var writer = XmlTextWriter.Create (XmlOutputFileName, settings))
 					serialized.WriteTo (writer);
-				Debug ("Result writting to {0}.", ResultOutput);
+				Debug ("Result writting to {0}.", XmlOutputFileName);
 			}
 		}
 
