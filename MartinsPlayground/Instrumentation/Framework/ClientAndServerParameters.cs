@@ -1,4 +1,5 @@
-﻿using Mono.Security.NewTls;
+﻿using System.Collections.Generic;
+using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
 using Mono.Security.NewTls.TestFramework;
 
@@ -9,11 +10,11 @@ namespace Mono.Security.Instrumentation.Framework
 		bool askForCert;
 		bool requireCert;
 
-		public CipherSuiteCollection ClientCiphers {
+		public ICollection<CipherSuiteCode> ClientCiphers {
 			get; set;
 		}
 
-		public CipherSuiteCollection ServerCiphers {
+		public ICollection<CipherSuiteCode> ServerCiphers {
 			get; set;
 		}
 

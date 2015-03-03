@@ -110,7 +110,7 @@ namespace Mono.Security.Instrumentation.Tests
 			if (!Factory.CanSelectCiphers)
 				throw new IgnoreException ("Current implementation does not let us select ciphers.");
 
-			var requestedCiphers = new CipherSuiteCollection (TlsProtocolCode.Tls12, code);
+			var requestedCiphers = new CipherSuiteCode[] { code };
 
 			await Run (new ClientAndServerParameters {
 				VerifyPeerCertificate = false,
@@ -129,8 +129,8 @@ namespace Mono.Security.Instrumentation.Tests
 			if (!Factory.CanSelectCiphers)
 				throw new IgnoreException ("Current implementation does not let us select ciphers.");
 
-			var requestedCipher = new CipherSuiteCollection (TlsProtocolCode.Tls12, CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256);
-			var supportedCipher = new CipherSuiteCollection (TlsProtocolCode.Tls12, CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA);
+			var requestedCipher = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256 };
+			var supportedCipher = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
 
 			await ExpectAlert (new ClientAndServerParameters {
 				VerifyPeerCertificate = false, ClientCiphers = requestedCipher, ServerCiphers = supportedCipher

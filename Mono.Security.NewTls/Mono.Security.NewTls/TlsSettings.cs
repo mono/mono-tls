@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Security;
 using Mono.Security.Interface;
 
@@ -30,8 +31,7 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		[CLSCompliant (false)]
-		public CipherSuiteCollection RequestedCiphers {
+		public ICollection<CipherSuiteCode> RequestedCiphers {
 			get; set;
 		}
 

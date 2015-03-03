@@ -67,8 +67,11 @@ namespace Mono.Security.NewTls.Negotiation
 			HandshakeParameters.ClientRandom = Context.Session.GetSecureRandomBytes (32);
 			TlsBuffer.WriteInt32 (HandshakeParameters.ClientRandom.Buffer, 0, clientUnixTime);
 
-			var requestedCiphers = Config.UserSettings != null ? Config.UserSettings.RequestedCiphers : null;
-			if (requestedCiphers == null)
+			var requestedUserCiphers = Config.UserSettings != null ? Config.UserSettings.RequestedCiphers : null;
+			CipherSuiteCollection requestedCiphers;
+			if (requestedUserCiphers != null)
+				requestedCiphers = new CipherSuiteCollection (Config.RequestedProtocol, requestedUserCiphers);
+			else
 				requestedCiphers = CipherSuiteFactory.GetDefaultCiphers (Config.RequestedProtocol);
 			if (requestedCiphers.Protocol != Config.RequestedProtocol)
 				throw new TlsException (AlertDescription.ProtocolVersion);

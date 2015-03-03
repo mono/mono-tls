@@ -458,11 +458,11 @@ namespace Mono.Security.Instrumentation.Console
 			get { return (CipherSuiteCode)native_openssl_get_current_cipher (handle); }
 		}
 
-		public void SetCipherList (IList<CipherSuiteCode> ciphers)
+		public void SetCipherList (ICollection<CipherSuiteCode> ciphers)
 		{
 			var codes = new TlsBuffer (ciphers.Count * 2);
-			for (int i = 0; i < ciphers.Count; i++)
-				codes.Write ((short)ciphers [i]);
+			foreach (var cipher in ciphers)
+				codes.Write ((short)cipher);
 
 			var ret = native_openssl_set_cipher_list (handle, codes.Buffer, ciphers.Count);
 			CheckError (ret);

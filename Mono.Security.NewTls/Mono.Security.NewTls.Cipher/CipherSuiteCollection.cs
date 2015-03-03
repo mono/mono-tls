@@ -14,7 +14,7 @@ namespace Mono.Security.NewTls.Cipher
 
 		List<CipherSuiteCode> innerList;
 
-		public CipherSuiteCollection (TlsProtocolCode protocol, params CipherSuiteCode[] codes)
+		public CipherSuiteCollection (TlsProtocolCode protocol, ICollection<CipherSuiteCode> codes)
 		{
 			Protocol = protocol;
 			innerList = new List<CipherSuiteCode> ();
