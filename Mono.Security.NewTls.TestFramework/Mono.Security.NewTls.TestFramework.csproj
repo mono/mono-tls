@@ -33,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ICryptoTestContext.cs" />
     <Compile Include="ILineBasedStream.cs" />
     <Compile Include="StreamWrapper.cs" />
     <Compile Include="ICertificate.cs" />

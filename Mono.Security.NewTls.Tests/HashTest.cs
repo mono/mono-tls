@@ -32,7 +32,7 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 
 	[AsyncTestFixture]
-	public class CryptoTest : ITestHost<IHashTestHost>
+	public class HashTest : ITestHost<IHashTestHost>
 	{
 		public IHashTestHost CreateInstance (TestContext context)
 		{
@@ -297,7 +297,7 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		public void SimpleTest (TestContext ctx, [TestHost] IHashTestHost provider)
 		{
-			ctx.LogMessage ("SIMPLE TEST: {0}", provider);
+			ctx.LogMessage ("HASH TEST: {0}", provider);
 		}
 	}
 }

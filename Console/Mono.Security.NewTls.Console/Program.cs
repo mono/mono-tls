@@ -49,11 +49,6 @@ namespace Mono.Security.NewTls.Console
 
 	public class Program : TestApp, ICryptoProvider, IRandomNumberGenerator
 	{
-		bool ICryptoProvider.IsEncryptionSupported (CryptoTestHostType type)
-		{
-			throw new NotImplementedException ();
-		}
-
 		public string SettingsFile {
 			get;
 			private set;
@@ -328,9 +323,13 @@ namespace Mono.Security.NewTls.Console
 			return data;
 		}
 
-		public bool IsSupported (CryptoTestHostType type)
+		public bool IsSupported (CryptoTestHostType type, bool needsEncryption)
 		{
 			if (type == CryptoTestHostType.Mono)
+				return true;
+			if (needsEncryption)
+				return false;
+			if (type == CryptoTestHostType.OpenSsl)
 				return true;
 			return false;
 		}
@@ -340,6 +339,8 @@ namespace Mono.Security.NewTls.Console
 			switch (type) {
 			case CryptoTestHostType.Mono:
 				return new MonoCryptoProvider ();
+			case CryptoTestHostType.OpenSsl:
+				return new NativeCryptoProvider ();
 
 			default:
 				throw new NotSupportedException ();

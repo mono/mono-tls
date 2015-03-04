@@ -41,6 +41,10 @@
     <Compile Include="ClientCertificate.cs" />
     <Compile Include="MonoCryptoProvider.cs" />
     <Compile Include="SymmetricAlgorithmProxy.cs" />
+    <Compile Include="NativeOpenSsl.cs" />
+    <Compile Include="NativeOpenSslError.cs" />
+    <Compile Include="NativeOpenSslException.cs" />
+    <Compile Include="NativeCryptoProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -69,5 +73,19 @@
       <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
       <Name>Xamarin.AsyncTests</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\MartinsPlayground\lib\libNativeOpenSsl.dylib">
+      <Link>libNativeOpenSsl.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\MartinsPlayground\lib\libcrypto.1.0.0.dylib">
+      <Link>libcrypto.1.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\MartinsPlayground\lib\libssl.1.0.0.dylib">
+      <Link>libssl.1.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

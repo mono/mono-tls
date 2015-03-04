@@ -1,10 +1,10 @@
 ﻿//
-// ICryptoProvider.cs
+// NativeOpenSslError.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin, Inc.
+// Copyright (c) 2014 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,24 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestProvider
 {
-	public interface ICryptoProvider
+	// Keep in sync with the native code
+	public enum NativeOpenSslError
 	{
-		IRandomNumberGenerator GetRandomNumberGenerator ();
-
-		bool IsSupported (CryptoTestHostType type, bool needsEncryption);
-
-		IHashTestHost GetHashTestHost (CryptoTestHostType type);
-
-		IEncryptionTestHost GetEncryptionTestHost (CryptoTestHostType type, CryptoTestParameters parameters);
+		Ok,
+		SOCKET,
+		SSL_CONNECT,
+		SSL_ACCEPT,
+		PKCS12_LOAD,
+		PKCS12_VERIFY,
+		PKCS12_PARSE,
+		INVALID_CERT,
+		INVALID_PKEY,
+		PKEY_DOES_NOT_MATCH,
+		CREATE_CONTEXT,
+		CREATE_CONNECTION,
+		INVALID_CIPHER
 	}
 }
 

@@ -1,10 +1,10 @@
 ﻿//
-// ICryptoProvider.cs
+// NativeOpenSslException.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin, Inc.
+// Copyright (c) 2014 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,14 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestProvider
 {
-	public interface ICryptoProvider
+	public class NativeOpenSslException : Exception
 	{
-		IRandomNumberGenerator GetRandomNumberGenerator ();
-
-		bool IsSupported (CryptoTestHostType type, bool needsEncryption);
-
-		IHashTestHost GetHashTestHost (CryptoTestHostType type);
-
-		IEncryptionTestHost GetEncryptionTestHost (CryptoTestHostType type, CryptoTestParameters parameters);
+		public NativeOpenSslException (NativeOpenSslError error)
+			: base (error.ToString ())
+		{
+		}
 	}
 }
 

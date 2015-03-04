@@ -50,6 +50,7 @@
     <Compile Include="IConnectionFactoryProvider.cs" />
     <Compile Include="ITestParameterProvider.cs" />
     <Compile Include="ConnectionFactoryParametersAttribute.cs" />
+    <Compile Include="ICryptoTestContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

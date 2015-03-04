@@ -63,7 +63,7 @@ namespace Mono.Security.NewTls.Tests
 		static bool IsOpenSslSupported ()
 		{
 			var provider = DependencyInjector.Get<ICryptoProvider> ();
-			return provider.IsSupported (CryptoTestHostType.OpenSsl);
+			return provider.IsSupported (CryptoTestHostType.OpenSsl, true);
 		}
 
 		static NewTlsTestFeatures ()
