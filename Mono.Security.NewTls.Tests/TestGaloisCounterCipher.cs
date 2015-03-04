@@ -30,20 +30,17 @@ using Xamarin.AsyncTests.Constraints;
 
 namespace Mono.Security.NewTls.Tests
 {
-	public class TestGaloisCounterCipher : CipherTest
+	using TestFramework;
+
+	[AsyncTestFixture]
+	public partial class TestGaloisCounterCipher : CipherTest
 	{
-		#if FIXME
-		protected override void Initialize ()
+		public override CryptoTestParameters GetParameters ()
 		{
-			Context.InitializeGCM (CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256, GetField (TestKeyName),
+			return CryptoTestParameters.CreateGCM (
+				TlsProtocolCode.Tls12, CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256, GetField (TestKeyName),
 				GetField (ImplicitNonce), GetField (ExplicitNonce));
 		}
-
-		public TestGaloisCounterCipher (TestConfiguration config, ICryptoTestHost provider)
-			: base (config, provider)
-		{
-		}
-		#endif
 
 		#region Auto-generated
 
@@ -63,7 +60,7 @@ namespace Mono.Security.NewTls.Tests
 		const string MagicDataName = "magicData";
 		const string MagicData2Name = "magicData2";
 
-		protected override void Generate ()
+		protected override void Generate (TestContext ctx, IEncryptionTestHost host)
 		{
 			Generator.WriteRandom (TestKeyName, 32);
 			Generator.WriteRandom (ImplicitNonce, 4);
@@ -75,56 +72,53 @@ namespace Mono.Security.NewTls.Tests
 
 			Generator.WriteOutput (HelloWorldName, Encoding.UTF8.GetBytes ("Hello World!"));
 
-			#if FIXME
-			TestHelloWorld ();
-			TestData0 ();
-			TestData ();
-			#endif
+			TestHelloWorld (ctx, host);
+			TestData0 (ctx, host);
+			TestData (ctx, host);
 		}
 
 		#endregion
 
-		#if FIXME
 		[AsyncTest]
-		public void Sizes ()
+		public void Sizes (TestContext ctx, [TestHost] IEncryptionTestHost host)
 		{
-			Assert.That (Context.BlockSize, Is.EqualTo (16), "#1");
-			Assert.That (Context.MinExtraEncryptedBytes, Is.EqualTo (24), "#2");
-			Assert.That (Context.MaxExtraEncryptedBytes, Is.EqualTo (24), "#2");
+			ctx.Assert (host.BlockSize, Is.EqualTo (16), "#1");
+			ctx.Assert (host.MinExtraEncryptedBytes, Is.EqualTo (24), "#2");
+			ctx.Assert (host.MaxExtraEncryptedBytes, Is.EqualTo (24), "#2");
 		}
 
 		[AsyncTest]
-		public void TestHelloWorld ()
+		public void TestHelloWorld (TestContext ctx, [TestHost] IEncryptionTestHost host)
 		{
 			var buffer = GetBuffer (HelloWorldName);
-			var output = Context.Encrypt (buffer);
-			Assert.That (output, Is.Not.Null, "#1");
-			Assert.That (output.Size, Is.EqualTo (buffer.Size + Context.MinExtraEncryptedBytes), "#2");
-			WriteOutput (HelloWorldResult, output);
+			var output = host.Encrypt (buffer);
+			ctx.Assert (output, Is.Not.Null, "#1");
+			ctx.Assert (output.Size, Is.EqualTo (buffer.Size + host.MinExtraEncryptedBytes), "#2");
+			WriteAndCheckOutput (ctx, HelloWorldResult, output);
 		}
 
 		[AsyncTest]
-		public void TestData0 ()
+		public void TestData0 (TestContext ctx, [TestHost] IEncryptionTestHost host)
 		{
 			var buffer =  GetBuffer (TestDataName, 0, 0);
-			var output = Context.Encrypt (buffer);
-			Assert.That (output, Is.Not.Null, "#1");
-			Assert.That (output.Size, Is.EqualTo (Context.MinExtraEncryptedBytes), "#2");
-			WriteOutput (Data0Result, output);
+			var output = host.Encrypt (buffer);
+			ctx.Assert (output, Is.Not.Null, "#1");
+			ctx.Assert (output.Size, Is.EqualTo (host.MinExtraEncryptedBytes), "#2");
+			WriteAndCheckOutput (ctx, Data0Result, output);
 		}
 
 		[AsyncTest]
-		public void TestData ()
+		public void TestData (TestContext ctx, [TestHost] IEncryptionTestHost host)
 		{
 			var buffer = GetBuffer (TestDataName);
-			var output = Context.Encrypt (buffer);
-			Assert.That (output, Is.Not.Null, "#1");
-			Assert.That (output.Size, Is.EqualTo (buffer.Size + Context.MinExtraEncryptedBytes), "#2");
-			WriteOutput (DataResult, output);
+			var output = host.Encrypt (buffer);
+			ctx.Assert (output, Is.Not.Null, "#1");
+			ctx.Assert (output.Size, Is.EqualTo (buffer.Size + host.MinExtraEncryptedBytes), "#2");
+			WriteAndCheckOutput (ctx, DataResult, output);
 		}
 
 		[AsyncTest]
-		public void TestInputOffset ()
+		public void TestInputOffset (TestContext ctx, [TestHost] IEncryptionTestHost host)
 		{
 			var hello = GetBuffer (HelloWorldName);
 			var input = new TlsBuffer (hello.Size + MagicDataSize + MagicData2Size);
@@ -133,42 +127,42 @@ namespace Mono.Security.NewTls.Tests
 			input.Write (hello);
 			input.Write (GetBuffer (MagicData2Name));
 
-			var output = Context.Encrypt (new BufferOffsetSize (input.Buffer, startPos, hello.Size));
-			Assert.That (output, Is.Not.Null, "#1");
-			Assert.That (output.Size, Is.EqualTo (hello.Size + Context.MinExtraEncryptedBytes), "#2");
+			var output = host.Encrypt (new BufferOffsetSize (input.Buffer, startPos, hello.Size));
+			ctx.Assert (output, Is.Not.Null, "#1");
+			ctx.Assert (output.Size, Is.EqualTo (hello.Size + host.MinExtraEncryptedBytes), "#2");
 
-			CheckOutput (HelloWorldResult, output);
+			WriteAndCheckOutput (ctx, HelloWorldResult, output);
 		}
 
 		[AsyncTest]
-		public void TestOutputOffset ()
+		public void TestOutputOffset (TestContext ctx, [TestHost] IEncryptionTestHost host)
 		{
 			var input = GetBuffer (HelloWorldName);
 
-			var output = new TlsBuffer (input.Size + Context.MaxExtraEncryptedBytes + MagicDataSize);
+			var output = new TlsBuffer (input.Size + host.MaxExtraEncryptedBytes + MagicDataSize);
 			output.Write (GetBuffer (MagicDataName));
 
 			var startOffset = output.Offset;
 			var startPos = output.Position;
 			var startSize = output.Size;
 
-			var length = Context.Encrypt (input, output.GetRemaining ());
+			var length = host.Encrypt (input, output.GetRemaining ());
 
-			Assert.That (length, Is.GreaterThanOrEqualTo (0), "#1");
-			Assert.That (length, Is.EqualTo (input.Size + Context.MinExtraEncryptedBytes), "#2a");
-			Assert.That (output.Offset, Is.EqualTo (startOffset), "#2b");
-			Assert.That (output.Size, Is.EqualTo (startSize), "#2c");
+			ctx.Assert (length, Is.GreaterThanOrEqualTo (0), "#1");
+			ctx.Assert (length, Is.EqualTo (input.Size + host.MinExtraEncryptedBytes), "#2a");
+			ctx.Assert (output.Offset, Is.EqualTo (startOffset), "#2b");
+			ctx.Assert (output.Size, Is.EqualTo (startSize), "#2c");
 
 			output.Position = 0;
 			var magic = output.ReadBytes (MagicDataSize);
-			Assert.That (magic, Is.EqualTo (GetField (MagicDataName)), "#3");
+			ctx.Assert (magic, Is.EqualTo (GetField (MagicDataName)), "#3");
 
 			var encrypted = output.ReadBytes (length);
-			CheckOutput (HelloWorldResult, new BufferOffsetSize (encrypted));
+			CheckOutput (ctx, HelloWorldResult, new BufferOffsetSize (encrypted));
 		}
 
 		[AsyncTest]
-		public void TestDecrypt ()
+		public void TestDecrypt (TestContext ctx, [TestHost] IEncryptionTestHost host)
 		{
 			var input = GetBuffer (HelloWorldResult);
 			var output = new TlsBuffer (input.Size + MagicDataSize + MagicData2Size);
@@ -177,20 +171,19 @@ namespace Mono.Security.NewTls.Tests
 
 			var hello = GetField (HelloWorldName);
 
-			var length = Context.Decrypt (input, output.GetRemaining ());
-			Assert.That (length, Is.EqualTo (hello.Length), "#1");
+			var length = host.Decrypt (input, output.GetRemaining ());
+			ctx.Assert (length, Is.EqualTo (hello.Length), "#1");
 
 			output.Position = 0;
 			var magic = output.ReadBytes (MagicDataSize);
-			Assert.That (magic, Is.EqualTo (GetField (MagicDataName)), "#2");
+			ctx.Assert (magic, Is.EqualTo (GetField (MagicDataName)), "#2");
 
 			var magic2 = output.ReadBytes (MagicData2Size);
-			Assert.That (magic2, Is.EqualTo (GetField (MagicData2Name)), "#3");
+			ctx.Assert (magic2, Is.EqualTo (GetField (MagicData2Name)), "#3");
 
 			var decrypted = output.ReadBytes (length);
-			Assert.That (decrypted, Is.EqualTo (hello), "#4");
+			ctx.Assert (decrypted, Is.EqualTo (hello), "#4");
 		}
-		#endif
 	}
 }
 

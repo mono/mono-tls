@@ -40,7 +40,6 @@
     <Compile Include="CertificateAsPEM.cs" />
     <Compile Include="ClientCertificate.cs" />
     <Compile Include="MonoCryptoProvider.cs" />
-    <Compile Include="MonoCryptoContext.cs" />
     <Compile Include="SymmetricAlgorithmProxy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

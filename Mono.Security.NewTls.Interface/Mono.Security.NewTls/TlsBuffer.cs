@@ -5,8 +5,7 @@ namespace Mono.Security.NewTls
 	public class TlsBuffer : SecretParameters
 	{
 		public int Position {
-			get;
-			internal set;
+			get; set;
 		}
 
 		public int Remaining {

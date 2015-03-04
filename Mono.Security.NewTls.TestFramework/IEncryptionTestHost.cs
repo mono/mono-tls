@@ -29,6 +29,10 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IEncryptionTestHost : IHashTestHost
 	{
+		CryptoTestParameters Parameters {
+			get;
+		}
+
 		void EncryptRecord (ContentType contentType, IBufferOffsetSize input, TlsStream output);
 
 		IBufferOffsetSize Encrypt (IBufferOffsetSize input);

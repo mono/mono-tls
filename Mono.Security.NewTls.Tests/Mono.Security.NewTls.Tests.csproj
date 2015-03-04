@@ -35,6 +35,9 @@
     <Compile Include="CryptoTest.cs" />
     <Compile Include="TestGaloisCounterCipher.cs" />
     <Compile Include="CipherTest.cs" />
+    <Compile Include="TestGaloisCounterGipher-Generated.cs" />
+    <Compile Include="TestCbcBlockCipher-Generated.cs" />
+    <Compile Include="TestCbcBlockCipher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

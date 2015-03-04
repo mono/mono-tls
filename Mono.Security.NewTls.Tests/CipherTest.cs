@@ -34,8 +34,22 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
-	public abstract class CipherTest
+	public abstract class CipherTest : ITestHost<IEncryptionTestHost>
 	{
+		public IEncryptionTestHost CreateInstance (TestContext context)
+		{
+			var provider = DependencyInjector.Get<ICryptoProvider> ();
+			return provider.GetEncryptionTestHost (ProviderType, GetParameters ());
+		}
+
+		[NewTlsTestFeatures.SelectCryptoProvider]
+		public CryptoTestHostType ProviderType {
+			get;
+			private set;
+		}
+
+		public abstract CryptoTestParameters GetParameters ();
+
 		#region Auto-generated
 
 		protected class OutputGenerator {
@@ -106,7 +120,7 @@ namespace Mono.Security.NewTls.Tests
 			return new BufferOffsetSize (buffer, offset, size);
 		}
 
-		protected void WriteOutput (TestContext ctx, string name, IBufferOffsetSize buffer)
+		protected void WriteAndCheckOutput (TestContext ctx, string name, IBufferOffsetSize buffer)
 		{
 			if (generator != null) {
 				generator.WriteOutput (name, buffer);
@@ -124,10 +138,10 @@ namespace Mono.Security.NewTls.Tests
 			ctx.Assert (array, Is.EqualTo (data), "output");
 		}
 
-		protected abstract void Generate ();
+		protected abstract void Generate (TestContext ctx, IEncryptionTestHost host);
 
 		// Call this function to randomly generate these byte arrays.
-		public void Generate (IRandomNumberGenerator rng, TextWriter output)
+		public void Generate (TestContext ctx, IRandomNumberGenerator rng, TextWriter output)
 		{
 			output.WriteLine ("namespace Mono.Security.Instrumentation.Tests");
 			output.WriteLine ("{");
@@ -136,7 +150,9 @@ namespace Mono.Security.NewTls.Tests
 
 			generator = new OutputGenerator (rng, output, "\t\t");
 
-			Generate ();
+			var host = CreateInstance (ctx);
+
+			Generate (ctx, host);
 
 			output.WriteLine ("\t}");
 			output.WriteLine ("}");

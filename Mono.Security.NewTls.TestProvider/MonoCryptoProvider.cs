@@ -42,13 +42,105 @@ using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public class MonoCryptoProvider : IHashTestHost
+	public class MonoCryptoProvider : IHashTestHost, IEncryptionTestHost
 	{
 		RandomNumberGenerator rng = RandomNumberGenerator.Create ();
 
+		public CryptoTestParameters Parameters {
+			get;
+			set;
+		}
+
+		CipherSuite cipher;
+		CryptoParameters crypto;
+
+		class MyCbcBlockCipher : CbcBlockCipher
+		{
+			CryptoTestParameters parameters;
+
+			public MyCbcBlockCipher (CryptoTestParameters parameters, CipherSuite cipher)
+				: base (parameters.IsServer, parameters.Protocol, cipher)
+			{
+				this.parameters = parameters;
+			}
+
+			protected override SymmetricAlgorithm CreateEncryptionAlgorithm (bool forEncryption)
+			{
+				return new MyAlgorithm (base.CreateEncryptionAlgorithm (forEncryption), parameters.IV);
+			}
+
+			protected override byte GetPaddingSize (int size)
+			{
+				var padLen = (byte)(BlockSize - size % BlockSize);
+				if (padLen == BlockSize)
+					padLen = 0;
+
+				padLen += (byte)(parameters.ExtraPaddingBlocks * BlockSize);
+
+				return padLen;
+			}
+		}
+
+		class MyAlgorithm : SymmetricAlgorithmProxy
+		{
+			byte[] iv;
+
+			public MyAlgorithm (SymmetricAlgorithm algorithm, byte[] iv)
+				: base (algorithm)
+			{
+				this.iv = iv;
+			}
+
+			public override void GenerateIV ()
+			{
+				base.IV = iv;
+			}
+		}
+
+		class MyGaloisCounterCipher : GaloisCounterCipher
+		{
+			CryptoTestParameters parameters;
+
+			public MyGaloisCounterCipher (CryptoTestParameters parameters, CipherSuite cipher)
+				: base (parameters.IsServer, parameters.Protocol, cipher)
+			{
+				this.parameters = parameters;
+			}
+
+			protected override void CreateExplicitNonce (SecureBuffer explicitNonce)
+			{
+				Buffer.BlockCopy (parameters.ExplicitNonce, 0, explicitNonce.Buffer, 0, parameters.ExplicitNonce.Length);
+			}
+		}
+
 		public Task Initialize (TestContext ctx, CancellationToken cancellationToken)
 		{
-			return Task.FromResult<object> (null);
+			return Task.Run (() => {
+				if (Parameters == null)
+					return;
+
+				cipher = CipherSuiteFactory.CreateCipherSuite (Parameters.Protocol, Parameters.Code);
+
+				if (Parameters.IsGCM) {
+					crypto = new MyGaloisCounterCipher (Parameters, cipher);
+
+					crypto.ServerWriteKey = SecureBuffer.CreateCopy (Parameters.Key);
+					crypto.ClientWriteKey = SecureBuffer.CreateCopy (Parameters.Key);
+					crypto.ServerWriteIV = SecureBuffer.CreateCopy (Parameters.ImplicitNonce);
+					crypto.ClientWriteIV = SecureBuffer.CreateCopy (Parameters.ImplicitNonce);
+
+					crypto.InitializeCipher ();
+				} else {
+					crypto = new MyCbcBlockCipher (Parameters, cipher);
+
+					crypto.ServerWriteKey = SecureBuffer.CreateCopy (Parameters.Key);
+					crypto.ClientWriteKey = SecureBuffer.CreateCopy (Parameters.Key);
+					crypto.ServerWriteMac = SecureBuffer.CreateCopy (Parameters.MAC);
+					crypto.ClientWriteMac = SecureBuffer.CreateCopy (Parameters.MAC);
+
+					crypto.InitializeCipher ();
+				}
+			});
 		}
 
 		public Task PreRun (TestContext ctx, CancellationToken cancellationToken)
@@ -63,7 +155,12 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public Task Destroy (TestContext ctx, CancellationToken cancellationToken)
 		{
-			return Task.FromResult<object> (null);
+			return Task.Run (() => {
+				if (crypto != null) {
+					crypto.Dispose ();
+					crypto = null;
+				}
+			});
 		}
 
 		public byte[] GetRandomBytes (int count)
@@ -104,9 +201,51 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return true; }
 		}
 
-		public ICryptoTestContext CreateContext (CryptoTestParameters parameters)
+		public int BlockSize {
+			get { return cipher.BlockSize; }
+		}
+
+		public int GetEncryptedSize (int size)
 		{
-			return new MonoCryptoContext (TlsProtocolCode.Tls12, true);
+			return crypto.GetEncryptedSize (size);
+		}
+
+		public int MinExtraEncryptedBytes {
+			get { return crypto.MinExtraEncryptedBytes; }
+		}
+
+		public int MaxExtraEncryptedBytes {
+			get { return crypto.MaxExtraEncryptedBytes; }
+		}
+
+		public void EncryptRecord (ContentType contentType, IBufferOffsetSize input, TlsStream output)
+		{
+			crypto.WriteSequenceNumber = 0;
+			TlsContext.EncodeRecord (Parameters.Protocol, ContentType.ApplicationData, crypto, input, output);
+		}
+
+		public IBufferOffsetSize Encrypt (IBufferOffsetSize input)
+		{
+			crypto.WriteSequenceNumber = 0;
+			return crypto.Encrypt (ContentType.ApplicationData, input);
+		}
+
+		public int Encrypt (IBufferOffsetSize input, IBufferOffsetSize output)
+		{
+			crypto.WriteSequenceNumber = 0;
+			return crypto.Encrypt (ContentType.ApplicationData, input, output);
+		}
+
+		public IBufferOffsetSize Decrypt (IBufferOffsetSize input)
+		{
+			crypto.ReadSequenceNumber = 0;
+			return crypto.Decrypt (ContentType.ApplicationData, input);
+		}
+
+		public int Decrypt (IBufferOffsetSize input, IBufferOffsetSize output)
+		{
+			crypto.ReadSequenceNumber = 0;
+			return crypto.Decrypt (ContentType.ApplicationData, input, output);
 		}
 	}
 }

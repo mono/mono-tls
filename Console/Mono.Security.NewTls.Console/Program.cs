@@ -54,16 +54,6 @@ namespace Mono.Security.NewTls.Console
 			throw new NotImplementedException ();
 		}
 
-		IHashTestHost ICryptoProvider.GetHashTestHost (CryptoTestHostType type)
-		{
-			throw new NotImplementedException ();
-		}
-
-		IEncryptionTestHost ICryptoProvider.GetEncryptionTestHost (CryptoTestHostType type, CryptoTestParameters parameters)
-		{
-			throw new NotImplementedException ();
-		}
-
 		public string SettingsFile {
 			get;
 			private set;
@@ -345,11 +335,22 @@ namespace Mono.Security.NewTls.Console
 			return false;
 		}
 
-		public IHashTestHost GetCryptoTestHost (CryptoTestHostType type)
+		public IHashTestHost GetHashTestHost (CryptoTestHostType type)
 		{
 			switch (type) {
 			case CryptoTestHostType.Mono:
 				return new MonoCryptoProvider ();
+
+			default:
+				throw new NotSupportedException ();
+			}
+		}
+
+		public IEncryptionTestHost GetEncryptionTestHost (CryptoTestHostType type, CryptoTestParameters parameters)
+		{
+			switch (type) {
+			case CryptoTestHostType.Mono:
+				return new MonoCryptoProvider { Parameters = parameters };
 
 			default:
 				throw new NotSupportedException ();

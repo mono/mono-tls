@@ -29,9 +29,18 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public class CryptoTestParameters
 	{
+		public TlsProtocolCode Protocol {
+			get;
+			private set;
+		}
+
 		public CipherSuiteCode Code {
 			get;
 			private set;
+		}
+
+		public bool IsServer {
+			get { return true; }
 		}
 
 		public byte[] Key {
@@ -58,18 +67,31 @@ namespace Mono.Security.NewTls.TestFramework
 			get;
 			private set;
 		}
+
+		public bool IsGCM {
+			get;
+			private set;
+		}
 		
-		public static CryptoTestParameters InitializeCBC (CipherSuiteCode code, byte[] key, byte[] mac, byte[] iv)
+		public bool EnableDebugging {
+			get; set;
+		}
+
+		public byte ExtraPaddingBlocks {
+			get; set;
+		}
+
+		public static CryptoTestParameters CreateCBC (TlsProtocolCode protocol, CipherSuiteCode code, byte[] key, byte[] mac, byte[] iv)
 		{
 			return new CryptoTestParameters {
-				Code = code, Key = key, MAC = mac, IV = iv
+				Protocol = protocol, Code = code, Key = key, MAC = mac, IV = iv
 			};
 		}
 
-		public static CryptoTestParameters CreateGCM (CipherSuiteCode code, byte[] key, byte[] implNonce, byte[] explNonce)
+		public static CryptoTestParameters CreateGCM (TlsProtocolCode protocol, CipherSuiteCode code, byte[] key, byte[] implNonce, byte[] explNonce)
 		{
 			return new CryptoTestParameters {
-				Code = code, Key = key, ImplicitNonce = implNonce, ExplicitNonce = explNonce
+				Protocol = protocol, Code = code, Key = key, ImplicitNonce = implNonce, ExplicitNonce = explNonce, IsGCM = true
 			};
 		}
 	}
