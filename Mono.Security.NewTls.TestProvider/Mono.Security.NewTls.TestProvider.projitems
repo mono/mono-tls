@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{648D351C-B6F7-4BFC-9BD2-1F82C6869EC2}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>TempShared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CertificateAndKeyAsPFX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CertificateAsPEM.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClientAndServer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClientCertificate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Connection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DotNetClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DotNetConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DotNetServer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MonoCryptoProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PrivateFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerCertificate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SymmetricAlgorithmProxy.cs" />
+  </ItemGroup>
+</Project>

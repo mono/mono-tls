@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestFr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Interface", "..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj", "{E471C608-9CA8-4787-B5A8-363CDADD9E82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider", "..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj", "{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Tests", "..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj", "{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{DEBB60D9-0226-481E-8743-82EABBF38546}"
@@ -41,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.Remoting
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider.OpenSsl", "..\Mono.Security.NewTls.TestProvider.OpenSsl\Mono.Security.NewTls.TestProvider.OpenSsl.csproj", "{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{648D351C-B6F7-4BFC-9BD2-1F82C6869EC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,16 +60,6 @@ Global
 		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Release|x86.ActiveCfg = Release|Any CPU
 		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Release|x86.Build.0 = Release|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.Debug|x86.Build.0 = Debug|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.Release|x86.ActiveCfg = Release|Any CPU
-		{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}.Release|x86.Build.0 = Release|Any CPU
 		{43272ABC-8798-4B6F-A8CA-D7F082DBB440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43272ABC-8798-4B6F-A8CA-D7F082DBB440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43272ABC-8798-4B6F-A8CA-D7F082DBB440}.Debug|x86.ActiveCfg = Debug|Any CPU

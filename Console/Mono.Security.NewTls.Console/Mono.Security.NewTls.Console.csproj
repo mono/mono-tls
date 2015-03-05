@@ -8,6 +8,8 @@
     <RootNamespace>Mono.Security.NewTls.Console</RootNamespace>
     <AssemblyName>Mono.Security.NewTls.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +41,7 @@
     <Compile Include="NDeskOptions.cs" />
   </ItemGroup>
   <Import Project="..\..\external\web-tests\support\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\support\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems')" />
+  <Import Project="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems" Label="Shared" Condition="Exists('..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
@@ -56,10 +59,6 @@
     <ProjectReference Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls.csproj">
       <Project>{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}</Project>
       <Name>Mono.Security.Providers.NewTls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj">
-      <Project>{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}</Project>
-      <Name>Mono.Security.NewTls.TestProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
@@ -84,6 +83,10 @@
     <ProjectReference Include="..\..\Mono.Security.NewTls.TestProvider.OpenSsl\Mono.Security.NewTls.TestProvider.OpenSsl.csproj">
       <Project>{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}</Project>
       <Name>Mono.Security.NewTls.TestProvider.OpenSsl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
+      <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
+      <Name>Mono.Security.NewTls</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

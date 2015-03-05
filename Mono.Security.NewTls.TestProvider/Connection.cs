@@ -100,7 +100,7 @@ namespace Mono.Security.NewTls.TestProvider
 		protected void Debug (string message, params object[] args)
 		{
 			if (Parameters.EnableDebugging)
-				Console.WriteLine ("[{0}]: {1}", GetType ().Name, string.Format (message, args));
+				global::System.Console.WriteLine ("[{0}]: {1}", GetType ().Name, string.Format (message, args));
 		}
 
 		#region ITestInstance implementation

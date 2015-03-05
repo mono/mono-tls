@@ -48,6 +48,7 @@
     <Compile Include="ConnectionFactoryParametersAttribute.cs" />
     <Compile Include="ICryptoTestContext.cs" />
   </ItemGroup>
+  <Import Project="..\..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems" Label="Shared" Condition="Exists('..\..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
@@ -71,10 +72,6 @@
     <ProjectReference Include="..\..\..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
       <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
       <Name>Mono.Security.NewTls.TestFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj">
-      <Project>{3A7EAE09-A0A6-49EC-B75B-E38DFE649EF1}</Project>
-      <Name>Mono.Security.NewTls.TestProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
       <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
