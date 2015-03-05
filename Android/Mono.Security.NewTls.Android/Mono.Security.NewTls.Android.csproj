@@ -50,6 +50,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestRunner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -91,6 +92,10 @@
     <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.Remoting\Xamarin.AsyncTests.Remoting.csproj">
       <Project>{584654DF-6888-4B18-AB82-3C773CD45436}</Project>
       <Name>Xamarin.AsyncTests.Remoting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
+      <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
+      <Name>Mono.Security.NewTls.Tests</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

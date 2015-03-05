@@ -18,6 +18,9 @@ namespace Mono.Security.NewTls.Android
 		{
 			base.OnCreate (bundle);
 
+			var runner = new TestRunner ();
+			runner.RunServer ();
+
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
 
