@@ -15,7 +15,7 @@ using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public class DotNetServer : DotNetConnection, IServerTestHost, IServer
+	public class DotNetServer : DotNetConnection, IServer
 	{
 		public ServerCertificate Certificate {
 			get;

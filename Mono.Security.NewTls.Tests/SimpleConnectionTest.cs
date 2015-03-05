@@ -33,14 +33,14 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
-	public class ServerTestHostAttribute : TestHostAttribute, ITestHost<IServerTestHost>
+	public class ServerTestHostAttribute : TestHostAttribute, ITestHost<IServer>
 	{
 		public ServerTestHostAttribute ()
 			: base (typeof (ServerTestHostAttribute))
 		{
 		}
 
-		public IServerTestHost CreateInstance (TestContext ctx)
+		public IServer CreateInstance (TestContext ctx)
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ServerType");
 			var serverParameters = ctx.GetParameter<ServerParameters> ();
@@ -49,14 +49,14 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	public class ClientTestHostAttribute : TestHostAttribute, ITestHost<IClientTestHost>
+	public class ClientTestHostAttribute : TestHostAttribute, ITestHost<IClient>
 	{
 		public ClientTestHostAttribute ()
 			: base (typeof (ClientTestHostAttribute))
 		{
 		}
 
-		public IClientTestHost CreateInstance (TestContext ctx)
+		public IClient CreateInstance (TestContext ctx)
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ClientType");
 			var clientParameters = ctx.GetParameter<ClientParameters> ();
@@ -121,8 +121,8 @@ namespace Mono.Security.NewTls.Tests
 		public async Task TestConnection (TestContext ctx,
 			[ServerParameter] ServerParameters serverParameters,
 			[ClientParameter] ClientParameters clientParameters,
-			[ServerTestHost] IServerTestHost server,
-			[ClientTestHost] IClientTestHost client)
+			[ServerTestHost] IServer server,
+			[ClientTestHost] IClient client)
 		{
 			ctx.LogMessage ("TEST CONNECTION: {0} {1} {2} {3}", serverParameters, clientParameters, server, client);
 			await Task.Delay (10000);

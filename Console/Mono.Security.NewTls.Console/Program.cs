@@ -371,14 +371,14 @@ namespace Mono.Security.NewTls.Console
 				return false;
 		}
 
-		public IClientTestHost CreateClient (ConnectionProviderType type, IClientParameters parameters)
+		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)
 		{
 			if (type == ConnectionProviderType.Mono)
 				return new DotNetClient (GetLocalEndPoint (), parameters);
 			throw new NotSupportedException ();
 		}
 
-		public IServerTestHost CreateServer (ConnectionProviderType type, IServerParameters parameters)
+		public IServer CreateServer (ConnectionProviderType type, IServerParameters parameters)
 		{
 			if (type == ConnectionProviderType.Mono)
 				return new DotNetServer (GetLocalEndPoint (), parameters);

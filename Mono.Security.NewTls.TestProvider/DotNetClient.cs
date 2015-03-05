@@ -15,7 +15,7 @@ using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public class DotNetClient : DotNetConnection, IClientTestHost, IClient
+	public class DotNetClient : DotNetConnection, IClient
 	{
 		new public IClientParameters Parameters {
 			get { return (IClientParameters)base.Parameters; }
