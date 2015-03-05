@@ -6,7 +6,7 @@
     <SharedGUID>{648D351C-B6F7-4BFC-9BD2-1F82C6869EC2}</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>TempShared</Import_RootNamespace>
+    <Import_RootNamespace>Mono.Security.NewTls.TestProvider</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CertificateAndKeyAsPFX.cs" />
