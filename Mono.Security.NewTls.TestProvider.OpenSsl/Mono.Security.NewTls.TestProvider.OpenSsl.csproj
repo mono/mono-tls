@@ -40,15 +40,15 @@
     <Compile Include="NativeOpenSslException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\MartinsPlayground\lib\libNativeOpenSsl.dylib">
+    <None Include="..\lib\libNativeOpenSsl.dylib">
       <Link>libNativeOpenSsl.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\MartinsPlayground\lib\libcrypto.1.0.0.dylib">
+    <None Include="..\lib\libcrypto.1.0.0.dylib">
       <Link>libcrypto.1.0.0.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\MartinsPlayground\lib\libssl.1.0.0.dylib">
+    <None Include="..\lib\libssl.1.0.0.dylib">
       <Link>libssl.1.0.0.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

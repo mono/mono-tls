@@ -1,6 +1,6 @@
 <WorkspaceItem ctype="Workspace">
   <Items>
-    <Item>Mono.Security.NewTls/MartinsPlayground.sln</Item>
+    <Item>MartinsPlayground.sln</Item>
     <Item>external/web-tests/Xamarin.WebTests.Async.sln</Item>
     <Item>MartinsPlayground.Android.sln</Item>
   </Items>
