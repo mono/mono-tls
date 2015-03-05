@@ -114,17 +114,18 @@ namespace Mono.Security.NewTls.Tests
 
 		public static IEnumerable<ClientParameters> GetClientParameters (TestContext ctx, string filter)
 		{
-			yield return new ClientParameters ("simple");
+			yield return new ClientParameters ("simple") { VerifyPeerCertificate = false };
 		}
 
 		[AsyncTest]
-		public void TestConnection (TestContext ctx,
+		public async Task TestConnection (TestContext ctx,
 			[ServerParameter] ServerParameters serverParameters,
 			[ClientParameter] ClientParameters clientParameters,
 			[ServerTestHost] IServerTestHost server,
 			[ClientTestHost] IClientTestHost client)
 		{
 			ctx.LogMessage ("TEST CONNECTION: {0} {1} {2} {3}", serverParameters, clientParameters, server, client);
+			await Task.Delay (10000);
 		}
 
 	}

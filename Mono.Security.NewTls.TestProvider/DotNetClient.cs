@@ -26,7 +26,7 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 		}
 
-		protected override Stream Start (TestContext ctx, Socket socket)
+		protected override async Task<Stream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
 		{
 			ctx.LogDebug (1, "Connected.");
 
@@ -40,7 +40,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var stream = new NetworkStream (socket);
 			var server = new SslStream (stream, false, RemoteValidationCallback, null);
-			server.AuthenticateAsClient (targetHost, clientCerts, SslProtocols.Tls12, false);
+			await server.AuthenticateAsClientAsync (targetHost, clientCerts, SslProtocols.Tls12, false);
 
 			ctx.LogDebug (1, "Successfully authenticated.");
 

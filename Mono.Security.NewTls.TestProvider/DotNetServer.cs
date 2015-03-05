@@ -36,7 +36,7 @@ namespace Mono.Security.NewTls.TestProvider
 			Certificate = new ServerCertificate (parameters.ServerCertificate);
 		}
 
-		protected override Stream Start (TestContext ctx, Socket socket)
+		protected override async Task<Stream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
 		{
 			ctx.LogDebug (1, "Accepted connection from {0}.", socket.RemoteEndPoint);
 
@@ -45,7 +45,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var stream = new NetworkStream (socket);
 			var server = new SslStream (stream, false);
-			server.AuthenticateAsServer (Certificate.Certificate, false, SslProtocols.Tls12, false);
+			await server.AuthenticateAsServerAsync (Certificate.Certificate, false, SslProtocols.Tls12, false);
 
 			ctx.LogDebug (1, "Successfully authenticated.");
 

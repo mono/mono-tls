@@ -78,7 +78,7 @@ namespace Mono.Security.NewTls.TestProvider
 			throw new InvalidOperationException ();
 		}
 
-		protected abstract Stream Start (TestContext ctx, Socket socket);
+		protected abstract Task<Stream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken);
 
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
@@ -97,10 +97,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 			tcs = new TaskCompletionSource<Stream> ();
 
-			socket.BeginAccept (ar => {
+			socket.BeginAccept (async ar => {
 				try {
 					accepted = socket.EndAccept (ar);
-					sslStream = Start (ctx, accepted);
+					cancellationToken.ThrowIfCancellationRequested ();
+					sslStream = await Start (ctx, accepted, cancellationToken);
 					tcs.SetResult (sslStream);
 				} catch (Exception ex) {
 					ctx.LogError ("Error starting server", ex);
@@ -116,10 +117,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 			tcs = new TaskCompletionSource<Stream> ();
 
-			socket.BeginConnect (EndPoint, ar => {
+			socket.BeginConnect (EndPoint, async ar => {
 				try {
 					socket.EndConnect (ar);
-					sslStream = Start (ctx, socket);
+					cancellationToken.ThrowIfCancellationRequested ();
+					sslStream = await Start (ctx, socket, cancellationToken);
 					tcs.SetResult (sslStream);
 				} catch (Exception ex) {
 					ctx.LogError ("Error starting client", ex);
