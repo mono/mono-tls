@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider", "Android\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj", "{EDCA419E-9AE6-4327-A6D6-51485004FAF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Providers.NewTls", "Android\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj", "{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,12 @@ Global
 		{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 		{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
