@@ -8,8 +8,8 @@ namespace Mono.Security.Instrumentation.Framework
 
 	public class MonoClientAndServerParameters : ClientAndServerParameters, IMonoClientAndServerParameters
 	{
-		public MonoClientAndServerParameters (string identifier)
-			: base (identifier)
+		public MonoClientAndServerParameters (string identifier, IServerCertificate certificate)
+			: base (identifier, certificate)
 		{
 		}
 

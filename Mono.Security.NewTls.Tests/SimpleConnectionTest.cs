@@ -43,9 +43,9 @@ namespace Mono.Security.NewTls.Tests
 		public IServer CreateInstance (TestContext ctx)
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ServerType");
-			var serverParameters = ctx.GetParameter<ServerParameters> ();
+			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
 			var provider = DependencyInjector.Get<IConnectionProvider> ();
-			return provider.CreateServer (providerType, serverParameters);
+			return provider.CreateServer (providerType, parameters);
 		}
 	}
 
@@ -59,35 +59,22 @@ namespace Mono.Security.NewTls.Tests
 		public IClient CreateInstance (TestContext ctx)
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ClientType");
-			var clientParameters = ctx.GetParameter<ClientParameters> ();
+			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
 			var provider = DependencyInjector.Get<IConnectionProvider> ();
-			return provider.CreateClient (providerType, clientParameters);
+			return provider.CreateClient (providerType, parameters);
 		}
 	}
 
-	class ServerParameterAttribute : TestParameterAttribute, ITestParameterSource<ServerParameters>
+	class ConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<ClientAndServerParameters>
 	{
-		public ServerParameterAttribute ()
+		public ConnectionParameterAttribute ()
 			: base (null, TestFlags.Browsable)
 		{
 		}
 
-		public IEnumerable<ServerParameters> GetParameters (TestContext ctx, string filter)
+		public IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
-			return SimpleConnectionTest.GetServerParameters (ctx, filter);
-		}
-	}
-
-	class ClientParameterAttribute : TestParameterAttribute, ITestParameterSource<ClientParameters>
-	{
-		public ClientParameterAttribute ()
-			: base (null, TestFlags.Browsable)
-		{
-		}
-
-		public IEnumerable<ClientParameters> GetParameters (TestContext ctx, string filter)
-		{
-			return SimpleConnectionTest.GetClientParameters (ctx, filter);
+			return SimpleConnectionTest.GetConnectionParameters (ctx, filter);
 		}
 	}
 
@@ -106,25 +93,19 @@ namespace Mono.Security.NewTls.Tests
 			private set;
 		}
 
-		public static IEnumerable<ServerParameters> GetServerParameters (TestContext ctx, string filter)
+		public static IEnumerable<ClientAndServerParameters> GetConnectionParameters (TestContext ctx, string filter)
 		{
-			yield return new ServerParameters ("simple", ResourceManager.SelfSignedServerCertificate);
-			yield break;
-		}
-
-		public static IEnumerable<ClientParameters> GetClientParameters (TestContext ctx, string filter)
-		{
-			yield return new ClientParameters ("simple") { VerifyPeerCertificate = false };
+			yield return new ClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
+				VerifyPeerCertificate = false
+			};
 		}
 
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx,
-			[ServerParameter] ServerParameters serverParameters,
-			[ClientParameter] ClientParameters clientParameters,
-			[ServerTestHost] IServer server,
-			[ClientTestHost] IClient client)
+			[ConnectionParameter] ClientAndServerParameters parameters,
+			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
-			ctx.LogMessage ("TEST CONNECTION: {0} {1} {2} {3}", serverParameters, clientParameters, server, client);
+			ctx.LogMessage ("TEST CONNECTION: {0} {1} {2}", parameters, server, client);
 
 			await client.WaitForConnection ();
 			ctx.LogMessage ("GOT CLIENT CONNECTION!");

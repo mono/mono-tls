@@ -106,7 +106,7 @@ namespace Mono.Security.Instrumentation.Framework
 		public ClientAndServer CreateClientAndServer (IClientAndServerParameters parameters)
 		{
 			if (parameters == null)
-				parameters = new ClientAndServerParameters (null);
+				parameters = new ClientAndServerParameters (null, null);
 			return new ClientAndServer (ServerFactory.CreateServer (parameters), ClientFactory.CreateClient (parameters), parameters);
 		}
 

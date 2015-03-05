@@ -7,9 +7,10 @@ namespace Mono.Security.NewTls.TestFramework
 		bool askForCert;
 		bool requireCert;
 
-		public ClientAndServerParameters (string identifier)
+		public ClientAndServerParameters (string identifier, IServerCertificate certificate)
 			: base (identifier)
 		{
+			ServerCertificate = certificate;
 		}
 
 		public ICollection<CipherSuiteCode> ClientCiphers {

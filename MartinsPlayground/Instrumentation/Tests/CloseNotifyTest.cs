@@ -51,7 +51,7 @@ namespace Mono.Security.Instrumentation.Tests
 
 		ClientAndServerParameters GetDefaultParameters ()
 		{
-			return new ClientAndServerParameters ("default") {
+			return new ClientAndServerParameters ("default", ResourceManager.SelfSignedServerCertificate) {
 				VerifyPeerCertificate = false
 			};
 		}
