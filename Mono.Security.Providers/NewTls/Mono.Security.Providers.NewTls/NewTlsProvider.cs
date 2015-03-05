@@ -31,7 +31,12 @@ using System.IO;
 using PrebuiltSystem::System.Net;
 using PrebuiltSystem::System.Net.Security;
 using Mono.Security.NewTls;
+#if PREBUILT_MSI
+using PrebuiltSystem::Mono.Security.Interface;
+#else
 using Mono.Security.Interface;
+#endif
+using PrebuiltSystem::Mono.Net.Security;
 
 using MX = Mono.Security.X509;
 using PSSCX = PrebuiltSystem::System.Security.Cryptography.X509Certificates;

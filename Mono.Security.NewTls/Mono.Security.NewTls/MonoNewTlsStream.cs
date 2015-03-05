@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 extern alias NewSystemSource;
+extern alias PrebuiltSystem;
 using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
 using LocalCertificateSelectionCallback = NewSystemSource::System.Net.Security.LocalCertificateSelectionCallback;
 using RemoteCertificateValidationCallback = NewSystemSource::System.Net.Security.RemoteCertificateValidationCallback;
@@ -33,7 +34,11 @@ using SslStream = NewSystemSource::System.Net.Security.SslStream;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+#if PREBUILT_MSI
+using PrebuiltSystem::Mono.Security.Interface;
+#else
 using Mono.Security.Interface;
+#endif
 using Mono.Security.NewTls;
 
 namespace Mono.Security.Providers.NewTls

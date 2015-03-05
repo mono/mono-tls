@@ -23,11 +23,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+extern alias PrebuiltSystem;
 using System;
 using Mono.Security.NewTls;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
+using SSCX = System.Security.Cryptography.X509Certificates;
+using PSSCX = PrebuiltSystem::System.Security.Cryptography.X509Certificates;
+
+#if PREBUILT_MSI
+using MSI = PrebuiltSystem::Mono.Security.Interface;
+#else
 using MSI = Mono.Security.Interface;
+#endif
 using MX = Mono.Security.X509;
 
 namespace Mono.Security.Providers.NewTls
@@ -81,9 +88,10 @@ namespace Mono.Security.Providers.NewTls
 			get { return Configuration.HasCredentials; }
 		}
 
-		public void SetCertificate (MX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
+		public void SetCertificate (SSCX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
 		{
-			Configuration.SetCertificate (certificate, privateKey);
+			var monoCert = new MX.X509Certificate (certificate.GetRawCertData ());
+			Configuration.SetCertificate (monoCert, privateKey);
 		}
 
 		public int GenerateNextToken (MSI.IBufferOffsetSize incoming, out MSI.IBufferOffsetSize outgoing)
@@ -153,9 +161,21 @@ namespace Mono.Security.Providers.NewTls
 			return Context.CreateAlert (new Alert (AlertLevel.Warning, AlertDescription.CloseNotify));
 		}
 
-		public MX.X509Certificate GetRemoteCertificate (out MX.X509CertificateCollection remoteCertificateStore)
+		public SSCX.X509Certificate GetRemoteCertificate (out PSSCX.X509CertificateCollection remoteCertificateStore)
 		{
-			return Context.GetRemoteCertificate (out remoteCertificateStore);
+			MX.X509CertificateCollection monoCollection;
+			var remoteCert = Context.GetRemoteCertificate (out monoCollection);
+			if (remoteCert == null) {
+				remoteCertificateStore = null;
+				return null;
+			}
+
+			remoteCertificateStore = new PSSCX.X509CertificateCollection ();
+			foreach (var cert in monoCollection) {
+				remoteCertificateStore.Add (new PSSCX.X509Certificate2 (cert.RawData));
+			}
+			return new PSSCX.X509Certificate2 (remoteCert.RawData);
+
 		}
 
 		public bool VerifyRemoteCertificate ()
