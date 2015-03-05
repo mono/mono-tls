@@ -34,7 +34,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using NDesk.Options;
-using Xamarin.WebTests.Portable;
 using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Console
@@ -68,10 +67,6 @@ namespace Mono.Security.NewTls.Console
 			get { return framework; }
 		}
 
-		public IPortableSupport PortableSupport {
-			get { return support; }
-		}
-
 		public int LogLevel {
 			get;
 			private set;
@@ -88,7 +83,6 @@ namespace Mono.Security.NewTls.Console
 		}
 
 		TestSession session;
-		IPortableSupport support;
 		SettingsBag settings;
 		TestFramework framework;
 		TestLogger logger;
@@ -99,9 +93,9 @@ namespace Mono.Security.NewTls.Console
 			SD.Debug.AutoFlush = true;
 			SD.Debug.Listeners.Add (new SD.ConsoleTraceListener ());
 
-			var support = PortableSupportImpl.Initialize ();
+			PortableSupportImpl.Initialize ();
 
-			var program = new Program (support, args);
+			var program = new Program (args);
 
 			try {
 				var task = program.Run ();
@@ -111,9 +105,8 @@ namespace Mono.Security.NewTls.Console
 			}
 		}
 
-		Program (IPortableSupport support, string[] args)
+		Program (string[] args)
 		{
-			this.support = support;
 			rng = RandomNumberGenerator.Create ();
 
 			DependencyInjector.Register<ICryptoProvider> (this);
