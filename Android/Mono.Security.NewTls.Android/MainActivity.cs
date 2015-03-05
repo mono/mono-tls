@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Android.App;
 using Android.Content;
@@ -12,25 +14,32 @@ namespace Mono.Security.NewTls.Android
 	[Activity (Label = "Mono.Security.NewTls.Android", MainLauncher = true, Icon = "@drawable/icon")]
 	public class MainActivity : Activity
 	{
-		int count = 1;
+		TestRunner runner;
+		TextView text;
 
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
-			var runner = new TestRunner ();
-			runner.RunServer ();
-
-			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
+			text = FindViewById<TextView> (Resource.Id.textView);
 
-			// Get our button from the layout resource,
-			// and attach an event to it
-			Button button = FindViewById<Button> (Resource.Id.myButton);
-			
-			button.Click += delegate {
-				button.Text = string.Format ("{0} clicks!", count++);
+			runner = new TestRunner ();
+			runner.LogEvent += (sender, e) => {
+				RunOnUiThread (() => text.Text = e);
 			};
+			Run ();
+		}
+
+		async void Run ()
+		{
+			while (true) {
+				text.Text = "Server running.";
+				await runner.RunServer ();
+				text.Text = "Server done.";
+
+				await Task.Delay (2500);
+			}
 		}
 	}
 }

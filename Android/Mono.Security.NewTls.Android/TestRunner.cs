@@ -46,9 +46,8 @@ namespace Mono.Security.NewTls.Android
 		TestFramework framework;
 
 		public TestLogger Logger {
-			get {
-				throw new NotImplementedException ();
-			}
+			get;
+			private set;
 		}
 
 		public SettingsBag Settings {
@@ -67,12 +66,19 @@ namespace Mono.Security.NewTls.Android
 			Settings = SettingsBag.CreateDefault ();
 			var assembly = typeof(NewTlsTestFeatures).Assembly;
 
+			Logger = new TestLogger (new MyLogger (this));
+
 			framework = TestFramework.GetLocalFramework (assembly);
 		}
 
-		static void Debug (string message, params object[] args)
+		public event EventHandler<string> LogEvent;
+
+		void Debug (string format, params object[] args)
 		{
-			SD.Debug.WriteLine (message, args);
+			var message = string.Format (format, args);
+			if (LogEvent != null)
+				LogEvent (this, message);
+			SD.Debug.WriteLine (message);
 		}
 
 		static IPEndPoint GetEndpoint (string text)
@@ -97,7 +103,90 @@ namespace Mono.Security.NewTls.Android
 			var server = await TestServer.StartServer (this, framework, CancellationToken.None);
 			Debug ("SERVER STARTED: {0}", server);
 			await server.WaitForExit (CancellationToken.None);
+			await server.Stop (CancellationToken.None);
 		}
+
+		#region Logging
+
+		void OnLogMessage (string message)
+		{
+			Debug (message);
+		}
+
+		void OnLogDebug (int level, string message)
+		{
+			Debug (message);
+		}
+
+		int countTests;
+		int countSuccess;
+		int countErrors;
+		int countIgnored;
+
+		void OnStatisticsEvent (TestLoggerBackend.StatisticsEventArgs args)
+		{
+			switch (args.Type) {
+			case TestLoggerBackend.StatisticsEventType.Running:
+				++countTests;
+				Debug ("Running {0}", args.Name);
+				break;
+			case TestLoggerBackend.StatisticsEventType.Finished:
+				switch (args.Status) {
+				case TestStatus.Success:
+					++countSuccess;
+					break;
+				case TestStatus.Ignored:
+				case TestStatus.None:
+					++countIgnored;
+					break;
+				default:
+					++countErrors;
+					break;
+				}
+
+				Debug ("Finished {0}: {1}", args.Name, args.Status);
+				break;
+			case TestLoggerBackend.StatisticsEventType.Reset:
+				break;
+			}
+		}
+
+		class MyLogger : TestLoggerBackend
+		{
+			readonly TestRunner Runner;
+
+			public MyLogger (TestRunner runner)
+			{
+				Runner = runner;
+			}
+
+			protected override void OnLogEvent (LogEntry entry)
+			{
+				switch (entry.Kind) {
+				case EntryKind.Debug:
+					Runner.OnLogDebug (entry.LogLevel, entry.Text);
+					break;
+
+				case EntryKind.Error:
+					if (entry.Error != null)
+						Runner.OnLogMessage (string.Format ("ERROR: {0}", entry.Error));
+					else
+						Runner.OnLogMessage (entry.Text);
+					break;
+
+				default:
+					Runner.OnLogMessage (entry.Text);
+					break;
+				}
+			}
+
+			protected override void OnStatisticsEvent (StatisticsEventArgs args)
+			{
+				Runner.OnStatisticsEvent (args);
+			}
+		}
+
+		#endregion
 
 		#region ICryptoProvider implementation
 
