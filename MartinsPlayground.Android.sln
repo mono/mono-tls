@@ -17,6 +17,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestPr
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.AsyncTests.PortableImpl", "external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.shproj", "{4D53941A-ABBE-4B89-A362-C56F7BC0B20A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Android", "Android\Mono.Security.NewTls.Android\Mono.Security.NewTls.Android.csproj", "{E342EA33-8ADA-4104-BF5A-18F4DD13FCD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,12 @@ Global
 		{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}.DebugWin|Any CPU.Build.0 = DebugWin|Any CPU
 		{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E342EA33-8ADA-4104-BF5A-18F4DD13FCD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E342EA33-8ADA-4104-BF5A-18F4DD13FCD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E342EA33-8ADA-4104-BF5A-18F4DD13FCD8}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{E342EA33-8ADA-4104-BF5A-18F4DD13FCD8}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{E342EA33-8ADA-4104-BF5A-18F4DD13FCD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E342EA33-8ADA-4104-BF5A-18F4DD13FCD8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E471C608-9CA8-4787-B5A8-363CDADD9E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E471C608-9CA8-4787-B5A8-363CDADD9E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E471C608-9CA8-4787-B5A8-363CDADD9E82}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
