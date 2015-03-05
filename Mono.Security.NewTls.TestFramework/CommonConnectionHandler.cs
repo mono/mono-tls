@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public abstract class CommonConnectionHandler : ConnectionHandler
+	public abstract class CommonConnectionHandler : IConnectionHandler
 	{
 		public ICommonConnection Connection {
 			get;
@@ -17,11 +17,11 @@ namespace Mono.Security.NewTls.TestFramework
 			Connection = connection;
 		}
 
-		public override bool SupportsCleanShutdown {
+		public bool SupportsCleanShutdown {
 			get { return Connection.SupportsCleanShutdown; }
 		}
 
-		public override Task Run ()
+		public Task Run ()
 		{
 			var wrapper = new StreamWrapper (Connection.Stream);
 			return MainLoop (wrapper);
@@ -29,12 +29,12 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected abstract Task MainLoop (ILineBasedStream stream);
 
-		public override Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply)
+		public Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply)
 		{
 			return Connection.Shutdown (attemptCleanShutdown, waitForReply);
 		}
 
-		public override void Close ()
+		public void Close ()
 		{
 			Connection.Dispose ();
 		}

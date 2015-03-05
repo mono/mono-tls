@@ -6,7 +6,7 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public abstract class ConnectionHandlerFactory
 	{
-		public abstract ConnectionHandler Create (IConnection connection);
+		public abstract IConnectionHandler Create (IConnection connection);
 
 		public static readonly ConnectionHandlerFactory OkAndDone = new SimpleFactory (c => new OkAndDoneHandler (c));
 
@@ -16,7 +16,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public static readonly ConnectionHandlerFactory HandshakeAndDone = new SimpleFactory (c => new HandshakeAndDoneHandler ((IClientAndServer)c));
 
-		delegate ConnectionHandler FactoryDelegate (IConnection connection);
+		delegate IConnectionHandler FactoryDelegate (IConnection connection);
 
 		class SimpleFactory : ConnectionHandlerFactory
 		{
@@ -27,7 +27,7 @@ namespace Mono.Security.NewTls.TestFramework
 				this.func = func;
 			}
 
-			public override ConnectionHandler Create (IConnection connection)
+			public override IConnectionHandler Create (IConnection connection)
 			{
 				return func (connection);
 			}

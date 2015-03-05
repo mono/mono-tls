@@ -31,7 +31,15 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IConnectionHandler
 	{
+		bool SupportsCleanShutdown {
+			get;
+		}
+
 		Task Run ();
+
+		Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply);
+
+		void Close ();
 	}
 }
 

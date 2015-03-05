@@ -55,7 +55,6 @@
     <Compile Include="IClientAndServer.cs" />
     <Compile Include="ClientAndServerHandler.cs" />
     <Compile Include="CommonConnectionHandler.cs" />
-    <Compile Include="ConnectionHandler.cs" />
     <Compile Include="ConnectionHandlerFactory.cs" />
     <Compile Include="ConnectionException.cs" />
     <Compile Include="DependencyInjector.cs" />

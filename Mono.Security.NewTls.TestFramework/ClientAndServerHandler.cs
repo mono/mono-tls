@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public abstract class ClientAndServerHandler : ConnectionHandler
+	public abstract class ClientAndServerHandler : IConnectionHandler
 	{
 		public IServer Server {
 			get;
@@ -23,11 +23,11 @@ namespace Mono.Security.NewTls.TestFramework
 			Client = client;
 		}
 
-		public override bool SupportsCleanShutdown {
+		public bool SupportsCleanShutdown {
 			get { return Server.SupportsCleanShutdown && Client.SupportsCleanShutdown; }
 		}
 
-		public override Task Run ()
+		public Task Run ()
 		{
 			var serverWrapper = new StreamWrapper (Server.Stream);
 			var clientWrapper = new StreamWrapper (Client.Stream);
@@ -36,7 +36,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected abstract Task MainLoop (ILineBasedStream serverStream, ILineBasedStream clientStream);
 
-		public override async Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply)
+		public async Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply)
 		{
 			var clientShutdown = Client.Shutdown (attemptCleanShutdown, waitForReply);
 			var serverShutdown = Server.Shutdown (attemptCleanShutdown, waitForReply);
@@ -44,7 +44,7 @@ namespace Mono.Security.NewTls.TestFramework
 			return clientShutdown.Result && serverShutdown.Result;
 		}
 
-		public override void Close ()
+		public void Close ()
 		{
 			Client.Dispose ();
 			Server.Dispose ();
