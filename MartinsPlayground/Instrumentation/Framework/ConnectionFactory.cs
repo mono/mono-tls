@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.TestProvider;
 
 namespace Mono.Security.Instrumentation.Framework
 {
@@ -106,7 +107,7 @@ namespace Mono.Security.Instrumentation.Framework
 		{
 			if (parameters == null)
 				parameters = new ClientAndServerParameters (null);
-			return new ClientAndServer (this, ServerFactory.CreateServer (parameters), ClientFactory.CreateClient (parameters), parameters);
+			return new ClientAndServer (ServerFactory.CreateServer (parameters), ClientFactory.CreateClient (parameters), parameters);
 		}
 
 		public override ConnectionType ConnectionType {

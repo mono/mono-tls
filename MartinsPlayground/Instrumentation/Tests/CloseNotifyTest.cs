@@ -32,6 +32,7 @@ using Mono.Security.NewTls.Instrumentation;
 using Mono.Security.NewTls.Negotiation;
 using Mono.Security.NewTls.Handshake;
 using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.TestProvider;
 using NUnit.Framework;
 
 namespace Mono.Security.Instrumentation.Tests

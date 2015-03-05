@@ -49,6 +49,7 @@
     <Compile Include="DotNetClient.cs" />
     <Compile Include="DotNetConnection.cs" />
     <Compile Include="DotNetServer.cs" />
+    <Compile Include="ClientAndServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
