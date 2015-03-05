@@ -81,5 +81,9 @@
       <Project>{9A328159-EF48-4082-B8FA-FB4FC2E44B0C}</Project>
       <Name>Xamarin.WebTests.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.TestProvider.OpenSsl\Mono.Security.NewTls.TestProvider.OpenSsl.csproj">
+      <Project>{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}</Project>
+      <Name>Mono.Security.NewTls.TestProvider.OpenSsl</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
