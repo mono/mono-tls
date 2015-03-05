@@ -57,7 +57,6 @@
     <Compile Include="CommonConnectionHandler.cs" />
     <Compile Include="ConnectionHandlerFactory.cs" />
     <Compile Include="ConnectionException.cs" />
-    <Compile Include="DependencyInjector.cs" />
     <Compile Include="ICryptoProvider.cs" />
     <Compile Include="CryptoTestParameters.cs" />
     <Compile Include="IRandomNumberGenerator.cs" />
