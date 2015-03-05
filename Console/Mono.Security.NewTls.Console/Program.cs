@@ -28,6 +28,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Reflection;
+using Mono.Security.Interface;
 using SD = System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -35,6 +36,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NDesk.Options;
 using System.Security.Cryptography;
+using Mono.Security.Providers.NewTls;
 
 namespace Mono.Security.NewTls.Console
 {
@@ -111,6 +113,8 @@ namespace Mono.Security.NewTls.Console
 
 			DependencyInjector.Register<ICryptoProvider> (this);
 			DependencyInjector.Register<IConnectionProvider> (this);
+
+			MonoTlsProviderFactory.InstallProvider (new NewTlsProvider ());
 
 			LogLevel = -1;
 
@@ -360,21 +364,27 @@ namespace Mono.Security.NewTls.Console
 		{
 			if (type == ConnectionProviderType.Mono)
 				return true;
+			else if (type == ConnectionProviderType.DotNet)
+				return true;
 			else
 				return false;
 		}
 
 		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)
 		{
-			if (type == ConnectionProviderType.Mono)
+			if (type == ConnectionProviderType.DotNet)
 				return new DotNetClient (GetLocalEndPoint (), parameters);
+			else if (type == ConnectionProviderType.Mono)
+				return new MonoClient (GetLocalEndPoint (), parameters);
 			throw new NotSupportedException ();
 		}
 
 		public IServer CreateServer (ConnectionProviderType type, IServerParameters parameters)
 		{
-			if (type == ConnectionProviderType.Mono)
+			if (type == ConnectionProviderType.DotNet)
 				return new DotNetServer (GetLocalEndPoint (), parameters);
+			else if (type == ConnectionProviderType.Mono)
+				return new MonoServer (GetLocalEndPoint (), parameters);
 			else
 				throw new NotSupportedException ();
 		}

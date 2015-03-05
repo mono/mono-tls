@@ -24,7 +24,7 @@ using Mono.Security.Providers.NewTls;
 using SSCX = System.Security.Cryptography.X509Certificates;
 using MX = Mono.Security.X509;
 
-namespace Mono.Security.Instrumentation.Console
+namespace Mono.Security.NewTls.TestProvider
 {
 	public class MonoClient : MonoConnection, IClient
 	{

@@ -69,6 +69,8 @@ namespace Mono.Security.NewTls.Tests
 		public static readonly TestFeature OpenSslCryptoProvider = new TestFeature (
 			"OpenSslCryptoProvider", "Use OpenSSL as crypto provider", () => IsOpenSslSupported ());
 
+		public static readonly TestFeature DotNetConnectionProvider = new TestFeature (
+			"DotNetConnectionProvider", "DotNetConnectionProvider", false);
 		public static readonly TestFeature MonoConnectionProvider = new TestFeature (
 			"MonoConnectionProvider", "MonoConnectionProvider", true);
 		public static readonly TestFeature OpenSslConnectionProvider = new TestFeature (
@@ -95,6 +97,7 @@ namespace Mono.Security.NewTls.Tests
 				yield return NotWorking;
 				yield return MonoCryptoProvider;
 				yield return OpenSslCryptoProvider;
+				yield return DotNetConnectionProvider;
 				yield return MonoConnectionProvider;
 				yield return OpenSslConnectionProvider;
 			}
@@ -147,9 +150,13 @@ namespace Mono.Security.NewTls.Tests
 						yield return ConnectionProviderType.Mono;
 					else if (filter.Equals ("openssl"))
 						yield return ConnectionProviderType.OpenSsl;
+					else if (filter.Equals ("dotnet"))
+						yield return ConnectionProviderType.DotNet;
 					yield break;
 				}
 
+				if (ctx.IsEnabled (DotNetConnectionProvider))
+					yield return ConnectionProviderType.DotNet;
 				if (ctx.IsEnabled (MonoConnectionProvider))
 					yield return ConnectionProviderType.Mono;
 				if (ctx.IsEnabled (OpenSslConnectionProvider))

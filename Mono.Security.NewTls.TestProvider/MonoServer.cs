@@ -38,10 +38,10 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return (IServerParameters)base.Parameters; }
 		}
 
-		public MonoServer (IPEndPoint endpoint, ServerCertificate pfx, IServerParameters parameters)
+		public MonoServer (IPEndPoint endpoint, IServerParameters parameters)
 			: base (endpoint, parameters)
 		{
-			Certificate = pfx;
+			Certificate = new ServerCertificate (parameters.ServerCertificate);
 		}
 
 		protected override TlsSettings GetSettings ()
