@@ -57,6 +57,7 @@ namespace Mono.Security.Instrumentation.Console
 			var newArgs = new ArraySegment<string> (args, 1, args.Length - 1);
 
 			switch (mode) {
+			#if FIXME
 			case "client":
 				Client (newArgs.ToArray ());
 				break;
@@ -66,6 +67,7 @@ namespace Mono.Security.Instrumentation.Console
 			case "connection":
 				Connection (newArgs.ToArray ());
 				break;
+			#endif
 			case "test":
 				RunTests (newArgs.ToArray ());
 				break;
@@ -111,6 +113,7 @@ namespace Mono.Security.Instrumentation.Console
 			}
 		}
 
+		#if FIXME
 		static void Client (params string[] args)
 		{
 			ClientFactory factory = Factory.DotNetClient;;
@@ -233,6 +236,7 @@ namespace Mono.Security.Instrumentation.Console
 			var parameters = GetClientAndServerParameters ();
 			return RunWithLocalServer (factory, parameters);
 		}
+		#endif
 
 		protected void PrintError (Exception ex)
 		{

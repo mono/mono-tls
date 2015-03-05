@@ -1,5 +1,5 @@
 ﻿//
-// CryptoProviderType.cs
+// ConnectionProviderType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,7 +27,7 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum CryptoTestHostType
+	public enum ConnectionProviderType
 	{
 		Mono,
 		OpenSsl

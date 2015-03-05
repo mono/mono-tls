@@ -1,10 +1,10 @@
 ﻿//
-// IConnection.cs
+// ClientParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2014 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2015 Xamarin, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,31 +24,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IConnection : IDisposable
+	public class ClientParameters : ConnectionParameters, IClientParameters
 	{
-		bool SupportsCleanShutdown {
-			get;
+		public ClientParameters (string identifier)
+			: base (identifier)
+		{
 		}
 
-		string EndPoint {
-			get;
+		public ICollection<CipherSuiteCode> ClientCiphers {
+			get; set;
 		}
 
-		IConnectionParameters Parameters {
-			get;
+		public ICertificateAndKeyAsPFX ClientCertificate {
+			get; set;
 		}
-
-		Task Start ();
-
-		Task WaitForConnection ();
-
-		Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply);
 	}
 }
 

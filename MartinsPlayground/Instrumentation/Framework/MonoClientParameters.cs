@@ -7,6 +7,11 @@ namespace Mono.Security.Instrumentation.Framework
 
 	public class MonoClientParameters : ClientParameters, IMonoClientParameters
 	{
+		public MonoClientParameters (string identifier)
+			: base (identifier)
+		{
+		}
+
 		public ClientCertificateParameters ClientCertificateParameters {
 			get; set;
 		}

@@ -21,6 +21,7 @@ namespace Mono.Security.Instrumentation.Tests
 		{
 		}
 
+		#if FIXME
 		[Test]
 		[Category ("Simple")]
 		public async void Simple ()
@@ -188,5 +189,6 @@ namespace Mono.Security.Instrumentation.Tests
 				throw;
 			}
 		}
+		#endif
 	}
 }

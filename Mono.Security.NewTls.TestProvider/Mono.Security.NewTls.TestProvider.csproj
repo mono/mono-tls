@@ -45,6 +45,10 @@
     <Compile Include="NativeOpenSslError.cs" />
     <Compile Include="NativeOpenSslException.cs" />
     <Compile Include="NativeCryptoProvider.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="DotNetClient.cs" />
+    <Compile Include="DotNetConnection.cs" />
+    <Compile Include="DotNetServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

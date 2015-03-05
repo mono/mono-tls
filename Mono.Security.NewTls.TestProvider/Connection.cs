@@ -7,18 +7,14 @@ using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
+using Xamarin.AsyncTests;
 
-namespace Mono.Security.Instrumentation.Framework
+namespace Mono.Security.NewTls.TestProvider
 {
-	public abstract class Connection : IConnection, IDisposable
+	public abstract class Connection : IConnection, ITestInstance, IDisposable
 	{
-		public ConnectionFactory Factory {
+		public abstract bool SupportsCleanShutdown {
 			get;
-			private set;
-		}
-
-		public bool SupportsCleanShutdown {
-			get { return Factory.SupportsCleanShutdown; }
 		}
 
 		public IPEndPoint EndPoint {
@@ -35,15 +31,14 @@ namespace Mono.Security.Instrumentation.Framework
 			private set;
 		}
 
-		protected Connection (ConnectionFactory factory, IPEndPoint endpoint, IConnectionParameters parameters)
+		protected Connection (IPEndPoint endpoint, IConnectionParameters parameters)
 		{
-			Factory = factory;
 			EndPoint = endpoint;
 			Parameters = parameters;
 		}
 
-		protected Connection (ConnectionFactory factory, string endpoint, IConnectionParameters parameters)
-			: this (factory, ParseEndPoint (endpoint), parameters)
+		protected Connection (string endpoint, IConnectionParameters parameters)
+			: this (ParseEndPoint (endpoint), parameters)
 		{
 		}
 
@@ -107,6 +102,34 @@ namespace Mono.Security.Instrumentation.Framework
 			if (Parameters.EnableDebugging)
 				Console.WriteLine ("[{0}]: {1}", GetType ().Name, string.Format (message, args));
 		}
+
+		#region ITestInstance implementation
+
+		public async Task Initialize (TestContext ctx, CancellationToken cancellationToken)
+		{
+			ctx.LogMessage ("Initialize: {0}", this);
+			await Start ();
+			ctx.LogMessage ("Initialize #1: {0}", this);
+		}
+
+		public Task PreRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return Task.FromResult<object> (null);
+		}
+
+		public Task PostRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return Task.FromResult<object> (null);
+		}
+
+		public Task Destroy (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return Task.Run (() => {
+				Dispose ();
+			});
+		}
+
+		#endregion
 
 		public void Dispose ()
 		{

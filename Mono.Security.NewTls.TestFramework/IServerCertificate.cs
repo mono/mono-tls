@@ -27,7 +27,7 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IServerCertificate
+	public interface IServerCertificate : ICertificateAndKeyAsPFX
 	{
 	}
 }

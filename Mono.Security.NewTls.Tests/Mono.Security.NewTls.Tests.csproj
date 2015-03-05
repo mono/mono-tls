@@ -38,6 +38,26 @@
     <Compile Include="TestCbcBlockCipher-Generated.cs" />
     <Compile Include="TestCbcBlockCipher.cs" />
     <Compile Include="HashTest.cs" />
+    <Compile Include="SimpleConnectionTest.cs" />
+    <Compile Include="Resources\LocalCACertificate.cs" />
+    <Compile Include="Resources\MonkeyCertificate.cs" />
+    <Compile Include="Resources\ResourceManager.cs" />
+    <Compile Include="Resources\SelfSignedServerCertificate.cs" />
+    <Compile Include="Resources\ServerCertificateFromCA.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\MartinsPlayground\CA\server-cert.pfx">
+      <Link>CA\server-cert.pfx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\MartinsPlayground\CA\Hamiller-Tube-CA.pem">
+      <Link>CA\Hamiller-Tube-CA.pem</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\MartinsPlayground\CA\server-self.pfx">
+      <Link>CA\server-self.pfx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\MartinsPlayground\CA\monkey.pfx">
+      <Link>CA\monkey.pfx</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -53,5 +73,9 @@
       <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
       <Name>Xamarin.AsyncTests</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="CA\" />
   </ItemGroup>
 </Project>

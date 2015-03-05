@@ -7,6 +7,11 @@ namespace Mono.Security.Instrumentation.Framework
 {
 	public class ClientParameters : ConnectionParameters, IClientParameters
 	{
+		public ClientParameters (string identifier)
+			: base (identifier)
+		{
+		}
+
 		public ICollection<CipherSuiteCode> ClientCiphers {
 			get; set;
 		}

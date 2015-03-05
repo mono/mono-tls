@@ -34,6 +34,7 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
+	[CryptoTests]
 	public abstract class CipherTest : ITestHost<IEncryptionTestHost>
 	{
 		public IEncryptionTestHost CreateInstance (TestContext context)
@@ -43,7 +44,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[NewTlsTestFeatures.SelectCryptoProvider]
-		public CryptoTestHostType ProviderType {
+		public CryptoProviderType ProviderType {
 			get;
 			private set;
 		}

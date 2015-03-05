@@ -7,6 +7,12 @@ namespace Mono.Security.NewTls.TestFramework
 		bool askForCert;
 		bool requireCert;
 
+		public ServerParameters (string identifier, IServerCertificate certificate)
+			: base (identifier)
+		{
+			ServerCertificate = certificate;
+		}
+
 		public IServerCertificate ServerCertificate {
 			get; set;
 		}

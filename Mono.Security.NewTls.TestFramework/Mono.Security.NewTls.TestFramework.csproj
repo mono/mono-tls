@@ -60,11 +60,16 @@
     <Compile Include="ConnectionException.cs" />
     <Compile Include="DependencyInjector.cs" />
     <Compile Include="ICryptoProvider.cs" />
-    <Compile Include="CryptoTestHostType.cs" />
     <Compile Include="CryptoTestParameters.cs" />
     <Compile Include="IRandomNumberGenerator.cs" />
     <Compile Include="IEncryptionTestHost.cs" />
     <Compile Include="IHashTestHost.cs" />
+    <Compile Include="IServerTestHost.cs" />
+    <Compile Include="IConnectionProvider.cs" />
+    <Compile Include="CryptoProviderType.cs" />
+    <Compile Include="ConnectionProviderType.cs" />
+    <Compile Include="IClientTestHost.cs" />
+    <Compile Include="ClientParameters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

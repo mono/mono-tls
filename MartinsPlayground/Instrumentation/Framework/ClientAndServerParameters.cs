@@ -10,6 +10,11 @@ namespace Mono.Security.Instrumentation.Framework
 		bool askForCert;
 		bool requireCert;
 
+		public ClientAndServerParameters (string identifier)
+			: base (identifier)
+		{
+		}
+
 		public ICollection<CipherSuiteCode> ClientCiphers {
 			get; set;
 		}

@@ -47,11 +47,20 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
+	public class CryptoTestsAttribute : TestCategoryAttribute
+	{
+		public override TestCategory Category {
+			get { return NewTlsTestFeatures.CryptoTests; }
+		}
+	}
+
 	public class NewTlsTestFeatures : ITestConfigurationProvider
 	{
 		public static readonly NewTlsTestFeatures Instance;
 
 		public static readonly TestCategory Work = new TestCategory ("Work");
+		public static readonly TestCategory CryptoTests = new TestCategory ("CryptoTests");
+
 		public static readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
 		public static readonly TestFeature NotWorking = new TestFeature ("NotWorking", "Not Working");
 
@@ -60,10 +69,15 @@ namespace Mono.Security.NewTls.Tests
 		public static readonly TestFeature OpenSslCryptoProvider = new TestFeature (
 			"OpenSslCryptoProvider", "Use OpenSSL as crypto provider", () => IsOpenSslSupported ());
 
+		public static readonly TestFeature MonoConnectionProvider = new TestFeature (
+			"MonoConnectionProvider", "MonoConnectionProvider", true);
+		public static readonly TestFeature OpenSslConnectionProvider = new TestFeature (
+			"OpenSslConnectionProvider", "OpenSslConnectionProvider", () => IsOpenSslSupported ());
+
 		static bool IsOpenSslSupported ()
 		{
 			var provider = DependencyInjector.Get<ICryptoProvider> ();
-			return provider.IsSupported (CryptoTestHostType.OpenSsl, true);
+			return provider.IsSupported (CryptoProviderType.OpenSsl, true);
 		}
 
 		static NewTlsTestFeatures ()
@@ -81,40 +95,67 @@ namespace Mono.Security.NewTls.Tests
 				yield return NotWorking;
 				yield return MonoCryptoProvider;
 				yield return OpenSslCryptoProvider;
+				yield return MonoConnectionProvider;
+				yield return OpenSslConnectionProvider;
 			}
 		}
 
 		public IEnumerable<TestCategory> Categories {
 			get {
 				yield return Work;
+				yield return CryptoTests;
 			}
 		}
 
 		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-		public class SelectCryptoProvider : TestParameterAttribute, ITestParameterSource<CryptoTestHostType>
+		public class SelectCryptoProvider : TestParameterAttribute, ITestParameterSource<CryptoProviderType>
 		{
 			public SelectCryptoProvider (string filter = null, TestFlags flags = TestFlags.Hidden)
 				: base (filter, flags)
 			{
 			}
 
-			public IEnumerable<CryptoTestHostType> GetParameters (TestContext ctx, string filter)
+			public IEnumerable<CryptoProviderType> GetParameters (TestContext ctx, string filter)
 			{
 				if (filter != null) {
 					if (filter.Equals ("mono"))
-						yield return CryptoTestHostType.Mono;
+						yield return CryptoProviderType.Mono;
 					else if (filter.Equals ("openssl"))
-						yield return CryptoTestHostType.OpenSsl;
+						yield return CryptoProviderType.OpenSsl;
 					yield break;
 				}
 
 				if (ctx.IsEnabled (MonoCryptoProvider))
-					yield return CryptoTestHostType.Mono;
+					yield return CryptoProviderType.Mono;
 				if (ctx.IsEnabled (OpenSslCryptoProvider))
-					yield return CryptoTestHostType.OpenSsl;
+					yield return CryptoProviderType.OpenSsl;
 			}
 		}
 
+		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
+		public class SelectConnectionProviderAttribute : TestParameterAttribute, ITestParameterSource<ConnectionProviderType>
+		{
+			public SelectConnectionProviderAttribute (string filter = null, TestFlags flags = TestFlags.Hidden)
+				: base (filter, flags)
+			{
+			}
+
+			public IEnumerable<ConnectionProviderType> GetParameters (TestContext ctx, string filter)
+			{
+				if (filter != null) {
+					if (filter.Equals ("mono"))
+						yield return ConnectionProviderType.Mono;
+					else if (filter.Equals ("openssl"))
+						yield return ConnectionProviderType.OpenSsl;
+					yield break;
+				}
+
+				if (ctx.IsEnabled (MonoConnectionProvider))
+					yield return ConnectionProviderType.Mono;
+				if (ctx.IsEnabled (OpenSslConnectionProvider))
+					yield return ConnectionProviderType.OpenSsl;
+			}
+		}
 
 	}
 

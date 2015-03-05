@@ -31,11 +31,11 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		IRandomNumberGenerator GetRandomNumberGenerator ();
 
-		bool IsSupported (CryptoTestHostType type, bool needsEncryption);
+		bool IsSupported (CryptoProviderType type, bool needsEncryption);
 
-		IHashTestHost GetHashTestHost (CryptoTestHostType type);
+		IHashTestHost GetHashTestHost (CryptoProviderType type);
 
-		IEncryptionTestHost GetEncryptionTestHost (CryptoTestHostType type, CryptoTestParameters parameters);
+		IEncryptionTestHost GetEncryptionTestHost (CryptoProviderType type, CryptoTestParameters parameters);
 	}
 }
 

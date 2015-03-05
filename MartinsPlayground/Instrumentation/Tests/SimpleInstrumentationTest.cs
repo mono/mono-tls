@@ -23,6 +23,7 @@ namespace Mono.Security.Instrumentation.Tests
 		{
 		}
 
+		#if FIXME
 		[Test]
 		[Category ("Work")]
 		public async void Hello ()
@@ -129,5 +130,6 @@ namespace Mono.Security.Instrumentation.Tests
 			var connection = await Factory.Start (parameters);
 			connection.Dispose ();
 		}
+		#endif
 	}
 }

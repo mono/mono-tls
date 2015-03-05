@@ -47,7 +47,7 @@ namespace Mono.Security.NewTls.Console
 	using Mono.Security.NewTls.TestProvider;
 	using Mono.Security.NewTls.Tests;
 
-	public class Program : TestApp, ICryptoProvider, IRandomNumberGenerator
+	public class Program : TestApp, ICryptoProvider, IConnectionProvider, IRandomNumberGenerator
 	{
 		public string SettingsFile {
 			get;
@@ -117,6 +117,7 @@ namespace Mono.Security.NewTls.Console
 			rng = RandomNumberGenerator.Create ();
 
 			DependencyInjector.Register<ICryptoProvider> (this);
+			DependencyInjector.Register<IConnectionProvider> (this);
 
 			LogLevel = -1;
 
@@ -172,7 +173,7 @@ namespace Mono.Security.NewTls.Console
 
 			using (var reader = new StreamReader (filename)) {
 				var doc = XDocument.Load (reader);
-				return Connection.LoadSettings (doc.Root);
+				return TestSerializer.ReadSettings (doc.Root);
 			}
 		}
 
@@ -186,7 +187,7 @@ namespace Mono.Security.NewTls.Console
 				xws.Indent = true;
 
 				using (var xml = XmlTextWriter.Create (writer, xws)) {
-					var node = Connection.WriteSettings (Settings);
+					var node = TestSerializer.WriteSettings (Settings);
 					node.WriteTo (xml);
 					xml.Flush ();
 				}
@@ -323,23 +324,23 @@ namespace Mono.Security.NewTls.Console
 			return data;
 		}
 
-		public bool IsSupported (CryptoTestHostType type, bool needsEncryption)
+		public bool IsSupported (CryptoProviderType type, bool needsEncryption)
 		{
-			if (type == CryptoTestHostType.Mono)
+			if (type == CryptoProviderType.Mono)
 				return true;
 			if (needsEncryption)
 				return false;
-			if (type == CryptoTestHostType.OpenSsl)
+			if (type == CryptoProviderType.OpenSsl)
 				return true;
 			return false;
 		}
 
-		public IHashTestHost GetHashTestHost (CryptoTestHostType type)
+		public IHashTestHost GetHashTestHost (CryptoProviderType type)
 		{
 			switch (type) {
-			case CryptoTestHostType.Mono:
+			case CryptoProviderType.Mono:
 				return new MonoCryptoProvider ();
-			case CryptoTestHostType.OpenSsl:
+			case CryptoProviderType.OpenSsl:
 				return new NativeCryptoProvider ();
 
 			default:
@@ -347,10 +348,10 @@ namespace Mono.Security.NewTls.Console
 			}
 		}
 
-		public IEncryptionTestHost GetEncryptionTestHost (CryptoTestHostType type, CryptoTestParameters parameters)
+		public IEncryptionTestHost GetEncryptionTestHost (CryptoProviderType type, CryptoTestParameters parameters)
 		{
 			switch (type) {
-			case CryptoTestHostType.Mono:
+			case CryptoProviderType.Mono:
 				return new MonoCryptoProvider { Parameters = parameters };
 
 			default:
@@ -359,6 +360,38 @@ namespace Mono.Security.NewTls.Console
 		}
 
 		#endregion
+
+		#region IConnectionProvider implementation
+
+		public bool IsSupported (ConnectionProviderType type)
+		{
+			if (type == ConnectionProviderType.Mono)
+				return true;
+			else
+				return false;
+		}
+
+		public IClientTestHost CreateClient (ConnectionProviderType type, IClientParameters parameters)
+		{
+			if (type == ConnectionProviderType.Mono)
+				return new DotNetClient (GetLocalEndPoint (), parameters);
+			throw new NotSupportedException ();
+		}
+
+		public IServerTestHost CreateServer (ConnectionProviderType type, IServerParameters parameters)
+		{
+			if (type == ConnectionProviderType.Mono)
+				return new DotNetServer (GetLocalEndPoint (), parameters);
+			else
+				throw new NotSupportedException ();
+		}
+
+		#endregion
+
+		IPEndPoint GetLocalEndPoint ()
+		{
+			return new IPEndPoint (IPAddress.Loopback, 4433);
+		}
 	}
 }
 

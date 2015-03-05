@@ -31,6 +31,7 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
+	[CryptoTests]
 	[AsyncTestFixture]
 	public class HashTest : ITestHost<IHashTestHost>
 	{
@@ -41,7 +42,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[NewTlsTestFeatures.SelectCryptoProvider]
-		public CryptoTestHostType ProviderType {
+		public CryptoProviderType ProviderType {
 			get;
 			private set;
 		}
