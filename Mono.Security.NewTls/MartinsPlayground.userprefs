@@ -31,7 +31,5 @@
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>
     <String>../MartinsPlayground/Instrumentation/Console/Mono.Security.Instrumentation.Console.csproj</String>
-    <String>../MartinsPlayground/Instrumentation/Tests/Mono.Security.Instrumentation.Tests.csproj</String>
-    <String>../MartinsPlayground/Instrumentation/Framework/Mono.Security.Instrumentation.Framework.csproj</String>
   </DisabledProjects>
 </Properties>

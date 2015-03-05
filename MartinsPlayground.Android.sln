@@ -13,13 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.Remoting
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestFramework", "Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj", "{EA1D2205-446B-4B54-823A-94985CC36A17}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{648D351C-B6F7-4BFC-9BD2-1F82C6869EC2}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.AsyncTests.PortableImpl", "external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.shproj", "{4D53941A-ABBE-4B89-A362-C56F7BC0B20A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Android", "Android\Mono.Security.NewTls.Android\Mono.Security.NewTls.Android.csproj", "{E342EA33-8ADA-4104-BF5A-18F4DD13FCD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Tests", "Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj", "{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider", "Android\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj", "{EDCA419E-9AE6-4327-A6D6-51485004FAF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +70,12 @@ Global
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDCA419E-9AE6-4327-A6D6-51485004FAF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDCA419E-9AE6-4327-A6D6-51485004FAF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDCA419E-9AE6-4327-A6D6-51485004FAF6}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDCA419E-9AE6-4327-A6D6-51485004FAF6}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{EDCA419E-9AE6-4327-A6D6-51485004FAF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDCA419E-9AE6-4327-A6D6-51485004FAF6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F72DD750-70EF-4243-93E9-8533D4B01FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F72DD750-70EF-4243-93E9-8533D4B01FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F72DD750-70EF-4243-93E9-8533D4B01FBC}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
