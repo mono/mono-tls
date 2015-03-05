@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
 
 namespace Mono.Security.Instrumentation.Framework
@@ -21,8 +22,12 @@ namespace Mono.Security.Instrumentation.Framework
 			get { return client; }
 		}
 
+		public override bool SupportsCleanShutdown {
+			get { return server.SupportsCleanShutdown && client.SupportsCleanShutdown; }
+		}
+
 		public ClientAndServer (ClientAndServerFactory factory, IServer server, IClient client, IClientAndServerParameters parameters)
-			: base (factory, server.EndPoint, parameters)
+			: base (server.EndPoint, parameters)
 		{
 			this.server = server;
 			this.client = client;

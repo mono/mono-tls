@@ -125,6 +125,10 @@ namespace Mono.Security.NewTls.Tests
 			[ClientTestHost] IClient client)
 		{
 			ctx.LogMessage ("TEST CONNECTION: {0} {1} {2} {3}", serverParameters, clientParameters, server, client);
+
+			await client.WaitForConnection ();
+			ctx.LogMessage ("GOT CLIENT CONNECTION!");
+
 			await Task.Delay (10000);
 		}
 

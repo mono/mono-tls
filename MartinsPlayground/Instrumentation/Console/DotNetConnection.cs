@@ -36,6 +36,7 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
 
 namespace Mono.Security.Instrumentation.Console
@@ -44,8 +45,12 @@ namespace Mono.Security.Instrumentation.Console
 
 	public abstract class DotNetConnection : Connection, ICommonConnection
 	{
+		public override bool SupportsCleanShutdown {
+			get { return true; }
+		}
+
 		public DotNetConnection (ConnectionFactory factory, IPEndPoint endpoint, IConnectionParameters parameters)
-			: base (factory, endpoint, parameters)
+			: base (endpoint, parameters)
 		{
 		}
 

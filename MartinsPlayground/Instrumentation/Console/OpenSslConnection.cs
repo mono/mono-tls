@@ -40,8 +40,12 @@ namespace Mono.Security.Instrumentation.Console
 
 	public abstract class OpenSslConnection : Connection, ICommonConnection
 	{
+		public override bool SupportsCleanShutdown {
+			get { return true; }
+		}
+
 		public OpenSslConnection (ConnectionFactory factory, IPEndPoint endpoint, IConnectionParameters parameters)
-			: base (factory, endpoint, parameters)
+			: base (endpoint, parameters)
 		{
 		}
 
