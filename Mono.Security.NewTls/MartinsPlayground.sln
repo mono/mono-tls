@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.Remoting
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider.OpenSsl", "..\Mono.Security.NewTls.TestProvider.OpenSsl\Mono.Security.NewTls.TestProvider.OpenSsl.csproj", "{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{648D351C-B6F7-4BFC-9BD2-1F82C6869EC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider", "..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj", "{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -160,6 +160,16 @@ Global
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA1D2205-446B-4B54-823A-94985CC36A17}.Release|x86.Build.0 = Release|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.Debug|x86.Build.0 = Debug|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.Release|x86.ActiveCfg = Release|Any CPU
+		{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8F077534-F58A-4390-A972-B93161381C84} = {DEBB60D9-0226-481E-8743-82EABBF38546}

@@ -39,7 +39,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NDeskOptions.cs" />
   </ItemGroup>
-  <Import Project="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems" Label="Shared" Condition="Exists('..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems')" />
   <Import Project="..\..\external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -78,6 +77,10 @@
     <ProjectReference Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
       <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
       <Name>Mono.Security.NewTls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj">
+      <Project>{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}</Project>
+      <Name>Mono.Security.NewTls.TestProvider</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
