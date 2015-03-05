@@ -68,6 +68,7 @@
     <Compile Include="CryptoProviderType.cs" />
     <Compile Include="ConnectionProviderType.cs" />
     <Compile Include="ClientParameters.cs" />
+    <Compile Include="ClientAndServerParameters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

@@ -37,8 +37,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConnectionFactory.cs" />
     <Compile Include="ClientAndServer.cs" />
-    <Compile Include="ClientParameters.cs" />
-    <Compile Include="ClientAndServerParameters.cs" />
     <Compile Include="IMonoClientAndServerParameters.cs" />
     <Compile Include="IMonoClientParameters.cs" />
     <Compile Include="IMonoServerParameters.cs" />
