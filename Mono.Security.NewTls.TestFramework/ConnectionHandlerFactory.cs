@@ -12,10 +12,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public static readonly ConnectionHandlerFactory Echo = new SimpleFactory (c => new EchoHandler (c));
 
-		public static readonly ConnectionHandlerFactory WaitForOkAndDone = new SimpleFactory (c => new WaitForOkAndDoneHandler ((IClientAndServer)c));
-
-		public static readonly ConnectionHandlerFactory HandshakeAndDone = new SimpleFactory (c => new HandshakeAndDoneHandler ((IClientAndServer)c));
-
 		delegate IConnectionHandler FactoryDelegate (IConnection connection);
 
 		class SimpleFactory : ConnectionHandlerFactory
@@ -62,47 +58,6 @@ namespace Mono.Security.NewTls.TestFramework
 					await stream.WriteLineAsync (line);
 			}
 		}
-
-		class WaitForOkAndDoneHandler : ClientAndServerHandler
-		{
-			public WaitForOkAndDoneHandler (IClientAndServer connection)
-				: base (connection.Server, connection.Client)
-			{
-			}
-
-			protected override async Task MainLoop (ILineBasedStream serverStream, ILineBasedStream clientStream)
-			{
-				await serverStream.WriteLineAsync ("OK");
-				var line = await clientStream.ReadLineAsync ();
-				if (!line.Equals ("OK"))
-					throw new ConnectionException ("Got unexpected output '{0}'", line);
-				await Shutdown (SupportsCleanShutdown, true);
-				Close ();
-			}
-		}
-
-		class HandshakeAndDoneHandler : ClientAndServerHandler
-		{
-			public HandshakeAndDoneHandler (IClientAndServer connection)
-				: base (connection.Server, connection.Client)
-			{
-			}
-
-			protected override async Task MainLoop (ILineBasedStream serverStream, ILineBasedStream clientStream)
-			{
-				await serverStream.WriteLineAsync ("SERVER OK");
-				var line = await clientStream.ReadLineAsync ();
-				if (!line.Equals ("SERVER OK"))
-					throw new ConnectionException ("Got unexpected output from server: '{0}'", line);
-				await clientStream.WriteLineAsync ("CLIENT OK");
-				line = await serverStream.ReadLineAsync ();
-				if (!line.Equals ("CLIENT OK"))
-					throw new ConnectionException ("Got unexpected output from client: '{0}'", line);
-				await Shutdown (SupportsCleanShutdown, true);
-				Close ();
-			}
-		}
-
 	}
 }
 

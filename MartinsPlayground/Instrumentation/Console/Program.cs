@@ -269,8 +269,8 @@ namespace Mono.Security.Instrumentation.Console
 		async Task RunWithLocalServer (ClientAndServerFactory factory, ClientAndServerParameters parameters)
 		{
 			try {
-				var connection = await factory.Start (parameters);
-				var handler = ConnectionHandlerFactory.WaitForOkAndDone.Create (connection);
+				var connection = (IClientAndServer)await factory.Start (parameters);
+				var handler = ClientAndServerHandlerFactory.WaitForOkAndDone.Create (connection.Server, connection.Client);
 				await handler.Run ();
 				connection.Dispose ();
 			} catch (Exception ex) {
