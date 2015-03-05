@@ -109,6 +109,34 @@ namespace Mono.Security.Instrumentation.Framework
 				Console.WriteLine ("[{0}]: {1}", GetType ().Name, string.Format (message, args));
 		}
 
+		#region ITestInstance implementation
+
+		public async Task Initialize (TestContext ctx, CancellationToken cancellationToken)
+		{
+			ctx.LogMessage ("Initialize: {0}", this);
+			await Start (ctx, cancellationToken);
+			ctx.LogMessage ("Initialize #1: {0}", this);
+		}
+
+		public Task PreRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return FinishedTask;
+		}
+
+		public Task PostRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return FinishedTask;
+		}
+
+		public Task Destroy (TestContext ctx, CancellationToken cancellationToken)
+		{
+			return Task.Run (() => {
+				Dispose ();
+			});
+		}
+
+		#endregion
+
 		public void Dispose ()
 		{
 			Dispose (true);

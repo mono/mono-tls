@@ -31,7 +31,7 @@ using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IConnection : IDisposable
+	public interface IConnection : ITestInstance, IDisposable
 	{
 		bool SupportsCleanShutdown {
 			get;
