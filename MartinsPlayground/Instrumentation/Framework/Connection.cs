@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.Instrumentation.Framework
 {
@@ -62,7 +63,7 @@ namespace Mono.Security.Instrumentation.Framework
 			return new IPEndPoint (address, port);
 		}
 
-		public abstract Task Start ();
+		public abstract Task Start (TestContext ctx, CancellationToken cancellationToken);
 
 		public abstract Task WaitForConnection ();
 

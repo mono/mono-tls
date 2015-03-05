@@ -32,7 +32,7 @@ namespace Mono.Security.Instrumentation.Framework
 				IConnection connection = null;
 				try {
 					connection = Create (parameters);
-					connection.Start ().Wait ();
+					connection.Start (null, CancellationToken.None).Wait ();
 					connection.WaitForConnection ().Wait ();
 					tcs.SetResult (connection);
 				} catch (Exception ex) {

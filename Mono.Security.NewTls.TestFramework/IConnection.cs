@@ -27,6 +27,7 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -44,7 +45,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get;
 		}
 
-		Task Start ();
+		Task Start (TestContext ctx, CancellationToken cancellationToken);
 
 		Task WaitForConnection ();
 

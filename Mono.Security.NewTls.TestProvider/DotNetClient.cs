@@ -11,6 +11,7 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -25,9 +26,9 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 		}
 
-		protected override Stream Start (Socket socket)
+		protected override Stream Start (TestContext ctx, Socket socket)
 		{
-			Debug ("Connected.");
+			ctx.LogDebug (1, "Connected.");
 
 			var clientCerts = new X509Certificate2Collection ();
 			if (Parameters.ClientCertificate != null) {
@@ -41,7 +42,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var server = new SslStream (stream, false, RemoteValidationCallback, null);
 			server.AuthenticateAsClient (targetHost, clientCerts, SslProtocols.Tls12, false);
 
-			Debug ("Successfully authenticated.");
+			ctx.LogDebug (1, "Successfully authenticated.");
 
 			return server;
 		}

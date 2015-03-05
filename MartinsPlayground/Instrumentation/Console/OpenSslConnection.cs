@@ -32,6 +32,7 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.Instrumentation.Console
 {
@@ -63,7 +64,7 @@ namespace Mono.Security.Instrumentation.Console
 			return connectionInfo;
 		}
 
-		public sealed override Task Start ()
+		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
 			openssl = new NativeOpenSsl (this is IClient, Parameters.EnableDebugging);
 			if (!Parameters.VerifyPeerCertificate)

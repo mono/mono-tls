@@ -36,6 +36,7 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.Instrumentation.Console
 {
@@ -77,7 +78,7 @@ namespace Mono.Security.Instrumentation.Console
 
 		protected abstract Stream Start (Socket socket);
 
-		public sealed override Task Start ()
+		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
 			if (this is IClient)
 				StartClient ();

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.Instrumentation.Framework
 {
@@ -32,10 +33,10 @@ namespace Mono.Security.Instrumentation.Framework
 			throw new InvalidOperationException ();
 		}
 
-		public override async Task Start ()
+		public override async Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
-			await server.Start ();
-			await client.Start ();
+			await server.Start (ctx, cancellationToken);
+			await client.Start (ctx, cancellationToken);
 		}
 
 		public override async Task WaitForConnection ()

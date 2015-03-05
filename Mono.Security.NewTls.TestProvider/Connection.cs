@@ -57,7 +57,7 @@ namespace Mono.Security.NewTls.TestProvider
 			return new IPEndPoint (address, port);
 		}
 
-		public abstract Task Start ();
+		public abstract Task Start (TestContext ctx, CancellationToken cancellationToken);
 
 		public abstract Task WaitForConnection ();
 
@@ -108,18 +108,18 @@ namespace Mono.Security.NewTls.TestProvider
 		public async Task Initialize (TestContext ctx, CancellationToken cancellationToken)
 		{
 			ctx.LogMessage ("Initialize: {0}", this);
-			await Start ();
+			await Start (ctx, cancellationToken);
 			ctx.LogMessage ("Initialize #1: {0}", this);
 		}
 
 		public Task PreRun (TestContext ctx, CancellationToken cancellationToken)
 		{
-			return Task.FromResult<object> (null);
+			return FinishedTask;
 		}
 
 		public Task PostRun (TestContext ctx, CancellationToken cancellationToken)
 		{
-			return Task.FromResult<object> (null);
+			return FinishedTask;
 		}
 
 		public Task Destroy (TestContext ctx, CancellationToken cancellationToken)

@@ -36,6 +36,7 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -77,18 +78,18 @@ namespace Mono.Security.NewTls.TestProvider
 			throw new InvalidOperationException ();
 		}
 
-		protected abstract Stream Start (Socket socket);
+		protected abstract Stream Start (TestContext ctx, Socket socket);
 
-		public sealed override Task Start ()
+		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
 			if (this is IClient)
-				StartClient ();
+				StartClient (ctx, cancellationToken);
 			else
-				StartServer ();
+				StartServer (ctx, cancellationToken);
 			return FinishedTask;
 		}
 
-		void StartServer ()
+		void StartServer (TestContext ctx, CancellationToken cancellationToken)
 		{
 			socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			socket.Bind (EndPoint);
@@ -99,16 +100,17 @@ namespace Mono.Security.NewTls.TestProvider
 			socket.BeginAccept (ar => {
 				try {
 					accepted = socket.EndAccept (ar);
-					sslStream = Start (accepted);
+					sslStream = Start (ctx, accepted);
 					tcs.SetResult (sslStream);
 				} catch (Exception ex) {
+					ctx.LogError ("Error starting server", ex);
 					Debug ("Error starting server: {0}", ex);
 					tcs.SetException (ex);
 				}
 			}, null);
 		}
 
-		void StartClient ()
+		void StartClient (TestContext ctx, CancellationToken cancellationToken)
 		{
 			socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -117,9 +119,10 @@ namespace Mono.Security.NewTls.TestProvider
 			socket.BeginConnect (EndPoint, ar => {
 				try {
 					socket.EndConnect (ar);
-					sslStream = Start (socket);
+					sslStream = Start (ctx, socket);
 					tcs.SetResult (sslStream);
 				} catch (Exception ex) {
+					ctx.LogError ("Error starting client", ex);
 					Debug ("Error starting client: {0}", ex);
 					tcs.SetException (ex);
 				}
