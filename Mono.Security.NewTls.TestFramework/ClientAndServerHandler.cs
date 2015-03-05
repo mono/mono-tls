@@ -27,11 +27,29 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Server.SupportsCleanShutdown && Client.SupportsCleanShutdown; }
 		}
 
-		public Task Run ()
+		public async Task WaitForConnection ()
 		{
+			var serverTask = Server.WaitForConnection ();
+			var clientTask = Client.WaitForConnection ();
+
+			var t1 = clientTask.ContinueWith (t => {
+				if (t.IsFaulted || t.IsCanceled)
+					Server.Dispose ();
+			});
+			var t2 = serverTask.ContinueWith (t => {
+				if (t.IsFaulted || t.IsCanceled)
+					Client.Dispose ();
+			});
+
+			await Task.WhenAll (serverTask, clientTask, t1, t2);
+		}
+
+		public async Task Run ()
+		{
+			await WaitForConnection ();
 			var serverWrapper = new StreamWrapper (Server.Stream);
 			var clientWrapper = new StreamWrapper (Client.Stream);
-			return MainLoop (serverWrapper, clientWrapper);
+			await MainLoop (serverWrapper, clientWrapper);
 		}
 
 		protected abstract Task MainLoop (ILineBasedStream serverStream, ILineBasedStream clientStream);

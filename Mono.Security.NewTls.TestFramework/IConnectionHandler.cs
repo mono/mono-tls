@@ -35,6 +35,8 @@ namespace Mono.Security.NewTls.TestFramework
 			get;
 		}
 
+		Task WaitForConnection ();
+
 		Task Run ();
 
 		Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply);

@@ -21,10 +21,16 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Connection.SupportsCleanShutdown; }
 		}
 
-		public Task Run ()
+		public async Task WaitForConnection ()
 		{
+			await Connection.WaitForConnection ();
+		}
+
+		public async Task Run ()
+		{
+			await WaitForConnection ();
 			var wrapper = new StreamWrapper (Connection.Stream);
-			return MainLoop (wrapper);
+			await MainLoop (wrapper);
 		}
 
 		protected abstract Task MainLoop (ILineBasedStream stream);
