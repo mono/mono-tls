@@ -69,6 +69,7 @@
     <Compile Include="ConnectionProviderType.cs" />
     <Compile Include="ClientParameters.cs" />
     <Compile Include="ClientAndServerParameters.cs" />
+    <Compile Include="IConnectionHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

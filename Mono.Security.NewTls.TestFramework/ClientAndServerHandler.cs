@@ -7,23 +7,48 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public abstract class ClientAndServerHandler : ConnectionHandler
 	{
-		new public IClientAndServer Connection {
-			get { return (IClientAndServer)base.Connection; }
+		public IServer Server {
+			get;
+			private set;
 		}
 
-		public ClientAndServerHandler (IClientAndServer connection)
-			: base (connection)
+		public IClient Client {
+			get;
+			private set;
+		}
+
+		public ClientAndServerHandler (IServer server, IClient client)
 		{
+			Server = server;
+			Client = client;
+		}
+
+		public override bool SupportsCleanShutdown {
+			get { return Server.SupportsCleanShutdown && Client.SupportsCleanShutdown; }
 		}
 
 		public override Task Run ()
 		{
-			var serverWrapper = new StreamWrapper (Connection.Server.Stream);
-			var clientWrapper = new StreamWrapper (Connection.Client.Stream);
+			var serverWrapper = new StreamWrapper (Server.Stream);
+			var clientWrapper = new StreamWrapper (Client.Stream);
 			return MainLoop (serverWrapper, clientWrapper);
 		}
 
 		protected abstract Task MainLoop (ILineBasedStream serverStream, ILineBasedStream clientStream);
+
+		public override async Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply)
+		{
+			var clientShutdown = Client.Shutdown (attemptCleanShutdown, waitForReply);
+			var serverShutdown = Server.Shutdown (attemptCleanShutdown, waitForReply);
+			await Task.WhenAll (clientShutdown, serverShutdown);
+			return clientShutdown.Result && serverShutdown.Result;
+		}
+
+		public override void Close ()
+		{
+			Client.Dispose ();
+			Server.Dispose ();
+		}
 	}
 }
 

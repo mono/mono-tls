@@ -12,9 +12,9 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public static readonly ConnectionHandlerFactory Echo = new SimpleFactory (c => new EchoHandler (c));
 
-		public static readonly ConnectionHandlerFactory WaitForOkAndDone = new SimpleFactory (c => new WaitForOkAndDoneHandler (c));
+		public static readonly ConnectionHandlerFactory WaitForOkAndDone = new SimpleFactory (c => new WaitForOkAndDoneHandler ((IClientAndServer)c));
 
-		public static readonly ConnectionHandlerFactory HandshakeAndDone = new SimpleFactory (c => new HandshakeAndDoneHandler (c));
+		public static readonly ConnectionHandlerFactory HandshakeAndDone = new SimpleFactory (c => new HandshakeAndDoneHandler ((IClientAndServer)c));
 
 		delegate ConnectionHandler FactoryDelegate (IConnection connection);
 
@@ -43,7 +43,7 @@ namespace Mono.Security.NewTls.TestFramework
 			protected override async Task MainLoop (ILineBasedStream stream)
 			{
 				await stream.WriteLineAsync ("OK");
-				await Connection.Shutdown (Connection.SupportsCleanShutdown, true);
+				await Shutdown (Connection.SupportsCleanShutdown, true);
 				Connection.Dispose ();
 			}
 		}
@@ -65,8 +65,8 @@ namespace Mono.Security.NewTls.TestFramework
 
 		class WaitForOkAndDoneHandler : ClientAndServerHandler
 		{
-			public WaitForOkAndDoneHandler (IConnection connection)
-				: base ((IClientAndServer)connection)
+			public WaitForOkAndDoneHandler (IClientAndServer connection)
+				: base (connection.Server, connection.Client)
 			{
 			}
 
@@ -76,15 +76,15 @@ namespace Mono.Security.NewTls.TestFramework
 				var line = await clientStream.ReadLineAsync ();
 				if (!line.Equals ("OK"))
 					throw new ConnectionException ("Got unexpected output '{0}'", line);
-				await Connection.Shutdown (Connection.SupportsCleanShutdown, true);
-				Connection.Dispose ();
+				await Shutdown (SupportsCleanShutdown, true);
+				Close ();
 			}
 		}
 
 		class HandshakeAndDoneHandler : ClientAndServerHandler
 		{
-			public HandshakeAndDoneHandler (IConnection connection)
-				: base ((IClientAndServer)connection)
+			public HandshakeAndDoneHandler (IClientAndServer connection)
+				: base (connection.Server, connection.Client)
 			{
 			}
 
@@ -98,8 +98,8 @@ namespace Mono.Security.NewTls.TestFramework
 				line = await serverStream.ReadLineAsync ();
 				if (!line.Equals ("CLIENT OK"))
 					throw new ConnectionException ("Got unexpected output from client: '{0}'", line);
-				await Connection.Shutdown (Connection.SupportsCleanShutdown, true);
-				Connection.Dispose ();
+				await Shutdown (SupportsCleanShutdown, true);
+				Close ();
 			}
 		}
 

@@ -7,17 +7,15 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public abstract class ConnectionHandler
 	{
-		public IConnection Connection {
+		public abstract bool SupportsCleanShutdown {
 			get;
-			private set;
-		}
-
-		public ConnectionHandler (IConnection connection)
-		{
-			Connection = connection;
 		}
 
 		public abstract Task Run ();
+
+		public abstract Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply);
+
+		public abstract void Close ();
 	}
 }
 

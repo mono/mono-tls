@@ -132,8 +132,8 @@ namespace Mono.Security.Instrumentation.Tests
 		{
 			public readonly MyFlags Flags;
 
-			public MyConnectionHandler (IConnection connection, MyFlags flags)
-				: base ((ClientAndServer)connection)
+			public MyConnectionHandler (IClientAndServer connection, MyFlags flags)
+				: base (connection.Server, connection.Client)
 			{
 				Flags = flags;
 			}
@@ -153,21 +153,21 @@ namespace Mono.Security.Instrumentation.Tests
 				if ((Flags & MyFlags.ClientSendsExtra) != 0)
 					await clientStream.WriteLineAsync ("EXTRA LINE FROM CLIENT!");
 				if ((Flags & MyFlags.ServerClosesFirst) != 0) {
-					await Connection.Server.Shutdown (true, false);
+					await Server.Shutdown (true, false);
 					line = await clientStream.ReadLineAsync ();
 					if (line != null)
 						throw new ConnectionException ("Got unexpected line after server sent close");
 				}
 				if ((Flags & MyFlags.ClientClosesFirst) != 0) {
-					await Connection.Client.Shutdown (true, false);
+					await Client.Shutdown (true, false);
 					line = await serverStream.ReadLineAsync ();
 					if (line != null)
 						throw new ConnectionException ("Got unexpected line after client sent close");
 				}
 				if ((Flags & MyFlags.DuplicateClose) != 0)
-					await Connection.Shutdown (true, true);
-				await Connection.Shutdown (true, true);
-				Connection.Dispose ();
+					await Shutdown (true, true);
+				await Shutdown (true, true);
+				Close ();
 			}
 		}
 
