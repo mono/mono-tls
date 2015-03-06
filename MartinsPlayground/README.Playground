@@ -1,29 +1,5 @@
 Martin's Playground
 ===================
 
-Tests, Samples, Random Stuff, ...
-
-
-To build this:
-
-* Mono from this branch must be checked out in /Workspace
-
-* Download the openssl 1.0.1 sources, configure with
-
-  $ ./config -t
-  $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL -shared
-  $ make
-  $ make install
-  
-  This install a shared-library build of openssl in /Workspace/INSTALL.
-  
-* Build Mono with --prefix=/Workspace/INSTALL
-
-* Make sure you have Xcode installed.
-
-* Build the native library with
-
-  $ make -f Makefile.native
-  
-* Build MartinPlayground.sln.
+Ignore, this directory will go away very shortly.
 
