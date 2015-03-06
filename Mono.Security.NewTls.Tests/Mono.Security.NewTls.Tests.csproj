@@ -48,16 +48,16 @@
     <Compile Include="Resources\ServerCertificateFromCA.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\MartinsPlayground\CA\server-cert.pfx">
+    <EmbeddedResource Include="..\CA\server-cert.pfx">
       <Link>CA\server-cert.pfx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\MartinsPlayground\CA\Hamiller-Tube-CA.pem">
+    <EmbeddedResource Include="..\CA\Hamiller-Tube-CA.pem">
       <Link>CA\Hamiller-Tube-CA.pem</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\MartinsPlayground\CA\server-self.pfx">
+    <EmbeddedResource Include="..\CA\server-self.pfx">
       <Link>CA\server-self.pfx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\MartinsPlayground\CA\monkey.pfx">
+    <EmbeddedResource Include="..\CA\monkey.pfx">
       <Link>CA\monkey.pfx</Link>
     </EmbeddedResource>
   </ItemGroup>
