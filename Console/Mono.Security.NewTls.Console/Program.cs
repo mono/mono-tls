@@ -365,7 +365,7 @@ namespace Mono.Security.NewTls.Console
 			if (type == ConnectionProviderType.Mono)
 				return true;
 			else if (type == ConnectionProviderType.DotNet)
-				return true;
+				return false;
 			else if (type == ConnectionProviderType.OpenSsl)
 				return true;
 			else
