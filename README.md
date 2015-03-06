@@ -2,6 +2,7 @@ Mono's New TLS Implementation
 =============================
 
 Dependencies:
+-------------
 
 * xamarin/web-tests from the 'martin-newtls' branch
   (https://github.com/xamarin/web-tests/tree/martin-newtls)
@@ -50,4 +51,12 @@ Dependencies:
   $ make -f Makefile.native
   
 * Build MartinPlayground.mdw.
+
+Reference Source and how the pieces fit together
+------------------------------------------------
+
+A slightly outdated documentation is here:
+https://github.com/mono/mono/blob/work-newtls/mcs/class/Mono.Security.Providers/README.md
+
+This still needs to be cleaned up.
 
