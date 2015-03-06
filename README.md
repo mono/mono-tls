@@ -14,6 +14,10 @@ Dependencies:
   
   FIXME: To use a different prefix, need to make sure we find the
   openssl shared libraries at runtime.
+
+* FIXME:
+  Temporarily need mono from the old 'work-newtls-master' branch
+  until a build problem is fixed.
   
 * For Android and iOS:
 
