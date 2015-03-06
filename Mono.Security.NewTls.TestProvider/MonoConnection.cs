@@ -51,6 +51,10 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 		}
 
+		public override bool SupportsCleanShutdown {
+			get { return true; }
+		}
+
 		TlsSettings settings;
 		MonoNewTlsStream monoSslStream;
 
