@@ -32,8 +32,8 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var clientCerts = new X509Certificate2Collection ();
 			if (Parameters.ClientCertificate != null) {
-				var clientCert = (ClientCertificate)Parameters.ClientCertificate;
-				clientCerts.Add (clientCert.Certificate);
+				var clientCert = new X509Certificate2 (Parameters.ClientCertificate.Data, Parameters.ClientCertificate.Password);
+				clientCerts.Add (clientCert);
 			}
 
 			var targetHost = "Hamiller-Tube.local";

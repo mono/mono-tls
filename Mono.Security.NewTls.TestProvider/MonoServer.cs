@@ -20,18 +20,14 @@ using Mono.Security.Providers.NewTls;
 
 using SSCX = System.Security.Cryptography.X509Certificates;
 using MX = Mono.Security.X509;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	public class MonoServer : MonoConnection, IServer
 	{
-		public ServerCertificate Certificate {
-			get;
-			private set;
-		}
-
-		IServerCertificate IServer.Certificate {
-			get { return Certificate; }
+		public IServerCertificate Certificate {
+			get { return Parameters.ServerCertificate; }
 		}
 
 		new public IServerParameters Parameters {
@@ -41,7 +37,6 @@ namespace Mono.Security.NewTls.TestProvider
 		public MonoServer (IPEndPoint endpoint, IServerParameters parameters)
 			: base (endpoint, parameters)
 		{
-			Certificate = new ServerCertificate (parameters.ServerCertificate);
 		}
 
 		protected override TlsSettings GetSettings ()
@@ -65,10 +60,12 @@ namespace Mono.Security.NewTls.TestProvider
 
 			settings.ClientCertValidationCallback = ClientCertValidationCallback;
 
+			var serverCert = new SSCX.X509Certificate2 (Certificate.Data, Certificate.Password);
+
 			var stream = new NetworkStream (socket);
 			return MonoNewTlsStreamFactory.CreateServer (
 				stream, false, null, null, EncryptionPolicy.RequireEncryption, settings,
-				Certificate.Certificate, false, SslProtocols.Tls12, false);
+				serverCert, false, SslProtocols.Tls12, false);
 		}
 
 		bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors)

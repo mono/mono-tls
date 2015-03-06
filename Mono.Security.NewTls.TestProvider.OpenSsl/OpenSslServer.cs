@@ -8,18 +8,14 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	public class OpenSslServer : OpenSslConnection, IServer
 	{
-		public ServerCertificate Certificate {
-			get;
-			private set;
-		}
-
-		IServerCertificate IServer.Certificate {
-			get { return Certificate; }
+		public IServerCertificate Certificate {
+			get { return Parameters.ServerCertificate; }
 		}
 
 		new public IServerParameters Parameters {
@@ -29,7 +25,6 @@ namespace Mono.Security.NewTls.TestProvider
 		public OpenSslServer (IPEndPoint endpoint, IServerParameters parameters)
 			: base (endpoint, parameters)
 		{
-			Certificate = new ServerCertificate (parameters.ServerCertificate);
 		}
 
 		protected override void Initialize ()

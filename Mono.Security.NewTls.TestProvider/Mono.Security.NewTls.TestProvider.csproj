@@ -35,17 +35,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CertificateAndKeyAsPFX.cs" />
-    <Compile Include="CertificateAsPEM.cs" />
     <Compile Include="ClientAndServer.cs" />
-    <Compile Include="ClientCertificate.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="DotNetClient.cs" />
     <Compile Include="DotNetConnection.cs" />
     <Compile Include="DotNetServer.cs" />
     <Compile Include="MonoCryptoProvider.cs" />
-    <Compile Include="PrivateFile.cs" />
-    <Compile Include="ServerCertificate.cs" />
     <Compile Include="SymmetricAlgorithmProxy.cs" />
     <Compile Include="MonoClient.cs" />
     <Compile Include="MonoConnection.cs" />

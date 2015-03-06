@@ -17,13 +17,8 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class DotNetServer : DotNetConnection, IServer
 	{
-		public ServerCertificate Certificate {
-			get;
-			private set;
-		}
-
-		IServerCertificate IServer.Certificate {
-			get { return Certificate; }
+		public IServerCertificate Certificate {
+			get { return Parameters.ServerCertificate; }
 		}
 
 		new public IServerParameters Parameters {
@@ -33,7 +28,6 @@ namespace Mono.Security.NewTls.TestProvider
 		public DotNetServer (IPEndPoint endpoint, IServerParameters parameters)
 			: base (endpoint, parameters)
 		{
-			Certificate = new ServerCertificate (parameters.ServerCertificate);
 		}
 
 		protected override async Task<Stream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
@@ -43,9 +37,11 @@ namespace Mono.Security.NewTls.TestProvider
 			if (Parameters.AskForClientCertificate || Parameters.RequireClientCertificate)
 				throw new NotSupportedException ();
 
+			var serverCert = new X509Certificate2 (Certificate.Data, Certificate.Password);
+
 			var stream = new NetworkStream (socket);
 			var server = new SslStream (stream, false);
-			await server.AuthenticateAsServerAsync (Certificate.Certificate, false, SslProtocols.Tls12, false);
+			await server.AuthenticateAsServerAsync (serverCert, false, SslProtocols.Tls12, false);
 
 			ctx.LogMessage ("Successfully authenticated.");
 
