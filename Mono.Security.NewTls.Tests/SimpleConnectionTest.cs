@@ -109,6 +109,7 @@ namespace Mono.Security.NewTls.Tests
 
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
 			await handler.WaitForConnection ();
+			ctx.LogMessage ("TEST CONNECTION #1");
 			await handler.Run ();
 
 			ctx.LogMessage ("TEST CONNECTION DONE");

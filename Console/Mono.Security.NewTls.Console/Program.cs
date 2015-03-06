@@ -366,6 +366,8 @@ namespace Mono.Security.NewTls.Console
 				return true;
 			else if (type == ConnectionProviderType.DotNet)
 				return true;
+			else if (type == ConnectionProviderType.OpenSsl)
+				return true;
 			else
 				return false;
 		}
@@ -376,6 +378,8 @@ namespace Mono.Security.NewTls.Console
 				return new DotNetClient (GetLocalEndPoint (), parameters);
 			else if (type == ConnectionProviderType.Mono)
 				return new MonoClient (GetLocalEndPoint (), parameters);
+			else if (type == ConnectionProviderType.OpenSsl)
+				return new OpenSslClient (GetLocalEndPoint (), parameters);
 			throw new NotSupportedException ();
 		}
 
@@ -385,6 +389,8 @@ namespace Mono.Security.NewTls.Console
 				return new DotNetServer (GetLocalEndPoint (), parameters);
 			else if (type == ConnectionProviderType.Mono)
 				return new MonoServer (GetLocalEndPoint (), parameters);
+			else if (type == ConnectionProviderType.OpenSsl)
+				return new OpenSslServer (GetLocalEndPoint (), parameters);
 			else
 				throw new NotSupportedException ();
 		}

@@ -38,6 +38,9 @@
     <Compile Include="NativeOpenSsl.cs" />
     <Compile Include="NativeOpenSslError.cs" />
     <Compile Include="NativeOpenSslException.cs" />
+    <Compile Include="OpenSslClient.cs" />
+    <Compile Include="OpenSslConnection.cs" />
+    <Compile Include="OpenSslServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\lib\libNativeOpenSsl.dylib">
@@ -79,6 +82,10 @@
     <ProjectReference Include="..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
       <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
       <Name>Xamarin.AsyncTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj">
+      <Project>{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}</Project>
+      <Name>Mono.Security.NewTls.TestProvider</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

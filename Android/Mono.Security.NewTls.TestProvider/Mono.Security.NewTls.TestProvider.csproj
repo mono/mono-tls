@@ -33,8 +33,16 @@
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Mono.Security" />
+    <Reference Include="System, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Mono.Security, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Mono.Security.Providers.NewSystemSource, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <SpecificVersion>False</SpecificVersion>
+      <Aliases>NewSystemSource</Aliases>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\CertificateAndKeyAsPFX.cs">
@@ -97,9 +105,6 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Reference Include="Mono.Security.Providers.NewSystemSource">
-      <Aliases>NewSystemSource</Aliases>
-    </Reference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
       <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
       <Name>Mono.Security.NewTls.Interface</Name>

@@ -67,20 +67,20 @@ namespace Mono.Security.NewTls.Tests
 		public static readonly TestFeature MonoCryptoProvider = new TestFeature (
 			"MonoCryptoProvider", "Use Mono.Security as crypto provider", true);
 		public static readonly TestFeature OpenSslCryptoProvider = new TestFeature (
-			"OpenSslCryptoProvider", "Use OpenSSL as crypto provider", () => IsOpenSslSupported ());
+			"OpenSslCryptoProvider", "Use OpenSSL as crypto provider", () => {
+				var provider = DependencyInjector.Get<ICryptoProvider> ();
+				return provider.IsSupported (CryptoProviderType.OpenSsl, false);
+			});
 
 		public static readonly TestFeature DotNetConnectionProvider = new TestFeature (
 			"DotNetConnectionProvider", "DotNetConnectionProvider", false);
 		public static readonly TestFeature MonoConnectionProvider = new TestFeature (
 			"MonoConnectionProvider", "MonoConnectionProvider", true);
 		public static readonly TestFeature OpenSslConnectionProvider = new TestFeature (
-			"OpenSslConnectionProvider", "OpenSslConnectionProvider", () => IsOpenSslSupported ());
-
-		static bool IsOpenSslSupported ()
-		{
-			var provider = DependencyInjector.Get<ICryptoProvider> ();
-			return provider.IsSupported (CryptoProviderType.OpenSsl, true);
-		}
+			"OpenSslConnectionProvider", "OpenSslConnectionProvider", () => {
+				var provider = DependencyInjector.Get<IConnectionProvider> ();
+				return provider.IsSupported (ConnectionProviderType.OpenSsl);
+			});
 
 		static NewTlsTestFeatures ()
 		{
