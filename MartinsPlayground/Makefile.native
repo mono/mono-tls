@@ -1,9 +1,0 @@
-PROJECT = NativeOpenSsl/NativeOpenSsl.xcodeproj
-TARGET = NativeOpenSsl
-
-all:
-	xcodebuild -project $(PROJECT) -target $(TARGET)
-
-clean:
-	-rm -f lib/*.dylib
-	xcodebuild -project $(PROJECT) -target $(TARGET) clean
