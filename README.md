@@ -7,6 +7,13 @@ Dependencies:
   (https://github.com/xamarin/web-tests/tree/martin-newtls)
   included as submodule.
   
+* Mono 4.0 must be installed in the system and set as the default Mono
+  (/Library/Frameworks/Mono.framework/Versions/4.0.0).
+  
+  This is required because some internals in the binary serialization
+  format have changed, which Xamarin Studio uses to communicate to the
+  external 'mdtool' build process when building against a custom runtime.
+  
 * mono/mono from the 'work-newtls' branch
   (https://github.com/mono/mono/tree/work-newtls)
   
@@ -14,11 +21,11 @@ Dependencies:
   
   FIXME: To use a different prefix, need to make sure we find the
   openssl shared libraries at runtime.
-
-* FIXME:
-  Temporarily need mono from the old 'work-newtls-master' branch
-  until a build problem is fixed.
   
+  This version of Mono must be selected as current runtime in
+  Xamarin Studio (go to Preferences / .NET Runtime to install it,
+  then select via Project / Active Runtime ...).
+
 * For Android and iOS:
 
   Custom built of Xamarin.Android / Xamarin.iOS with Mono from
