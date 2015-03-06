@@ -98,6 +98,17 @@ namespace Mono.Security.NewTls.Tests
 			yield return new ClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
 				VerifyPeerCertificate = false
 			};
+			yield return new ClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
+				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate
+			};
+			yield return new ClientAndServerParameters ("ask-for-certificate", ResourceManager.ServerCertificateFromCA) {
+				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
+				AskForClientCertificate = true
+			};
+			yield return new ClientAndServerParameters ("require-certificate", ResourceManager.ServerCertificateFromCA) {
+				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
+				RequireClientCertificate = true, ClientCertificate = ResourceManager.MonkeyCertificate
+			};
 		}
 
 		[AsyncTest]

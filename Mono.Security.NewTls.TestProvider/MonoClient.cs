@@ -57,7 +57,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var clientCerts = new X509Certificate2Collection ();
 			if (Parameters.ClientCertificate != null) {
-				var clientCert = (ClientCertificate)Parameters.ClientCertificate;
+				var clientCert = new ClientCertificate (Parameters.ClientCertificate.Data, Parameters.ClientCertificate.Password);
 				clientCerts.Add (clientCert.Certificate);
 			}
 

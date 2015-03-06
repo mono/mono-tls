@@ -4,7 +4,7 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public class ServerCertificate : CertificateAndKeyAsPFX, IServerCertificate
+	public sealed class ServerCertificate : CertificateAndKeyAsPFX, IServerCertificate
 	{
 		public ServerCertificate (byte[] data, string password)
 			: base (data, password)

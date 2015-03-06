@@ -8,7 +8,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get; set;
 		}
 
-		ICertificateAndKeyAsPFX ClientCertificate {
+		IClientCertificate ClientCertificate {
 			get; set;
 		}
 	}
