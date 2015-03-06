@@ -64,32 +64,39 @@ namespace Mono.Security.NewTls.Tests
 		public static readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
 		public static readonly TestFeature NotWorking = new TestFeature ("NotWorking", "Not Working");
 
-		public static readonly TestFeature MonoCryptoProvider = new TestFeature (
-			"MonoCryptoProvider", "Use Mono.Security as crypto provider", () => {
-				var provider = DependencyInjector.Get<ICryptoProvider> ();
-				return provider.IsSupported (CryptoProviderType.Mono, false);
-			});
-		public static readonly TestFeature OpenSslCryptoProvider = new TestFeature (
-			"OpenSslCryptoProvider", "Use OpenSSL as crypto provider", () => {
-				var provider = DependencyInjector.Get<ICryptoProvider> ();
-				return provider.IsSupported (CryptoProviderType.OpenSsl, false);
-			});
+		public static readonly TestFeature MonoCryptoProvider = CreateCryptoFeature (
+			"MonoCryptoProvider", "Use Mono.Security as crypto provider", CryptoProviderType.Mono, false);
+		public static readonly TestFeature OpenSslCryptoProvider = CreateCryptoFeature (
+			"OpenSslCryptoProvider", "Use OpenSSL as crypto provider", CryptoProviderType.OpenSsl, false);
 
-		public static readonly TestFeature DotNetConnectionProvider = new TestFeature (
-			"DotNetConnectionProvider", "DotNetConnectionProvider", () => {
-				var provider = DependencyInjector.Get<IConnectionProvider> ();
-				return provider.IsSupported (ConnectionProviderType.DotNet);
-			});
-		public static readonly TestFeature MonoConnectionProvider = new TestFeature (
-			"MonoConnectionProvider", "MonoConnectionProvider", () => {
-				var provider = DependencyInjector.Get<IConnectionProvider> ();
-				return provider.IsSupported (ConnectionProviderType.Mono);
-			});
-		public static readonly TestFeature OpenSslConnectionProvider = new TestFeature (
-			"OpenSslConnectionProvider", "OpenSslConnectionProvider", () => {
-				var provider = DependencyInjector.Get<IConnectionProvider> ();
-				return provider.IsSupported (ConnectionProviderType.OpenSsl);
-			});
+		static TestFeature CreateCryptoFeature (string name, string description, CryptoProviderType type, bool needsEncryption, bool defaultValue = true)
+		{
+			var provider = DependencyInjector.Get<ICryptoProvider> ();
+			if (!provider.IsSupported (type, needsEncryption)) {
+				// read-only and disabled
+				return new TestFeature (name, description, () => false);
+			}
+
+			return new TestFeature (name, description, defaultValue);
+		}
+
+		public static readonly TestFeature DotNetConnectionProvider = CreateConnectionFeature (
+			"DotNetConnectionProvider", "DotNetConnectionProvider", ConnectionProviderType.DotNet);
+		public static readonly TestFeature MonoConnectionProvider = CreateConnectionFeature (
+			"MonoConnectionProvider", "MonoConnectionProvider", ConnectionProviderType.Mono);
+		public static readonly TestFeature OpenSslConnectionProvider = CreateConnectionFeature (
+			"OpenSslConnectionProvider", "OpenSslConnectionProvider", ConnectionProviderType.OpenSsl);
+
+		static TestFeature CreateConnectionFeature (string name, string description, ConnectionProviderType type, bool defaultValue = true)
+		{
+			var provider = DependencyInjector.Get<IConnectionProvider> ();
+			if (!provider.IsSupported (type)) {
+				// read-only and disabled
+				return new TestFeature (name, description, () => false);
+			}
+
+			return new TestFeature (name, description, defaultValue);
+		}
 
 		static NewTlsTestFeatures ()
 		{
