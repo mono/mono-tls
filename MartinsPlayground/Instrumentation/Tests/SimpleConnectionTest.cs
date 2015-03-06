@@ -21,48 +21,6 @@ namespace Mono.Security.Instrumentation.Tests
 		{
 		}
 
-		#if FIXME
-		[Test]
-		[Category ("Simple")]
-		public async void Simple ()
-		{
-			await Run (new ClientAndServerParameters {
-				VerifyPeerCertificate = false
-			});
-		}
-
-		[Test]
-		[Category ("Simple")]
-		public async void Simple_VerifyCertificate ()
-		{
-			await Run (new ClientAndServerParameters {
-				ServerCertificate = ResourceManager.ServerCertificateFromCA,
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate
-			});
-		}
-
-		[Test]
-		[Category ("Simple")]
-		public async void Simple_AskForCertificate ()
-		{
-			await Run (new ClientAndServerParameters {
-				ServerCertificate = ResourceManager.ServerCertificateFromCA,
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				AskForClientCertificate = true
-			});
-		}
-
-		[Test]
-		[Category ("Simple")]
-		public async void Simple_RequireCertificate ()
-		{
-			await Run (new ClientAndServerParameters {
-				ServerCertificate = ResourceManager.ServerCertificateFromCA,
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				RequireClientCertificate = true, ClientCertificate = ResourceManager.MonkeyCertificate
-			});
-		}
-
 		[Test]
 		[Category ("Simple")]
 		public async void CheckCipherSuite ()
@@ -189,6 +147,5 @@ namespace Mono.Security.Instrumentation.Tests
 				throw;
 			}
 		}
-		#endif
 	}
 }
