@@ -45,10 +45,12 @@ namespace Mono.Security.NewTls.TestProvider
 		public OpenSslConnection (IPEndPoint endpoint, IConnectionParameters parameters)
 			: base (endpoint, parameters)
 		{
+			createTcs = new TaskCompletionSource<object> ();
 		}
 
 		protected NativeOpenSsl openssl;
 		TlsConnectionInfo connectionInfo;
+		TaskCompletionSource<object> createTcs;
 
 		public Stream Stream {
 			get { return openssl; }
@@ -83,6 +85,15 @@ namespace Mono.Security.NewTls.TestProvider
 				openssl.SetCertificateVerify (mode, RemoteValidationCallback);
 			}
 			Initialize ();
+
+			Task.Factory.StartNew (() => {
+				try {
+					CreateConnection ();
+					createTcs.SetResult (null);
+				} catch (Exception ex) {
+					createTcs.SetException (ex);
+				}
+			});
 			return FinishedTask;
 		}
 
@@ -92,7 +103,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public sealed override Task WaitForConnection ()
 		{
-			return Task.Run (() => CreateConnection ());
+			return createTcs.Task;
 		}
 
 		public sealed override Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply)
