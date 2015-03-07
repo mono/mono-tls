@@ -61,7 +61,9 @@ namespace Mono.Security.NewTls.Android
 		{
 			rng = RandomNumberGenerator.Create ();
 
-			MonoTlsProviderFactory.InstallProvider (new NewTlsProvider ());
+			var newTlsProvider = new NewTlsProvider ();
+			DependencyInjector.Register<NewTlsProvider> (newTlsProvider);
+			MonoTlsProviderFactory.InstallProvider (newTlsProvider);
 
 			PortableSupportImpl.Initialize ();
 			DependencyInjector.Register<ICryptoProvider> (this);

@@ -114,7 +114,9 @@ namespace Mono.Security.NewTls.Console
 			DependencyInjector.Register<ICryptoProvider> (this);
 			DependencyInjector.Register<IConnectionProvider> (this);
 
-			MonoTlsProviderFactory.InstallProvider (new NewTlsProvider ());
+			var newTlsProvider = new NewTlsProvider ();
+			DependencyInjector.Register<NewTlsProvider> (newTlsProvider);
+			MonoTlsProviderFactory.InstallProvider (newTlsProvider);
 
 			LogLevel = -1;
 

@@ -130,6 +130,11 @@ namespace Mono.Security.Providers.NewTls
 
 			return new TlsContextWrapper (config);
 		}
+
+		public static MonoNewTlsStream GetNewTlsStream (MonoSslStream stream)
+		{
+			return ((MonoSslStreamImpl)stream).Impl;
+		}
 	}
 }
 

@@ -37,6 +37,7 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 
 using Mono.Security.NewTls;
+using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using Mono.Security.NewTls.TestFramework;
 
@@ -56,7 +57,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		TlsSettings settings;
-		MonoNewTlsStream monoSslStream;
+		MonoSslStream monoSslStream;
 
 		public override bool SupportsConnectionInfo {
 			get { return true; }
@@ -67,23 +68,22 @@ namespace Mono.Security.NewTls.TestProvider
 			return settings.ConnectionInfo;
 		}
 
-		protected abstract MonoNewTlsStream Start (Socket socket, TlsSettings settings);
+		protected abstract Task<MonoSslStream> Start (TestContext ctx, Socket socket, TlsSettings settings, CancellationToken cancellationToken);
 
 		protected abstract TlsSettings GetSettings ();
 
-		protected sealed override Task<Stream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
+		protected sealed override async Task<Stream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
 		{
-			return Task.Run<Stream> (() => {
-				settings = GetSettings ();
-				settings.EnableDebugging = Parameters.EnableDebugging;
-				monoSslStream = Start (socket, settings);
-				return monoSslStream;
-			});
+			settings = GetSettings ();
+			settings.EnableDebugging = Parameters.EnableDebugging;
+			monoSslStream = await Start (ctx, socket, settings, cancellationToken);
+			return monoSslStream.AuthenticatedStream;
 		}
 
 		protected override async Task<bool> TryCleanShutdown (bool waitForReply)
 		{
-			await monoSslStream.Shutdown (waitForReply);
+			var monoNewTlsStream = NewTlsProvider.GetNewTlsStream (monoSslStream);
+			await monoNewTlsStream.Shutdown (waitForReply);
 			return true;
 		}
 	}

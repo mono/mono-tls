@@ -20,6 +20,9 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Mono.Security.Providers.NewTls;
+using Mono.Security.Interface;
+
+using Xamarin.AsyncTests;
 
 using SSCX = System.Security.Cryptography.X509Certificates;
 using MX = Mono.Security.X509;
@@ -51,7 +54,7 @@ namespace Mono.Security.NewTls.TestProvider
 			return settings;
 		}
 
-		protected override MonoNewTlsStream Start (Socket socket, TlsSettings settings)
+		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, TlsSettings settings, CancellationToken cancellationToken)
 		{
 			Debug ("Connected.");
 
@@ -65,14 +68,18 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var stream = new NetworkStream (socket);
 
-			return MonoNewTlsStreamFactory.CreateClient (
-				stream, false, RemoteValidationCallback, null, EncryptionPolicy.RequireEncryption, settings,
-				targetHost, clientCerts, SslProtocols.Tls12, false);
+			var provider = DependencyInjector.Get<NewTlsProvider> ();
+			var monoSslStream = provider.CreateSslStream (
+				stream, false, MonoRemoteValidationCallback, null, settings);
+
+			await monoSslStream.AuthenticateAsClientAsync (targetHost, clientCerts, SslProtocols.Tls12, false);
+
+			return monoSslStream;
 		}
 
-		bool RemoteValidationCallback (object sender, X509Certificate certificate, X509Chain chain, NewSslPolicyErrors errors)
+		bool MonoRemoteValidationCallback (string targetHost, X509Certificate certificate, X509Chain chain, MonoSslPolicyErrors errors)
 		{
-			return base.RemoteValidationCallback (sender, certificate, chain, (SslPolicyErrors)errors);
+			return base.RemoteValidationCallback (this, certificate, chain, (SslPolicyErrors)errors);
 		}
 
 		bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors)

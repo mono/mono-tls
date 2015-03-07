@@ -17,6 +17,7 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Mono.Security.Providers.NewTls;
+using Mono.Security.Interface;
 
 using SSCX = System.Security.Cryptography.X509Certificates;
 using MX = Mono.Security.X509;
@@ -50,7 +51,7 @@ namespace Mono.Security.NewTls.TestProvider
 			return settings;
 		}
 
-		protected override MonoNewTlsStream Start (Socket socket, TlsSettings settings)
+		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, TlsSettings settings, CancellationToken cancellationToken)
 		{
 			#if FIXME
 			var monoParams = Parameters as IMonoServerParameters;
@@ -63,10 +64,15 @@ namespace Mono.Security.NewTls.TestProvider
 			var serverCert = new SSCX.X509Certificate2 (Certificate.Data, Certificate.Password);
 
 			var stream = new NetworkStream (socket);
-			return MonoNewTlsStreamFactory.CreateServer (
-				stream, false, null, null, EncryptionPolicy.RequireEncryption, settings,
-				serverCert, false, SslProtocols.Tls12, false);
+
+			var provider = DependencyInjector.Get<NewTlsProvider> ();
+			var monoSslStream = provider.CreateSslStream (stream, false, null, null, settings);
+
+			await monoSslStream.AuthenticateAsServerAsync (serverCert, false, SslProtocols.Tls12, false);
+
+			return monoSslStream;
 		}
+
 
 		bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors)
 		{
