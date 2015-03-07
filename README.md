@@ -4,21 +4,17 @@ Mono's New TLS Implementation
 Dependencies:
 -------------
 
-* xamarin/web-tests from the 'martin-newtls' branch
-  (https://github.com/xamarin/web-tests/tree/martin-newtls)
-  included as submodule.
+* Xamarin.AsyncTests from the [martin-newtls](https://github.com/xamarin/web-tests/tree/martin-newtls) branch.  This is included as a submodule.
   
-* Mono 4.0 must be installed in the system and set as the default Mono
-  (/Library/Frameworks/Mono.framework/Versions/4.0.0).
+* Mono 4.0 must be installed as system-default Mono in `/Library/Frameworks/Mono.framework`.
   
   This is required because some internals in the binary serialization
   format have changed, which Xamarin Studio uses to communicate to the
-  external 'mdtool' build process when building against a custom runtime.
+  external `mdtool` build process when building against a custom runtime.
   
-* mono/mono from the 'work-newtls' branch
-  (https://github.com/mono/mono/tree/work-newtls)
+* Mono from the [work-newtls](https://github.com/mono/mono/tree/work-newtls) branch installed into a custom prefix.
   
-  This must be installed in /Workspace/INSTALL at the moment.
+  At the moment, this custom prefix must be `/Workspace/INSTALL` - this is unfortunately hardcoded in the [native Xcode project](https://github.com/mono/mono-tls/blob/master/NativeOpenSsl/NativeOpenSsl.xcodeproj/project.pbxproj) at the moment.
   
   FIXME: To use a different prefix, need to make sure we find the
   openssl shared libraries at runtime.
