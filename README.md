@@ -71,3 +71,14 @@ All these classes are currently not built into `System.dll`, but into `Mono.Secu
 Main bridge between our code and theirs is [Mono.Security.Providers.NewTls.MonoNewTlsStreamFactory](https://github.com/mono/mono-tls/blob/master/Mono.Security.Providers/NewTls/Mono.Security.Providers.NewTls/MonoNewTlsStreamFactory.cs).
 
 The `Mono.Security.Providers.NewTls` module uses advanced `extern alias` compilation magic to create an instance of their `SslStream` class from the `Mono.Security.Providers.NewSystemSource` module (again, this uses advanced `extern alias` compilation magic).
+
+This `Mono.Security.Providers.NewTls` module provides an implementation of [`Mono.Security.Interface.MonoTlsProvider`](https://github.com/mono/mono/blob/work-newtls/mcs/class/Mono.Security/Mono.Security.Interface/MonoTlsProvider.cs), which is then registered with the [`MonoTlsProviderFactory`](https://github.com/mono/mono/blob/work-newtls/mcs/class/Mono.Security/Mono.Security.Interface/MonoTlsProviderFactory.cs), a new public `Mono.Security.dll` (`System.dll` on Mobile) API.
+
+When Mono's existing web-stack attempts to make a TLS call, it will query `MonoTlsProviderFactory` for the current provider, so it can use the new implementation.  (FIXME: this is not done yet)  (FIXME: the factory is currently per-process and needs to be set at application startup).
+
+To use the new code, an application needs to call
+
+	MonoTlsProviderFactory.InstallProvider (new NewTlsProvider ());
+
+
+
