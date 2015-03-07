@@ -58,19 +58,17 @@ namespace Mono.Security.NewTls.Tests
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ClientType");
 			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
+
+			CipherSuiteCode requestedCipher;
+			if (ctx.TryGetParameter<CipherSuiteCode> (out requestedCipher)) {
+				// we receive a deep-cloned copy, so we can modify it here.
+				parameters.ClientCiphers = new CipherSuiteCode[] { requestedCipher };
+				parameters.ExpectedCipher = requestedCipher;
+			}
+
 			var provider = DependencyInjector.Get<IConnectionProvider> ();
 			return provider.CreateClient (providerType, parameters);
 		}
-	}
-
-	abstract class ConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<ClientAndServerParameters>
-	{
-		public ConnectionParameterAttribute ()
-			: base (null, TestFlags.Browsable)
-		{
-		}
-
-		public abstract IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter);
 	}
 }
 

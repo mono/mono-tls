@@ -34,20 +34,9 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
-	class SelectCipherSuiteAttribute : ConnectionParameterAttribute
+	class SelectCipherSuiteAttribute : TestParameterAttribute, ITestParameterSource<CipherSuiteCode>
 	{
-		public override IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter)
-		{
-			foreach (var cipher in GetAllCipherSuites ()) {
-				var name = string.Format ("select-cipher:{0}", cipher);
-				yield return new ClientAndServerParameters (name, ResourceManager.DefaultServerCertificate) {
-					VerifyPeerCertificate = false, ClientCiphers = new CipherSuiteCode[] { cipher },
-					ExpectedCipher = cipher
-				};
-			}
-		}
-
-		public IEnumerable<CipherSuiteCode> GetAllCipherSuites ()
+		public IEnumerable<CipherSuiteCode> GetParameters (TestContext ctx, string filter)
 		{
 			// Galois-Counter Cipher Suites.
 			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384;
@@ -88,17 +77,20 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx,
-			[SelectCipherSuite] ClientAndServerParameters parameters,
+			[SelectCipherSuite] CipherSuiteCode cipherSuite,
+			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
-			ctx.LogMessage ("SELECT CIPHERS: {0} {1} {2} {3}", parameters, parameters.ExpectedCipher, server, client);
+			ctx.LogMessage ("SELECT CIPHERS: {0} {1} {2} {3}", cipherSuite, parameters, server, client);
+
+			ctx.Assert (cipherSuite, Is.EqualTo (parameters.ExpectedCipher.Value));
 
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
 			await handler.WaitForConnection ();
 
 			var serverInfo = server.GetConnectionInfo ();
 			ctx.Assert (serverInfo, Is.Not.Null);
-			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value));
+			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (cipherSuite));
 
 			await handler.Run ();
 		}

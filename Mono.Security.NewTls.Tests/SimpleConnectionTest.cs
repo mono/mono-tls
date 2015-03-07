@@ -34,9 +34,14 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
-	class SimpleConnectionParameterAttribute : ConnectionParameterAttribute
+	class SimpleConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<ClientAndServerParameters>
 	{
-		public override IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter)
+		public SimpleConnectionParameterAttribute (string filter = null)
+			: base (filter)
+		{
+		}
+
+		public IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
 			yield return new ClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
 				VerifyPeerCertificate = false, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
