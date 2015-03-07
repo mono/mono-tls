@@ -54,8 +54,20 @@ For Android and iOS you will need a custom build of Xamarin.Android / Xamarin.iO
 Reference Source and how the pieces fit together
 ------------------------------------------------
 
-A slightly outdated documentation is here:
-https://github.com/mono/mono/blob/work-newtls/mcs/class/Mono.Security.Providers/README.md
+See [mcs/class/Mono.Security.Providers/README.md](
+https://github.com/mono/mono/blob/work-newtls/mcs/class/Mono.Security.Providers/README.md) for an overview of the new `Mono.Security.Interface` APIs.
 
-This still needs to be cleaned up.
+The new TLS code requires Microsoft's `SslStream` implementation from the referencesource, the corresponding files are:
 
+* [System/Net/SecureProtocols/SslStream.cs](https://github.com/mono/referencesource/blob/mono-4.0.0-branch/System/net/System/Net/SecureProtocols/SslStream.cs)
+* [System/Net/SecureProtocols/_SslStream.cs](https://github.com/mono/referencesource/blob/mono-4.0.0-branch/System/net/System/Net/SecureProtocols/_SslStream.cs)
+* [System/Net/SecureProtocols/_SslState.cs](https://github.com/mono/referencesource/blob/mono-4.0.0-branch/System/net/System/Net/SecureProtocols/_SslState.cs)
+* [System/Net/_SecureChannel.cs](https://github.com/mono/referencesource/blob/mono-4.0.0-branch/System/net/System/Net/_SecureChannel.cs)
+
+Main bridge between their code and ours is [mcs/class/System/ReferenceSources/SSPIWrapper.cs](https://github.com/mono/mono/blob/work-newtls/mcs/class/System/ReferenceSources/SSPIWrapper.cs).
+
+All these classes are currently not built into `System.dll`, but into `Mono.Security.Providers.NewSystemSource.dll`.
+
+Main bridge between our code and theirs is [Mono.Security.Providers.NewTls.MonoNewTlsStreamFactory](https://github.com/mono/mono-tls/blob/master/Mono.Security.Providers/NewTls/Mono.Security.Providers.NewTls/MonoNewTlsStreamFactory.cs).
+
+The `Mono.Security.Providers.NewTls` module uses advanced `extern alias` compilation magic to create an instance of their `SslStream` class from the `Mono.Security.Providers.NewSystemSource` module (again, this uses advanced `extern alias` compilation magic).
