@@ -36,8 +36,28 @@ namespace Mono.Security.NewTls.Tests
 
 	class SelectCipherSuiteAttribute : TestParameterAttribute, ITestParameterSource<CipherSuiteCode>
 	{
+		public SelectCipherSuiteAttribute (string name)
+		{
+			Identifier = name;
+		}
+
+		public SelectCipherSuiteAttribute (string name, CipherSuiteCode code)
+			: base (code.ToString ())
+		{
+			Identifier = name;
+		}
+
 		public IEnumerable<CipherSuiteCode> GetParameters (TestContext ctx, string filter)
 		{
+			if (filter != null) {
+				CipherSuiteCode code;
+				if (!Enum.TryParse<CipherSuiteCode> (filter, out code))
+					ctx.AssertFail ("Invalid cipher code '{0}'.", filter);
+
+				yield return code;
+				yield break;
+			}
+
 			// Galois-Counter Cipher Suites.
 			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384;
 			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256;
@@ -78,9 +98,8 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		public async Task SelectClientCipher (TestContext ctx,
 			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
-			[ServerTestHost] IServer server,
-			[SelectCipherSuite] CipherSuiteCode clientCipher,
-			[ClientTestHost] IClient client)
+			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
+			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
 			ctx.LogMessage ("SELECT CLIENT CIPHERS: {0} {1} {2} {3}", clientCipher, parameters, server, client);
 
@@ -103,9 +122,8 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		public async Task SelectServerCipher (TestContext ctx,
 			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
-			[SelectCipherSuite] CipherSuiteCode serverCipher,
-			[ServerTestHost] IServer server,
-			[ClientTestHost] IClient client)
+			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
+			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
 			ctx.LogMessage ("SELECT SERVER CIPHERS: {0} {1} {2} {3}", serverCipher, parameters, server, client);
 
@@ -124,6 +142,30 @@ namespace Mono.Security.NewTls.Tests
 
 			await handler.Run ();
 		}
+
+		[AsyncTest]
+		public async Task InvalidCipher (TestContext ctx,
+			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
+			[SelectCipherSuite ("ServerCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA)] CipherSuiteCode serverCipher,
+			[SelectCipherSuite ("ClientCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
+			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
+		{
+			ctx.LogMessage ("SELECT INVALID CIPHERS: {0} {1} {2} {3}", serverCipher, parameters, server, client);
+
+			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
+			await handler.WaitForConnection ();
+
+			var serverInfo = server.GetConnectionInfo ();
+			ctx.Assert (serverInfo, Is.Not.Null, "server info");
+			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (serverCipher), "server cipher code");
+
+			var clientInfo = client.GetConnectionInfo ();
+			ctx.Assert (clientInfo, Is.Not.Null, "client info");
+			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (serverCipher), "client cipher");
+
+			await handler.Run ();
+		}
+
 	}
 }
 

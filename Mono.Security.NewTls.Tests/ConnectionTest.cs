@@ -44,7 +44,7 @@ namespace Mono.Security.NewTls.Tests
 			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
 
 			CipherSuiteCode requestedCipher;
-			if (ctx.TryGetParameter<CipherSuiteCode> (out requestedCipher)) {
+			if (ctx.TryGetParameter<CipherSuiteCode> (out requestedCipher, "ServerCipher")) {
 				// we receive a deep-cloned copy, so we can modify it here.
 				parameters.ServerCiphers = new CipherSuiteCode[] { requestedCipher };
 				parameters.ExpectedCipher = requestedCipher;
@@ -68,7 +68,7 @@ namespace Mono.Security.NewTls.Tests
 			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
 
 			CipherSuiteCode requestedCipher;
-			if (ctx.TryGetParameter<CipherSuiteCode> (out requestedCipher)) {
+			if (ctx.TryGetParameter<CipherSuiteCode> (out requestedCipher, "ClientCipher")) {
 				// we receive a deep-cloned copy, so we can modify it here.
 				parameters.ClientCiphers = new CipherSuiteCode[] { requestedCipher };
 				parameters.ExpectedCipher = requestedCipher;
