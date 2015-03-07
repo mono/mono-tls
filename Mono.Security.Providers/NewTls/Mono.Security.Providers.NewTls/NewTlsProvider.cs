@@ -93,7 +93,11 @@ namespace Mono.Security.Providers.NewTls
 			MonoLocalCertificateSelectionCallback userCertificateSelectionCallback,
 			MonoTlsSettings settings = null)
 		{
-			throw new NotImplementedException ();
+			return MonoNewTlsStreamFactory.CreateSslStream (
+				innerStream, leaveInnerStreamOpen,
+				userCertificateValidationCallback,
+				userCertificateSelectionCallback,
+				settings);
 		}
 
 		public override IMonoTlsContext CreateTlsContext (

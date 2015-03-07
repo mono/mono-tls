@@ -35,6 +35,11 @@ using System;
 using System.IO;
 using PrebuiltSystem::System.Net.Security;
 using PrebuiltSystem::System.Security.Authentication;
+#if PREBUILT_MSI
+using PrebuiltSystem::Mono.Security.Interface;
+#else
+using Mono.Security.Interface;
+#endif
 using TlsSettings = Mono.Security.NewTls.TlsSettings;
 
 using PSSCX = PrebuiltSystem::System.Security.Cryptography.X509Certificates;
@@ -44,6 +49,19 @@ namespace Mono.Security.Providers.NewTls
 {
 	public static class MonoNewTlsStreamFactory
 	{
+		internal static MonoSslStream CreateSslStream (
+			Stream innerStream, bool leaveInnerStreamOpen,
+			MonoRemoteCertificateValidationCallback userCertificateValidationCallback,
+			MonoLocalCertificateSelectionCallback userCertificateSelectionCallback,
+			MonoTlsSettings settings = null)
+		{
+			var stream = new MonoNewTlsStream (
+				innerStream, leaveInnerStreamOpen,
+				ConvertCallback (userCertificateValidationCallback),
+				ConvertCallback (userCertificateSelectionCallback), settings);
+			return new MonoSslStreamImpl (stream);
+		}
+
 		public static MonoNewTlsStream CreateServer (
 			Stream innerStream, bool leaveOpen, RemoteCertificateValidationCallback certValidationCallback, 
 			LocalCertificateSelectionCallback certSelectionCallback, XEncryptionPolicy encryptionPolicy, TlsSettings settings,
@@ -103,6 +121,20 @@ namespace Mono.Security.Providers.NewTls
 			if (callback == null)
 				return null;
 			return (s, c, ch, e) => callback (s, c, ch, (SslPolicyErrors)e);
+		}
+
+		static XLocalCertificateSelectionCallback ConvertCallback (MonoLocalCertificateSelectionCallback callback)
+		{
+			if (callback == null)
+				return null;
+			return (s, t, lc, rc, ai) => callback (t, lc, rc, ai);
+		}
+
+		static XRemoteCertificateValidationCallback ConvertCallback (MonoRemoteCertificateValidationCallback callback)
+		{
+			if (callback == null)
+				return null;
+			return (s, c, ch, e) => callback (null, c, ch, (MonoSslPolicyErrors)e);
 		}
 	}
 }
