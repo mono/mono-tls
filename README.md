@@ -44,30 +44,12 @@ Dependencies:
 
 * Open `MartinsPlayground.sln` in Xamarin Studio and select `/Workspace/INSTALL` as current runtime.
 
-* For Android and iOS:
 
-  Custom built of Xamarin.Android / Xamarin.iOS with Mono from
-  the the 'work-newtls' branch.
-  
-  You also need to build mcs/class/Mono.Security.Providers and
-  install the binaries.
+Android and iOS
+---------------
 
-* Download the openssl 1.0.1 sources, configure with
-
-  $ ./config -t
-  $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL -shared
-  $ make
-  $ make install
-  
-  This install a shared-library build of openssl in /Workspace/INSTALL.
-  
-* Make sure you have Xcode installed.
-
-* Build the native library with
-
-  $ make -f Makefile.native
-  
-* Build MartinPlayground.mdw.
+For Android and iOS you will need a custom build of Xamarin.Android / Xamarin.iOS with Mono from the
+`work-newtls` branch.  You also need to build `mcs/class/Mono.Security.Providers` and install the binaries.
 
 Reference Source and how the pieces fit together
 ------------------------------------------------
