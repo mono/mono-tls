@@ -42,6 +42,14 @@ namespace Mono.Security.NewTls.Tests
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ServerType");
 			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
+
+			CipherSuiteCode requestedCipher;
+			if (ctx.TryGetParameter<CipherSuiteCode> (out requestedCipher)) {
+				// we receive a deep-cloned copy, so we can modify it here.
+				parameters.ServerCiphers = new CipherSuiteCode[] { requestedCipher };
+				parameters.ExpectedCipher = requestedCipher;
+			}
+
 			var provider = DependencyInjector.Get<IConnectionProvider> ();
 			return provider.CreateServer (providerType, parameters);
 		}

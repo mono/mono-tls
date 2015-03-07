@@ -63,38 +63,67 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class SelectCiphersTest
 	{
-		[NewTlsTestFeatures.SelectConnectionProvider ("connection-info")]
+		[NewTlsTestFeatures.SelectConnectionProvider ("connection-info:select-ciphers")]
 		public ConnectionProviderType ServerType {
 			get;
 			private set;
 		}
 
-		[NewTlsTestFeatures.SelectConnectionProvider ("select-ciphers")]
+		[NewTlsTestFeatures.SelectConnectionProvider ("connection-info:select-ciphers")]
 		public ConnectionProviderType ClientType {
 			get;
 			private set;
 		}
 
 		[AsyncTest]
-		public async Task TestConnection (TestContext ctx,
-			[SelectCipherSuite] CipherSuiteCode cipherSuite,
+		public async Task SelectClientCipher (TestContext ctx,
 			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
-			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
+			[ServerTestHost] IServer server,
+			[SelectCipherSuite] CipherSuiteCode clientCipher,
+			[ClientTestHost] IClient client)
 		{
-			ctx.LogMessage ("SELECT CIPHERS: {0} {1} {2} {3}", cipherSuite, parameters, server, client);
+			ctx.LogMessage ("SELECT CLIENT CIPHERS: {0} {1} {2} {3}", clientCipher, parameters, server, client);
 
-			ctx.Assert (cipherSuite, Is.EqualTo (parameters.ExpectedCipher.Value));
+			ctx.Assert (clientCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
 			await handler.WaitForConnection ();
 
 			var serverInfo = server.GetConnectionInfo ();
-			ctx.Assert (serverInfo, Is.Not.Null);
-			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (cipherSuite));
+			ctx.Assert (serverInfo, Is.Not.Null, "server info");
+			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (clientCipher), "server cipher code");
+
+			var clientInfo = client.GetConnectionInfo ();
+			ctx.Assert (clientInfo, Is.Not.Null, "client info");
+			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (clientCipher), "client cipher");
 
 			await handler.Run ();
 		}
 
+		[AsyncTest]
+		public async Task SelectServerCipher (TestContext ctx,
+			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
+			[SelectCipherSuite] CipherSuiteCode serverCipher,
+			[ServerTestHost] IServer server,
+			[ClientTestHost] IClient client)
+		{
+			ctx.LogMessage ("SELECT SERVER CIPHERS: {0} {1} {2} {3}", serverCipher, parameters, server, client);
+
+			ctx.Assert (serverCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
+
+			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
+			await handler.WaitForConnection ();
+
+			var serverInfo = server.GetConnectionInfo ();
+			ctx.Assert (serverInfo, Is.Not.Null, "server info");
+			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (serverCipher), "server cipher code");
+
+			var clientInfo = client.GetConnectionInfo ();
+			ctx.Assert (clientInfo, Is.Not.Null, "client info");
+			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (serverCipher), "client cipher");
+
+			await handler.Run ();
+		}
 	}
 }
 
