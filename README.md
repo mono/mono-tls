@@ -27,19 +27,21 @@ Dependencies:
 
   The default version of OpenSsl on OS X is too old and it's also not built as shared library.  You need to download the openssl 1.0.1 sources, then configure and compile with:
   
-      $ ./config -t
-      $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL -shared
-      $ make
-      $ make install
-  
-  to build and install a shared-library version of openssl in `/Workspace/INSTALL`.
+```
+    $ ./config -t
+    $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL -shared
+    $ make
+    $ make install
+```
   
 * Xcode
 
 * Build the native library with
 
-      $ make -f Makefile.native
-      
+```
+  $ make -f Makefile.native
+```
+
 * Open `MartinsPlayground.sln` in Xamarin Studio and select `/Workspace/INSTALL` as current runtime.
 
 * For Android and iOS:
