@@ -37,7 +37,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
-		public ClientParameters (ClientParameters other)
+		ClientParameters (ClientParameters other)
 			: base (other)
 		{
 			if (other.ClientCiphers != null)
@@ -47,6 +47,11 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		object ICloneable.Clone ()
+		{
+			return DeepClone ();
+		}
+
+		public ClientParameters DeepClone ()
 		{
 			return new ClientParameters (this);
 		}

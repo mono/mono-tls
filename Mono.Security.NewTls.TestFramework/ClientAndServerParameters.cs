@@ -14,7 +14,7 @@ namespace Mono.Security.NewTls.TestFramework
 			ServerCertificate = certificate;
 		}
 
-		public ClientAndServerParameters (ClientAndServerParameters other)
+		ClientAndServerParameters (ClientAndServerParameters other)
 			: base (other)
 		{
 			ServerCertificate = other.ServerCertificate;
@@ -29,6 +29,11 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		object ICloneable.Clone ()
+		{
+			return DeepClone ();
+		}
+
+		public ClientAndServerParameters DeepClone ()
 		{
 			return new ClientAndServerParameters (this);
 		}
