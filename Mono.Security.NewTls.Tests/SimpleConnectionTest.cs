@@ -83,8 +83,6 @@ namespace Mono.Security.NewTls.Tests
 			[SimpleConnectionParameter] ClientAndServerParameters parameters,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
-			ctx.LogMessage ("TEST CONNECTION: {0} {1} {2}", parameters, server, client);
-
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
 			await handler.WaitForConnection ();
 
@@ -101,12 +99,8 @@ namespace Mono.Security.NewTls.Tests
 				}
 			}
 
-			ctx.LogMessage ("TEST CONNECTION #1");
 			await handler.Run ();
-
-			ctx.LogMessage ("TEST CONNECTION DONE");
 		}
-
 	}
 }
 

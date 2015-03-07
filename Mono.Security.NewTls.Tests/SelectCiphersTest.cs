@@ -101,8 +101,6 @@ namespace Mono.Security.NewTls.Tests
 			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
-			ctx.LogMessage ("SELECT CLIENT CIPHERS: {0} {1} {2} {3}", clientCipher, parameters, server, client);
-
 			ctx.Assert (clientCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
@@ -125,8 +123,6 @@ namespace Mono.Security.NewTls.Tests
 			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
-			ctx.LogMessage ("SELECT SERVER CIPHERS: {0} {1} {2} {3}", serverCipher, parameters, server, client);
-
 			ctx.Assert (serverCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
