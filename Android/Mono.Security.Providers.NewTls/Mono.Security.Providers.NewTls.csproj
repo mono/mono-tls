@@ -38,22 +38,17 @@
     <DefineConstants>PREBUILT_MSI</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Xml, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System.Core, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="Mono.Security, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-      <SpecificVersion>False</SpecificVersion>
-      <Aliases>PrebuiltSystem</Aliases>
     </Reference>
     <Reference Include="Mono.Security.Providers.NewSystemSource, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <SpecificVersion>False</SpecificVersion>
       <Aliases>NewSystemSource</Aliases>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System">
+      <Aliases>PrebuiltSystem</Aliases>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +63,9 @@
     </Compile>
     <Compile Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls\TlsContextWrapper.cs">
       <Link>TlsContextWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls\MonoSslStreamImpl.cs">
+      <Link>MonoSslStreamImpl.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

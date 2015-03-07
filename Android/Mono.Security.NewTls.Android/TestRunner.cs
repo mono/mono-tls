@@ -251,6 +251,28 @@ namespace Mono.Security.NewTls.Android
 				return false;
 		}
 
+		public bool HasConnectionInfo (ConnectionProviderType type)
+		{
+			switch (type) {
+			case ConnectionProviderType.Mono:
+			case ConnectionProviderType.OpenSsl:
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		public bool CanSelectCiphers (ConnectionProviderType type)
+		{
+			switch (type) {
+			case ConnectionProviderType.Mono:
+			case ConnectionProviderType.OpenSsl:
+				return true;
+			default:
+				return false;
+			}
+		}
+
 		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)
 		{
 			if (type == ConnectionProviderType.DotNet)

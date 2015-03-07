@@ -33,9 +33,6 @@
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="Mono.Security, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -43,19 +40,11 @@
       <SpecificVersion>False</SpecificVersion>
       <Aliases>NewSystemSource</Aliases>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\CertificateAndKeyAsPFX.cs">
-      <Link>CertificateAndKeyAsPFX.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\CertificateAsPEM.cs">
-      <Link>CertificateAsPEM.cs</Link>
-    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\ClientAndServer.cs">
       <Link>ClientAndServer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\ClientCertificate.cs">
-      <Link>ClientCertificate.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Connection.cs">
       <Link>Connection.cs</Link>
@@ -71,12 +60,6 @@
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs">
       <Link>MonoCryptoProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\PrivateFile.cs">
-      <Link>PrivateFile.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\ServerCertificate.cs">
-      <Link>ServerCertificate.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs">
       <Link>SymmetricAlgorithmProxy.cs</Link>
