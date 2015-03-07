@@ -24,15 +24,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class ClientParameters : ConnectionParameters, IClientParameters
+	public sealed class ClientParameters : ConnectionParameters, IClientParameters, ICloneable
 	{
 		public ClientParameters (string identifier)
 			: base (identifier)
 		{
+		}
+
+		public ClientParameters (ClientParameters other)
+			: base (other)
+		{
+			if (other.ClientCiphers != null)
+				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
+			ClientCertificate = other.ClientCertificate;
+			ExpectedCipher = other.ExpectedCipher;
+		}
+
+		object ICloneable.Clone ()
+		{
+			return new ClientParameters (this);
 		}
 
 		public ICollection<CipherSuiteCode> ClientCiphers {

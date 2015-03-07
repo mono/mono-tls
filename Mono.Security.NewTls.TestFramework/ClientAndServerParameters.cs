@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class ClientAndServerParameters : ConnectionParameters, IClientAndServerParameters
+	public sealed class ClientAndServerParameters : ConnectionParameters, IClientAndServerParameters, ICloneable
 	{
 		bool askForCert;
 		bool requireCert;
@@ -11,6 +12,25 @@ namespace Mono.Security.NewTls.TestFramework
 			: base (identifier)
 		{
 			ServerCertificate = certificate;
+		}
+
+		public ClientAndServerParameters (ClientAndServerParameters other)
+			: base (other)
+		{
+			ServerCertificate = other.ServerCertificate;
+			ClientCertificate = other.ClientCertificate;
+			if (other.ClientCiphers != null)
+				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
+			if (other.ServerCiphers != null)
+				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
+			askForCert = other.askForCert;
+			requireCert = other.requireCert;
+			ExpectedCipher = other.ExpectedCipher;
+		}
+
+		object ICloneable.Clone ()
+		{
+			return new ClientAndServerParameters (this);
 		}
 
 		public ICollection<CipherSuiteCode> ClientCiphers {

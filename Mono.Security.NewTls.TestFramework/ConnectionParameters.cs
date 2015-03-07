@@ -20,6 +20,14 @@ namespace Mono.Security.NewTls.TestFramework
 			Identifier = identifier;
 		}
 
+		protected ConnectionParameters (ConnectionParameters other)
+		{
+			Identifier = other.Identifier;
+			verifyPeerCertificate = other.verifyPeerCertificate;
+			EnableDebugging = other.EnableDebugging;
+			TrustedCA = other.TrustedCA;
+		}
+
 		public bool VerifyPeerCertificate {
 			get { return verifyPeerCertificate; }
 			set { verifyPeerCertificate = value; }
