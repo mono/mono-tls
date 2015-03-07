@@ -150,22 +150,36 @@ namespace Mono.Security.NewTls.Tests
 			[SelectCipherSuite ("ClientCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
-			ctx.LogMessage ("SELECT INVALID CIPHERS: {0} {1} {2} {3}", serverCipher, parameters, server, client);
-
-			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
-			await handler.WaitForConnection ();
-
-			var serverInfo = server.GetConnectionInfo ();
-			ctx.Assert (serverInfo, Is.Not.Null, "server info");
-			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (serverCipher), "server cipher code");
-
-			var clientInfo = client.GetConnectionInfo ();
-			ctx.Assert (clientInfo, Is.Not.Null, "client info");
-			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (serverCipher), "client cipher");
-
-			await handler.Run ();
+			await ExpectAlert (ctx, server, client, AlertDescription.HandshakeFailure);
 		}
 
+		void ExpectAlert (TestContext ctx, Task t, AlertDescription expectedAlert, string message)
+		{
+			ctx.Assert (t.IsFaulted, Is.True, "#1:" + message);
+			var baseException = t.Exception.GetBaseException ();
+			if (baseException is AggregateException) {
+				var aggregate = baseException as AggregateException;
+				ctx.Assert (aggregate.InnerExceptions.Count, Is.EqualTo (2), "#2a:" + message);
+				var authExcType = aggregate.InnerExceptions [0].GetType ();
+				ctx.Assert (authExcType.FullName, Is.EqualTo ("System.Security.Authentication.AuthenticationException"), "#2b:" + message);
+				baseException = aggregate.InnerExceptions [1];
+			}
+			ctx.Assert (baseException, Is.InstanceOf<TlsException> (), "#2:" + message);
+			var alert = ((TlsException)baseException).Alert;
+			ctx.Assert (alert.Level, Is.EqualTo (AlertLevel.Fatal), "#3:" + message);
+			ctx.Assert (alert.Description, Is.EqualTo (expectedAlert), "#4:" + message);
+		}
+
+		async Task ExpectAlert (TestContext ctx, IServer server, IClient client, AlertDescription alert)
+		{
+			var serverTask = server.WaitForConnection ();
+			var clientTask = client.WaitForConnection ();
+
+			var t1 = clientTask.ContinueWith (t => ExpectAlert (ctx, t, alert, "client"));
+			var t2 = serverTask.ContinueWith (t => ExpectAlert (ctx, t, alert, "server"));
+
+			await Task.WhenAll (t1, t2);
+		}
 	}
 }
 
