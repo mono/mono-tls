@@ -46,6 +46,7 @@
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="Resources\SelfSignedServerCertificate.cs" />
     <Compile Include="Resources\ServerCertificateFromCA.cs" />
+    <Compile Include="ConnectionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\CA\server-cert.pfx">

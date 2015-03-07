@@ -33,48 +33,24 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
-	public class ServerTestHostAttribute : TestHostAttribute, ITestHost<IServer>
+	class SimpleConnectionParameterAttribute : ConnectionParameterAttribute
 	{
-		public ServerTestHostAttribute ()
-			: base (typeof (ServerTestHostAttribute))
+		public override IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
-		}
-
-		public IServer CreateInstance (TestContext ctx)
-		{
-			var providerType = ctx.GetParameter<ConnectionProviderType> ("ServerType");
-			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
-			var provider = DependencyInjector.Get<IConnectionProvider> ();
-			return provider.CreateServer (providerType, parameters);
-		}
-	}
-
-	public class ClientTestHostAttribute : TestHostAttribute, ITestHost<IClient>
-	{
-		public ClientTestHostAttribute ()
-			: base (typeof (ClientTestHostAttribute))
-		{
-		}
-
-		public IClient CreateInstance (TestContext ctx)
-		{
-			var providerType = ctx.GetParameter<ConnectionProviderType> ("ClientType");
-			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
-			var provider = DependencyInjector.Get<IConnectionProvider> ();
-			return provider.CreateClient (providerType, parameters);
-		}
-	}
-
-	class ConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<ClientAndServerParameters>
-	{
-		public ConnectionParameterAttribute ()
-			: base (null, TestFlags.Browsable)
-		{
-		}
-
-		public IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter)
-		{
-			return SimpleConnectionTest.GetConnectionParameters (ctx, filter);
+			yield return new ClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
+				VerifyPeerCertificate = false
+			};
+			yield return new ClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
+				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate
+			};
+			yield return new ClientAndServerParameters ("ask-for-certificate", ResourceManager.ServerCertificateFromCA) {
+				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
+				AskForClientCertificate = true
+			};
+			yield return new ClientAndServerParameters ("require-certificate", ResourceManager.ServerCertificateFromCA) {
+				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
+				RequireClientCertificate = true, ClientCertificate = ResourceManager.MonkeyCertificate
+			};
 		}
 	}
 
@@ -93,27 +69,9 @@ namespace Mono.Security.NewTls.Tests
 			private set;
 		}
 
-		public static IEnumerable<ClientAndServerParameters> GetConnectionParameters (TestContext ctx, string filter)
-		{
-			yield return new ClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
-				VerifyPeerCertificate = false
-			};
-			yield return new ClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate
-			};
-			yield return new ClientAndServerParameters ("ask-for-certificate", ResourceManager.ServerCertificateFromCA) {
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				AskForClientCertificate = true
-			};
-			yield return new ClientAndServerParameters ("require-certificate", ResourceManager.ServerCertificateFromCA) {
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				RequireClientCertificate = true, ClientCertificate = ResourceManager.MonkeyCertificate
-			};
-		}
-
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx,
-			[ConnectionParameter] ClientAndServerParameters parameters,
+			[SimpleConnectionParameter] ClientAndServerParameters parameters,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
 			ctx.LogMessage ("TEST CONNECTION: {0} {1} {2}", parameters, server, client);
