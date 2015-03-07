@@ -67,6 +67,40 @@ When used without any name, the value of the first test parameter with that type
 the [ServerTestHost] may `ctx.GetParameter<ClientAndServerParameters>` to retrieve the current "parameters"
 value.  Or it could use `ctx.GetParameter<ConnectionProviderType> ("ClientType")` to get that property.
 
-However, you may only query for test parameters, not previous test hosts - so the [ClientTestHost] cannot
-currently access the previously created `IServer`.
+You may also query for previously created tests hosts, for instance the [ClientTestHost] could use
+`ctx.GetParameter<IServer>()` to get the current `IServer` instance.
+
+The same also applies to the current fixture instance - you may either query by type, so
+`ctx.GetParameter<SimpleConnectionTest> ()` in our example, or call `ctx.GetFixtureInstance()`.
+
+Each test host may provide the four async methods from ITestInstance: Initiaze() and Destroy() are called when
+the host is created / destroyed.
+
+And there is also PreRun() and PostRun().  These come to play when any parameterizations are used after
+the test host - for instance, look at this:
+
+		[AsyncTest]
+		public async Task SelectClientCipher (TestContext ctx,
+			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
+			[ServerTestHost] IServer server,
+			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
+			[ClientTestHost] IClient client)
+
+Here, a new `IServer` instance will be created (and their Initialize() / Destroy() being called) for each
+value of `parameters` and any previous parameters.  Then `clientCiphers` will iterate though all its possible
+values, reusing the same `IServer` instance - but calling PreRun() and PostRun() each time.
+
+So the above method will create a new client for each of the different cipher suite codes, all connecting to
+the same server.
+
+And this method will create a new client and server pair for each different cipher suite code:
+
+		[AsyncTest]
+		public async Task SelectClientCipher (TestContext ctx,
+			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
+			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
+			[ServerTestHost] IServer server,
+			[ClientTestHost] IClient client)
+
+
 
