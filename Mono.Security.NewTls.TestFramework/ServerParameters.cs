@@ -34,6 +34,10 @@ namespace Mono.Security.NewTls.TestFramework
 		public ICollection<CipherSuiteCode> ServerCiphers {
 			get; set;
 		}
+
+		public CipherSuiteCode? ExpectedCipher {
+			get; set;
+		}
 	}
 }
 

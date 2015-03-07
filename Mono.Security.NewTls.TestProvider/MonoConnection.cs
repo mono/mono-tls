@@ -58,6 +58,10 @@ namespace Mono.Security.NewTls.TestProvider
 		TlsSettings settings;
 		MonoNewTlsStream monoSslStream;
 
+		public override bool SupportsConnectionInfo {
+			get { return true; }
+		}
+
 		public override TlsConnectionInfo GetConnectionInfo ()
 		{
 			return settings.ConnectionInfo;

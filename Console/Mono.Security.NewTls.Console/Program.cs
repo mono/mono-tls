@@ -362,14 +362,29 @@ namespace Mono.Security.NewTls.Console
 
 		public bool IsSupported (ConnectionProviderType type)
 		{
-			if (type == ConnectionProviderType.Mono)
+			switch (type) {
+			case ConnectionProviderType.Mono:
+			case ConnectionProviderType.OpenSsl:
 				return true;
-			else if (type == ConnectionProviderType.DotNet)
+			default:
 				return false;
-			else if (type == ConnectionProviderType.OpenSsl)
+			}
+		}
+
+		public bool HasConnectionInfo (ConnectionProviderType type)
+		{
+			switch (type) {
+			case ConnectionProviderType.Mono:
+			case ConnectionProviderType.OpenSsl:
 				return true;
-			else
+			default:
 				return false;
+			}
+		}
+
+		public bool CanSelectCiphers (ConnectionProviderType type)
+		{
+			return false;
 		}
 
 		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)

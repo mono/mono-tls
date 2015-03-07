@@ -159,24 +159,69 @@ namespace Mono.Security.NewTls.Tests
 			{
 			}
 
-			public IEnumerable<ConnectionProviderType> GetParameters (TestContext ctx, string filter)
+			static IEnumerable<ConnectionProviderType> GetProviders (TestContext ctx)
 			{
-				if (filter != null) {
-					if (filter.Equals ("mono"))
-						yield return ConnectionProviderType.Mono;
-					else if (filter.Equals ("openssl"))
-						yield return ConnectionProviderType.OpenSsl;
-					else if (filter.Equals ("dotnet"))
-						yield return ConnectionProviderType.DotNet;
-					yield break;
-				}
-
 				if (ctx.IsEnabled (DotNetConnectionProvider))
 					yield return ConnectionProviderType.DotNet;
 				if (ctx.IsEnabled (MonoConnectionProvider))
 					yield return ConnectionProviderType.Mono;
 				if (ctx.IsEnabled (OpenSslConnectionProvider))
 					yield return ConnectionProviderType.OpenSsl;
+			}
+
+			static bool RunFilter (string filter, ConnectionProviderType type)
+			{
+				if (filter == null)
+					return true;
+
+				var provider = DependencyInjector.Get<IConnectionProvider> ();
+
+				var parts = filter.Split (':');
+				foreach (var part in parts) {
+					switch (part) {
+					case "mono":
+						if (type != ConnectionProviderType.Mono)
+							return false;
+						break;
+					case "!mono":
+						if (type == ConnectionProviderType.Mono)
+							return false;
+						break;
+					case "dotnet":
+						if (type != ConnectionProviderType.DotNet)
+							return false;
+						break;
+					case "!dotnet":
+						if (type == ConnectionProviderType.DotNet)
+							return false;
+						break;
+					case "openssl":
+						if (type != ConnectionProviderType.OpenSsl)
+							return false;
+						break;
+					case "!openssl":
+						if (type == ConnectionProviderType.OpenSsl)
+							return false;
+						break;
+					case "connection-info":
+						if (!provider.HasConnectionInfo (type))
+							return false;
+						break;
+					default:
+						return false;
+					}
+				}
+
+				return true;
+			}
+
+
+			public IEnumerable<ConnectionProviderType> GetParameters (TestContext ctx, string filter)
+			{
+				foreach (var type in GetProviders (ctx)) {
+					if (RunFilter (filter, type))
+						yield return type;
+				}
 			}
 		}
 

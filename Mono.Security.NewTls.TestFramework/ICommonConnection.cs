@@ -34,6 +34,10 @@ namespace Mono.Security.NewTls.TestFramework
 			get;
 		}
 
+		bool SupportsConnectionInfo {
+			get;
+		}
+
 		TlsConnectionInfo GetConnectionInfo ();
 	}
 }

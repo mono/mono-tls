@@ -19,6 +19,10 @@ namespace Mono.Security.NewTls.TestFramework
 		ICollection<CipherSuiteCode> ServerCiphers {
 			get; set;
 		}
+
+		CipherSuiteCode? ExpectedCipher {
+			get; set;
+		}
 	}
 }
 

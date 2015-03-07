@@ -56,6 +56,10 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return openssl; }
 		}
 
+		public override bool SupportsConnectionInfo {
+			get { return true; }
+		}
+
 		public override TlsConnectionInfo GetConnectionInfo ()
 		{
 			if (connectionInfo != null)

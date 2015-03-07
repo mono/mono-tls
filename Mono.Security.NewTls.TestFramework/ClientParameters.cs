@@ -42,6 +42,10 @@ namespace Mono.Security.NewTls.TestFramework
 		public IClientCertificate ClientCertificate {
 			get; set;
 		}
+
+		public CipherSuiteCode? ExpectedCipher {
+			get; set;
+		}
 	}
 }
 

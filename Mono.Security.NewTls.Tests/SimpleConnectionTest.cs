@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Constraints;
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -38,18 +39,21 @@ namespace Mono.Security.NewTls.Tests
 		public override IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
 			yield return new ClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
-				VerifyPeerCertificate = false
+				VerifyPeerCertificate = false, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+
 			};
 			yield return new ClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate
+				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
+				ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 			};
 			yield return new ClientAndServerParameters ("ask-for-certificate", ResourceManager.ServerCertificateFromCA) {
 				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				AskForClientCertificate = true
+				AskForClientCertificate = true,  ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 			};
 			yield return new ClientAndServerParameters ("require-certificate", ResourceManager.ServerCertificateFromCA) {
 				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				RequireClientCertificate = true, ClientCertificate = ResourceManager.MonkeyCertificate
+				RequireClientCertificate = true, ClientCertificate = ResourceManager.MonkeyCertificate,
+				ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 			};
 		}
 	}
@@ -78,6 +82,20 @@ namespace Mono.Security.NewTls.Tests
 
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
 			await handler.WaitForConnection ();
+
+			if (parameters.ExpectedCipher != null) {
+				if (client.SupportsConnectionInfo) {
+					var clientInfo = client.GetConnectionInfo ();
+					ctx.Assert (clientInfo, Is.Not.Null);
+					ctx.Assert (clientInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value));
+				}
+				if (server.SupportsConnectionInfo) {
+					var serverInfo = server.GetConnectionInfo ();
+					ctx.Assert (serverInfo, Is.Not.Null);
+					ctx.Assert (serverInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value));
+				}
+			}
+
 			ctx.LogMessage ("TEST CONNECTION #1");
 			await handler.Run ();
 

@@ -17,6 +17,10 @@ namespace Mono.Security.NewTls.TestProvider
 			get;
 		}
 
+		public abstract bool SupportsConnectionInfo {
+			get;
+		}
+
 		public IPEndPoint EndPoint {
 			get;
 			private set;

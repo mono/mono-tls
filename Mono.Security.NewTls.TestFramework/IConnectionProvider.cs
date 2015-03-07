@@ -31,6 +31,10 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		bool IsSupported (ConnectionProviderType type);
 
+		bool HasConnectionInfo (ConnectionProviderType type);
+
+		bool CanSelectCiphers (ConnectionProviderType type);
+
 		IClient CreateClient (ConnectionProviderType type, IClientParameters parameters);
 
 		IServer CreateServer (ConnectionProviderType type, IServerParameters parameters);

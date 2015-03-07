@@ -8,6 +8,10 @@ namespace Mono.Security.NewTls.TestFramework
 			get; set;
 		}
 
+		CipherSuiteCode? ExpectedCipher {
+			get; set;
+		}
+
 		IClientCertificate ClientCertificate {
 			get; set;
 		}

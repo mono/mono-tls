@@ -32,6 +32,10 @@ namespace Mono.Security.NewTls.TestProvider
 			this.client = client;
 		}
 
+		public override bool SupportsConnectionInfo {
+			get { return false; }
+		}
+
 		public override TlsConnectionInfo GetConnectionInfo ()
 		{
 			throw new InvalidOperationException ();
