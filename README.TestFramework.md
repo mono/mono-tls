@@ -22,6 +22,25 @@ If any consumer of these test parameters wishes to modify the returned objects, 
 Xamarin.AsyncTests.ICloneable to provide a deep copy.  GetParameters() may or may not be re-invoked on subsequent
 test runs, so modifying the returned object without using ICloneable will ask for trouble.
 
+TestFeature:
+============
+
+The values returned by the different Test Parameter Sources may be customized by using Test Features.
+
+They are provided via the assembly-level `[assembly: TestSuite (Type)]` attribute, which points to an instance
+of `ITestConfigurationProvider`.
+
+All features and categories specified there automatically map onto corresponding elements in the Mac GUI's Settings
+Dialog.  `TestConfiguration` is the class which stores their current values in a `SettingsBag`.  All the involved
+classes have XML Serialization support in the `Xamarin.AsyncTests.Framework.TestSerializer` class.
+
+Each feature has two states - enabled or disabled - but it may be a constant value.  Such constant values are used
+to probe for operating-system and/or implementation specific features.  For instance, you could check whether or
+not you're on Mobile and then enable / disable tests based on that.
+
+Tests which are disabled via features do not count towards the "ignored" count - so "ignored" basically means there
+was a problem with this test.
+
 TestHost:
 =========
 
@@ -101,6 +120,62 @@ And this method will create a new client and server pair for each different ciph
 			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
 			[ServerTestHost] IServer server,
 			[ClientTestHost] IClient client)
+
+
+Test Paths and XML Serialization
+================================
+
+Internally, the new Xamarin.AsyncTests framework is completely XML based and serializable.
+
+The XML format is not perfect yet and it contains a lot of redundant information, but it works ...
+
+The is this concept of a "Test Path": the test path contains the current parameterization in a
+serializable form.  It is stored in each TestResult, can be stored to disk and is used by the Mac GUI
+to display both the Test Suite and all its TestResults in a user-friendly tree structure, where you
+can select individual test parameterizations, inspect their results and also re-run them.
+
+Test Runners
+============
+
+For the TLS Tests, there are currently two test runner frontends:
+
+* Mono.Security.NewTls.Console is the Console Test Runner.
+
+By default, this will run all the tests, provide a short summary and dump the full result into TestResult.xml.
+This XML file can then be loaded in the Mac GUI.
+
+In addition to this, the console runner may also function as a server and listen for a connection from the
+Mac GUI.  This connection will send XML-based commands back and forth to communicate.
+
+Unfortunately, the Mac GUI can't directly run the tests in-process yet because it would require either a
+system-installed `mono/work-newtls` Mono or a custom-built Xamarin.Mac.  However, this shouldn't be a problem
+anymore once we have automated builds of that `mono/work-newtls`, so it could simply be installed in
+/Library/Frameworks/Mono.framework.
+
+* Mono.Security.NewTls.Android is the Android Test Runner.
+
+There is no Android or iOS GUI, so this will only function in server mode and listen for connections from
+the Mac GUI.
+
+* external/web-tests/Xamarin.AsyncTests.Console is a console client tool.
+
+All it does at the moment is connecting to a remote test server and triggering a "run everything".
+
+The result will then be dumped into TestResult.xml.
+
+* external/web-tests/MacUI is the MAC GUI.
+
+At the moment, it will only automatically run the samples - you need to manually configure the server's
+address and port to connect to a remote server.  This will be fixed shortly.
+
+
+Last changed March 07th, 2015
+Martin Baulig <martin.baulig@xamarin.com>
+
+
+
+
+
 
 
 
