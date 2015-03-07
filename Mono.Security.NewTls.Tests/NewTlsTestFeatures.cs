@@ -207,6 +207,10 @@ namespace Mono.Security.NewTls.Tests
 						if (!provider.HasConnectionInfo (type))
 							return false;
 						break;
+					case "select-ciphers":
+						if (!provider.CanSelectCiphers (type))
+							return false;
+						break;
 					default:
 						return false;
 					}

@@ -384,7 +384,13 @@ namespace Mono.Security.NewTls.Console
 
 		public bool CanSelectCiphers (ConnectionProviderType type)
 		{
-			return false;
+			switch (type) {
+			case ConnectionProviderType.Mono:
+			case ConnectionProviderType.OpenSsl:
+				return true;
+			default:
+				return false;
+			}
 		}
 
 		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)
