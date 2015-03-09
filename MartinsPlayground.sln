@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.Framewor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.Remoting", "external\web-tests\Xamarin.AsyncTests.Remoting\Xamarin.AsyncTests.Remoting.csproj", "{584654DF-6888-4B18-AB82-3C773CD45436}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider.OpenSsl", "Mono.Security.NewTls.TestProvider.OpenSsl\Mono.Security.NewTls.TestProvider.OpenSsl.csproj", "{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider", "Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj", "{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Console", "Mono.Security.NewTls.Console\Mono.Security.NewTls.Console.csproj", "{8F077534-F58A-4390-A972-B93161381C84}"
@@ -34,16 +32,6 @@ Global
 		DebugWin|Any CPU = DebugWin|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Debug|x86.Build.0 = Debug|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Release|x86.ActiveCfg = Release|Any CPU
-		{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}.Release|x86.Build.0 = Release|Any CPU
 		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Debug|x86.ActiveCfg = Debug|Any CPU

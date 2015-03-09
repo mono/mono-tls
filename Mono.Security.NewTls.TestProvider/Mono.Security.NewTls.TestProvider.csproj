@@ -45,6 +45,13 @@
     <Compile Include="MonoClient.cs" />
     <Compile Include="MonoConnection.cs" />
     <Compile Include="MonoServer.cs" />
+    <Compile Include="NativeCryptoProvider.cs" />
+    <Compile Include="NativeOpenSsl.cs" />
+    <Compile Include="NativeOpenSslError.cs" />
+    <Compile Include="NativeOpenSslException.cs" />
+    <Compile Include="OpenSslClient.cs" />
+    <Compile Include="OpenSslConnection.cs" />
+    <Compile Include="OpenSslServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -80,5 +87,19 @@
       <Project>{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}</Project>
       <Name>Mono.Security.Providers.NewTls</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\lib\libcrypto.1.0.0.dylib">
+      <Link>libcrypto.1.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\lib\libNativeOpenSsl.dylib">
+      <Link>libNativeOpenSsl.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\lib\libssl.1.0.0.dylib">
+      <Link>libssl.1.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

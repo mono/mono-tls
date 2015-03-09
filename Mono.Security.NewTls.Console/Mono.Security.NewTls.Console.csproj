@@ -71,10 +71,6 @@
       <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
       <Name>Mono.Security.NewTls.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mono.Security.NewTls.TestProvider.OpenSsl\Mono.Security.NewTls.TestProvider.OpenSsl.csproj">
-      <Project>{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}</Project>
-      <Name>Mono.Security.NewTls.TestProvider.OpenSsl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
       <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
       <Name>Mono.Security.NewTls</Name>
