@@ -76,6 +76,15 @@
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoServer.cs">
       <Link>MonoServer.cs</Link>
     </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\ConnectionProvider.cs">
+      <Link>ConnectionProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\CryptoProvider.cs">
+      <Link>CryptoProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DependencyProvider.cs">
+      <Link>DependencyProvider.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>

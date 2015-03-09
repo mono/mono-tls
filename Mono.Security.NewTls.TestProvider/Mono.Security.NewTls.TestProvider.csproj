@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;HAVE_OPENSSL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -52,6 +52,9 @@
     <Compile Include="OpenSslClient.cs" />
     <Compile Include="OpenSslConnection.cs" />
     <Compile Include="OpenSslServer.cs" />
+    <Compile Include="CryptoProvider.cs" />
+    <Compile Include="ConnectionProvider.cs" />
+    <Compile Include="DependencyProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

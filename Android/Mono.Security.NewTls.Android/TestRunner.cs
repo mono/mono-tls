@@ -42,9 +42,8 @@ namespace Mono.Security.NewTls.Android
 	using TestProvider;
 	using Tests;
 
-	public class TestRunner : TestApp, ICryptoProvider, IConnectionProvider, IRandomNumberGenerator
+	public class TestRunner : TestApp
 	{
-		RandomNumberGenerator rng;
 		TestFramework framework;
 
 		public TestLogger Logger {
@@ -59,22 +58,14 @@ namespace Mono.Security.NewTls.Android
 
 		public TestRunner ()
 		{
-			rng = RandomNumberGenerator.Create ();
-
-			var newTlsProvider = new NewTlsProvider ();
-			DependencyInjector.Register<NewTlsProvider> (newTlsProvider);
-			MonoTlsProviderFactory.InstallProvider (newTlsProvider);
-
 			PortableSupportImpl.Initialize ();
-			DependencyInjector.Register<ICryptoProvider> (this);
-			DependencyInjector.Register<IConnectionProvider> (this);
 
 			Settings = SettingsBag.CreateDefault ();
 			var assembly = typeof(NewTlsTestFeatures).Assembly;
 
 			Logger = new TestLogger (new MyLogger (this));
 
-			framework = TestFramework.GetLocalFramework (assembly);
+			framework = TestFramework.GetLocalFramework (assembly, typeof (DependencyProvider).Assembly);
 		}
 
 		public event EventHandler<string> LogEvent;
@@ -193,113 +184,6 @@ namespace Mono.Security.NewTls.Android
 		}
 
 		#endregion
-
-		#region ICryptoProvider implementation
-
-		public IRandomNumberGenerator GetRandomNumberGenerator ()
-		{
-			return this;
-		}
-
-		public byte[] GetRandomBytes (int count)
-		{
-			var data = new byte [count];
-			rng.GetBytes (data);
-			return data;
-		}
-
-		public bool IsSupported (CryptoProviderType type, bool needsEncryption)
-		{
-			if (type == CryptoProviderType.Mono)
-				return true;
-			if (needsEncryption)
-				return false;
-			if (type == CryptoProviderType.OpenSsl)
-				return true;
-			return false;
-		}
-
-		public IHashTestHost GetHashTestHost (CryptoProviderType type)
-		{
-			switch (type) {
-			case CryptoProviderType.Mono:
-				return new MonoCryptoProvider ();
-			default:
-				throw new NotSupportedException ();
-			}
-		}
-
-		public IEncryptionTestHost GetEncryptionTestHost (CryptoProviderType type, CryptoTestParameters parameters)
-		{
-			switch (type) {
-			case CryptoProviderType.Mono:
-				return new MonoCryptoProvider { Parameters = parameters };
-			default:
-				throw new NotSupportedException ();
-			}
-		}
-
-		#endregion
-
-		#region IConnectionProvider implementation
-
-		public bool IsSupported (ConnectionProviderType type)
-		{
-			if (type == ConnectionProviderType.Mono)
-				return true;
-			else if (type == ConnectionProviderType.DotNet)
-				return true;
-			else
-				return false;
-		}
-
-		public bool HasConnectionInfo (ConnectionProviderType type)
-		{
-			switch (type) {
-			case ConnectionProviderType.Mono:
-			case ConnectionProviderType.OpenSsl:
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		public bool CanSelectCiphers (ConnectionProviderType type)
-		{
-			switch (type) {
-			case ConnectionProviderType.Mono:
-			case ConnectionProviderType.OpenSsl:
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)
-		{
-			if (type == ConnectionProviderType.DotNet)
-				return new DotNetClient (GetLocalEndPoint (), parameters);
-			else if (type == ConnectionProviderType.Mono)
-				return new MonoClient (GetLocalEndPoint (), parameters);
-			throw new NotSupportedException ();
-		}
-
-		public IServer CreateServer (ConnectionProviderType type, IServerParameters parameters)
-		{
-			if (type == ConnectionProviderType.DotNet)
-				return new DotNetServer (GetLocalEndPoint (), parameters);
-			else if (type == ConnectionProviderType.Mono)
-				return new MonoServer (GetLocalEndPoint (), parameters);
-			else
-				throw new NotSupportedException ();
-		}
-
-		#endregion
-
-		IPEndPoint GetLocalEndPoint ()
-		{
-			return new IPEndPoint (IPAddress.Loopback, 4433);
-		}
 	}
 }
 

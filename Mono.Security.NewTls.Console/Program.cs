@@ -39,8 +39,6 @@ using System.Security.Cryptography;
 using Mono.Security.Providers.NewTls;
 using Xamarin.AsyncTests;
 
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.Console.Program))]
-
 namespace Mono.Security.NewTls.Console
 {
 	using Xamarin.AsyncTests;
@@ -51,7 +49,7 @@ namespace Mono.Security.NewTls.Console
 	using Mono.Security.NewTls.TestProvider;
 	using Mono.Security.NewTls.Tests;
 
-	public class Program : TestApp, ICryptoProvider, IConnectionProvider, IRandomNumberGenerator, IDependencyProvider
+	public class Program : TestApp
 	{
 		public string SettingsFile {
 			get;
@@ -91,7 +89,6 @@ namespace Mono.Security.NewTls.Console
 		SettingsBag settings;
 		TestFramework framework;
 		TestLogger logger;
-		RandomNumberGenerator rng;
 
 		public static void Main (string[] args)
 		{
@@ -100,8 +97,7 @@ namespace Mono.Security.NewTls.Console
 
 			PortableSupportImpl.Initialize ();
 
-			var program = Instance;
-			program.ParseArgs (args);
+			var program = new Program (args);
 
 			try {
 				var task = program.Run ();
@@ -111,29 +107,7 @@ namespace Mono.Security.NewTls.Console
 			}
 		}
 
-		public static Program Instance = new Program ();
-
-		Program ()
-		{
-			Initialize ();
-		}
-
-		public void Initialize ()
-		{
-			if (rng != null)
-				return;
-
-			rng = RandomNumberGenerator.Create ();
-
-			DependencyInjector.Register<ICryptoProvider> (this);
-			DependencyInjector.Register<IConnectionProvider> (this);
-
-			var newTlsProvider = new NewTlsProvider ();
-			DependencyInjector.Register<NewTlsProvider> (newTlsProvider);
-			MonoTlsProviderFactory.InstallProvider (newTlsProvider);
-		}
-
-		void ParseArgs (string[] args)
+		Program (string[] args)
 		{
 			LogLevel = -1;
 
@@ -157,7 +131,7 @@ namespace Mono.Security.NewTls.Console
 			logger = new TestLogger (new ConsoleLogger (this));
 			logger.LogLevel = LogLevel;
 
-			framework = TestFramework.GetLocalFramework (assembly);
+			framework = TestFramework.GetLocalFramework (assembly, typeof (DependencyProvider).Assembly);
 		}
 
 		static void Debug (string message, params object[] args)
@@ -324,122 +298,6 @@ namespace Mono.Security.NewTls.Console
 			{
 				Program.OnStatisticsEvent (args);
 			}
-		}
-
-		#region ICryptoProvider implementation
-
-		public IRandomNumberGenerator GetRandomNumberGenerator ()
-		{
-			return this;
-		}
-
-		public byte[] GetRandomBytes (int count)
-		{
-			var data = new byte [count];
-			rng.GetBytes (data);
-			return data;
-		}
-
-		public bool IsSupported (CryptoProviderType type, bool needsEncryption)
-		{
-			if (type == CryptoProviderType.Mono)
-				return true;
-			if (needsEncryption)
-				return false;
-			if (type == CryptoProviderType.OpenSsl)
-				return true;
-			return false;
-		}
-
-		public IHashTestHost GetHashTestHost (CryptoProviderType type)
-		{
-			switch (type) {
-			case CryptoProviderType.Mono:
-				return new MonoCryptoProvider ();
-			case CryptoProviderType.OpenSsl:
-				return new NativeCryptoProvider ();
-
-			default:
-				throw new NotSupportedException ();
-			}
-		}
-
-		public IEncryptionTestHost GetEncryptionTestHost (CryptoProviderType type, CryptoTestParameters parameters)
-		{
-			switch (type) {
-			case CryptoProviderType.Mono:
-				return new MonoCryptoProvider { Parameters = parameters };
-
-			default:
-				throw new NotSupportedException ();
-			}
-		}
-
-		#endregion
-
-		#region IConnectionProvider implementation
-
-		public bool IsSupported (ConnectionProviderType type)
-		{
-			switch (type) {
-			case ConnectionProviderType.Mono:
-			case ConnectionProviderType.OpenSsl:
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		public bool HasConnectionInfo (ConnectionProviderType type)
-		{
-			switch (type) {
-			case ConnectionProviderType.Mono:
-			case ConnectionProviderType.OpenSsl:
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		public bool CanSelectCiphers (ConnectionProviderType type)
-		{
-			switch (type) {
-			case ConnectionProviderType.Mono:
-			case ConnectionProviderType.OpenSsl:
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)
-		{
-			if (type == ConnectionProviderType.DotNet)
-				return new DotNetClient (GetLocalEndPoint (), parameters);
-			else if (type == ConnectionProviderType.Mono)
-				return new MonoClient (GetLocalEndPoint (), parameters);
-			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslClient (GetLocalEndPoint (), parameters);
-			throw new NotSupportedException ();
-		}
-
-		public IServer CreateServer (ConnectionProviderType type, IServerParameters parameters)
-		{
-			if (type == ConnectionProviderType.DotNet)
-				return new DotNetServer (GetLocalEndPoint (), parameters);
-			else if (type == ConnectionProviderType.Mono)
-				return new MonoServer (GetLocalEndPoint (), parameters);
-			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslServer (GetLocalEndPoint (), parameters);
-			else
-				throw new NotSupportedException ();
-		}
-
-		#endregion
-
-		IPEndPoint GetLocalEndPoint ()
-		{
-			return new IPEndPoint (IPAddress.Loopback, 4433);
 		}
 	}
 }
