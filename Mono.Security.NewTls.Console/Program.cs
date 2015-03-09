@@ -37,6 +37,9 @@ using System.Threading.Tasks;
 using NDesk.Options;
 using System.Security.Cryptography;
 using Mono.Security.Providers.NewTls;
+using Xamarin.AsyncTests;
+
+[assembly: DependencyProvider (typeof (Mono.Security.NewTls.Console.Program))]
 
 namespace Mono.Security.NewTls.Console
 {
@@ -48,7 +51,7 @@ namespace Mono.Security.NewTls.Console
 	using Mono.Security.NewTls.TestProvider;
 	using Mono.Security.NewTls.Tests;
 
-	public class Program : TestApp, ICryptoProvider, IConnectionProvider, IRandomNumberGenerator
+	public class Program : TestApp, ICryptoProvider, IConnectionProvider, IRandomNumberGenerator, IDependencyProvider
 	{
 		public string SettingsFile {
 			get;
@@ -97,7 +100,8 @@ namespace Mono.Security.NewTls.Console
 
 			PortableSupportImpl.Initialize ();
 
-			var program = new Program (args);
+			var program = Instance;
+			program.ParseArgs (args);
 
 			try {
 				var task = program.Run ();
@@ -107,8 +111,18 @@ namespace Mono.Security.NewTls.Console
 			}
 		}
 
-		Program (string[] args)
+		public static Program Instance = new Program ();
+
+		Program ()
 		{
+			Initialize ();
+		}
+
+		public void Initialize ()
+		{
+			if (rng != null)
+				return;
+
 			rng = RandomNumberGenerator.Create ();
 
 			DependencyInjector.Register<ICryptoProvider> (this);
@@ -117,7 +131,10 @@ namespace Mono.Security.NewTls.Console
 			var newTlsProvider = new NewTlsProvider ();
 			DependencyInjector.Register<NewTlsProvider> (newTlsProvider);
 			MonoTlsProviderFactory.InstallProvider (newTlsProvider);
+		}
 
+		void ParseArgs (string[] args)
+		{
 			LogLevel = -1;
 
 			var p = new OptionSet ();

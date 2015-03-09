@@ -25,9 +25,12 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
+[assembly: RequireDependency (typeof (IConnectionProvider))]
+[assembly: RequireDependency (typeof (ICryptoProvider))]
 
 namespace Mono.Security.NewTls.Tests
 {
