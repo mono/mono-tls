@@ -9,7 +9,7 @@
     <AssemblyName>Mono.Security.NewTls.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\new-tls.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,46 +40,46 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NDeskOptions.cs" />
   </ItemGroup>
-  <Import Project="..\..\external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
+  <Import Project="..\external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
+    <ProjectReference Include="..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
       <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
       <Name>Xamarin.AsyncTests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.Framework\Xamarin.AsyncTests.Framework.csproj">
+    <ProjectReference Include="..\external\web-tests\Xamarin.AsyncTests.Framework\Xamarin.AsyncTests.Framework.csproj">
       <Project>{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}</Project>
       <Name>Xamarin.AsyncTests.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.Remoting\Xamarin.AsyncTests.Remoting.csproj">
+    <ProjectReference Include="..\external\web-tests\Xamarin.AsyncTests.Remoting\Xamarin.AsyncTests.Remoting.csproj">
       <Project>{584654DF-6888-4B18-AB82-3C773CD45436}</Project>
       <Name>Xamarin.AsyncTests.Remoting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls.csproj">
+    <ProjectReference Include="..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls.csproj">
       <Project>{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}</Project>
       <Name>Mono.Security.Providers.NewTls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
       <Name>Mono.Security.NewTls.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
       <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
       <Name>Mono.Security.NewTls.TestFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
       <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
       <Name>Mono.Security.NewTls.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.TestProvider.OpenSsl\Mono.Security.NewTls.TestProvider.OpenSsl.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls.TestProvider.OpenSsl\Mono.Security.NewTls.TestProvider.OpenSsl.csproj">
       <Project>{2106FB71-AA81-49C5-89F2-445A6C7DF9E6}</Project>
       <Name>Mono.Security.NewTls.TestProvider.OpenSsl</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
       <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj">
       <Project>{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}</Project>
       <Name>Mono.Security.NewTls.TestProvider</Name>
     </ProjectReference>
