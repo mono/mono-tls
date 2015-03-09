@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Threading;
 using Xamarin.AsyncTests;
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
@@ -36,20 +37,18 @@ namespace Mono.Security.NewTls.TestProvider
 
 	public class DependencyProvider : IDependencyProvider
 	{
-		public static DependencyProvider Instance = new DependencyProvider ();
-
-		DependencyProvider ()
-		{
-		}
+		static int initialized;
 
 		public void Initialize ()
 		{
-			var newTlsProvider = new NewTlsProvider ();
-			DependencyInjector.Register<NewTlsProvider> (newTlsProvider);
-			MonoTlsProviderFactory.InstallProvider (newTlsProvider);
+			if (Interlocked.CompareExchange (ref initialized, 1, 0) == 0) {
+				var newTlsProvider = new NewTlsProvider ();
+				DependencyInjector.Register<NewTlsProvider> (newTlsProvider);
+				MonoTlsProviderFactory.InstallProvider (newTlsProvider);
 
-			DependencyInjector.Register<ICryptoProvider> (new CryptoProvider ());
-			DependencyInjector.Register<IConnectionProvider> (new ConnectionProvider ());
+				DependencyInjector.Register<ICryptoProvider> (new CryptoProvider ());
+				DependencyInjector.Register<IConnectionProvider> (new ConnectionProvider ());
+			}
 		}
 	}
 }
