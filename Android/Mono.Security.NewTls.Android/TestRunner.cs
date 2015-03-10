@@ -58,7 +58,7 @@ namespace Mono.Security.NewTls.Android
 
 		public TestRunner ()
 		{
-			PortableSupportImpl.Initialize ();
+			new PortableSupportImpl ().Initialize ();
 
 			Settings = SettingsBag.CreateDefault ();
 			var assembly = typeof(NewTlsTestFeatures).Assembly;
