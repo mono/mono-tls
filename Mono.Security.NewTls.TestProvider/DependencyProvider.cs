@@ -26,6 +26,7 @@
 using System;
 using System.Threading;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Console;
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 
@@ -49,6 +50,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
 			DependencyInjector.RegisterDependency<IConnectionProvider> (() => new ConnectionProvider ());
+		}
+
+		static void Main (string[] args)
+		{
+			Program.Run (typeof (DependencyProvider).Assembly, args);
 		}
 	}
 }

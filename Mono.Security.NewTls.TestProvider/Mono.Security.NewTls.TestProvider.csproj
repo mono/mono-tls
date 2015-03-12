@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Mono.Security.NewTls.TestProvider</RootNamespace>
     <AssemblyName>Mono.Security.NewTls.TestProvider</AssemblyName>
     <SignAssembly>true</SignAssembly>
@@ -93,6 +93,14 @@
     <ProjectReference Include="..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
       <Name>Mono.Security.NewTls.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\external\web-tests\Xamarin.AsyncTests.Console\Xamarin.AsyncTests.Console.csproj">
+      <Project>{8FA04E17-8E60-45C4-A9A7-51C5047CCABF}</Project>
+      <Name>Xamarin.AsyncTests.Console</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\external\web-tests\Xamarin.AsyncTests.Framework\Xamarin.AsyncTests.Framework.csproj">
+      <Project>{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}</Project>
+      <Name>Xamarin.AsyncTests.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
