@@ -139,6 +139,7 @@ namespace Mono.Security.NewTls.Tests
 			await handler.Run ();
 		}
 
+		[Work]
 		[AsyncTest]
 		public async Task InvalidCipher (TestContext ctx,
 			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,

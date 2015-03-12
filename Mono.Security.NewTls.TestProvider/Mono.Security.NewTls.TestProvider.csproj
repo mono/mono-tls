@@ -25,6 +25,7 @@
         <Command type="AfterBuild" command="post-build.sh ${TargetDir}" />
       </CustomCommands>
     </CustomCommands>
+    <Commandlineparameters>--gui=127.0.0.1:8888 --optional-gui --log-level=-1</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>

@@ -72,7 +72,16 @@ namespace Mono.Security.NewTls.TestProvider
 			var monoSslStream = provider.CreateSslStream (
 				stream, false, MonoRemoteValidationCallback, null, settings);
 
-			await monoSslStream.AuthenticateAsClientAsync (targetHost, clientCerts, SslProtocols.Tls12, false);
+			var newTlsStream = NewTlsProvider.GetNewTlsStream (monoSslStream);
+
+			try {
+				await monoSslStream.AuthenticateAsClientAsync (targetHost, clientCerts, SslProtocols.Tls12, false);
+			} catch (Exception ex) {
+				var lastError = newTlsStream.LastError;
+				if (lastError != null)
+					throw new AggregateException (ex, lastError);
+				throw;
+			}
 
 			return monoSslStream;
 		}
