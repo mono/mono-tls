@@ -108,7 +108,6 @@ namespace Mono.Security.NewTls.TestProvider
 					sslStream = await Start (ctx, accepted, cancellationToken);
 					tcs.SetResult (sslStream);
 				} catch (Exception ex) {
-					ctx.LogError ("Error starting server", ex);
 					Debug ("Error starting server: {0}", ex);
 					tcs.SetException (ex);
 				}
@@ -128,7 +127,6 @@ namespace Mono.Security.NewTls.TestProvider
 					sslStream = await Start (ctx, socket, cancellationToken);
 					tcs.SetResult (sslStream);
 				} catch (Exception ex) {
-					ctx.LogError ("Error starting client", ex);
 					Debug ("Error starting client: {0}", ex);
 					tcs.SetException (ex);
 				}
