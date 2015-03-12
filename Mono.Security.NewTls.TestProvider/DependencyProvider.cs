@@ -31,24 +31,24 @@ using Mono.Security.Providers.NewTls;
 
 [assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.DependencyProvider))]
 
+[assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
+
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
 	public class DependencyProvider : IDependencyProvider
 	{
-		static int initialized;
-
 		public void Initialize ()
 		{
-			if (Interlocked.CompareExchange (ref initialized, 1, 0) == 0) {
+			DependencyInjector.RegisterDependency<NewTlsProvider> (() => {
 				var newTlsProvider = new NewTlsProvider ();
-				DependencyInjector.Register<NewTlsProvider> (newTlsProvider);
 				MonoTlsProviderFactory.InstallProvider (newTlsProvider);
+				return newTlsProvider;
+			});
 
-				DependencyInjector.Register<ICryptoProvider> (new CryptoProvider ());
-				DependencyInjector.Register<IConnectionProvider> (new ConnectionProvider ());
-			}
+			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
+			DependencyInjector.RegisterDependency<IConnectionProvider> (() => new ConnectionProvider ());
 		}
 	}
 }
