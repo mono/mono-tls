@@ -99,9 +99,9 @@
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
       <Name>Mono.Security.NewTls.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls.Console\Mono.Security.NewTls.Console.csproj">
       <Project>{EDCA419E-9AE6-4327-A6D6-51485004FAF6}</Project>
-      <Name>Mono.Security.NewTls.TestProvider</Name>
+      <Name>Mono.Security.NewTls.Console</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj">
       <Project>{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}</Project>
