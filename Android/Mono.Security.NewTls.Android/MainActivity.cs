@@ -5,6 +5,7 @@ using Android.OS;
 
 namespace Mono.Security.NewTls.Android
 {
+	using TestProvider;
 	using Xamarin.Forms;
 	using Xamarin.Forms.Platform.Android;
 	using Xamarin.AsyncTests;
@@ -26,7 +27,9 @@ namespace Mono.Security.NewTls.Android
 
 			Forms.Init (this, bundle);
 
-			Framework = TestFramework.GetLocalFramework (typeof(MainActivity).Assembly);
+			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
+
+			Framework = TestFramework.GetLocalFramework (typeof(NewTlsDependencyProvider).Assembly);
 
 			LoadApplication (new MobileTestApp (Framework));
 		}
