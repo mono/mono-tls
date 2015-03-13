@@ -15,7 +15,7 @@ using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
 using System.Security.Cryptography;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	public class NativeCryptoProvider : IHashTestHost
 	{

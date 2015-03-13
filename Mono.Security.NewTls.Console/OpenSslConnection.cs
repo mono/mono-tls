@@ -31,10 +31,10 @@ using System.Threading.Tasks;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
 using Mono.Security.NewTls.TestFramework;
-using Mono.Security.NewTls.TestProvider;
+using Mono.Security.NewTls.Console;
 using Xamarin.AsyncTests;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	public abstract class OpenSslConnection : Connection, ICommonConnection
 	{

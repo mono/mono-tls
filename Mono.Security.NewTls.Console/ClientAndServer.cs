@@ -6,7 +6,7 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	public class ClientAndServer : Connection, IClientAndServer
 	{

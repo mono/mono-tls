@@ -26,7 +26,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	using TestFramework;
 

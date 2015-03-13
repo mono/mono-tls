@@ -18,7 +18,7 @@ using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
 
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
-using Mono.Security.NewTls.TestProvider;
+using Mono.Security.NewTls.Console;
 using Mono.Security.Providers.NewTls;
 using Mono.Security.Interface;
 
@@ -27,7 +27,7 @@ using Xamarin.AsyncTests;
 using SSCX = System.Security.Cryptography.X509Certificates;
 using MX = Mono.Security.X509;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	public class MonoClient : MonoConnection, IClient
 	{

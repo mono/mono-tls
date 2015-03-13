@@ -43,7 +43,7 @@ using Mono.Security.NewTls.TestFramework;
 
 using Xamarin.AsyncTests;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	public abstract class MonoConnection : DotNetConnection, ICommonConnection
 	{

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	public class OpenSslClient : OpenSslConnection, IClient
 	{

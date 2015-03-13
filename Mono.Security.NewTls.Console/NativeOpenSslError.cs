@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	// Keep in sync with the native code
 	public enum NativeOpenSslError

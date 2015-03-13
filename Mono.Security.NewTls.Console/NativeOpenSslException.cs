@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.Console
 {
 	public class NativeOpenSslException : Exception
 	{
