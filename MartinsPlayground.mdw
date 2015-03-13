@@ -1,7 +1,7 @@
 <WorkspaceItem ctype="Workspace">
   <Items>
     <Item>MartinsPlayground.sln</Item>
-    <Item>external/web-tests/Xamarin.WebTests.Async.sln</Item>
+    <Item>external/web-tests/Xamarin.WebTests.sln</Item>
     <Item>MartinsPlayground.Android.sln</Item>
   </Items>
 </WorkspaceItem>

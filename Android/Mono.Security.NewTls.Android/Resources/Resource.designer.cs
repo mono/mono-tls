@@ -26,6 +26,7 @@ namespace Mono.Security.NewTls.Android
 		
 		public static void UpdateIdValues()
 		{
+			global::Mono.Security.NewTls.Android.Resource.String.library_name = global::Mono.Security.NewTls.Android.Resource.String.library_name;
 		}
 		
 		public partial class Attribute

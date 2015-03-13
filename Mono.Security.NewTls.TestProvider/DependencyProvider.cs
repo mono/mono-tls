@@ -26,13 +26,17 @@
 using System;
 using System.Threading;
 using Xamarin.AsyncTests;
+#if !__MOBILE__
 using Xamarin.AsyncTests.Console;
+#endif
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 
 [assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.DependencyProvider))]
 
+#if !__MOBILE__
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
+#endif
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -52,10 +56,12 @@ namespace Mono.Security.NewTls.TestProvider
 			DependencyInjector.RegisterDependency<IConnectionProvider> (() => new ConnectionProvider ());
 		}
 
+		#if !__MOBILE__
 		static void Main (string[] args)
 		{
 			Program.Run (typeof (DependencyProvider).Assembly, args);
 		}
+		#endif
 	}
 }
 

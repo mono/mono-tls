@@ -73,7 +73,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\Icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
   </ItemGroup>
-  <Import Project="..\..\external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\support\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
@@ -95,10 +94,6 @@
     <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.Framework\Xamarin.AsyncTests.Framework.csproj">
       <Project>{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}</Project>
       <Name>Xamarin.AsyncTests.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.Remoting\Xamarin.AsyncTests.Remoting.csproj">
-      <Project>{584654DF-6888-4B18-AB82-3C773CD45436}</Project>
-      <Name>Xamarin.AsyncTests.Remoting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
