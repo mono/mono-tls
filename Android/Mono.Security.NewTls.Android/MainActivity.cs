@@ -1,47 +1,35 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Android.App;
-using Android.Content;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
 
 namespace Mono.Security.NewTls.Android
 {
-	[Activity (Label = "Mono.Security.NewTls.Android", MainLauncher = true, Icon = "@drawable/icon")]
-	public class MainActivity : Activity
+	using Xamarin.Forms;
+	using Xamarin.Forms.Platform.Android;
+	using Xamarin.AsyncTests;
+	using Xamarin.AsyncTests.Framework;
+	using Xamarin.AsyncTests.Portable;
+	using Xamarin.AsyncTests.Mobile;
+
+	[Activity (Label = "Mono.Security.NewTls.Android", MainLauncher = true)]
+	public class MainActivity : FormsApplicationActivity
 	{
-		TestRunner runner;
-		TextView text;
+		public TestFramework Framework {
+			get;
+			private set;
+		}
 
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
-			SetContentView (Resource.Layout.Main);
-			text = FindViewById<TextView> (Resource.Id.textView);
+			Forms.Init (this, bundle);
 
-			runner = new TestRunner ();
-			runner.LogEvent += (sender, e) => {
-				RunOnUiThread (() => text.Text = e);
-			};
-			Run ();
-		}
+			Framework = TestFramework.GetLocalFramework (typeof(MainActivity).Assembly);
 
-		async void Run ()
-		{
-			while (true) {
-				text.Text = "Server running.";
-				await runner.RunServer ();
-				text.Text = "Server done.";
-
-				await Task.Delay (2500);
-			}
+			LoadApplication (new MobileTestApp (Framework));
 		}
 	}
 }
-
 
