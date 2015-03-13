@@ -41,26 +41,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ClientAndServer.cs" />
-    <Compile Include="Connection.cs" />
-    <Compile Include="DotNetClient.cs" />
-    <Compile Include="DotNetConnection.cs" />
-    <Compile Include="DotNetServer.cs" />
-    <Compile Include="MonoCryptoProvider.cs" />
-    <Compile Include="SymmetricAlgorithmProxy.cs" />
-    <Compile Include="MonoClient.cs" />
-    <Compile Include="MonoConnection.cs" />
-    <Compile Include="MonoServer.cs" />
-    <Compile Include="NativeCryptoProvider.cs" />
-    <Compile Include="NativeOpenSsl.cs" />
-    <Compile Include="NativeOpenSslError.cs" />
-    <Compile Include="NativeOpenSslException.cs" />
-    <Compile Include="OpenSslClient.cs" />
-    <Compile Include="OpenSslConnection.cs" />
-    <Compile Include="OpenSslServer.cs" />
-    <Compile Include="CryptoProvider.cs" />
-    <Compile Include="ConnectionProvider.cs" />
-    <Compile Include="DependencyProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\ClientAndServer.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\Connection.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\ConnectionProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\CryptoProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\DependencyProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\DotNetClient.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\DotNetConnection.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\DotNetServer.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoClient.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnection.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoServer.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\NativeCryptoProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\NativeOpenSsl.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\NativeOpenSslError.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\NativeOpenSslException.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslClient.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslConnection.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslServer.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -111,16 +111,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\lib\libcrypto.1.0.0.dylib">
-      <Link>libcrypto.1.0.0.dylib</Link>
+      <Link>Mono.Security.NewTls.TestProvider\libcrypto.1.0.0.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\lib\libNativeOpenSsl.dylib">
-      <Link>libNativeOpenSsl.dylib</Link>
+      <Link>Mono.Security.NewTls.TestProvider\libNativeOpenSsl.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\lib\libssl.1.0.0.dylib">
-      <Link>libssl.1.0.0.dylib</Link>
+      <Link>Mono.Security.NewTls.TestProvider\libssl.1.0.0.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mono.Security.NewTls.TestProvider\" />
   </ItemGroup>
 </Project>

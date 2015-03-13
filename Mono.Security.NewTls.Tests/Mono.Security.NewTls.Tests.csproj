@@ -33,21 +33,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NewTlsTestFeatures.cs" />
-    <Compile Include="TestGaloisCounterCipher.cs" />
-    <Compile Include="CipherTest.cs" />
-    <Compile Include="TestGaloisCounterGipher-Generated.cs" />
-    <Compile Include="TestCbcBlockCipher-Generated.cs" />
-    <Compile Include="TestCbcBlockCipher.cs" />
-    <Compile Include="HashTest.cs" />
-    <Compile Include="SimpleConnectionTest.cs" />
     <Compile Include="Resources\LocalCACertificate.cs" />
     <Compile Include="Resources\MonkeyCertificate.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="Resources\SelfSignedServerCertificate.cs" />
     <Compile Include="Resources\ServerCertificateFromCA.cs" />
-    <Compile Include="ConnectionTest.cs" />
-    <Compile Include="SelectCiphersTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\CipherTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\ConnectionTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\HashTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\NewTlsTestFeatures.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\SelectCiphersTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\SimpleConnectionTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\TestCbcBlockCipher.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\TestCbcBlockCipher-Generated.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterCipher.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterGipher-Generated.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\CA\server-cert.pfx">
@@ -81,5 +81,6 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="CA\" />
+    <Folder Include="Mono.Security.NewTls.Tests\" />
   </ItemGroup>
 </Project>
