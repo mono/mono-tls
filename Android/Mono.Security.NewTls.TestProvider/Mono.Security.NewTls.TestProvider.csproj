@@ -40,46 +40,46 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\ClientAndServer.cs">
-      <Link>ClientAndServer.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\ClientAndServer.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Connection.cs">
-      <Link>Connection.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\Connection.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DotNetClient.cs">
-      <Link>DotNetClient.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\DotNetClient.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DotNetConnection.cs">
-      <Link>DotNetConnection.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\DotNetConnection.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DotNetServer.cs">
-      <Link>DotNetServer.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\DotNetServer.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs">
-      <Link>MonoCryptoProvider.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs">
-      <Link>SymmetricAlgorithmProxy.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoClient.cs">
-      <Link>MonoClient.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\MonoClient.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoConnection.cs">
-      <Link>MonoConnection.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\MonoConnection.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoServer.cs">
-      <Link>MonoServer.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\MonoServer.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\ConnectionProvider.cs">
-      <Link>ConnectionProvider.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\ConnectionProvider.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\CryptoProvider.cs">
-      <Link>CryptoProvider.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\CryptoProvider.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DependencyProvider.cs">
-      <Link>DependencyProvider.cs</Link>
+      <Link>Mono.Security.NewTls.TestProvider\DependencyProvider.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
