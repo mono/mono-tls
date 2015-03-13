@@ -34,9 +34,7 @@ using Mono.Security.Providers.NewTls;
 
 [assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
 
-#if !__MOBILE__
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
-#endif
 
 namespace Mono.Security.NewTls.TestProvider
 {
