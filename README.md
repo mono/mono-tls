@@ -80,5 +80,23 @@ To use the new code, an application needs to call
 
 	MonoTlsProviderFactory.InstallProvider (new NewTlsProvider ());
 
+Running the Tests
+-----------------
+
+See [web-tests/README.md](https://github.com/xamarin/web-tests/blob/martin-newtls/README.md) for a detailed overview of the test framework.
+
+The platform-specific test implementation is `Mono.Security.NewTls.TestProvider`.  This project currently exists in two versions: [one](https://github.com/mono/mono-tls/tree/master/Mono.Security.NewTls.TestProvider) for the Console and [another one](https://github.com/mono/mono-tls/tree/master/Android/Mono.Security.NewTls.TestProvider).
+
+Due to some strong-name requirements, the actual Android app also needs to be in a [different project](https://github.com/mono/mono-tls/tree/master/Android/Mono.Security.NewTls.Android).
+
+To run the tests on the Console:
+
+1. Build as explained above.
+2. Build the [Mac GUI](https://github.com/xamarin/web-tests/tree/martin-newtls/Xamarin.AsyncTests.MacUI).  You may need to set the current Mono runtime to the default one for this.
+3. Run as explained in the [web-tests/README.md](https://github.com/xamarin/web-tests/blob/martin-newtls/README.md), using `Mono.Security.NewTls.TestProvider.exe` as custom test implementation.
+
+To run the tests on Android, use the `Mono.Security.NewTls.Android` app.  iOS is not done yet, but will come shortly.
 
 
+Last changed March 13, 2015
+Martin Baulig <martin.baulig@xamarin.com>
