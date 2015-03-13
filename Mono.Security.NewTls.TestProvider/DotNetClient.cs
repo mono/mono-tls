@@ -10,10 +10,10 @@ using System.Collections.Generic;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
-using Mono.Security.NewTls.Console;
+using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
 
-namespace Mono.Security.NewTls.Console
+namespace Mono.Security.NewTls.TestProvider
 {
 	public class DotNetClient : DotNetConnection, IClient
 	{

@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F35F5D80-FD45-43DF-A4E5-5D28BB04921B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Mono.Security.NewTls.Console</RootNamespace>
-    <AssemblyName>Mono.Security.NewTls.Console</AssemblyName>
+    <RootNamespace>Mono.Security.NewTls.TestProvider</RootNamespace>
+    <AssemblyName>Mono.Security.NewTls.TestProvider</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\new-tls.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

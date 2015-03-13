@@ -9,7 +9,7 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
 
-namespace Mono.Security.NewTls.Console
+namespace Mono.Security.NewTls.TestProvider
 {
 	public abstract class Connection : IConnection, IDisposable
 	{

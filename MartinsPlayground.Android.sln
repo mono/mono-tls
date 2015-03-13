@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Androi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Tests", "Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj", "{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Console", "Android\Mono.Security.NewTls.Console\Mono.Security.NewTls.Console.csproj", "{EDCA419E-9AE6-4327-A6D6-51485004FAF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider", "Android\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj", "{EDCA419E-9AE6-4327-A6D6-51485004FAF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Providers.NewTls", "Android\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj", "{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}"
 EndProject

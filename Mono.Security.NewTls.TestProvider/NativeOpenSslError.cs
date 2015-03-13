@@ -1,5 +1,5 @@
 ﻿//
-// NativeOpenSslException.cs
+// NativeOpenSslError.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,14 +25,24 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.Console
+namespace Mono.Security.NewTls.TestProvider
 {
-	public class NativeOpenSslException : Exception
+	// Keep in sync with the native code
+	public enum NativeOpenSslError
 	{
-		public NativeOpenSslException (NativeOpenSslError error)
-			: base (error.ToString ())
-		{
-		}
+		Ok,
+		SOCKET,
+		SSL_CONNECT,
+		SSL_ACCEPT,
+		PKCS12_LOAD,
+		PKCS12_VERIFY,
+		PKCS12_PARSE,
+		INVALID_CERT,
+		INVALID_PKEY,
+		PKEY_DOES_NOT_MATCH,
+		CREATE_CONTEXT,
+		CREATE_CONNECTION,
+		INVALID_CIPHER
 	}
 }
 

@@ -6,8 +6,8 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{EDCA419E-9AE6-4327-A6D6-51485004FAF6}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Mono.Security.NewTls.Console</RootNamespace>
-    <AssemblyName>Mono.Security.NewTls.Console</AssemblyName>
+    <RootNamespace>Mono.Security.NewTls.TestProvider</RootNamespace>
+    <AssemblyName>Mono.Security.NewTls.TestProvider</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
@@ -42,46 +42,46 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\ClientAndServer.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\ClientAndServer.cs">
       <Link>ClientAndServer.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\Connection.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Connection.cs">
       <Link>Connection.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\DotNetClient.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DotNetClient.cs">
       <Link>DotNetClient.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\DotNetConnection.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DotNetConnection.cs">
       <Link>DotNetConnection.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\DotNetServer.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DotNetServer.cs">
       <Link>DotNetServer.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\MonoCryptoProvider.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs">
       <Link>MonoCryptoProvider.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\SymmetricAlgorithmProxy.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs">
       <Link>SymmetricAlgorithmProxy.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\Properties\AssemblyInfo.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\MonoClient.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoClient.cs">
       <Link>MonoClient.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\MonoConnection.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoConnection.cs">
       <Link>MonoConnection.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\MonoServer.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\MonoServer.cs">
       <Link>MonoServer.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\ConnectionProvider.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\ConnectionProvider.cs">
       <Link>ConnectionProvider.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\CryptoProvider.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\CryptoProvider.cs">
       <Link>CryptoProvider.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.Console\DependencyProvider.cs">
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\DependencyProvider.cs">
       <Link>DependencyProvider.cs</Link>
     </Compile>
   </ItemGroup>
