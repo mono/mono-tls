@@ -32,7 +32,7 @@ using Xamarin.AsyncTests.Console;
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.DependencyProvider))]
+[assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
 
 #if !__MOBILE__
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
@@ -42,7 +42,7 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public class DependencyProvider : IDependencyProvider
+	public class NewTlsDependencyProvider : IDependencyProvider
 	{
 		public void Initialize ()
 		{
@@ -59,7 +59,7 @@ namespace Mono.Security.NewTls.TestProvider
 		#if !__MOBILE__
 		static void Main (string[] args)
 		{
-			Program.Run (typeof (DependencyProvider).Assembly, args);
+			Program.Run (typeof (NewTlsDependencyProvider).Assembly, args);
 		}
 		#endif
 	}

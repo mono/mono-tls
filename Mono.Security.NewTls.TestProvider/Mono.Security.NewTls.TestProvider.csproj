@@ -45,7 +45,6 @@
     <Compile Include="Mono.Security.NewTls.TestProvider\Connection.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\ConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\CryptoProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestProvider\DependencyProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\DotNetClient.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\DotNetConnection.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\DotNetServer.cs" />
@@ -61,6 +60,7 @@
     <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslConnection.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslServer.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\NewTlsDependencyProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
