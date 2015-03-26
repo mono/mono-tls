@@ -26,6 +26,10 @@
 using System;
 using System.Threading;
 using Xamarin.AsyncTests;
+using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Server;
+
+
 #if !__MOBILE__
 using Xamarin.AsyncTests.Console;
 #endif
@@ -52,6 +56,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
 			DependencyInjector.RegisterDependency<IConnectionProvider> (() => new ConnectionProvider ());
+
+			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
+			DependencyInjector.RegisterDependency<NTLMHandler> (() => new NTLMHandler ());
 		}
 
 		#if !__MOBILE__

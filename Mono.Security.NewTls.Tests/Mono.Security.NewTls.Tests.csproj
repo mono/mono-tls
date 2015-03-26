@@ -48,6 +48,7 @@
     <Compile Include="Mono.Security.NewTls.Tests\TestCbcBlockCipher-Generated.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterGipher-Generated.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\SimpleHttpsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\CA\server-cert.pfx">
@@ -76,6 +77,10 @@
     <ProjectReference Include="..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
       <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
       <Name>Xamarin.AsyncTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\external\web-tests\Xamarin.WebTests\Xamarin.WebTests.csproj">
+      <Project>{E93E8622-665B-44D6-B36A-89C93B5B3532}</Project>
+      <Name>Xamarin.WebTests</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
