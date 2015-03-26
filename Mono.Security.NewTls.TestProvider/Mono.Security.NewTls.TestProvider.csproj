@@ -111,15 +111,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\lib\libcrypto.1.0.0.dylib">
-      <Link>Mono.Security.NewTls.TestProvider\libcrypto.1.0.0.dylib</Link>
+      <Link>libcrypto.1.0.0.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\lib\libNativeOpenSsl.dylib">
-      <Link>Mono.Security.NewTls.TestProvider\libNativeOpenSsl.dylib</Link>
+      <Link>libNativeOpenSsl.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\lib\libssl.1.0.0.dylib">
-      <Link>Mono.Security.NewTls.TestProvider\libssl.1.0.0.dylib</Link>
+      <Link>libssl.1.0.0.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
