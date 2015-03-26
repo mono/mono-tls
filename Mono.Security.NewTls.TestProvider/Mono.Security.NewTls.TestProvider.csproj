@@ -142,6 +142,9 @@
       <Name>Xamarin.WebTests</Name>
     </ProjectReference>
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>$(ProjectDir)\..\external\web-tests\post-build.sh $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="..\lib\libcrypto.1.0.0.dylib">
       <Link>libcrypto.1.0.0.dylib</Link>
