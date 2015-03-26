@@ -32,6 +32,7 @@ using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.Framework;
 using Xamarin.WebTests.Handlers;
 using Xamarin.AsyncTests.Portable;
+using Mono.Security.NewTls.TestFramework;
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -49,6 +50,22 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
+	class HttpsTestRunner : TraditionalTestRunner
+	{
+		protected override void ConfigureRequest (TestContext ctx, HttpServer server, Uri uri, Handler handler, Request request)
+		{
+			var provider = DependencyInjector.Get<IHttpsConnectionProvider> ();
+			var traditionalRequest = (TraditionalRequest)request;
+			provider.InitializeHttpRequest (traditionalRequest.Request);
+			base.ConfigureRequest (ctx, server, uri, handler, request);
+		}
+
+		protected override async Task<Response> RunInner (TestContext ctx, CancellationToken cancellationToken, HttpServer server, Uri uri, Handler handler)
+		{
+			return await base.RunInner (ctx, cancellationToken, server, uri, handler);
+		}
+	}
+
 	[Work]
 	[AsyncTestFixture (Timeout = 5000)]
 	public class SimpleHttpsTest : ITestHost<HttpServer>
@@ -56,7 +73,7 @@ namespace Mono.Security.NewTls.Tests
 		public HttpServer CreateInstance (TestContext ctx)
 		{
 			var support = DependencyInjector.Get<IPortableEndPointSupport> ();
-			return new HttpServer (support.GetLoopbackEndpoint (9999), false, false);
+			return new HttpServer (support.GetLoopbackEndpoint (9999), false, true);
 		}
 
 		public static IEnumerable<Handler> GetParameters (TestContext ctx, string filter)
@@ -67,7 +84,8 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		public Task Run (TestContext ctx, CancellationToken cancellationToken, [TestHost] HttpServer server, [SimpleHttpsHandler] Handler handler)
 		{
-			return TestRunner.RunTraditional (ctx, server, handler, cancellationToken);
+			var runner = new HttpsTestRunner ();
+			return runner.Run (ctx, cancellationToken, server, handler, null);
 		}
 
 	}

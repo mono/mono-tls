@@ -1,5 +1,5 @@
-﻿//
-// DependencyProvider.cs
+//
+// MonoHttpsConnectionProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,51 +24,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Threading;
-using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Server;
-
-
-#if !__MOBILE__
-using Xamarin.AsyncTests.Console;
-#endif
+using System.Net;
 using Mono.Security.Interface;
+using Xamarin.AsyncTests;
 using Mono.Security.Providers.NewTls;
-
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
-
-[assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public class NewTlsDependencyProvider : IDependencyProvider
+	class MonoHttpsConnectionProvider : IHttpsConnectionProvider
 	{
-		public void Initialize ()
+		public void InitializeHttpRequest (HttpWebRequest request)
 		{
-			DependencyInjector.RegisterDependency<NewTlsProvider> (() => {
-				var newTlsProvider = new NewTlsProvider ();
-				MonoTlsProviderFactory.InstallProvider (newTlsProvider);
-				return newTlsProvider;
-			});
-
-			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-			DependencyInjector.RegisterDependency<IConnectionProvider> (() => new ConnectionProvider ());
-
-			DependencyInjector.RegisterDependency<IHttpsConnectionProvider> (() => new MonoHttpsConnectionProvider ());
-
-			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
-			DependencyInjector.RegisterDependency<NTLMHandler> (() => new NTLMHandler ());
+			var provider = DependencyInjector.Get<NewTlsProvider> ();
+			MonoTlsProviderFactory.SetProvider (request.ServicePoint, provider);
 		}
-
-		#if !__MOBILE__
-		static void Main (string[] args)
-		{
-			Program.Run (typeof (NewTlsDependencyProvider).Assembly, args);
-		}
-		#endif
 	}
 }
 
