@@ -1,5 +1,5 @@
-﻿//
-// DependencyProvider.cs
+//
+// MonoHttpsConnectionProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,51 +24,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Threading;
-using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Server;
-
-
-#if !__MOBILE__
-using Xamarin.AsyncTests.Console;
-#endif
+using System.Net;
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
-
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
-
-[assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public class NewTlsDependencyProvider : IDependencyProvider
+	class MonoHttpsProvider : IHttpsProvider
 	{
-		public void Initialize ()
+		readonly MonoTlsProvider legacyTlsProvider;
+		readonly MonoTlsProvider newTlsProvider;
+
+		internal MonoHttpsProvider ()
 		{
-			DependencyInjector.RegisterDependency<NewTlsProvider> (() => {
-				var newTlsProvider = new NewTlsProvider ();
-				MonoTlsProviderFactory.InstallProvider (newTlsProvider);
-				return newTlsProvider;
-			});
-
-			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-			DependencyInjector.RegisterDependency<IConnectionProvider> (() => new ConnectionProvider ());
-
-			DependencyInjector.RegisterDependency<IHttpsProvider> (() => new MonoHttpsProvider ());
-
-			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
-			DependencyInjector.RegisterDependency<NTLMHandler> (() => new NTLMHandler ());
+			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
+			legacyTlsProvider = MonoTlsProviderFactory.GetDefaultProvider ();
 		}
 
-		#if !__MOBILE__
-		static void Main (string[] args)
+		public HttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri)
 		{
-			Program.Run (typeof (NewTlsDependencyProvider).Assembly, args);
+			switch (type) {
+			case HttpsProviderType.MonoWithOldTLS:
+				return MonoTlsProviderFactory.CreateHttpsRequest (requestUri, legacyTlsProvider);
+			case HttpsProviderType.MonoWithNewTLS:
+				return MonoTlsProviderFactory.CreateHttpsRequest (requestUri, newTlsProvider);
+			default:
+				throw new InvalidOperationException ();
+			}
 		}
-		#endif
 	}
 }
 

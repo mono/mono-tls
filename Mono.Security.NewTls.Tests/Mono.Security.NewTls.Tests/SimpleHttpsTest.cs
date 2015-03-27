@@ -50,19 +50,29 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	class HttpsTestRunner : TraditionalTestRunner
+	class HttpsTestRunner : TestRunner
 	{
-		protected override void ConfigureRequest (TestContext ctx, HttpServer server, Uri uri, Handler handler, Request request)
-		{
-			var provider = DependencyInjector.Get<IHttpsConnectionProvider> ();
-			var traditionalRequest = (TraditionalRequest)request;
-			provider.InitializeHttpRequest (traditionalRequest.Request);
-			base.ConfigureRequest (ctx, server, uri, handler, request);
+		public HttpsProviderType ProviderType {
+			get;
+			private set;
 		}
 
-		protected override async Task<Response> RunInner (TestContext ctx, CancellationToken cancellationToken, HttpServer server, Uri uri, Handler handler)
+		public HttpsTestRunner (HttpsProviderType type)
 		{
-			return await base.RunInner (ctx, cancellationToken, server, uri, handler);
+			ProviderType = type;
+		}
+
+		protected override Request CreateRequest (TestContext ctx, HttpServer server, Handler handler, Uri uri)
+		{
+			var provider = DependencyInjector.Get<IHttpsProvider> ();
+			var request = provider.CreateRequest (ProviderType, uri);
+			return new TraditionalRequest (request);
+		}
+
+		protected override Task<Response> RunInner (TestContext ctx, CancellationToken cancellationToken, HttpServer server, Handler handler, Request request)
+		{
+			var traditionalRequest = (TraditionalRequest)request;
+			return traditionalRequest.SendAsync (ctx, cancellationToken);
 		}
 	}
 
@@ -70,6 +80,12 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture (Timeout = 5000)]
 	public class SimpleHttpsTest : ITestHost<HttpServer>
 	{
+		[NewTlsTestFeatures.SelectHttpsProvider]
+		public HttpsProviderType HttpsProvider {
+			get;
+			private set;
+		}
+
 		public HttpServer CreateInstance (TestContext ctx)
 		{
 			var support = DependencyInjector.Get<IPortableEndPointSupport> ();
@@ -84,7 +100,7 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		public Task Run (TestContext ctx, CancellationToken cancellationToken, [TestHost] HttpServer server, [SimpleHttpsHandler] Handler handler)
 		{
-			var runner = new HttpsTestRunner ();
+			var runner = new HttpsTestRunner (HttpsProvider);
 			return runner.Run (ctx, cancellationToken, server, handler, null);
 		}
 

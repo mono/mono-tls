@@ -28,9 +28,9 @@ using System.Net;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IHttpsConnectionProvider
+	public interface IHttpsProvider
 	{
-		void InitializeHttpRequest (HttpWebRequest request);
+		HttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri);
 	}
 }
 

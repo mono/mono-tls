@@ -1,5 +1,5 @@
-//
-// MonoHttpsConnectionProvider.cs
+﻿//
+// HttpsProviderType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,22 +24,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Net;
-using Mono.Security.Interface;
-using Xamarin.AsyncTests;
-using Mono.Security.Providers.NewTls;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFramework;
-
-	class MonoHttpsConnectionProvider : IHttpsConnectionProvider
+	public enum HttpsProviderType
 	{
-		public void InitializeHttpRequest (HttpWebRequest request)
-		{
-			var provider = DependencyInjector.Get<NewTlsProvider> ();
-			MonoTlsProviderFactory.SetProvider (request.ServicePoint, provider);
-		}
+		MonoWithOldTLS,
+		MonoWithNewTLS
 	}
 }
 

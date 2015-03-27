@@ -32,7 +32,7 @@ using Xamarin.WebTests.Portable;
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
 [assembly: RequireDependency (typeof (IConnectionProvider))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
-[assembly: RequireDependency (typeof (IHttpsConnectionProvider))]
+[assembly: RequireDependency (typeof (IHttpsProvider))]
 [assembly: RequireDependency (typeof (IPortableWebSupport))]
 
 namespace Mono.Security.NewTls.Tests
@@ -104,6 +104,9 @@ namespace Mono.Security.NewTls.Tests
 			return new TestFeature (name, description, defaultValue);
 		}
 
+		public static readonly TestFeature HttpsWithOldTLS = new TestFeature ("HttpsWithOldTLS", "Use Mono's existing web stack with the old TLS", false);
+		public static readonly TestFeature HttpsWithNewTLS = new TestFeature ("HttpsWithNewTLS", "Use Mono's existing web stack with the new TLS", true);
+
 		static NewTlsTestFeatures ()
 		{
 			Instance = new NewTlsTestFeatures ();
@@ -122,6 +125,8 @@ namespace Mono.Security.NewTls.Tests
 				yield return DotNetConnectionProvider;
 				yield return MonoConnectionProvider;
 				yield return OpenSslConnectionProvider;
+				yield return HttpsWithOldTLS;
+				yield return HttpsWithNewTLS;
 			}
 		}
 
@@ -232,6 +237,31 @@ namespace Mono.Security.NewTls.Tests
 					if (RunFilter (filter, type))
 						yield return type;
 				}
+			}
+		}
+
+		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
+		public class SelectHttpsProvider : TestParameterAttribute, ITestParameterSource<HttpsProviderType>
+		{
+			public SelectHttpsProvider (string filter = null, TestFlags flags = TestFlags.Hidden)
+				: base (filter, flags)
+			{
+			}
+
+			public IEnumerable<HttpsProviderType> GetParameters (TestContext ctx, string filter)
+			{
+				if (filter != null) {
+					if (filter.Equals ("https-with-oldtls"))
+						yield return HttpsProviderType.MonoWithOldTLS;
+					else if (filter.Equals ("https-with-newtls"))
+						yield return HttpsProviderType.MonoWithNewTLS;
+					yield break;
+				}
+
+				if (ctx.IsEnabled (HttpsWithOldTLS))
+					yield return HttpsProviderType.MonoWithOldTLS;
+				if (ctx.IsEnabled (OpenSslCryptoProvider))
+					yield return HttpsProviderType.MonoWithNewTLS;
 			}
 		}
 

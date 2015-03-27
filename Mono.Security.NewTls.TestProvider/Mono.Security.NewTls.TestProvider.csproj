@@ -90,7 +90,7 @@
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\ProxyListener.cs">
       <Link>Xamarin.WebTests.Server\ProxyListener.cs</Link>
     </Compile>
-    <Compile Include="Mono.Security.NewTls.TestProvider\MonoHttpsConnectionProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
