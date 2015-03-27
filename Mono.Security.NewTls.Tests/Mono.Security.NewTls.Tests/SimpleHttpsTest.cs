@@ -64,6 +64,7 @@ namespace Mono.Security.NewTls.Tests
 
 		protected override Request CreateRequest (TestContext ctx, HttpServer server, Handler handler, Uri uri)
 		{
+			ctx.LogMessage ("CREATE REQUEST: {0} {1}", ProviderType, uri);
 			var provider = DependencyInjector.Get<IHttpsProvider> ();
 			var request = provider.CreateRequest (ProviderType, uri);
 			return new TraditionalRequest (request);
