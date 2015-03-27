@@ -260,7 +260,7 @@ namespace Mono.Security.NewTls.Tests
 
 				if (ctx.IsEnabled (HttpsWithOldTLS))
 					yield return HttpsProviderType.MonoWithOldTLS;
-				if (ctx.IsEnabled (OpenSslCryptoProvider))
+				if (ctx.IsEnabled (HttpsWithNewTLS))
 					yield return HttpsProviderType.MonoWithNewTLS;
 			}
 		}
