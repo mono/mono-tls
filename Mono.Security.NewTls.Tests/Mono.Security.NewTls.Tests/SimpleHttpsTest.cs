@@ -31,6 +31,7 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.Framework;
 using Xamarin.WebTests.Handlers;
+using Xamarin.WebTests.Portable;
 using Xamarin.AsyncTests.Portable;
 using Mono.Security.NewTls.TestFramework;
 
@@ -89,8 +90,11 @@ namespace Mono.Security.NewTls.Tests
 
 		public HttpServer CreateInstance (TestContext ctx)
 		{
-			var support = DependencyInjector.Get<IPortableEndPointSupport> ();
-			return new HttpServer (support.GetLoopbackEndpoint (9999), false, true);
+			var endpointSupport = DependencyInjector.Get<IPortableEndPointSupport> ();
+			var endpoint = endpointSupport.GetLoopbackEndpoint (9999);
+
+			var provider = DependencyInjector.Get<IHttpsProvider> ();
+			return provider.CreateServer (endpoint, ResourceManager.DefaultServerCertificate);
 		}
 
 		public static IEnumerable<Handler> GetParameters (TestContext ctx, string filter)

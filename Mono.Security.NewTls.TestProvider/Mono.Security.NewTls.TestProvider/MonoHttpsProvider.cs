@@ -25,9 +25,13 @@
 // THE SOFTWARE.
 using System;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
+using Xamarin.WebTests.Framework;
+using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -54,6 +58,13 @@ namespace Mono.Security.NewTls.TestProvider
 			default:
 				throw new InvalidOperationException ();
 			}
+		}
+
+		public HttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate)
+		{
+			var cert = new X509Certificate2 (certificate.Data, certificate.Password);
+			var wrapper = new ServerCertificate { InstallDefaultValidationCallback = false, Certificate = cert };
+			return new HttpServer (endpoint, false, wrapper);
 		}
 	}
 }

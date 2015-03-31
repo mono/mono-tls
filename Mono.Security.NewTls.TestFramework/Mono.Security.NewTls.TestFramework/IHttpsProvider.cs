@@ -25,12 +25,16 @@
 // THE SOFTWARE.
 using System;
 using System.Net;
+using Xamarin.AsyncTests.Portable;
+using Xamarin.WebTests.Framework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IHttpsProvider
 	{
 		HttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri);
+
+		HttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate);
 	}
 }
 
