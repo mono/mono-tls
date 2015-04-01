@@ -94,6 +94,7 @@
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\ServerCertificate.cs">
       <Link>Xamarin.WebTests.Server\ServerCertificate.cs</Link>
     </Compile>
+    <Compile Include="Mono.Security.NewTls.TestProvider\CertificateValidationProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

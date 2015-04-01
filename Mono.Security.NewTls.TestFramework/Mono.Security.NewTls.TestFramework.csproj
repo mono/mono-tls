@@ -71,6 +71,8 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\StreamWrapper.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\HttpsProviderType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IHttpsProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\ICertificateValidator.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\ICertificateValidationProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ProjectExtensions>

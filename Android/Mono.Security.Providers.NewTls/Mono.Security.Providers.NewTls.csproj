@@ -43,8 +43,11 @@
     <Reference Include="System">
       <Aliases>PrebuiltSystem</Aliases>
     </Reference>
-    <Reference Include="Mono.Security" />
-    <Reference Include="Mono.Security.Providers.NewSystemSource">
+    <Reference Include="Mono.Security, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Mono.Security.Providers.NewSystemSource, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <SpecificVersion>False</SpecificVersion>
       <Aliases>NewSystemSource</Aliases>
     </Reference>
   </ItemGroup>
