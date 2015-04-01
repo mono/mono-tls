@@ -165,6 +165,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mono.Security.NewTls.TestProvider\" />
-    <Folder Include="Xamarin.WebTests.Console\" />
   </ItemGroup>
 </Project>

@@ -37,6 +37,7 @@
     <Reference Include="Mono.Security.Providers.NewSystemSource">
       <Aliases>NewSystemSource</Aliases>
     </Reference>
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\ClientAndServer.cs">
@@ -81,6 +82,45 @@
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\NewTlsDependencyProvider.cs">
       <Link>Mono.Security.NewTls.TestProvider\NewTlsDependencyProvider.cs</Link>
     </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpListener.cs">
+      <Link>Xamarin.WebTests.Server\HttpListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\Listener.cs">
+      <Link>Xamarin.WebTests.Server\Listener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableWebSupportImpl.cs">
+      <Link>Xamarin.WebTests.Server\PortableWebSupportImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\ProxyListener.cs">
+      <Link>Xamarin.WebTests.Server\ProxyListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\ServerCertificate.cs">
+      <Link>Xamarin.WebTests.Server\ServerCertificate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpClient.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpClientHandler.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpClientHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpContent.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpContent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpRequestMessage.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpRequestMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpResponseMessage.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpResponseMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\StreamContent.cs">
+      <Link>Xamarin.WebTests.HttpClient\StreamContent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\StringContent.cs">
+      <Link>Xamarin.WebTests.HttpClient\StringContent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs">
+      <Link>Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
@@ -122,5 +162,13 @@
       <Project>{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}</Project>
       <Name>Xamarin.AsyncTests.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests\Xamarin.WebTests.csproj">
+      <Project>{E93E8622-665B-44D6-B36A-89C93B5B3532}</Project>
+      <Name>Xamarin.WebTests</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Xamarin.WebTests.Server\" />
+    <Folder Include="Xamarin.WebTests.HttpClient\" />
   </ItemGroup>
 </Project>
