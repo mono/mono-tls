@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {

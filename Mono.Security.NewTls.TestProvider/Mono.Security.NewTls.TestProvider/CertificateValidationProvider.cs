@@ -28,6 +28,7 @@ using System.Net;
 using System.Net.Security;
 using Mono.Security.Interface;
 using Xamarin.WebTests.Server;
+using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestProvider
 {

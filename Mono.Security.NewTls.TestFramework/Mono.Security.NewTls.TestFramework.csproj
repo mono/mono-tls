@@ -45,13 +45,9 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CryptoProviderType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CryptoTestParameters.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\ICertificate.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\ICertificateAndKeyAsPFX.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\ICertificateAsPEM.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IClient.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IClientAndServer.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IClientAndServerParameters.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IClientCertificate.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IClientParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ICommonConnection.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IConnection.cs" />
@@ -65,7 +61,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\ILineBasedStream.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IRandomNumberGenerator.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IServer.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IServerCertificate.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\StreamWrapper.cs" />

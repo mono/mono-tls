@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.Tests
 {

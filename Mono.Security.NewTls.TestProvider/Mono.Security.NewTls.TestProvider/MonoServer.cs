@@ -22,6 +22,7 @@ using Mono.Security.Interface;
 using SSCX = System.Security.Cryptography.X509Certificates;
 using MX = Mono.Security.X509;
 using Xamarin.AsyncTests;
+using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestProvider
 {
