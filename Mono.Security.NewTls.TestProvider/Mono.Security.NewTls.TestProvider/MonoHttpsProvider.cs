@@ -42,23 +42,29 @@ namespace Mono.Security.NewTls.TestProvider
 	{
 		readonly MonoTlsProvider legacyTlsProvider;
 		readonly MonoTlsProvider newTlsProvider;
+		readonly IHttpWebRequestProvider requestProvider;
 
 		internal MonoHttpsProvider ()
 		{
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
 			legacyTlsProvider = MonoTlsProviderFactory.GetDefaultProvider ();
+			requestProvider = DependencyInjector.Get<IHttpWebRequestProvider> ();
 		}
 
-		public HttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri)
+		public IHttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri)
 		{
+			HttpWebRequest request;
 			switch (type) {
 			case HttpsProviderType.MonoWithOldTLS:
-				return MonoTlsProviderFactory.CreateHttpsRequest (requestUri, legacyTlsProvider);
+				request = MonoTlsProviderFactory.CreateHttpsRequest (requestUri, legacyTlsProvider);
+				break;
 			case HttpsProviderType.MonoWithNewTLS:
-				return MonoTlsProviderFactory.CreateHttpsRequest (requestUri, newTlsProvider);
+				request = MonoTlsProviderFactory.CreateHttpsRequest (requestUri, newTlsProvider);
+				break;
 			default:
 				throw new InvalidOperationException ();
 			}
+			return requestProvider.Create (request);
 		}
 
 		public IHttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate)

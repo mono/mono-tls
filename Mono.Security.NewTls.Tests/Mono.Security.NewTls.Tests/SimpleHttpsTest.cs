@@ -69,9 +69,14 @@ namespace Mono.Security.NewTls.Tests
 			var httpsProvider = DependencyInjector.Get<IHttpsProvider> ();
 			var request = httpsProvider.CreateRequest (ProviderType, uri);
 
-			// var validationProvider = DependencyInjector.Get<ICertificateValidationProvider> ();
-			// var validator = validationProvider.AcceptThisCertificate (server.ServerCertificate);
-			// validator.Install (request);
+			request.SetKeepAlive (true);
+
+			ctx.Assert (request.SupportsCertificateValidator, "CertificateValidator");
+
+			var validationProvider = DependencyInjector.Get<ICertificateValidationProvider> ();
+			var validator = validationProvider.AcceptThisCertificate (server.ServerCertificate);
+
+			request.InstallCertificateValidator (validator);
 
 			return new TraditionalRequest (request);
 		}

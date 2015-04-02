@@ -32,7 +32,7 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IHttpsProvider
 	{
-		HttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri);
+		IHttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri);
 
 		IHttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate);
 	}
