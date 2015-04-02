@@ -94,7 +94,6 @@
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\ServerCertificate.cs">
       <Link>Xamarin.WebTests.Server\ServerCertificate.cs</Link>
     </Compile>
-    <Compile Include="Mono.Security.NewTls.TestProvider\CertificateValidationProvider.cs" />
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableProxy.cs">
       <Link>Xamarin.WebTests.Server\PortableProxy.cs</Link>
     </Compile>
