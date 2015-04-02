@@ -85,7 +85,7 @@ namespace Mono.Security.NewTls.Tests
 
 	[Work]
 	[AsyncTestFixture (Timeout = 5000)]
-	public class SimpleHttpsTest : ITestHost<HttpServer>
+	public class SimpleHttpsTest : ITestHost<IHttpServer>
 	{
 		[NewTlsTestFeatures.SelectHttpsProvider]
 		public HttpsProviderType HttpsProvider {
@@ -93,7 +93,7 @@ namespace Mono.Security.NewTls.Tests
 			private set;
 		}
 
-		public HttpServer CreateInstance (TestContext ctx)
+		public IHttpServer CreateInstance (TestContext ctx)
 		{
 			var endpointSupport = DependencyInjector.Get<IPortableEndPointSupport> ();
 			var endpoint = endpointSupport.GetLoopbackEndpoint (9999);
@@ -108,7 +108,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AsyncTest]
-		public Task Run (TestContext ctx, CancellationToken cancellationToken, [TestHost] HttpServer server, [SimpleHttpsHandler] Handler handler)
+		public Task Run (TestContext ctx, CancellationToken cancellationToken, [TestHost] IHttpServer server, [SimpleHttpsHandler] Handler handler)
 		{
 			var runner = new HttpsTestRunner (HttpsProvider);
 			return runner.Run (ctx, cancellationToken, server, handler, null);

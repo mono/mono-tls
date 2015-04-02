@@ -31,6 +31,7 @@ using Mono.Security.Providers.NewTls;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Framework;
+using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
@@ -60,7 +61,7 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 		}
 
-		public HttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate)
+		public IHttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate)
 		{
 			var cert = new X509Certificate2 (certificate.Data, certificate.Password);
 			var wrapper = new ServerCertificate { InstallDefaultValidationCallback = false, Certificate = cert };

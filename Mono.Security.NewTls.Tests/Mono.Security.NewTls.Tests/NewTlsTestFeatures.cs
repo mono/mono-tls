@@ -34,6 +34,7 @@ using Xamarin.WebTests.Portable;
 [assembly: RequireDependency (typeof (ICryptoProvider))]
 [assembly: RequireDependency (typeof (IHttpsProvider))]
 [assembly: RequireDependency (typeof (IPortableWebSupport))]
+[assembly: RequireDependency (typeof (IHttpWebRequestProvider))]
 
 namespace Mono.Security.NewTls.Tests
 {

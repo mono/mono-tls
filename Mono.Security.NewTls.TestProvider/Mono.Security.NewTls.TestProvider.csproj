@@ -98,6 +98,12 @@
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableProxy.cs">
       <Link>Xamarin.WebTests.Server\PortableProxy.cs</Link>
     </Compile>
+    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestImpl.cs">
+      <Link>Xamarin.WebTests.Server\HttpWebRequestImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestProvider.cs">
+      <Link>Xamarin.WebTests.Server\HttpWebRequestProvider.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

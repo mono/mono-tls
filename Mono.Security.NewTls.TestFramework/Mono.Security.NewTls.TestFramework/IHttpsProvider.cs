@@ -26,7 +26,7 @@
 using System;
 using System.Net;
 using Xamarin.AsyncTests.Portable;
-using Xamarin.WebTests.Framework;
+using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -34,7 +34,7 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		HttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri);
 
-		HttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate);
+		IHttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate);
 	}
 }
 
