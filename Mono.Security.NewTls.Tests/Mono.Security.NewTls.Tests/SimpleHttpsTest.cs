@@ -104,7 +104,7 @@ namespace Mono.Security.NewTls.Tests
 			var endpoint = endpointSupport.GetLoopbackEndpoint (9999);
 
 			var provider = DependencyInjector.Get<IHttpsProvider> ();
-			return provider.CreateServer (endpoint, ResourceManager.DefaultServerCertificate);
+			return provider.CreateServer (HttpsProvider, endpoint, ResourceManager.DefaultServerCertificate);
 		}
 
 		public static IEnumerable<Handler> GetParameters (TestContext ctx, string filter)

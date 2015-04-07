@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.Interface;
@@ -42,12 +43,16 @@ namespace Mono.Security.NewTls.TestProvider
 	{
 		readonly MonoTlsProvider legacyTlsProvider;
 		readonly MonoTlsProvider newTlsProvider;
+		readonly SslStreamProviderImpl legacyStreamProvider;
+		readonly SslStreamProviderImpl newStreamProvider;
 		readonly IHttpWebRequestProvider requestProvider;
 
 		internal MonoHttpsProvider ()
 		{
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
 			legacyTlsProvider = MonoTlsProviderFactory.GetDefaultProvider ();
+			legacyStreamProvider = new SslStreamProviderImpl (legacyTlsProvider);
+			newStreamProvider = new SslStreamProviderImpl (newTlsProvider);
 			requestProvider = DependencyInjector.Get<IHttpWebRequestProvider> ();
 		}
 
@@ -67,11 +72,49 @@ namespace Mono.Security.NewTls.TestProvider
 			return requestProvider.Create (request);
 		}
 
-		public IHttpServer CreateServer (IPortableEndPoint endpoint, IServerCertificate certificate)
+		public IHttpServer CreateServer (HttpsProviderType type, IPortableEndPoint endpoint, IServerCertificate certificate)
+		{
+			ISslStreamProvider streamProvider;
+			switch (type) {
+			case HttpsProviderType.MonoWithOldTLS:
+				streamProvider = legacyStreamProvider;
+				break;
+			case HttpsProviderType.MonoWithNewTLS:
+				streamProvider = newStreamProvider;
+				break;
+			default:
+				throw new InvalidOperationException ();
+			}
+			return new HttpServer (endpoint, false, certificate, streamProvider);
+		}
+
+		static ServerCertificate GetCertificate (IServerCertificate certificate)
 		{
 			var cert = new X509Certificate2 (certificate.Data, certificate.Password);
-			var wrapper = new ServerCertificate { Certificate = cert };
-			return new HttpServer (endpoint, false, wrapper);
+			return new ServerCertificate { Certificate = cert };
+		}
+
+		class SslStreamProviderImpl : ISslStreamProvider
+		{
+			readonly MonoTlsProvider provider;
+
+			public SslStreamProviderImpl (MonoTlsProvider provider)
+			{
+				this.provider = provider;
+			}
+
+			Stream ISslStreamProvider.CreateServerStream (Stream stream, IServerCertificate certificate)
+			{
+				var serverCertificate = GetCertificate (certificate);
+				return CreateServerStream (stream, serverCertificate);
+			}
+
+			public Stream CreateServerStream (Stream stream, ServerCertificate serverCertificate)
+			{
+				var sslStream = provider.CreateSslStream (stream, false, null, null, null);
+				sslStream.AuthenticateAsServer (serverCertificate.Certificate);
+				return sslStream.AuthenticatedStream;
+			}
 		}
 	}
 }
