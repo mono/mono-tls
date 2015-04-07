@@ -227,7 +227,7 @@ namespace Mono.Security.Providers.NewTls
 		}
 
 		public override int KeyExchangeStrength {
-			get { return KeyExchangeStrength; }
+			get { return Impl.KeyExchangeStrength; }
 		}
 
 		public override bool CanRead {
