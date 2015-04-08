@@ -124,6 +124,21 @@
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs">
       <Link>Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs</Link>
     </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateValidationProvider.cs">
+      <Link>Xamarin.WebTests.Server\CertificateValidationProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateValidator.cs">
+      <Link>Xamarin.WebTests.Server\CertificateValidator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestImpl.cs">
+      <Link>Xamarin.WebTests.Server\HttpWebRequestImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestProvider.cs">
+      <Link>Xamarin.WebTests.Server\HttpWebRequestProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableProxy.cs">
+      <Link>Xamarin.WebTests.Server\PortableProxy.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
@@ -168,6 +183,10 @@
     <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests\Xamarin.WebTests.csproj">
       <Project>{E93E8622-665B-44D6-B36A-89C93B5B3532}</Project>
       <Name>Xamarin.WebTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.Portable\Xamarin.WebTests.Portable.csproj">
+      <Project>{85371459-6509-4D96-A95D-862399E0F0BE}</Project>
+      <Name>Xamarin.WebTests.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
