@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Security;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls
 {
@@ -13,17 +14,26 @@ namespace Mono.Security.NewTls
 			if (certificates == null || certificates.Count < 1)
 				throw new TlsException (AlertDescription.CertificateUnknown);
 
+			#if FIXME
 			var leaf = certificates [0];
 			var chain = new MX.X509Chain ();
 			chain.LoadCertificates (certificates);
 			var ok = chain.Build (leaf);
 			var errors = GetStatus (chain.Status);
+			#endif
 
-			if (config.RemoteCertValidationCallback != null)
-				ok = config.RemoteCertValidationCallback (null, leaf, chain, errors);
+			var helper = config.CertificateValidationHelper ?? new CertificateValidationHelper ();
 
-			if (!ok)
-				throw new TlsException (AlertDescription.CertificateUnknown);
+			var certs = new SSCX.X509CertificateCollection ();
+			for (int i = 0; i < certificates.Count; i++)
+				certs.Add (new SSCX.X509Certificate (certificates [i].RawData));
+
+			var result = helper.ValidateChain (config.TargetHost, certs);
+			if (result.Trusted)
+				return;
+
+			// FIXME: check other values to report correct error type.
+			throw new TlsException (AlertDescription.CertificateUnknown);
 		}
 
 		static SslPolicyErrors GetStatus (MX.X509ChainStatusFlags flags)

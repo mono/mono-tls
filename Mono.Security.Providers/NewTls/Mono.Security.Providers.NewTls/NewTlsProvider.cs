@@ -103,10 +103,8 @@ namespace Mono.Security.Providers.NewTls
 		public override IMonoTlsContext CreateTlsContext (
 			string hostname, bool serverMode, TlsProtocols protocolFlags,
 			SSCX.X509Certificate serverCertificate, PSSCX.X509CertificateCollection clientCertificates,
-			bool remoteCertRequired, bool checkCertName, bool checkCertRevocationStatus,
-			MonoEncryptionPolicy encryptionPolicy,
-			MonoRemoteCertificateValidationCallback userCertificateValidationCallback,
-			MonoLocalCertificateSelectionCallback userCertificateSelectionCallback,
+			bool remoteCertRequired, MonoEncryptionPolicy encryptionPolicy,
+			CertificateValidationHelper certificateValidationHelper,
 			MonoTlsSettings settings)
 		{
 			TlsConfiguration config;
@@ -116,16 +114,7 @@ namespace Mono.Security.Providers.NewTls
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, monoCert, cert.PrivateKey);
 			} else {
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, hostname);
-				#if FIXME
-				if (certSelectionDelegate != null)
-					config.Client.LocalCertSelectionCallback = (t, l, r, a) => certSelectionDelegate(t, l, r, a);
-				#endif
-				if (userCertificateValidationCallback != null) {
-					config.RemoteCertValidationCallback = (h, c, ch, p) => {
-						var ssc = new SSCX.X509Certificate (c.RawData);
-						return userCertificateValidationCallback (h, ssc, null, (MonoSslPolicyErrors)p);
-					};
-				}
+				config.CertificateValidationHelper = certificateValidationHelper;
 			}
 
 			return new TlsContextWrapper (config);

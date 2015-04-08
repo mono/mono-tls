@@ -136,11 +136,7 @@ namespace Mono.Security.NewTls
 			private set;
 		}
 
-		public RemoteCertValidationCallback RemoteCertValidationCallback {
-			get; set;
-		}
-
-		public LocalCertSelectionCallback LocalCertSelectionCallback {
+		public CertificateValidationHelper CertificateValidationHelper {
 			get; set;
 		}
 
