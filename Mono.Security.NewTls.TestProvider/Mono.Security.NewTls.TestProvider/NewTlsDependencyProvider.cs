@@ -29,10 +29,13 @@ using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
 
-
-#if !__MOBILE__
+#if MACUI
+using Xamarin.AsyncTests.MacUI;
+using AppKit;
+#elif !__MOBILE__
 using Xamarin.AsyncTests.Console;
 #endif
+
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 
@@ -64,7 +67,15 @@ namespace Mono.Security.NewTls.TestProvider
 			DependencyInjector.RegisterDependency<IHttpsProvider> (() => new MonoHttpsProvider ());
 		}
 
-		#if !__MOBILE__
+		#if MACUI
+		static void Main (string[] args)
+		{
+			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
+
+			NSApplication.Init ();
+			NSApplication.Main (args);
+		}
+		#elif !__MOBILE__
 		static void Main (string[] args)
 		{
 			Program.Run (typeof (NewTlsDependencyProvider).Assembly, args);

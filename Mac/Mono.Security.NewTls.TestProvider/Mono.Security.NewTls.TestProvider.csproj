@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{97CF1313-8F68-49E2-A93B-5A7EB4BACD5C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Mono.Security.NewTls.TestProvider</RootNamespace>
+    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <AssemblyName>Mono.Security.NewTls.TestProvider</AssemblyName>
+    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;MACUI</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <UseRefCounting>false</UseRefCounting>
+    <UseSGen>false</UseSGen>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <CreatePackage>false</CreatePackage>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <UseRefCounting>false</UseRefCounting>
+    <UseSGen>false</UseSGen>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <CreatePackage>false</CreatePackage>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <DefineConstants>MACUI</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.Mac" />
+    <Reference Include="Mono.Security.Providers.NewSystemSource">
+      <Aliases>NewSystemSource</Aliases>
+    </Reference>
+    <Reference Include="Mono.Security" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\ClientAndServer.cs">
+      <Link>Mono.Security.NewTls.TestProvider\ClientAndServer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\Connection.cs">
+      <Link>Mono.Security.NewTls.TestProvider\Connection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\DotNetClient.cs">
+      <Link>Mono.Security.NewTls.TestProvider\DotNetClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\DotNetConnection.cs">
+      <Link>Mono.Security.NewTls.TestProvider\DotNetConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\DotNetServer.cs">
+      <Link>Mono.Security.NewTls.TestProvider\DotNetServer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs">
+      <Link>Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs">
+      <Link>Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoClient.cs">
+      <Link>Mono.Security.NewTls.TestProvider\MonoClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoConnection.cs">
+      <Link>Mono.Security.NewTls.TestProvider\MonoConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoServer.cs">
+      <Link>Mono.Security.NewTls.TestProvider\MonoServer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\ConnectionProvider.cs">
+      <Link>Mono.Security.NewTls.TestProvider\ConnectionProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\CryptoProvider.cs">
+      <Link>Mono.Security.NewTls.TestProvider\CryptoProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\NewTlsDependencyProvider.cs">
+      <Link>Mono.Security.NewTls.TestProvider\NewTlsDependencyProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpListener.cs">
+      <Link>Xamarin.WebTests.Server\HttpListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\Listener.cs">
+      <Link>Xamarin.WebTests.Server\Listener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableWebSupportImpl.cs">
+      <Link>Xamarin.WebTests.Server\PortableWebSupportImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\ProxyListener.cs">
+      <Link>Xamarin.WebTests.Server\ProxyListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\ServerCertificate.cs">
+      <Link>Xamarin.WebTests.Server\ServerCertificate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpClient.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpClientHandler.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpClientHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpContent.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpContent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpRequestMessage.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpRequestMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpResponseMessage.cs">
+      <Link>Xamarin.WebTests.HttpClient\HttpResponseMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\StreamContent.cs">
+      <Link>Xamarin.WebTests.HttpClient\StreamContent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\StringContent.cs">
+      <Link>Xamarin.WebTests.HttpClient\StringContent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs">
+      <Link>Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateValidationProvider.cs">
+      <Link>Xamarin.WebTests.Server\CertificateValidationProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateValidator.cs">
+      <Link>Xamarin.WebTests.Server\CertificateValidator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestImpl.cs">
+      <Link>Xamarin.WebTests.Server\HttpWebRequestImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestProvider.cs">
+      <Link>Xamarin.WebTests.Server\HttpWebRequestProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableProxy.cs">
+      <Link>Xamarin.WebTests.Server\PortableProxy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\AppDelegate.cs">
+      <Link>AppDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\AppDelegate.designer.cs">
+      <Link>AppDelegate.designer.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedFlat" ResourceNamePolicy="FileFormatDefault" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
+      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
+      <Name>Mono.Security.NewTls.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
+      <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
+      <Name>Mono.Security.NewTls.TestFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
+      <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
+      <Name>Xamarin.AsyncTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
+      <Project>{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}</Project>
+      <Name>Mono.Security.NewTls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj">
+      <Project>{A3824ECB-B185-48C8-96F2-F4B5171366FB}</Project>
+      <Name>Mono.Security.Providers.NewTls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
+      <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
+      <Name>Mono.Security.NewTls.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.Framework\Xamarin.AsyncTests.Framework.csproj">
+      <Project>{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}</Project>
+      <Name>Xamarin.AsyncTests.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests\Xamarin.WebTests.csproj">
+      <Project>{E93E8622-665B-44D6-B36A-89C93B5B3532}</Project>
+      <Name>Xamarin.WebTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.Portable\Xamarin.WebTests.Portable.csproj">
+      <Project>{85371459-6509-4D96-A95D-862399E0F0BE}</Project>
+      <Name>Xamarin.WebTests.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.UI\Xamarin.AsyncTests.UI.csproj">
+      <Project>{49780FD0-2761-4C20-ACC5-5956FFEBD51F}</Project>
+      <Name>Xamarin.AsyncTests.UI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\Info.plist">
+      <Link>Info.plist</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\MainMenu.xib">
+      <Link>MainMenu.xib</Link>
+    </InterfaceDefinition>
+  </ItemGroup>
+</Project>

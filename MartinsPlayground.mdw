@@ -4,5 +4,6 @@
     <Item>external/web-tests/Xamarin.WebTests.sln</Item>
     <Item>MartinsPlayground.Android.sln</Item>
     <Item>MartinsPlayground.iOS.sln</Item>
+    <Item>MartinsPlayground.Mac.sln</Item>
   </Items>
 </WorkspaceItem>

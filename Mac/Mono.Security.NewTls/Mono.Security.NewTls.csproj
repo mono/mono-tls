@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mono.Security.NewTls</RootNamespace>
+    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <AssemblyName>Mono.Security.NewTls</AssemblyName>
+    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;NET_4_5;MOBILE;INSIDE_MONO_SECURITY;INSTRUMENTATION</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <UseRefCounting>false</UseRefCounting>
+    <UseSGen>false</UseSGen>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <CreatePackage>false</CreatePackage>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <UseRefCounting>false</UseRefCounting>
+    <UseSGen>false</UseSGen>
+    <DefineConstants>NET_4_5;MOBILE;INSIDE_MONO_SECURITY</DefineConstants>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <CreatePackage>false</CreatePackage>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.Mac" />
+    <Reference Include="Mono.Security" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\CryptoException.cs">
+      <Link>BouncyCastle\crypto\CryptoException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\DataLengthException.cs">
+      <Link>BouncyCastle\crypto\DataLengthException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\IBlockCipher.cs">
+      <Link>BouncyCastle\crypto\IBlockCipher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\ICipherParameters.cs">
+      <Link>BouncyCastle\crypto\ICipherParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\IDigest.cs">
+      <Link>BouncyCastle\crypto\IDigest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\IMac.cs">
+      <Link>BouncyCastle\crypto\IMac.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\InvalidCipherTextException.cs">
+      <Link>BouncyCastle\crypto\InvalidCipherTextException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\GeneralDigest.cs">
+      <Link>BouncyCastle\crypto\digests\GeneralDigest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\LongDigest.cs">
+      <Link>BouncyCastle\crypto\digests\LongDigest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\NullDigest.cs">
+      <Link>BouncyCastle\crypto\digests\NullDigest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\Sha256Digest.cs">
+      <Link>BouncyCastle\crypto\digests\Sha256Digest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\Sha384Digest.cs">
+      <Link>BouncyCastle\crypto\digests\Sha384Digest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\Sha512Digest.cs">
+      <Link>BouncyCastle\crypto\digests\Sha512Digest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\ShortenedDigest.cs">
+      <Link>BouncyCastle\crypto\digests\ShortenedDigest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\engines\AesEngine.cs">
+      <Link>BouncyCastle\crypto\engines\AesEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\engines\AesFastEngine.cs">
+      <Link>BouncyCastle\crypto\engines\AesFastEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\engines\AesLightEngine.cs">
+      <Link>BouncyCastle\crypto\engines\AesLightEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\macs\HMac.cs">
+      <Link>BouncyCastle\crypto\macs\HMac.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\CbcBlockCipher.cs">
+      <Link>BouncyCastle\crypto\modes\CbcBlockCipher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\GCMBlockCipher.cs">
+      <Link>BouncyCastle\crypto\modes\GCMBlockCipher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\IAeadBlockCipher.cs">
+      <Link>BouncyCastle\crypto\modes\IAeadBlockCipher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\gcm\BasicGcmExponentiator.cs">
+      <Link>BouncyCastle\crypto\modes\gcm\BasicGcmExponentiator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\gcm\BasicGcmMultiplier.cs">
+      <Link>BouncyCastle\crypto\modes\gcm\BasicGcmMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\gcm\GcmUtilities.cs">
+      <Link>BouncyCastle\crypto\modes\gcm\GcmUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\gcm\IGcmExponentiator.cs">
+      <Link>BouncyCastle\crypto\modes\gcm\IGcmExponentiator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\gcm\IGcmMultiplier.cs">
+      <Link>BouncyCastle\crypto\modes\gcm\IGcmMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\gcm\Tables1kGcmExponentiator.cs">
+      <Link>BouncyCastle\crypto\modes\gcm\Tables1kGcmExponentiator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\gcm\Tables64kGcmMultiplier.cs">
+      <Link>BouncyCastle\crypto\modes\gcm\Tables64kGcmMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\gcm\Tables8kGcmMultiplier.cs">
+      <Link>BouncyCastle\crypto\modes\gcm\Tables8kGcmMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\parameters\AEADParameters.cs">
+      <Link>BouncyCastle\crypto\parameters\AEADParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\parameters\KeyParameter.cs">
+      <Link>BouncyCastle\crypto\parameters\KeyParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\parameters\ParametersWithIV.cs">
+      <Link>BouncyCastle\crypto\parameters\ParametersWithIV.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\util\Pack.cs">
+      <Link>BouncyCastle\crypto\util\Pack.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\BigInteger.cs">
+      <Link>BouncyCastle\math\BigInteger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\util\Arrays.cs">
+      <Link>BouncyCastle\util\Arrays.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\MD5SHA1.cs">
+      <Link>Mono.Security.Cryptography\MD5SHA1.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\RSASslSignatureDeformatter.cs">
+      <Link>Mono.Security.Cryptography\RSASslSignatureDeformatter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\RSASslSignatureFormatter.cs">
+      <Link>Mono.Security.Cryptography\RSASslSignatureFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\CertificateManager.cs">
+      <Link>Mono.Security.NewTls\CertificateManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\HandshakeParameters.cs">
+      <Link>Mono.Security.NewTls\HandshakeParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\Session.cs">
+      <Link>Mono.Security.NewTls\Session.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\TlsConfiguration.cs">
+      <Link>Mono.Security.NewTls\TlsConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\TlsContext.cs">
+      <Link>Mono.Security.NewTls\TlsContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\TlsSettings.cs">
+      <Link>Mono.Security.NewTls\TlsSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\BlockCipher.cs">
+      <Link>Mono.Security.NewTls.Cipher\BlockCipher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\BlockCipherWithHMac.cs">
+      <Link>Mono.Security.NewTls.Cipher\BlockCipherWithHMac.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CbcBlockCipher.cs">
+      <Link>Mono.Security.NewTls.Cipher\CbcBlockCipher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs">
+      <Link>Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherSuite.cs">
+      <Link>Mono.Security.NewTls.Cipher\CipherSuite.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherSuiteCollection.cs">
+      <Link>Mono.Security.NewTls.Cipher\CipherSuiteCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherSuiteFactory.cs">
+      <Link>Mono.Security.NewTls.Cipher\CipherSuiteFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CryptoParameters.cs">
+      <Link>Mono.Security.NewTls.Cipher\CryptoParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\DiffieHellmanKeyExchange.cs">
+      <Link>Mono.Security.NewTls.Cipher\DiffieHellmanKeyExchange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\GaloisCounterCipher.cs">
+      <Link>Mono.Security.NewTls.Cipher\GaloisCounterCipher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\HMac.cs">
+      <Link>Mono.Security.NewTls.Cipher\HMac.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\HandshakeHash.cs">
+      <Link>Mono.Security.NewTls.Cipher\HandshakeHash.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\KeyExchange.cs">
+      <Link>Mono.Security.NewTls.Cipher\KeyExchange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\PseudoRandomFunction.cs">
+      <Link>Mono.Security.NewTls.Cipher\PseudoRandomFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\PseudoRandomFunctionTls10.cs">
+      <Link>Mono.Security.NewTls.Cipher\PseudoRandomFunctionTls10.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\PseudoRandomFunctionTls12.cs">
+      <Link>Mono.Security.NewTls.Cipher\PseudoRandomFunctionTls12.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\RSAKeyExchange.cs">
+      <Link>Mono.Security.NewTls.Cipher\RSAKeyExchange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\SignatureHelper.cs">
+      <Link>Mono.Security.NewTls.Cipher\SignatureHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\TlsCipherSuite10.cs">
+      <Link>Mono.Security.NewTls.Cipher\TlsCipherSuite10.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\TlsCipherSuite12.cs">
+      <Link>Mono.Security.NewTls.Cipher\TlsCipherSuite12.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Extensions\ExtensionType.cs">
+      <Link>Mono.Security.NewTls.Extensions\ExtensionType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Extensions\RenegotiationExtension.cs">
+      <Link>Mono.Security.NewTls.Extensions\RenegotiationExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Extensions\ServerNameExtension.cs">
+      <Link>Mono.Security.NewTls.Extensions\ServerNameExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Extensions\SignatureAlgorithmsExtension.cs">
+      <Link>Mono.Security.NewTls.Extensions\SignatureAlgorithmsExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Extensions\TlsExtension.cs">
+      <Link>Mono.Security.NewTls.Extensions\TlsExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Extensions\TlsExtensionCollection.cs">
+      <Link>Mono.Security.NewTls.Extensions\TlsExtensionCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\HandshakeMessage.cs">
+      <Link>Mono.Security.NewTls.Handshake\HandshakeMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\HandshakeType.cs">
+      <Link>Mono.Security.NewTls.Handshake\HandshakeType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\Message.cs">
+      <Link>Mono.Security.NewTls.Handshake\Message.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsCertificate.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsCertificate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsCertificateRequest.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsCertificateRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsCertificateVerify.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsCertificateVerify.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsChangeCipherSpec.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsChangeCipherSpec.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsClientHello.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsClientHello.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsClientKeyExchange.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsClientKeyExchange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsFinished.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsFinished.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsHelloRequest.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsHelloRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsServerHello.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsServerHello.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsServerHelloDone.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsServerHelloDone.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsServerKeyExchange.cs">
+      <Link>Mono.Security.NewTls.Handshake\TlsServerKeyExchange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Instrumentation\ContextInstrument.cs">
+      <Link>Mono.Security.NewTls.Instrumentation\ContextInstrument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Instrumentation\Instrument.cs">
+      <Link>Mono.Security.NewTls.Instrumentation\Instrument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Instrumentation\InstrumentCollection.cs">
+      <Link>Mono.Security.NewTls.Instrumentation\InstrumentCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Instrumentation\NegotiationInstrument.cs">
+      <Link>Mono.Security.NewTls.Instrumentation\NegotiationInstrument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\ClientConnection.cs">
+      <Link>Mono.Security.NewTls.Negotiation\ClientConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\ClientKeyExchange.cs">
+      <Link>Mono.Security.NewTls.Negotiation\ClientKeyExchange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\NegotiationHandler.cs">
+      <Link>Mono.Security.NewTls.Negotiation\NegotiationHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\NegotiationState.cs">
+      <Link>Mono.Security.NewTls.Negotiation\NegotiationState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\ServerConnection.cs">
+      <Link>Mono.Security.NewTls.Negotiation\ServerConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\ServerFinished.cs">
+      <Link>Mono.Security.NewTls.Negotiation\ServerFinished.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\ServerHello.cs">
+      <Link>Mono.Security.NewTls.Negotiation\ServerHello.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\IRunningHash.cs">
+      <Link>System.Security.Cryptography\IRunningHash.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\MD5CryptoServiceProvider.cs">
+      <Link>System.Security.Cryptography\MD5CryptoServiceProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA1CryptoServiceProvider.cs">
+      <Link>System.Security.Cryptography\SHA1CryptoServiceProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA1Managed.cs">
+      <Link>System.Security.Cryptography\SHA1Managed.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA256Managed.cs">
+      <Link>System.Security.Cryptography\SHA256Managed.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA384Managed.cs">
+      <Link>System.Security.Cryptography\SHA384Managed.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA512Managed.cs">
+      <Link>System.Security.Cryptography\SHA512Managed.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHAConstants.cs">
+      <Link>System.Security.Cryptography\SHAConstants.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Mono.Security.Providers\common\Consts.cs">
+      <Link>common\Consts.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
+      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
+      <Name>Mono.Security.NewTls.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

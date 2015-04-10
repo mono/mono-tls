@@ -65,6 +65,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
       <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
