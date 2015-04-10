@@ -3,5 +3,6 @@
     <Item>MartinsPlayground.sln</Item>
     <Item>external/web-tests/Xamarin.WebTests.sln</Item>
     <Item>MartinsPlayground.Android.sln</Item>
+    <Item>MartinsPlayground.iOS.sln</Item>
   </Items>
 </WorkspaceItem>

@@ -3,33 +3,32 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{EDCA419E-9AE6-4327-A6D6-51485004FAF6}</ProjectGuid>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{82D2DAA8-59A0-4E51-BD5D-CC9223900F5B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Mono.Security.NewTls.TestProvider</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>Mono.Security.NewTls.TestProvider</AssemblyName>
-    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -38,6 +37,9 @@
     <Reference Include="Mono.Security.Providers.NewSystemSource">
       <Aliases>NewSystemSource</Aliases>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\ClientAndServer.cs">
@@ -138,7 +140,7 @@
     </Compile>
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
-  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -162,16 +164,12 @@
       <Name>Xamarin.AsyncTests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
-      <Project>{F72DD750-70EF-4243-93E9-8533D4B01FBC}</Project>
+      <Project>{6534ECF8-C035-496D-899F-B454CEDFA989}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj">
-      <Project>{AB52F21A-F39E-4EEA-9C9A-984A0F724FE6}</Project>
+      <Project>{51DDB0E5-25CE-41C4-BDD0-EB5976A67BAD}</Project>
       <Name>Mono.Security.Providers.NewTls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
-      <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
-      <Name>Mono.Security.NewTls.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.Framework\Xamarin.AsyncTests.Framework.csproj">
       <Project>{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}</Project>
@@ -184,6 +182,10 @@
     <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.Portable\Xamarin.WebTests.Portable.csproj">
       <Project>{85371459-6509-4D96-A95D-862399E0F0BE}</Project>
       <Name>Xamarin.WebTests.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
+      <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
+      <Name>Mono.Security.NewTls.Tests</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
