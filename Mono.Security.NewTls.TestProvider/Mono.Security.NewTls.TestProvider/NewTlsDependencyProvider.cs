@@ -65,6 +65,10 @@ namespace Mono.Security.NewTls.TestProvider
 			DependencyInjector.RegisterDependency<ICertificateValidationProvider> (() => new CertificateValidationProvider ());
 
 			DependencyInjector.RegisterDependency<IHttpsProvider> (() => new MonoHttpsProvider ());
+
+			#if MACUI
+			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());
+			#endif
 		}
 
 		#if MACUI

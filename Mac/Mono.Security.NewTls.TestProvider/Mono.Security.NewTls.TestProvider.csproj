@@ -157,6 +157,7 @@
     <Compile Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\AppDelegate.designer.cs">
       <Link>AppDelegate.designer.cs</Link>
     </Compile>
+    <Compile Include="BuiltinTestServer.cs" />
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
