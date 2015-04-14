@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;MACUI</DefineConstants>
+    <DefineConstants>DEBUG;MACUI;HAVE_OPENSSL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -29,6 +29,8 @@
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
+    <PlatformTarget>x86</PlatformTarget>
+    <XamMacArch>i386</XamMacArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -42,7 +44,7 @@
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
-    <DefineConstants>MACUI</DefineConstants>
+    <DefineConstants>MACUI;HAVE_OPENSSL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -158,6 +160,27 @@
       <Link>AppDelegate.designer.cs</Link>
     </Compile>
     <Compile Include="BuiltinTestServer.cs" />
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\NativeCryptoProvider.cs">
+      <Link>Mono.Security.NewTls.TestProvider\NativeCryptoProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\NativeOpenSsl.cs">
+      <Link>Mono.Security.NewTls.TestProvider\NativeOpenSsl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\NativeOpenSslError.cs">
+      <Link>Mono.Security.NewTls.TestProvider\NativeOpenSslError.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\NativeOpenSslException.cs">
+      <Link>Mono.Security.NewTls.TestProvider\NativeOpenSslException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\OpenSslClient.cs">
+      <Link>Mono.Security.NewTls.TestProvider\OpenSslClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\OpenSslConnection.cs">
+      <Link>Mono.Security.NewTls.TestProvider\OpenSslConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\OpenSslServer.cs">
+      <Link>Mono.Security.NewTls.TestProvider\OpenSslServer.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
@@ -221,5 +244,19 @@
     <InterfaceDefinition Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\MainMenu.xib">
       <Link>MainMenu.xib</Link>
     </InterfaceDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\..\lib\libcrypto.1.0.0.dylib">
+      <Link>libcrypto.1.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </BundleResource>
+    <BundleResource Include="..\..\lib\libNativeOpenSsl.dylib">
+      <Link>libNativeOpenSsl.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </BundleResource>
+    <BundleResource Include="..\..\lib\libssl.1.0.0.dylib">
+      <Link>libssl.1.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </BundleResource>
   </ItemGroup>
 </Project>
