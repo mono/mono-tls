@@ -182,9 +182,9 @@
       <Project>{E93E8622-665B-44D6-B36A-89C93B5B3532}</Project>
       <Name>Xamarin.WebTests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.Portable\Xamarin.WebTests.Portable.csproj">
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.Framework\Xamarin.WebTests.Framework.csproj">
       <Project>{85371459-6509-4D96-A95D-862399E0F0BE}</Project>
-      <Name>Xamarin.WebTests.Portable</Name>
+      <Name>Xamarin.WebTests.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>

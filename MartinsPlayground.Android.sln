@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.Mobile",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests", "external\web-tests\Xamarin.WebTests\Xamarin.WebTests.csproj", "{E93E8622-665B-44D6-B36A-89C93B5B3532}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.Portable", "external\web-tests\Xamarin.WebTests.Portable\Xamarin.WebTests.Portable.csproj", "{85371459-6509-4D96-A95D-862399E0F0BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.Framework", "external\web-tests\Xamarin.WebTests.Framework\Xamarin.WebTests.Framework.csproj", "{85371459-6509-4D96-A95D-862399E0F0BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
