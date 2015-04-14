@@ -71,7 +71,7 @@ namespace Mono.Security.NewTls.Tests
 
 			request.SetKeepAlive (true);
 
-			ctx.Assert (request.SupportsCertificateValidator, "CertificateValidator");
+			ctx.Assert (request.Provider.SupportsCertificateValidator, "CertificateValidator");
 
 			var validationProvider = DependencyInjector.Get<ICertificateValidationProvider> ();
 			var validator = validationProvider.AcceptThisCertificate (server.ServerCertificate);
@@ -81,10 +81,16 @@ namespace Mono.Security.NewTls.Tests
 			return new TraditionalRequest (request);
 		}
 
-		protected override Task<Response> RunInner (TestContext ctx, CancellationToken cancellationToken, HttpServer server, Handler handler, Request request)
+		protected override async Task<Response> RunInner (TestContext ctx, CancellationToken cancellationToken, HttpServer server, Handler handler, Request request)
 		{
 			var traditionalRequest = (TraditionalRequest)request;
-			return traditionalRequest.SendAsync (ctx, cancellationToken);
+			var response = await traditionalRequest.SendAsync (ctx, cancellationToken);
+			ctx.LogMessage ("GOT RESPONSE: {0}", response);
+
+			var certificate = traditionalRequest.Request.GetCertificate ();
+			ctx.LogMessage ("GOT CERTIFICATE: {0}", certificate);
+
+			return response;
 		}
 	}
 
