@@ -178,10 +178,6 @@
       <Project>{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}</Project>
       <Name>Xamarin.AsyncTests.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests\Xamarin.WebTests.csproj">
-      <Project>{E93E8622-665B-44D6-B36A-89C93B5B3532}</Project>
-      <Name>Xamarin.WebTests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.Framework\Xamarin.WebTests.Framework.csproj">
       <Project>{85371459-6509-4D96-A95D-862399E0F0BE}</Project>
       <Name>Xamarin.WebTests.Framework</Name>
