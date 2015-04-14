@@ -33,11 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\LocalCACertificate.cs" />
-    <Compile Include="Resources\MonkeyCertificate.cs" />
-    <Compile Include="Resources\ResourceManager.cs" />
-    <Compile Include="Resources\SelfSignedServerCertificate.cs" />
-    <Compile Include="Resources\ServerCertificateFromCA.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\CipherTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\ConnectionTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\HashTest.cs" />
@@ -49,20 +44,6 @@
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterGipher-Generated.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\SimpleHttpsTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\CA\server-cert.pfx">
-      <Link>CA\server-cert.pfx</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\CA\Hamiller-Tube-CA.pem">
-      <Link>CA\Hamiller-Tube-CA.pem</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\CA\server-self.pfx">
-      <Link>CA\server-self.pfx</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\CA\monkey.pfx">
-      <Link>CA\monkey.pfx</Link>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
@@ -89,8 +70,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="CA\" />
     <Folder Include="Mono.Security.NewTls.Tests\" />
   </ItemGroup>
 </Project>

@@ -29,6 +29,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.Tests
 {
