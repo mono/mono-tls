@@ -109,6 +109,9 @@
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateValidator.cs">
       <Link>Xamarin.WebTests.Server\CertificateValidator.cs</Link>
     </Compile>
+    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\Certificate.cs">
+      <Link>Xamarin.WebTests.Server\Certificate.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

@@ -138,6 +138,9 @@
     <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableProxy.cs">
       <Link>Xamarin.WebTests.Server\PortableProxy.cs</Link>
     </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\Certificate.cs">
+      <Link>Xamarin.WebTests.Server\Certificate.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
