@@ -45,8 +45,6 @@ namespace Mono.Security.Providers.NewTls
 {
 	public class MonoNewTlsStream : SslStream
 	{
-		CertificateValidationHelper validationHelper;
-
 		internal MonoNewTlsStream (Stream innerStream, TlsSettings settings)
 			: this (innerStream, false, null, settings)
 		{
@@ -57,8 +55,8 @@ namespace Mono.Security.Providers.NewTls
 		{
 		}
 
-		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, CertificateValidationHelper validationHelper, MonoTlsSettings settings)
-			: base (innerStream, leaveOpen, validationHelper, EncryptionPolicy.RequireEncryption, settings)
+		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, MonoTlsSettings settings)
+			: base (innerStream, leaveOpen, certificateValidator, EncryptionPolicy.RequireEncryption, settings)
 		{
 		}
 

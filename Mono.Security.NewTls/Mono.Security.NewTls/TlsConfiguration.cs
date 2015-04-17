@@ -136,7 +136,7 @@ namespace Mono.Security.NewTls
 			private set;
 		}
 
-		public CertificateValidationHelper CertificateValidationHelper {
+		public ICertificateValidator CertificateValidator {
 			get; set;
 		}
 

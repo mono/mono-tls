@@ -54,7 +54,8 @@ namespace Mono.Security.Providers.NewTls
 			CertificateValidationHelper validationHelper,
 			MonoTlsSettings settings = null)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, validationHelper, settings);
+			var validator = validationHelper != null ? validationHelper.CertificateValidator : null;
+			var stream = new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, validator, settings);
 			return new MonoSslStreamImpl (stream);
 		}
 
@@ -63,7 +64,7 @@ namespace Mono.Security.Providers.NewTls
 			SSCX.X509Certificate serverCertificate, bool clientCertificateRequired,
 			SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveOpen, validationHelper, settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveOpen, validationHelper.CertificateValidator, settings);
 
 			try {
 				stream.AuthenticateAsServer (serverCertificate, clientCertificateRequired, enabledSslProtocols, checkCertificateRevocation);
@@ -81,7 +82,7 @@ namespace Mono.Security.Providers.NewTls
 			Stream innerStream, bool leaveOpen, CertificateValidationHelper validationHelper, TlsSettings settings,
 			string targetHost, PSSCX.X509CertificateCollection clientCertificates, SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveOpen, validationHelper, settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveOpen, validationHelper.CertificateValidator, settings);
 
 			try {
 				stream.AuthenticateAsClient (targetHost, clientCertificates, enabledSslProtocols, checkCertificateRevocation);

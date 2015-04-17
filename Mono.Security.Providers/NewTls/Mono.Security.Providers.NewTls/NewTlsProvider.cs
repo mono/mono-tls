@@ -99,8 +99,7 @@ namespace Mono.Security.Providers.NewTls
 			string hostname, bool serverMode, TlsProtocols protocolFlags,
 			SSCX.X509Certificate serverCertificate, PSSCX.X509CertificateCollection clientCertificates,
 			bool remoteCertRequired, MonoEncryptionPolicy encryptionPolicy,
-			CertificateValidationHelper certificateValidationHelper,
-			MonoTlsSettings settings)
+			ICertificateValidator certificateValidator, MonoTlsSettings settings)
 		{
 			TlsConfiguration config;
 			if (serverMode) {
@@ -109,7 +108,7 @@ namespace Mono.Security.Providers.NewTls
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, monoCert, cert.PrivateKey);
 			} else {
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, hostname);
-				config.CertificateValidationHelper = certificateValidationHelper;
+				config.CertificateValidator = certificateValidator;
 			}
 
 			return new TlsContextWrapper (config);

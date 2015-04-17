@@ -22,13 +22,11 @@ namespace Mono.Security.NewTls
 			var errors = GetStatus (chain.Status);
 			#endif
 
-			var helper = config.CertificateValidationHelper ?? new CertificateValidationHelper ();
+			var helper = config.CertificateValidator;
+			if (helper == null)
+				helper = new CertificateValidationHelper (config.UserSettings).CertificateValidator;
 
-			var certs = new SSCX.X509CertificateCollection ();
-			for (int i = 0; i < certificates.Count; i++)
-				certs.Add (new SSCX.X509Certificate (certificates [i].RawData));
-
-			var result = helper.ValidateChain (config.TargetHost, certs);
+			var result = helper.ValidateChain (config.TargetHost, certificates);
 			if (result.Trusted)
 				return;
 
