@@ -67,7 +67,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var stream = new NetworkStream (socket);
 
 			var provider = DependencyInjector.Get<NewTlsProvider> ();
-			var monoSslStream = provider.CreateSslStream (stream, false, null, null, settings);
+			var monoSslStream = provider.CreateSslStream (stream, false, null, settings);
 
 			var newTlsStream = NewTlsProvider.GetNewTlsStream (monoSslStream);
 
@@ -82,7 +82,6 @@ namespace Mono.Security.NewTls.TestProvider
 
 			return monoSslStream;
 		}
-
 
 		bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors)
 		{

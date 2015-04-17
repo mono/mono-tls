@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
@@ -73,6 +74,16 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected Task FinishedTask {
 			get { return Task.FromResult<object> (null); }
+		}
+
+		public CertificateValidationHelper GetValidationHelper ()
+		{
+			var helper = new CertificateValidationHelper ();
+			helper.ServerCertificateValidationCallback = (s, c, ch, e) => {
+				return RemoteValidationCallback (false, c);
+			};
+
+			return helper;
 		}
 
 		protected bool RemoteValidationCallback (bool ok, X509Certificate certificate)

@@ -89,15 +89,10 @@ namespace Mono.Security.Providers.NewTls
 
 		public override MonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
-			MonoRemoteCertificateValidationCallback userCertificateValidationCallback,
-			MonoLocalCertificateSelectionCallback userCertificateSelectionCallback,
+			CertificateValidationHelper validationHelper,
 			MonoTlsSettings settings = null)
 		{
-			return MonoNewTlsStreamFactory.CreateSslStream (
-				innerStream, leaveInnerStreamOpen,
-				userCertificateValidationCallback,
-				userCertificateSelectionCallback,
-				settings);
+			return MonoNewTlsStreamFactory.CreateSslStream (innerStream, leaveInnerStreamOpen, validationHelper, settings);
 		}
 
 		public override IMonoTlsContext CreateTlsContext (

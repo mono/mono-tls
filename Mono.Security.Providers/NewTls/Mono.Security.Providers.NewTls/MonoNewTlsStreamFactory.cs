@@ -51,28 +51,19 @@ namespace Mono.Security.Providers.NewTls
 	{
 		internal static MonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
-			MonoRemoteCertificateValidationCallback userCertificateValidationCallback,
-			MonoLocalCertificateSelectionCallback userCertificateSelectionCallback,
+			CertificateValidationHelper validationHelper,
 			MonoTlsSettings settings = null)
 		{
-			var stream = new MonoNewTlsStream (
-				innerStream, leaveInnerStreamOpen,
-				ConvertCallback (userCertificateValidationCallback),
-				ConvertCallback (userCertificateSelectionCallback), settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, validationHelper, settings);
 			return new MonoSslStreamImpl (stream);
 		}
 
 		public static MonoNewTlsStream CreateServer (
-			Stream innerStream, bool leaveOpen, RemoteCertificateValidationCallback certValidationCallback, 
-			LocalCertificateSelectionCallback certSelectionCallback, XEncryptionPolicy encryptionPolicy, TlsSettings settings,
-			SSCX.X509Certificate serverCertificate, bool clientCertificateRequired, SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
+			Stream innerStream, bool leaveOpen, CertificateValidationHelper validationHelper, TlsSettings settings,
+			SSCX.X509Certificate serverCertificate, bool clientCertificateRequired,
+			SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
-			var stream = new MonoNewTlsStream (
-				innerStream, leaveOpen,
-				ConvertCallback (certValidationCallback),
-				ConvertCallback (certSelectionCallback),
-				(XEncryptionPolicy)encryptionPolicy,
-				settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveOpen, validationHelper, settings);
 
 			try {
 				stream.AuthenticateAsServer (serverCertificate, clientCertificateRequired, enabledSslProtocols, checkCertificateRevocation);
@@ -87,16 +78,10 @@ namespace Mono.Security.Providers.NewTls
 		}
 
 		public static MonoNewTlsStream CreateClient (
-			Stream innerStream, bool leaveOpen, RemoteCertificateValidationCallback certValidationCallback, 
-			LocalCertificateSelectionCallback certSelectionCallback, XEncryptionPolicy encryptionPolicy, TlsSettings settings,
+			Stream innerStream, bool leaveOpen, CertificateValidationHelper validationHelper, TlsSettings settings,
 			string targetHost, PSSCX.X509CertificateCollection clientCertificates, SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
-			var stream = new MonoNewTlsStream (
-				innerStream, leaveOpen,
-				ConvertCallback (certValidationCallback),
-				ConvertCallback (certSelectionCallback),
-				(XEncryptionPolicy)encryptionPolicy,
-				settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveOpen, validationHelper, settings);
 
 			try {
 				stream.AuthenticateAsClient (targetHost, clientCertificates, enabledSslProtocols, checkCertificateRevocation);

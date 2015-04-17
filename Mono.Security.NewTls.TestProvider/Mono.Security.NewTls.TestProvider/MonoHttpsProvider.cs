@@ -111,7 +111,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			public Stream CreateServerStream (Stream stream, ServerCertificate serverCertificate)
 			{
-				var sslStream = provider.CreateSslStream (stream, false, null, null, null);
+				var sslStream = provider.CreateSslStream (stream, false, null, null);
 				sslStream.AuthenticateAsServer (serverCertificate.Certificate);
 				return sslStream.AuthenticatedStream;
 			}

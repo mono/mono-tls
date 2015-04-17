@@ -68,9 +68,10 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var stream = new NetworkStream (socket);
 
+			var validationHelper = GetValidationHelper ();
+
 			var provider = DependencyInjector.Get<NewTlsProvider> ();
-			var monoSslStream = provider.CreateSslStream (
-				stream, false, MonoRemoteValidationCallback, null, settings);
+			var monoSslStream = provider.CreateSslStream (stream, false, validationHelper, settings);
 
 			var newTlsStream = NewTlsProvider.GetNewTlsStream (monoSslStream);
 

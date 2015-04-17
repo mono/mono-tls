@@ -45,30 +45,20 @@ namespace Mono.Security.Providers.NewTls
 {
 	public class MonoNewTlsStream : SslStream
 	{
+		CertificateValidationHelper validationHelper;
+
 		internal MonoNewTlsStream (Stream innerStream, TlsSettings settings)
-			: this (innerStream, false, null, null, settings)
+			: this (innerStream, false, null, settings)
 		{
 		}
 
 		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, TlsSettings settings)
-			: this (innerStream, leaveOpen, null, null, EncryptionPolicy.RequireEncryption, settings)
+			: this (innerStream, leaveOpen, null, settings)
 		{
 		}
 
-		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, RemoteCertificateValidationCallback certValidationCallback, MonoTlsSettings settings)
-			: this (innerStream, leaveOpen, certValidationCallback, null, EncryptionPolicy.RequireEncryption, settings)
-		{
-		}
-
-		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, RemoteCertificateValidationCallback certValidationCallback, 
-		                                LocalCertificateSelectionCallback certSelectionCallback, MonoTlsSettings settings)
-			: this (innerStream, leaveOpen, certValidationCallback, certSelectionCallback, EncryptionPolicy.RequireEncryption, settings)
-		{
-		}
-
-		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, RemoteCertificateValidationCallback certValidationCallback, 
-		                                LocalCertificateSelectionCallback certSelectionCallback, EncryptionPolicy encryptionPolicy, MonoTlsSettings settings)
-			: base (innerStream, leaveOpen, certValidationCallback, certSelectionCallback, encryptionPolicy, settings)
+		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, CertificateValidationHelper validationHelper, MonoTlsSettings settings)
+			: base (innerStream, leaveOpen, validationHelper, EncryptionPolicy.RequireEncryption, settings)
 		{
 		}
 

@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Net;
 using System.Threading;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
@@ -69,6 +70,8 @@ namespace Mono.Security.NewTls.TestProvider
 			#if MACUI
 			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());
 			#endif
+
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 		}
 
 		#if MACUI
