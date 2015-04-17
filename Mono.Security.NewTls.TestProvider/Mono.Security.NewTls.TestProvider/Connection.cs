@@ -9,6 +9,7 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.Interface;
 using Xamarin.AsyncTests;
+using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -97,7 +98,7 @@ namespace Mono.Security.NewTls.TestProvider
 			if (Parameters.TrustedCA == null)
 				return false;
 
-			var caCert = new X509Certificate (Parameters.TrustedCA.Data);
+			var caCert = CertificateProvider.GetCertificate (Parameters.TrustedCA);
 			Debug ("Got Trusted CA Certificate: {0}", caCert.Subject);
 			Debug ("Remote Certificate: {0}", certificate.Subject);
 

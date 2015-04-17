@@ -12,6 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
+using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -32,7 +33,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var clientCerts = new X509Certificate2Collection ();
 			if (Parameters.ClientCertificate != null) {
-				var clientCert = new X509Certificate2 (Parameters.ClientCertificate.Data, Parameters.ClientCertificate.Password);
+				var clientCert = CertificateProvider.GetCertificate (Parameters.ClientCertificate);
 				clientCerts.Add (clientCert);
 			}
 

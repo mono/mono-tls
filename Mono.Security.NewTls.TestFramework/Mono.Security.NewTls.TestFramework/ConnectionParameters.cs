@@ -38,7 +38,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get; set;
 		}
 
-		public ICertificateAsPEM TrustedCA {
+		public ICertificate TrustedCA {
 			get; set;
 		}
 

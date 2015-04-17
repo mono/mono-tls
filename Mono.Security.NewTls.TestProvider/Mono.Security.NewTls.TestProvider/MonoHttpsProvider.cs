@@ -85,13 +85,9 @@ namespace Mono.Security.NewTls.TestProvider
 			default:
 				throw new InvalidOperationException ();
 			}
-			return new HttpServer (endpoint, false, certificate, streamProvider);
-		}
 
-		static ServerCertificate GetCertificate (IServerCertificate certificate)
-		{
-			var cert = new X509Certificate2 (certificate.Data, certificate.Password);
-			return new ServerCertificate { Certificate = cert };
+			var flags = ListenerFlags.None;
+			return new HttpServer (endpoint, flags, certificate, streamProvider);
 		}
 
 		class SslStreamProviderImpl : ISslStreamProvider
@@ -105,14 +101,14 @@ namespace Mono.Security.NewTls.TestProvider
 
 			Stream ISslStreamProvider.CreateServerStream (Stream stream, IServerCertificate certificate)
 			{
-				var serverCertificate = GetCertificate (certificate);
+				var serverCertificate = CertificateProvider.GetCertificate (certificate);
 				return CreateServerStream (stream, serverCertificate);
 			}
 
-			public Stream CreateServerStream (Stream stream, ServerCertificate serverCertificate)
+			public Stream CreateServerStream (Stream stream, X509Certificate serverCertificate)
 			{
 				var sslStream = provider.CreateSslStream (stream, false, null, null);
-				sslStream.AuthenticateAsServer (serverCertificate.Certificate);
+				sslStream.AuthenticateAsServer (serverCertificate);
 				return sslStream.AuthenticatedStream;
 			}
 		}

@@ -13,6 +13,7 @@ using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -38,7 +39,7 @@ namespace Mono.Security.NewTls.TestProvider
 			if (Parameters.AskForClientCertificate || Parameters.RequireClientCertificate)
 				throw new NotSupportedException ();
 
-			var serverCert = new X509Certificate2 (Certificate.Data, Certificate.Password);
+			var serverCert = CertificateProvider.GetCertificate (Certificate);
 
 			var stream = new NetworkStream (socket);
 			var server = new SslStream (stream, false);

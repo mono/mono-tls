@@ -23,6 +23,7 @@ using SSCX = System.Security.Cryptography.X509Certificates;
 using MX = Mono.Security.X509;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -62,7 +63,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			settings.ClientCertValidationCallback = ClientCertValidationCallback;
 
-			var serverCert = new SSCX.X509Certificate2 (Certificate.Data, Certificate.Password);
+			var serverCert = CertificateProvider.GetCertificate (Certificate);
 
 			var stream = new NetworkStream (socket);
 

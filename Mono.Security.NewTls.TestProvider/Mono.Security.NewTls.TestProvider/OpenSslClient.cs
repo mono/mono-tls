@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
+using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -31,7 +32,7 @@ namespace Mono.Security.NewTls.TestProvider
 		protected override void CreateConnection ()
 		{
 			if (Parameters.ClientCertificate != null)
-				openssl.SetCertificate (Parameters.ClientCertificate.Data, Parameters.ClientCertificate.Password);
+				openssl.SetCertificate (CertificateProvider.GetCertificate (Parameters.ClientCertificate).GetRawCertData ());
 			if (Parameters.ClientCiphers != null)
 				openssl.SetCipherList (Parameters.ClientCiphers);
 			openssl.Connect (EndPoint);

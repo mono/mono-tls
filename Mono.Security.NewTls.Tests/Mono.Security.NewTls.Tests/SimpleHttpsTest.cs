@@ -74,8 +74,8 @@ namespace Mono.Security.NewTls.Tests
 
 			ctx.Assert (request.Provider.SupportsCertificateValidator, "CertificateValidator");
 
-			var validationProvider = DependencyInjector.Get<ICertificateValidationProvider> ();
-			var validator = validationProvider.AcceptThisCertificate (server.ServerCertificate);
+			var provider = DependencyInjector.Get<ICertificateProvider> ();
+			var validator = provider.AcceptThisCertificate (server.ServerCertificate);
 
 			request.InstallCertificateValidator (validator);
 
