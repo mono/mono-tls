@@ -51,20 +51,19 @@ namespace Mono.Security.Providers.NewTls
 	{
 		internal static MonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
-			CertificateValidationHelper validationHelper,
+			ICertificateValidator certificateValidator,
 			MonoTlsSettings settings = null)
 		{
-			var validator = validationHelper != null ? validationHelper.CertificateValidator : null;
-			var stream = new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, validator, settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, certificateValidator, settings);
 			return new MonoSslStreamImpl (stream);
 		}
 
 		public static MonoNewTlsStream CreateServer (
-			Stream innerStream, bool leaveOpen, CertificateValidationHelper validationHelper, TlsSettings settings,
+			Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, TlsSettings settings,
 			SSCX.X509Certificate serverCertificate, bool clientCertificateRequired,
 			SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveOpen, validationHelper.CertificateValidator, settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveOpen, certificateValidator, settings);
 
 			try {
 				stream.AuthenticateAsServer (serverCertificate, clientCertificateRequired, enabledSslProtocols, checkCertificateRevocation);
@@ -79,10 +78,10 @@ namespace Mono.Security.Providers.NewTls
 		}
 
 		public static MonoNewTlsStream CreateClient (
-			Stream innerStream, bool leaveOpen, CertificateValidationHelper validationHelper, TlsSettings settings,
+			Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, TlsSettings settings,
 			string targetHost, PSSCX.X509CertificateCollection clientCertificates, SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveOpen, validationHelper.CertificateValidator, settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveOpen, certificateValidator, settings);
 
 			try {
 				stream.AuthenticateAsClient (targetHost, clientCertificates, enabledSslProtocols, checkCertificateRevocation);
