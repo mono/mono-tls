@@ -77,14 +77,14 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return Task.FromResult<object> (null); }
 		}
 
-		public CertificateValidationHelper GetValidationHelper ()
+		public ICertificateValidator GetCertificateValidator ()
 		{
 			var settings = new MonoTlsSettings {
 				ServerCertificateValidationCallback = (s, c, ch, e) => {
 					return RemoteValidationCallback (false, c);
 				}
 			};
-			return new CertificateValidationHelper (settings);
+			return CertificateValidationHelper.CreateDefaultValidator (settings);
 		}
 
 		protected bool RemoteValidationCallback (bool ok, X509Certificate certificate)

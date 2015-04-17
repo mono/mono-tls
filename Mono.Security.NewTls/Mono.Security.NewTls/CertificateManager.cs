@@ -24,7 +24,7 @@ namespace Mono.Security.NewTls
 
 			var helper = config.CertificateValidator;
 			if (helper == null)
-				helper = new CertificateValidationHelper (config.UserSettings).CertificateValidator;
+				helper = CertificateValidationHelper.CreateDefaultValidator (config.UserSettings);
 
 			var result = helper.ValidateChain (config.TargetHost, certificates);
 			if (result.Trusted)
