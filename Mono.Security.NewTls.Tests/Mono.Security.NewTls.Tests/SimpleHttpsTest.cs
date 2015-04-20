@@ -32,6 +32,7 @@ using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.Framework;
 using Xamarin.WebTests.Handlers;
 using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 using Xamarin.AsyncTests.Portable;
 using Mono.Security.NewTls.TestFramework;
@@ -52,66 +53,26 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	class HttpsTestRunner : TestRunner
-	{
-		public HttpsProviderType ProviderType {
-			get;
-			private set;
-		}
-
-		public HttpsTestRunner (HttpsProviderType type)
-		{
-			ProviderType = type;
-		}
-
-		protected override Request CreateRequest (TestContext ctx, HttpServer server, Handler handler, Uri uri)
-		{
-			ctx.LogMessage ("CREATE REQUEST: {0} {1}", ProviderType, uri);
-			var httpsProvider = DependencyInjector.Get<IHttpsProvider> ();
-			var request = httpsProvider.CreateRequest (ProviderType, uri);
-
-			request.SetKeepAlive (true);
-
-			ctx.Assert (request.Provider.SupportsCertificateValidator, "CertificateValidator");
-
-			var provider = DependencyInjector.Get<ICertificateProvider> ();
-			var validator = provider.AcceptThisCertificate (server.ServerCertificate);
-
-			request.InstallCertificateValidator (validator);
-
-			return new TraditionalRequest (request);
-		}
-
-		protected override async Task<Response> RunInner (TestContext ctx, CancellationToken cancellationToken, HttpServer server, Handler handler, Request request)
-		{
-			var traditionalRequest = (TraditionalRequest)request;
-			var response = await traditionalRequest.SendAsync (ctx, cancellationToken);
-			ctx.LogMessage ("GOT RESPONSE: {0}", response);
-
-			var certificate = traditionalRequest.Request.GetCertificate ();
-			ctx.LogMessage ("GOT CERTIFICATE: {0}", certificate);
-
-			return response;
-		}
-	}
-
 	[Work]
 	[AsyncTestFixture (Timeout = 5000)]
-	public class SimpleHttpsTest : ITestHost<IHttpServer>
+	public class SimpleHttpsTest
 	{
 		[NewTlsTestFeatures.SelectHttpsProvider]
-		public HttpsProviderType HttpsProvider {
+		public HttpProviderType HttpsProvider {
 			get;
 			private set;
 		}
 
-		public IHttpServer CreateInstance (TestContext ctx)
-		{
-			var endpointSupport = DependencyInjector.Get<IPortableEndPointSupport> ();
-			var endpoint = endpointSupport.GetLoopbackEndpoint (9999);
+		[NewTlsTestFeatures.SelectHttpTestMode]
+		public HttpTestMode TestMode {
+			get;
+			private set;
+		}
 
-			var provider = DependencyInjector.Get<IHttpsProvider> ();
-			return provider.CreateServer (HttpsProvider, endpoint, ResourceManager.DefaultServerCertificate);
+		[NewTlsTestFeatures.SelectServerCertificate]
+		public ServerCertificateType ServerCertificateType {
+			get;
+			private set;
 		}
 
 		public static IEnumerable<Handler> GetParameters (TestContext ctx, string filter)
@@ -119,13 +80,12 @@ namespace Mono.Security.NewTls.Tests
 			yield return new HelloWorldHandler ("Hello World");
 		}
 
+		[Work]
 		[AsyncTest]
-		public Task Run (TestContext ctx, CancellationToken cancellationToken, [TestHost] IHttpServer server, [SimpleHttpsHandler] Handler handler)
+		public Task Run (TestContext ctx, CancellationToken cancellationToken, [HttpsTestHost] HttpServer server, [SimpleHttpsHandler] Handler handler)
 		{
-			var runner = new HttpsTestRunner (HttpsProvider);
-			return runner.Run (ctx, cancellationToken, server, handler, null);
+			return HttpsTestRunner.Run (ctx, cancellationToken, server, handler);
 		}
-
 	}
 }
 

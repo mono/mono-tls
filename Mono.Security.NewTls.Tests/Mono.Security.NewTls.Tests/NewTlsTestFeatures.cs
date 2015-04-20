@@ -28,13 +28,15 @@ using System.Collections.Generic;
 using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Framework;
+using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Resources;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
 [assembly: RequireDependency (typeof (IConnectionProvider))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
-[assembly: RequireDependency (typeof (IHttpsProvider))]
 [assembly: RequireDependency (typeof (IPortableWebSupport))]
-[assembly: RequireDependency (typeof (IHttpWebRequestProvider))]
+[assembly: RequireDependency (typeof (IHttpProviderFactory))]
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -242,31 +244,61 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-		public class SelectHttpsProvider : TestParameterAttribute, ITestParameterSource<HttpsProviderType>
+		public class SelectHttpsProvider : TestParameterAttribute, ITestParameterSource<HttpProviderType>
 		{
 			public SelectHttpsProvider (string filter = null, TestFlags flags = TestFlags.Hidden)
 				: base (filter, flags)
 			{
 			}
 
-			public IEnumerable<HttpsProviderType> GetParameters (TestContext ctx, string filter)
+			public IEnumerable<HttpProviderType> GetParameters (TestContext ctx, string filter)
 			{
 				if (filter != null) {
 					if (filter.Equals ("https-with-oldtls"))
-						yield return HttpsProviderType.MonoWithOldTLS;
+						yield return HttpProviderType.MonoWithOldTLS;
 					else if (filter.Equals ("https-with-newtls"))
-						yield return HttpsProviderType.MonoWithNewTLS;
+						yield return HttpProviderType.MonoWithNewTLS;
 					yield break;
 				}
 
 				if (ctx.IsEnabled (HttpsWithOldTLS))
-					yield return HttpsProviderType.MonoWithOldTLS;
+					yield return HttpProviderType.MonoWithOldTLS;
 				if (ctx.IsEnabled (HttpsWithNewTLS))
-					yield return HttpsProviderType.MonoWithNewTLS;
+					yield return HttpProviderType.MonoWithNewTLS;
 			}
 		}
 
-	}
+		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
+		public class SelectServerCertificateAttribute : TestParameterAttribute, ITestParameterSource<ServerCertificateType>
+		{
+			public SelectServerCertificateAttribute (string filter = null, TestFlags flags = TestFlags.Browsable)
+				: base (filter, flags)
+			{
+			}
 
+			public IEnumerable<ServerCertificateType> GetParameters (TestContext ctx, string filter)
+			{
+				yield return ServerCertificateType.Default;
+				yield return ServerCertificateType.SelfSigned;
+			}
+		}
+
+		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
+		public class SelectHttpTestMode : TestParameterAttribute, ITestParameterSource<HttpTestMode>
+		{
+			public SelectHttpTestMode (string filter = null, TestFlags flags = TestFlags.Browsable)
+				: base (filter, flags)
+			{
+			}
+
+			public IEnumerable<HttpTestMode> GetParameters (TestContext ctx, string filter)
+			{
+				yield return HttpTestMode.Default;
+				yield return HttpTestMode.ReuseConnection;
+				yield return HttpTestMode.RejectServerCertificate;
+				yield return HttpTestMode.RequireClientCertificate;
+			}
+		}
+	}
 }
 

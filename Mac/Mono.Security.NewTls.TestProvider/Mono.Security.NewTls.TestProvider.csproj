@@ -132,17 +132,11 @@
     <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\StringContent.cs">
       <Link>Xamarin.WebTests.HttpClient\StringContent.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs">
-      <Link>Mono.Security.NewTls.TestProvider\MonoHttpsProvider.cs</Link>
-    </Compile>
     <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateValidator.cs">
       <Link>Xamarin.WebTests.Server\CertificateValidator.cs</Link>
     </Compile>
     <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestImpl.cs">
       <Link>Xamarin.WebTests.Server\HttpWebRequestImpl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestProvider.cs">
-      <Link>Xamarin.WebTests.Server\HttpWebRequestProvider.cs</Link>
     </Compile>
     <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableProxy.cs">
       <Link>Xamarin.WebTests.Server\PortableProxy.cs</Link>
@@ -177,6 +171,18 @@
     </Compile>
     <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateProvider.cs">
       <Link>Xamarin.WebTests.Server\CertificateProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\DefaultHttpProvider.cs">
+      <Link>Xamarin.WebTests.Server\DefaultHttpProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\DefaultHttpProviderFactory.cs">
+      <Link>Xamarin.WebTests.Server\DefaultHttpProviderFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoHttpProvider.cs">
+      <Link>Mono.Security.NewTls.TestProvider\MonoHttpProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider\MonoHttpProviderFactory.cs">
+      <Link>Mono.Security.NewTls.TestProvider\MonoHttpProviderFactory.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />

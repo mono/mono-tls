@@ -64,8 +64,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\StreamWrapper.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\HttpsProviderType.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IHttpsProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

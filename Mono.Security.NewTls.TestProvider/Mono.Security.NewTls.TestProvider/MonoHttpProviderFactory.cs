@@ -1,5 +1,5 @@
 ﻿//
-// HttpsProviderType.cs
+// MonoHttpProviderFactory.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,13 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Xamarin.WebTests.Server;
+using Xamarin.WebTests.Providers;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestProvider
 {
-	public enum HttpsProviderType
+	class MonoHttpProviderFactory : DefaultHttpProviderFactory
 	{
-		MonoWithOldTLS,
-		MonoWithNewTLS
+		internal MonoHttpProviderFactory ()
+		{
+			var legacyProvider = new MonoHttpProvider (HttpProviderType.MonoWithOldTLS);
+			Install (HttpProviderType.MonoWithOldTLS, legacyProvider);
+
+			var newProvider = new MonoHttpProvider (HttpProviderType.MonoWithNewTLS);
+			Install (HttpProviderType.MonoWithNewTLS, newProvider);
+		}
 	}
 }
 

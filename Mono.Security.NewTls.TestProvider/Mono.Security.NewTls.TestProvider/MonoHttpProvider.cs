@@ -33,61 +33,72 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Framework;
 using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.HttpClient;
 using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	class MonoHttpsProvider : IHttpsProvider
+	class MonoHttpProvider : IHttpProvider
 	{
+		readonly HttpProviderType type;
 		readonly MonoTlsProvider legacyTlsProvider;
 		readonly MonoTlsProvider newTlsProvider;
 		readonly SslStreamProviderImpl legacyStreamProvider;
 		readonly SslStreamProviderImpl newStreamProvider;
-		readonly IHttpWebRequestProvider requestProvider;
 
-		internal MonoHttpsProvider ()
+		internal MonoHttpProvider (HttpProviderType type)
 		{
+			this.type = type;
+
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
 			legacyTlsProvider = MonoTlsProviderFactory.GetDefaultProvider ();
 			legacyStreamProvider = new SslStreamProviderImpl (legacyTlsProvider);
 			newStreamProvider = new SslStreamProviderImpl (newTlsProvider);
-			requestProvider = DependencyInjector.Get<IHttpWebRequestProvider> ();
 		}
 
-		public IHttpWebRequest CreateRequest (HttpsProviderType type, Uri requestUri)
+		public bool SupportsWebRequest {
+			get { return true; }
+		}
+
+		public IHttpWebRequest CreateWebRequest (Uri uri)
 		{
 			HttpWebRequest request;
 			switch (type) {
-			case HttpsProviderType.MonoWithOldTLS:
-				request = MonoTlsProviderFactory.CreateHttpsRequest (requestUri, legacyTlsProvider);
+			case HttpProviderType.MonoWithOldTLS:
+				request = MonoTlsProviderFactory.CreateHttpsRequest (uri, legacyTlsProvider);
 				break;
-			case HttpsProviderType.MonoWithNewTLS:
-				request = MonoTlsProviderFactory.CreateHttpsRequest (requestUri, newTlsProvider);
+			case HttpProviderType.MonoWithNewTLS:
+				request = MonoTlsProviderFactory.CreateHttpsRequest (uri, newTlsProvider);
 				break;
 			default:
 				throw new InvalidOperationException ();
 			}
-			return requestProvider.Create (request);
+			return CreateWebRequest (request);
 		}
 
-		public IHttpServer CreateServer (HttpsProviderType type, IPortableEndPoint endpoint, IServerCertificate certificate)
+		public IHttpWebRequest CreateWebRequest (HttpWebRequest request)
+		{
+			return new HttpWebRequestImpl (request);
+		}
+
+		public HttpServer CreateServer (IPortableEndPoint endpoint, ListenerFlags flags, IServerCertificate serverCertificate)
 		{
 			ISslStreamProvider streamProvider;
 			switch (type) {
-			case HttpsProviderType.MonoWithOldTLS:
+			case HttpProviderType.MonoWithOldTLS:
 				streamProvider = legacyStreamProvider;
 				break;
-			case HttpsProviderType.MonoWithNewTLS:
+			case HttpProviderType.MonoWithNewTLS:
 				streamProvider = newStreamProvider;
 				break;
 			default:
 				throw new InvalidOperationException ();
 			}
 
-			var flags = ListenerFlags.None;
-			return new HttpServer (endpoint, flags, certificate, streamProvider);
+			return new HttpServer (this, endpoint, flags, serverCertificate);
 		}
 
 		class SslStreamProviderImpl : ISslStreamProvider
@@ -110,6 +121,28 @@ namespace Mono.Security.NewTls.TestProvider
 				var sslStream = provider.CreateSslStream (stream, false, null, null);
 				sslStream.AuthenticateAsServer (serverCertificate);
 				return sslStream.AuthenticatedStream;
+			}
+		}
+
+		public bool SupportsHttpClient {
+			get { return false; }
+		}
+
+		public IHttpClientHandler CreateHttpClient ()
+		{
+			throw new InvalidOperationException ();
+		}
+
+		public ISslStreamProvider SslStreamProvider {
+			get {
+				switch (type) {
+				case HttpProviderType.MonoWithOldTLS:
+					return legacyStreamProvider;
+				case HttpProviderType.MonoWithNewTLS:
+					return newStreamProvider;
+				default:
+					throw new InvalidOperationException ();
+				}
 			}
 		}
 	}
