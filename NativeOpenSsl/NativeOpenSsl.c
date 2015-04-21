@@ -450,6 +450,8 @@ native_openssl_create_connection (NativeOpenSsl *ptr)
 		return NATIVE_OPENSSL_ERROR_CREATE_CONNECTION;
 	}
 	
+	SSL_set_options(ptr->ssl, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv3 | SSL_OP_NO_SSLv2);
+
 	return 0;
 	
 }
