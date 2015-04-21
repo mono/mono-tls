@@ -127,7 +127,7 @@ namespace Mono.Security.NewTls.TestProvider
 				DebugHelper.WriteLine ("DEBUG CALLBACK: {0:x} {1:x} {2:x} {3:x}", cmd, ptr.ToInt32 (), size, ret);
 				var buffer = new byte [size];
 				Marshal.Copy (ptr, buffer, 0, size);
-				OnDebugCallback (cmd == 0x82, buffer);
+				OnDebugCallback ((cmd & 0x0f) == 0x03, buffer);
 			} catch (Exception ex) {
 				DebugHelper.WriteLine ("EXCEPTION IN DEBUG CALLBACK: {0}", ex);
 			}
