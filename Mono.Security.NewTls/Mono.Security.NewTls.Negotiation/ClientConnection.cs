@@ -78,6 +78,9 @@ namespace Mono.Security.NewTls.Negotiation
 
 			HandshakeParameters.SupportedCiphers = requestedCiphers.Clone ();
 
+			if (Config.RequestedProtocol == TlsProtocolCode.Tls12 && !UserSettings.HasClientCertificateParameters)
+				UserSettings.ClientCertificateParameters = ClientCertificateParameters.GetDefaultParameters ();
+
 			if (Config.EnableSecureRenegotiation && !Session.SecureRenegotiation && ((Config.RenegotiationFlags & RenegotiationFlags.SendCipherSpecCode) != 0))
 				HandshakeParameters.SupportedCiphers.AddSCSV ();
 

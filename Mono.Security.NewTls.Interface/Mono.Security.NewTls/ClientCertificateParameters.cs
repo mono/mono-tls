@@ -45,6 +45,13 @@ namespace Mono.Security.NewTls
 				SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa));
 			}
 		}
+
+		public static ClientCertificateParameters GetDefaultParameters ()
+		{
+			var defaultParameters = new ClientCertificateParameters ();
+			defaultParameters.EnsureDefaultValues ();
+			return defaultParameters;
+		}
 	}
 }
 
