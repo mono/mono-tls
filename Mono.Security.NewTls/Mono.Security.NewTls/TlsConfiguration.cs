@@ -46,7 +46,7 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		internal const RenegotiationFlags DefaultRenegotiationFlags = RenegotiationFlags.SecureRenegotiation | RenegotiationFlags.SendClientHelloExtension;
+		internal const RenegotiationFlags DefaultRenegotiationFlags = RenegotiationFlags.SecureRenegotiation | RenegotiationFlags.SendClientHelloExtension | RenegotiationFlags.SendCipherSpecCode;
 
 		public TlsConfiguration (TlsProtocols protocols, TlsSettings settings, string targetHost)
 		{
