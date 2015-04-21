@@ -86,18 +86,6 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public HttpServer CreateServer (IPortableEndPoint endpoint, ListenerFlags flags, IServerCertificate serverCertificate)
 		{
-			ISslStreamProvider streamProvider;
-			switch (type) {
-			case HttpProviderType.MonoWithOldTLS:
-				streamProvider = legacyStreamProvider;
-				break;
-			case HttpProviderType.MonoWithNewTLS:
-				streamProvider = newStreamProvider;
-				break;
-			default:
-				throw new InvalidOperationException ();
-			}
-
 			return new HttpServer (this, endpoint, flags, serverCertificate);
 		}
 
