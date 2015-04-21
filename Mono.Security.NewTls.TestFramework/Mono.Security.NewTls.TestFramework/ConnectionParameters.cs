@@ -1,4 +1,5 @@
 ﻿using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
@@ -24,9 +25,14 @@ namespace Mono.Security.NewTls.TestFramework
 		protected ConnectionParameters (ConnectionParameters other)
 		{
 			Identifier = other.Identifier;
+			EndPoint = other.EndPoint;
 			verifyPeerCertificate = other.verifyPeerCertificate;
 			EnableDebugging = other.EnableDebugging;
 			TrustedCA = other.TrustedCA;
+		}
+
+		public IPortableEndPoint EndPoint {
+			get; set;
 		}
 
 		public bool VerifyPeerCertificate {

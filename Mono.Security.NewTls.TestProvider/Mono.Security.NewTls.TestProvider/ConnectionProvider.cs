@@ -25,6 +25,8 @@
 // THE SOFTWARE.
 using System;
 using System.Net;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -77,12 +79,12 @@ namespace Mono.Security.NewTls.TestProvider
 		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)
 		{
 			if (type == ConnectionProviderType.DotNet)
-				return new DotNetClient (GetLocalEndPoint (), parameters);
+				return new DotNetClient (GetEndPoint (parameters), parameters);
 			else if (type == ConnectionProviderType.Mono)
-				return new MonoClient (GetLocalEndPoint (), parameters);
+				return new MonoClient (GetEndPoint (parameters), parameters);
 #if HAVE_OPENSSL
 			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslClient (GetLocalEndPoint (), parameters);
+				return new OpenSslClient (GetEndPoint (parameters), parameters);
 #endif
 			throw new NotSupportedException ();
 		}
@@ -90,20 +92,23 @@ namespace Mono.Security.NewTls.TestProvider
 		public IServer CreateServer (ConnectionProviderType type, IServerParameters parameters)
 		{
 			if (type == ConnectionProviderType.DotNet)
-				return new DotNetServer (GetLocalEndPoint (), parameters);
+				return new DotNetServer (GetEndPoint (parameters), parameters);
 			else if (type == ConnectionProviderType.Mono)
-				return new MonoServer (GetLocalEndPoint (), parameters);
+				return new MonoServer (GetEndPoint (parameters), parameters);
 #if HAVE_OPENSSL
 			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslServer (GetLocalEndPoint (), parameters);
+				return new OpenSslServer (GetEndPoint (parameters), parameters);
 #endif
 			else
 				throw new NotSupportedException ();
 		}
 
-		IPEndPoint GetLocalEndPoint ()
+		IPEndPoint GetEndPoint (IConnectionParameters parameters)
 		{
-			return new IPEndPoint (IPAddress.Loopback, 4433);
+			if (parameters.EndPoint != null)
+				return new IPEndPoint (IPAddress.Parse (parameters.EndPoint.Address), parameters.EndPoint.Port);
+			else
+				return new IPEndPoint (IPAddress.Loopback, 4433);
 		}
 	}
 }
