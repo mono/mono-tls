@@ -106,10 +106,13 @@ namespace Mono.Security.Providers.NewTls
 				var cert = (PSSCX.X509Certificate2)serverCertificate;
 				var monoCert = new MX.X509Certificate (cert.RawData);
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, monoCert, cert.PrivateKey);
+				if (remoteCertRequired)
+					config.UserSettings.RequireClientCertificate = true;
 			} else {
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, hostname);
-				config.CertificateValidator = certificateValidator;
 			}
+
+			config.CertificateValidator = certificateValidator;
 
 			return new TlsContextWrapper (config);
 		}

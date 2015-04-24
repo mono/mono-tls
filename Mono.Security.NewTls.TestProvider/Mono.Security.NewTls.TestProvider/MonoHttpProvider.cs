@@ -26,8 +26,10 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Security;
+using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
@@ -44,8 +46,8 @@ namespace Mono.Security.NewTls.TestProvider
 	class MonoHttpProvider : IHttpProvider
 	{
 		readonly HttpProviderType type;
-		readonly MonoTlsProvider legacyTlsProvider;
-		readonly MonoTlsProvider newTlsProvider;
+		readonly MSI.MonoTlsProvider legacyTlsProvider;
+		readonly MSI.MonoTlsProvider newTlsProvider;
 		readonly SslStreamProviderImpl legacyStreamProvider;
 		readonly SslStreamProviderImpl newStreamProvider;
 
@@ -54,7 +56,7 @@ namespace Mono.Security.NewTls.TestProvider
 			this.type = type;
 
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
-			legacyTlsProvider = MonoTlsProviderFactory.GetDefaultProvider ();
+			legacyTlsProvider = MSI.MonoTlsProviderFactory.GetDefaultProvider ();
 			legacyStreamProvider = new SslStreamProviderImpl (legacyTlsProvider);
 			newStreamProvider = new SslStreamProviderImpl (newTlsProvider);
 		}
@@ -68,10 +70,10 @@ namespace Mono.Security.NewTls.TestProvider
 			HttpWebRequest request;
 			switch (type) {
 			case HttpProviderType.MonoWithOldTLS:
-				request = MonoTlsProviderFactory.CreateHttpsRequest (uri, legacyTlsProvider);
+				request = MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, legacyTlsProvider);
 				break;
 			case HttpProviderType.MonoWithNewTLS:
-				request = MonoTlsProviderFactory.CreateHttpsRequest (uri, newTlsProvider);
+				request = MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, newTlsProvider);
 				break;
 			default:
 				throw new InvalidOperationException ();
@@ -91,23 +93,36 @@ namespace Mono.Security.NewTls.TestProvider
 
 		class SslStreamProviderImpl : ISslStreamProvider
 		{
-			readonly MonoTlsProvider provider;
+			readonly MSI.MonoTlsProvider provider;
 
-			public SslStreamProviderImpl (MonoTlsProvider provider)
+			public SslStreamProviderImpl (MSI.MonoTlsProvider provider)
 			{
 				this.provider = provider;
 			}
 
-			Stream ISslStreamProvider.CreateServerStream (Stream stream, IServerCertificate certificate)
+			Stream ISslStreamProvider.CreateServerStream (Stream stream, IServerCertificate certificate, ICertificateValidator validator, ListenerFlags flags)
 			{
 				var serverCertificate = CertificateProvider.GetCertificate (certificate);
-				return CreateServerStream (stream, serverCertificate);
+
+				MSI.ICertificateValidator msiValidator = null;
+				if (validator != null) {
+					var settings = new MSI.MonoTlsSettings ();
+					settings.ServerCertificateValidationCallback = (s, c, ch, e) => {
+						return ((CertificateValidator)validator).ValidationCallback (s, c, ch, (SslPolicyErrors)e);
+					};
+					msiValidator = MSI.CertificateValidationHelper.CreateDefaultValidator (settings);
+				}
+
+				return CreateServerStream (stream, serverCertificate, msiValidator, flags);
 			}
 
-			public Stream CreateServerStream (Stream stream, X509Certificate serverCertificate)
+			public Stream CreateServerStream (Stream stream, X509Certificate serverCertificate, MSI.ICertificateValidator validator, ListenerFlags flags)
 			{
-				var sslStream = provider.CreateSslStream (stream, false, null, null);
-				sslStream.AuthenticateAsServer (serverCertificate);
+				var protocols = (SslProtocols)ServicePointManager.SecurityProtocol;
+				var clientCertificateRequired = flags == ListenerFlags.RequireClientCertificate;
+
+				var sslStream = provider.CreateSslStream (stream, false, validator, null);
+				sslStream.AuthenticateAsServer (serverCertificate, clientCertificateRequired, protocols, false);
 				return sslStream.AuthenticatedStream;
 			}
 		}

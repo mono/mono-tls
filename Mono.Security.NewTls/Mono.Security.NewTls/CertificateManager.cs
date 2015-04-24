@@ -14,20 +14,12 @@ namespace Mono.Security.NewTls
 			if (certificates == null || certificates.Count < 1)
 				throw new TlsException (AlertDescription.CertificateUnknown);
 
-			#if FIXME
-			var leaf = certificates [0];
-			var chain = new MX.X509Chain ();
-			chain.LoadCertificates (certificates);
-			var ok = chain.Build (leaf);
-			var errors = GetStatus (chain.Status);
-			#endif
-
 			var helper = config.CertificateValidator;
 			if (helper == null)
 				helper = CertificateValidationHelper.CreateDefaultValidator (config.UserSettings);
 
 			var result = helper.ValidateChain (config.TargetHost, certificates);
-			if (result.Trusted)
+			if (result != null && result.Trusted && !result.UserDenied)
 				return;
 
 			// FIXME: check other values to report correct error type.
@@ -52,24 +44,21 @@ namespace Mono.Security.NewTls
 				throw new TlsException (AlertDescription.CertificateUnknown);
 			}
 
-			var leaf = certificates [0];
-			var chain = new MX.X509Chain ();
-			chain.LoadCertificates (certificates);
-			var ok = chain.Build (leaf);
-			var errors = GetStatus (chain.Status);
-
 			var certParams = config.UserSettings.ClientCertificateParameters;
 			if (certParams.CertificateAuthorities.Count > 0) {
-				if (!certParams.CertificateAuthorities.Contains (leaf.IssuerName))
+				if (!certParams.CertificateAuthorities.Contains (certificates [0].IssuerName))
 					throw new TlsException (AlertDescription.BadCertificate);
 			}
 
-			if (config.UserSettings.ClientCertValidationCallback != null)
-				ok = config.UserSettings.ClientCertValidationCallback (certParams, leaf, chain, errors);
+			var helper = config.CertificateValidator;
+			if (helper == null)
+				helper = CertificateValidationHelper.CreateDefaultValidator (config.UserSettings);
 
-			if (!ok)
-				throw new TlsException (AlertDescription.CertificateUnknown);
-			return true;
+			var result = helper.ValidateClientCertificate (certificates);
+			if (result != null && result.Trusted && !result.UserDenied)
+				return true;
+
+			throw new TlsException (AlertDescription.CertificateUnknown);
 		}
 	}
 }
