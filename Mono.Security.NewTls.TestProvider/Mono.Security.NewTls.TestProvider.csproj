@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <Commandlineparameters>--log-level=8 --category=Work --features=-all,HttpsWithOldTLS,HttpsWithNewTLS --debug</Commandlineparameters>
+    <Commandlineparameters>--log-level=8 --category=Work </Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>

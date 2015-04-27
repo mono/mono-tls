@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Framework;
+using Xamarin.WebTests.HttpFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 

@@ -33,7 +33,7 @@ using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
-using Xamarin.WebTests.Framework;
+using Xamarin.WebTests.HttpFramework;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.HttpClient;

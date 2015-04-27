@@ -104,6 +104,7 @@ namespace Mono.Security.NewTls.Tests
 			private set;
 		}
 
+		[Work]
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx,
 			[MonoConnectionParameterAttribute] MonoClientAndServerParameters parameters,
