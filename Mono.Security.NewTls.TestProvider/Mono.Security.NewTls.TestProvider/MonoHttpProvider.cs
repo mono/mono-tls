@@ -119,7 +119,7 @@ namespace Mono.Security.NewTls.TestProvider
 			public Stream CreateServerStream (Stream stream, X509Certificate serverCertificate, MSI.ICertificateValidator validator, ListenerFlags flags)
 			{
 				var protocols = (SslProtocols)ServicePointManager.SecurityProtocol;
-				var clientCertificateRequired = flags == ListenerFlags.RequireClientCertificate;
+				var clientCertificateRequired = (flags & ListenerFlags.RequireClientCertificate) != 0;
 
 				var sslStream = provider.CreateSslStream (stream, false, validator, null);
 				sslStream.AuthenticateAsServer (serverCertificate, clientCertificateRequired, protocols, false);
@@ -147,6 +147,10 @@ namespace Mono.Security.NewTls.TestProvider
 					throw new InvalidOperationException ();
 				}
 			}
+		}
+
+		public ISslStreamProvider DefaultSslStreamProvider {
+			get { return newStreamProvider; }
 		}
 	}
 }

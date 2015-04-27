@@ -246,7 +246,7 @@ namespace Mono.Security.NewTls.Tests
 		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
 		public class SelectHttpsProvider : TestParameterAttribute, ITestParameterSource<HttpProviderType>
 		{
-			public SelectHttpsProvider (string filter = null, TestFlags flags = TestFlags.Hidden)
+			public SelectHttpsProvider (string filter = null, TestFlags flags = TestFlags.Browsable)
 				: base (filter, flags)
 			{
 			}
@@ -297,6 +297,8 @@ namespace Mono.Security.NewTls.Tests
 				yield return HttpTestMode.ReuseConnection;
 				yield return HttpTestMode.RejectServerCertificate;
 				yield return HttpTestMode.RequireClientCertificate;
+				yield return HttpTestMode.RejectClientCertificate;
+				yield return HttpTestMode.MissingClientCertificate;
 			}
 		}
 	}
