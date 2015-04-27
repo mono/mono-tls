@@ -26,6 +26,10 @@ namespace Mono.Security.NewTls.TestFramework
 			ExpectedCipher = other.ExpectedCipher;
 		}
 
+		IConnectionParameters ICommonConnectionParameters.ConnectionParameters {
+			get { return this; }
+		}
+
 		object ICloneable.Clone ()
 		{
 			return DeepClone ();

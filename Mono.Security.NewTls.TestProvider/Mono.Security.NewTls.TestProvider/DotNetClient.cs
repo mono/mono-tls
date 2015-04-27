@@ -23,7 +23,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public DotNetClient (IPEndPoint endpoint, IClientParameters parameters)
-			: base (endpoint, parameters)
+			: base (endpoint, parameters.ConnectionParameters)
 		{
 		}
 

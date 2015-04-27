@@ -34,6 +34,10 @@ namespace Mono.Security.NewTls.TestFramework
 			return DeepClone ();
 		}
 
+		IConnectionParameters ICommonConnectionParameters.ConnectionParameters {
+			get { return this; }
+		}
+
 		public ClientAndServerParameters DeepClone ()
 		{
 			return new ClientAndServerParameters (this);

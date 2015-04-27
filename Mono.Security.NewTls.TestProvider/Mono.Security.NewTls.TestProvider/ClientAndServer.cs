@@ -26,7 +26,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public ClientAndServer (IServer server, IClient client, IClientAndServerParameters parameters)
-			: base (server.EndPoint, parameters)
+			: base (server.EndPoint, parameters.ConnectionParameters)
 		{
 			this.server = server;
 			this.client = client;

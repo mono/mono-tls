@@ -20,7 +20,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public OpenSslClient (IPEndPoint endpoint, IClientParameters parameters)
-			: base (endpoint, parameters)
+			: base (endpoint, parameters.ConnectionParameters)
 		{
 		}
 

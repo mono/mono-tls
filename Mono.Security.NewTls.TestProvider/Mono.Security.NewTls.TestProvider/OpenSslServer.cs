@@ -25,7 +25,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public OpenSslServer (IPEndPoint endpoint, IServerParameters parameters)
-			: base (endpoint, parameters)
+			: base (endpoint, parameters.ConnectionParameters)
 		{
 		}
 

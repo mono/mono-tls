@@ -28,8 +28,12 @@ using Xamarin.AsyncTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface ICommonConnectionParameters : IConnectionParameters
+	public interface ICommonConnectionParameters
 	{
+		IConnectionParameters ConnectionParameters {
+			get;
+		}
+
 		IPortableEndPoint EndPoint {
 			get; set;
 		}
