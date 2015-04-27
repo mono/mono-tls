@@ -3,7 +3,7 @@ using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IServerParameters : IConnectionParameters
+	public interface IServerParameters : ICommonConnectionParameters
 	{
 		IServerCertificate ServerCertificate {
 			get; set;

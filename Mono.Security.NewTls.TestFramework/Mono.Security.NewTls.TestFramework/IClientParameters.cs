@@ -3,7 +3,7 @@ using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IClientParameters : IConnectionParameters
+	public interface IClientParameters : ICommonConnectionParameters
 	{
 		ICollection<CipherSuiteCode> ClientCiphers {
 			get; set;

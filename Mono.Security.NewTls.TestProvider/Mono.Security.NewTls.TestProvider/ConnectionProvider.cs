@@ -103,7 +103,7 @@ namespace Mono.Security.NewTls.TestProvider
 				throw new NotSupportedException ();
 		}
 
-		IPEndPoint GetEndPoint (IConnectionParameters parameters)
+		IPEndPoint GetEndPoint (ICommonConnectionParameters parameters)
 		{
 			if (parameters.EndPoint != null)
 				return new IPEndPoint (IPAddress.Parse (parameters.EndPoint.Address), parameters.EndPoint.Port);

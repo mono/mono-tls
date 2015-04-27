@@ -64,6 +64,7 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\StreamWrapper.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\ICommonConnectionParameters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
@@ -71,7 +72,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedFlat" ResourceNamePolicy="FileFormatDefault" />
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="Flat" ResourceNamePolicy="FileFormatDefault" />
         </Policies>
       </Properties>
     </MonoDevelop>

@@ -6,10 +6,6 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IConnectionParameters
 	{
-		IPortableEndPoint EndPoint {
-			get; set;
-		}
-
 		bool VerifyPeerCertificate {
 			get; set;
 		}
