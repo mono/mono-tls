@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {

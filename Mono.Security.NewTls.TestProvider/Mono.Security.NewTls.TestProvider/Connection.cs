@@ -10,6 +10,7 @@ using Mono.Security.NewTls.TestFramework;
 using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Server;
+using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestProvider
 {

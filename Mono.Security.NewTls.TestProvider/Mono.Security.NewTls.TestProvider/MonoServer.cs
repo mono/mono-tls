@@ -24,6 +24,7 @@ using MX = Mono.Security.X509;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
+using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestProvider
 {

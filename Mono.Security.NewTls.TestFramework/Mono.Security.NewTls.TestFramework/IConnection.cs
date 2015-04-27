@@ -28,6 +28,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.AsyncTests;
+using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
