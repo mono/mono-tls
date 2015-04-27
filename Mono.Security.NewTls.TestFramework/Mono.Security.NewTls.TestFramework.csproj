@@ -36,7 +36,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\ClientAndServerHandler.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ClientAndServerHandlerFactory.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CommonConnectionHandler.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionException.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionHandlerFactory.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionProviderType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionType.cs" />
