@@ -41,7 +41,7 @@ namespace Mono.Security.NewTls.Tests
 		public IServer CreateInstance (TestContext ctx)
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ServerType");
-			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
+			var parameters = ctx.GetParameter<MonoClientAndServerParameters> ();
 
 			CipherSuiteCode requestedCipher;
 			if (ctx.TryGetParameter<CipherSuiteCode> (out requestedCipher, "ServerCipher")) {
@@ -65,7 +65,7 @@ namespace Mono.Security.NewTls.Tests
 		public IClient CreateInstance (TestContext ctx)
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ClientType");
-			var parameters = ctx.GetParameter<ClientAndServerParameters> ();
+			var parameters = ctx.GetParameter<MonoClientAndServerParameters> ();
 
 			CipherSuiteCode requestedCipher;
 			if (ctx.TryGetParameter<CipherSuiteCode> (out requestedCipher, "ClientCipher")) {

@@ -97,7 +97,7 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task SelectClientCipher (TestContext ctx,
-			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
+			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
@@ -119,7 +119,7 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task SelectServerCipher (TestContext ctx,
-			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
+			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
@@ -141,7 +141,7 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task InvalidCipher (TestContext ctx,
-			[SimpleConnectionParameter ("simple")] ClientAndServerParameters parameters,
+			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA)] CipherSuiteCode serverCipher,
 			[SelectCipherSuite ("ClientCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)

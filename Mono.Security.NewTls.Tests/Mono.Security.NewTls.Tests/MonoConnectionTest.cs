@@ -59,28 +59,28 @@ namespace Mono.Security.NewTls.Tests
 	 * 
 	 */
 
-	class SimpleConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<ClientAndServerParameters>
+	class MonoConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<MonoClientAndServerParameters>
 	{
-		public SimpleConnectionParameterAttribute (string filter = null)
+		public MonoConnectionParameterAttribute (string filter = null)
 			: base (filter)
 		{
 		}
 
-		public IEnumerable<ClientAndServerParameters> GetParameters (TestContext ctx, string filter)
+		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
-			yield return new ClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
+			yield return new MonoClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
 				VerifyPeerCertificate = false, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 
 			};
-			yield return new ClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
+			yield return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
 				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
 				ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 			};
-			yield return new ClientAndServerParameters ("ask-for-certificate", ResourceManager.ServerCertificateFromCA) {
+			yield return new MonoClientAndServerParameters ("ask-for-certificate", ResourceManager.ServerCertificateFromCA) {
 				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
 				AskForClientCertificate = true,  ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 			};
-			yield return new ClientAndServerParameters ("require-certificate", ResourceManager.ServerCertificateFromCA) {
+			yield return new MonoClientAndServerParameters ("require-certificate", ResourceManager.ServerCertificateFromCA) {
 				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
 				RequireClientCertificate = true, ClientCertificate = ResourceManager.MonkeyCertificate,
 				ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
@@ -90,7 +90,7 @@ namespace Mono.Security.NewTls.Tests
 
 	[Work]
 	[AsyncTestFixture]
-	public class SimpleConnectionTest
+	public class MonoConnectionTest
 	{
 		[NewTlsTestFeatures.SelectConnectionProvider]
 		public ConnectionProviderType ServerType {
@@ -106,7 +106,7 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx,
-			[SimpleConnectionParameter] ClientAndServerParameters parameters,
+			[MonoConnectionParameterAttribute] MonoClientAndServerParameters parameters,
 			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);

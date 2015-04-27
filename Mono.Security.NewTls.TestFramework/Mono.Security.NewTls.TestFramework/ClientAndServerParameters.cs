@@ -1,32 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public sealed class ClientAndServerParameters : ConnectionParameters, IClientAndServerParameters, IClientParameters, IServerParameters, ICloneable
+	public abstract class ClientAndServerParameters : ConnectionParameters, IClientAndServerParameters, ICloneable
 	{
-		bool askForCert;
-		bool requireCert;
-
-		public ClientAndServerParameters (string identifier, IServerCertificate certificate)
+		protected ClientAndServerParameters (string identifier)
 			: base (identifier)
 		{
-			ServerCertificate = certificate;
-		}
-
-		ClientAndServerParameters (ClientAndServerParameters other)
-			: base (other)
-		{
-			ServerCertificate = other.ServerCertificate;
-			ClientCertificate = other.ClientCertificate;
-			if (other.ClientCiphers != null)
-				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			askForCert = other.askForCert;
-			requireCert = other.requireCert;
-			ExpectedCipher = other.ExpectedCipher;
 		}
 
 		object ICloneable.Clone ()
@@ -34,51 +17,45 @@ namespace Mono.Security.NewTls.TestFramework
 			return DeepClone ();
 		}
 
-		IClientParameters IClientAndServerParameters.ClientParameters {
-			get { return this; }
+		public abstract IClientParameters ClientParameters {
+			get;
 		}
 
-		IServerParameters IClientAndServerParameters.ServerParameters {
-			get { return this; }
+		public abstract IServerParameters ServerParameters {
+			get;
 		}
 
-		public ClientAndServerParameters DeepClone ()
+		public abstract ClientAndServerParameters DeepClone ();
+
+		public static ClientAndServerParameters Create (ClientParameters clientParameters, ServerParameters serverParameters)
 		{
-			return new ClientAndServerParameters (this);
+			return new SimpleClientAndServerParameters (clientParameters, serverParameters);
 		}
 
-		public ICollection<CipherSuiteCode> ClientCiphers {
-			get; set;
-		}
+		class SimpleClientAndServerParameters : ClientAndServerParameters
+		{
+			readonly ClientParameters clientParameters;
+			readonly ServerParameters serverParameters;
 
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public IServerCertificate ServerCertificate {
-			get; set;
-		}
-
-		public bool AskForClientCertificate {
-			get { return askForCert || requireCert; }
-			set { askForCert = value; }
-		}
-
-		public bool RequireClientCertificate {
-			get { return requireCert; }
-			set {
-				requireCert = value;
-				if (value)
-					askForCert = true;
+			public SimpleClientAndServerParameters (ClientParameters clientParameters, ServerParameters serverParameters)
+				: base (clientParameters.Identifier + ":" + serverParameters.Identifier)
+			{
+				this.clientParameters= clientParameters;
+				this.serverParameters = serverParameters;
 			}
-		}
 
-		public IClientCertificate ClientCertificate {
-			get; set;
-		}
+			public override ClientAndServerParameters DeepClone ()
+			{
+				return new SimpleClientAndServerParameters (clientParameters.DeepClone (), serverParameters.DeepClone ());
+			}
 
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
+			public override IClientParameters ClientParameters {
+				get { return clientParameters; }
+			}
+
+			public override IServerParameters ServerParameters {
+				get { return serverParameters; }
+			}
 		}
 	}
 }
