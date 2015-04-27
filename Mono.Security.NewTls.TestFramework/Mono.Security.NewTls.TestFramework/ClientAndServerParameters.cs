@@ -4,7 +4,7 @@ using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public sealed class ClientAndServerParameters : ConnectionParameters, IClientAndServerParameters, ICloneable
+	public sealed class ClientAndServerParameters : ConnectionParameters, IClientAndServerParameters, IClientParameters, IServerParameters, ICloneable
 	{
 		bool askForCert;
 		bool requireCert;
@@ -35,6 +35,14 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		IConnectionParameters ICommonConnectionParameters.ConnectionParameters {
+			get { return this; }
+		}
+
+		IClientParameters IClientAndServerParameters.ClientParameters {
+			get { return this; }
+		}
+
+		IServerParameters IClientAndServerParameters.ServerParameters {
 			get { return this; }
 		}
 
