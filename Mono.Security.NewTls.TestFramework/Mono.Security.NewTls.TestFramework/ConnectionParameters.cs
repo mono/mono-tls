@@ -4,7 +4,7 @@ using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class ConnectionParameters : IConnectionParameters, ITestParameter
+	public class ConnectionParameters : IConnectionParameters, ICommonConnectionParameters, ITestParameter
 	{
 		bool verifyPeerCertificate = true;
 
@@ -29,6 +29,10 @@ namespace Mono.Security.NewTls.TestFramework
 			verifyPeerCertificate = other.verifyPeerCertificate;
 			EnableDebugging = other.EnableDebugging;
 			TrustedCA = other.TrustedCA;
+		}
+
+		IConnectionParameters ICommonConnectionParameters.ConnectionParameters {
+			get { return this; }
 		}
 
 		public IPortableEndPoint EndPoint {

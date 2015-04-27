@@ -53,7 +53,6 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	[Work]
 	[AsyncTestFixture (Timeout = 5000)]
 	public class SimpleHttpsTest
 	{
@@ -80,7 +79,6 @@ namespace Mono.Security.NewTls.Tests
 			yield return new HelloWorldHandler ("Hello World");
 		}
 
-		[Work]
 		[AsyncTest]
 		public Task Run (TestContext ctx, CancellationToken cancellationToken, [HttpsTestHost] HttpServer server, [SimpleHttpsHandler] Handler handler)
 		{

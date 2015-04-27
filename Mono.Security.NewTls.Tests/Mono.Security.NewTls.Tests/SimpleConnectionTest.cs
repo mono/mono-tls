@@ -88,6 +88,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
+	[Work]
 	[AsyncTestFixture]
 	public class SimpleConnectionTest
 	{
