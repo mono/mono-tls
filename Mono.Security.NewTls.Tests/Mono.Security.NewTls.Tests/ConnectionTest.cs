@@ -31,14 +31,14 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
-	public class ServerTestHostAttribute : TestHostAttribute, ITestHost<IServer>
+	public class MonoServerTestHostAttribute : TestHostAttribute, ITestHost<IMonoServer>
 	{
-		public ServerTestHostAttribute ()
-			: base (typeof (ServerTestHostAttribute))
+		public MonoServerTestHostAttribute ()
+			: base (typeof (MonoServerTestHostAttribute))
 		{
 		}
 
-		public IServer CreateInstance (TestContext ctx)
+		public IMonoServer CreateInstance (TestContext ctx)
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ServerType");
 			var parameters = ctx.GetParameter<MonoClientAndServerParameters> ();
@@ -50,19 +50,19 @@ namespace Mono.Security.NewTls.Tests
 				parameters.ExpectedCipher = requestedCipher;
 			}
 
-			var provider = DependencyInjector.Get<IConnectionProvider> ();
-			return provider.CreateServer (providerType, parameters);
+			var provider = DependencyInjector.Get<IMonoConnectionProvider> ();
+			return provider.CreateMonoServer (providerType, parameters);
 		}
 	}
 
-	public class ClientTestHostAttribute : TestHostAttribute, ITestHost<IClient>
+	public class MonoClientTestHostAttribute : TestHostAttribute, ITestHost<IMonoClient>
 	{
-		public ClientTestHostAttribute ()
-			: base (typeof (ClientTestHostAttribute))
+		public MonoClientTestHostAttribute ()
+			: base (typeof (MonoClientTestHostAttribute))
 		{
 		}
 
-		public IClient CreateInstance (TestContext ctx)
+		public IMonoClient CreateInstance (TestContext ctx)
 		{
 			var providerType = ctx.GetParameter<ConnectionProviderType> ("ClientType");
 			var parameters = ctx.GetParameter<MonoClientAndServerParameters> ();
@@ -74,8 +74,8 @@ namespace Mono.Security.NewTls.Tests
 				parameters.ExpectedCipher = requestedCipher;
 			}
 
-			var provider = DependencyInjector.Get<IConnectionProvider> ();
-			return provider.CreateClient (providerType, parameters);
+			var provider = DependencyInjector.Get<IMonoConnectionProvider> ();
+			return provider.CreateMonoClient (providerType, parameters);
 		}
 	}
 }

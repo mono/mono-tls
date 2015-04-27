@@ -28,7 +28,7 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public class MonoServer : MonoConnection, IServer
+	public class MonoServer : MonoConnection, IMonoServer
 	{
 		public IServerCertificate Certificate {
 			get { return Parameters.ServerCertificate; }

@@ -31,7 +31,7 @@ using MX = Mono.Security.X509;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public class MonoClient : MonoConnection, IClient
+	public class MonoClient : MonoConnection, IMonoClient
 	{
 		IClientParameters IClient.Parameters {
 			get { return Parameters; }

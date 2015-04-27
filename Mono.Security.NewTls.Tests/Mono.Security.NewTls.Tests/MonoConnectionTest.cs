@@ -108,7 +108,7 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx,
 			[MonoConnectionParameterAttribute] MonoClientAndServerParameters parameters,
-			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
+			[MonoServerTestHost] IMonoServer server, [MonoClientTestHost] IMonoClient client)
 		{
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
 			await handler.WaitForConnection ();

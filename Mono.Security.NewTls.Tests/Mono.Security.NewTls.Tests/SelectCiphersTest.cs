@@ -99,7 +99,7 @@ namespace Mono.Security.NewTls.Tests
 		public async Task SelectClientCipher (TestContext ctx,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
-			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
+			[MonoServerTestHost] IMonoServer server, [MonoClientTestHost] IMonoClient client)
 		{
 			ctx.Assert (clientCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
@@ -121,7 +121,7 @@ namespace Mono.Security.NewTls.Tests
 		public async Task SelectServerCipher (TestContext ctx,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
-			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
+			[MonoServerTestHost] IMonoServer server, [MonoClientTestHost] IMonoClient client)
 		{
 			ctx.Assert (serverCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
@@ -144,7 +144,7 @@ namespace Mono.Security.NewTls.Tests
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA)] CipherSuiteCode serverCipher,
 			[SelectCipherSuite ("ClientCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
-			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
+			[MonoServerTestHost] IServer server, [MonoClientTestHost] IClient client)
 		{
 			await ExpectAlert (ctx, server, client, AlertDescription.HandshakeFailure);
 		}

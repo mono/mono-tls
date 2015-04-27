@@ -33,7 +33,7 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public class ConnectionProvider : IConnectionProvider
+	public class MonoConnectionProvider : IMonoConnectionProvider
 	{
 		public bool IsSupported (ConnectionProviderType type)
 		{
@@ -100,6 +100,29 @@ namespace Mono.Security.NewTls.TestProvider
 			else if (type == ConnectionProviderType.OpenSsl)
 				return new OpenSslServer (GetEndPoint (parameters), (IMonoServerParameters)parameters);
 #endif
+			else
+				throw new NotSupportedException ();
+		}
+
+		public IMonoClient CreateMonoClient (ConnectionProviderType type, IMonoClientParameters parameters)
+		{
+			if (type == ConnectionProviderType.Mono)
+				return new MonoClient (GetEndPoint (parameters), parameters);
+			#if HAVE_OPENSSL
+			else if (type == ConnectionProviderType.OpenSsl)
+				return new OpenSslClient (GetEndPoint (parameters), parameters);
+			#endif
+			throw new NotSupportedException ();
+		}
+
+		public IMonoServer CreateMonoServer (ConnectionProviderType type, IMonoServerParameters parameters)
+		{
+			if (type == ConnectionProviderType.Mono)
+				return new MonoServer (GetEndPoint (parameters), parameters);
+			#if HAVE_OPENSSL
+			else if (type == ConnectionProviderType.OpenSsl)
+				return new OpenSslServer (GetEndPoint (parameters), parameters);
+			#endif
 			else
 				throw new NotSupportedException ();
 		}
