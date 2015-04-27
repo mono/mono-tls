@@ -32,11 +32,15 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class MonoClient : MonoConnection, IClient
 	{
-		new public IClientParameters Parameters {
-			get { return (IClientParameters)base.Parameters; }
+		IClientParameters IClient.Parameters {
+			get { return Parameters; }
 		}
 
-		public MonoClient (IPEndPoint endpoint, IClientParameters parameters)
+		new public IMonoClientParameters Parameters {
+			get { return (IMonoClientParameters)base.Parameters; }
+		}
+
+		public MonoClient (IPEndPoint endpoint, IMonoClientParameters parameters)
 			: base (endpoint, parameters.ConnectionParameters)
 		{
 		}

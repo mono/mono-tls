@@ -66,6 +66,10 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\StreamWrapper.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ICommonConnectionParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientAndServerParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoClientParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoServerParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoServerParameters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

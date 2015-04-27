@@ -30,7 +30,7 @@ using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class MonoClientAndServerParameters : ClientAndServerParameters, IClientAndServerParameters, IClientParameters, IServerParameters, ICloneable
+	public class MonoClientAndServerParameters : ClientAndServerParameters, IClientAndServerParameters, IMonoClientParameters, IMonoServerParameters, ICloneable
 	{
 		bool askForCert;
 		bool requireCert;

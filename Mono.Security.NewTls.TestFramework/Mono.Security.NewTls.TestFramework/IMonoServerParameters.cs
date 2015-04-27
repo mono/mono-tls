@@ -1,5 +1,5 @@
 ﻿//
-// ClientParameters.cs
+// IMonoServerParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,37 +24,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class ClientParameters : ConnectionParameters, IClientParameters, ICloneable
+	public interface IMonoServerParameters : IServerParameters
 	{
-		public ClientParameters (string identifier)
-			: base (identifier)
-		{
+		ICollection<CipherSuiteCode> ServerCiphers {
+			get; set;
 		}
 
-		protected ClientParameters (ClientParameters other)
-			: base (other)
-		{
-			ClientCertificate = other.ClientCertificate;
-		}
-
-		object ICloneable.Clone ()
-		{
-			return DeepClone ();
-		}
-
-		public virtual ClientParameters DeepClone ()
-		{
-			return new ClientParameters (this);
-		}
-
-		public IClientCertificate ClientCertificate {
+		CipherSuiteCode? ExpectedCipher {
 			get; set;
 		}
 	}

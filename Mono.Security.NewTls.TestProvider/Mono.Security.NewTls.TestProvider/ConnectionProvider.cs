@@ -81,10 +81,10 @@ namespace Mono.Security.NewTls.TestProvider
 			if (type == ConnectionProviderType.DotNet)
 				return new DotNetClient (GetEndPoint (parameters), parameters);
 			else if (type == ConnectionProviderType.Mono)
-				return new MonoClient (GetEndPoint (parameters), parameters);
+				return new MonoClient (GetEndPoint (parameters), (IMonoClientParameters)parameters);
 #if HAVE_OPENSSL
 			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslClient (GetEndPoint (parameters), parameters);
+				return new OpenSslClient (GetEndPoint (parameters), (IMonoClientParameters)parameters);
 #endif
 			throw new NotSupportedException ();
 		}
@@ -94,10 +94,10 @@ namespace Mono.Security.NewTls.TestProvider
 			if (type == ConnectionProviderType.DotNet)
 				return new DotNetServer (GetEndPoint (parameters), parameters);
 			else if (type == ConnectionProviderType.Mono)
-				return new MonoServer (GetEndPoint (parameters), parameters);
+				return new MonoServer (GetEndPoint (parameters), (IMonoServerParameters)parameters);
 #if HAVE_OPENSSL
 			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslServer (GetEndPoint (parameters), parameters);
+				return new OpenSslServer (GetEndPoint (parameters), (IMonoServerParameters)parameters);
 #endif
 			else
 				throw new NotSupportedException ();

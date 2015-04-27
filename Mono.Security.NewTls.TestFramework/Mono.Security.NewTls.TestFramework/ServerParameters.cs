@@ -4,7 +4,7 @@ using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public sealed class ServerParameters : ConnectionParameters, IServerParameters, ICloneable
+	public class ServerParameters : ConnectionParameters, IServerParameters, ICloneable
 	{
 		bool askForCert;
 		bool requireCert;
@@ -15,15 +15,12 @@ namespace Mono.Security.NewTls.TestFramework
 			ServerCertificate = certificate;
 		}
 
-		ServerParameters (ServerParameters other)
+		protected ServerParameters (ServerParameters other)
 			: base (other)
 		{
 			ServerCertificate = other.ServerCertificate;
 			askForCert = other.askForCert;
 			requireCert = other.requireCert;
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			ExpectedCipher = other.ExpectedCipher;
 		}
 
 		object ICloneable.Clone ()
@@ -31,7 +28,7 @@ namespace Mono.Security.NewTls.TestFramework
 			return DeepClone ();
 		}
 
-		public ServerParameters DeepClone ()
+		public virtual ServerParameters DeepClone ()
 		{
 			return new ServerParameters (this);
 		}
@@ -52,14 +49,6 @@ namespace Mono.Security.NewTls.TestFramework
 				if (value)
 					askForCert = true;
 			}
-		}
-
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
 		}
 	}
 }

@@ -15,11 +15,15 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class OpenSslClient : OpenSslConnection, IClient
 	{
-		new public IClientParameters Parameters {
-			get { return (IClientParameters)base.Parameters; }
+		IClientParameters IClient.Parameters {
+			get { return Parameters; }
 		}
 
-		public OpenSslClient (IPEndPoint endpoint, IClientParameters parameters)
+		new public IMonoClientParameters Parameters {
+			get { return (IMonoClientParameters)base.Parameters; }
+		}
+
+		public OpenSslClient (IPEndPoint endpoint, IMonoClientParameters parameters)
 			: base (endpoint, parameters.ConnectionParameters)
 		{
 		}

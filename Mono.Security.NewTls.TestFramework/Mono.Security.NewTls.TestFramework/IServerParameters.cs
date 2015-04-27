@@ -16,14 +16,6 @@ namespace Mono.Security.NewTls.TestFramework
 		bool RequireClientCertificate {
 			get; set;
 		}
-
-		ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
 	}
 }
 
