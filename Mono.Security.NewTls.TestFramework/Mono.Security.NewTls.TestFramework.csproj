@@ -37,7 +37,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CryptoProviderType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CryptoTestParameters.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IConnectionFactory.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ICryptoProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IEncryptionTestHost.cs" />
