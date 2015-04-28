@@ -1,5 +1,5 @@
 ﻿//
-// IConnectionProviderFactory.cs
+// IMonoConnectionProviderFactory.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,11 +27,13 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IConnectionProviderFactory
+	public interface IMonoConnectionProviderFactory : IConnectionProviderFactory
 	{
-		bool IsSupported (ConnectionProviderType type);
+		bool HasConnectionInfo (ConnectionProviderType type);
 
-		IConnectionProvider GetProvider (ConnectionProviderType type);
+		bool CanSelectCiphers (ConnectionProviderType type);
+
+		IMonoConnectionProvider GetMonoProvider (ConnectionProviderType type);
 	}
 }
 

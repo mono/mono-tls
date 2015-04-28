@@ -188,7 +188,7 @@ namespace Mono.Security.NewTls.Tests
 				if (filter == null)
 					return true;
 
-				var factory = DependencyInjector.Get<IConnectionProviderFactory> ();
+				var factory = DependencyInjector.Get<IMonoConnectionProviderFactory> ();
 
 				var parts = filter.Split (':');
 				foreach (var part in parts) {

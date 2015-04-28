@@ -33,7 +33,7 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	class ConnectionProviderFactory : IConnectionProviderFactory
+	class MonoConnectionProviderFactory : IMonoConnectionProviderFactory
 	{
 		readonly IConnectionProvider dotNetProvider;
 		readonly IMonoConnectionProvider monoProvider;
@@ -41,7 +41,7 @@ namespace Mono.Security.NewTls.TestProvider
 		readonly IMonoConnectionProvider openSslProvider;
 #endif
 
-		internal ConnectionProviderFactory ()
+		internal MonoConnectionProviderFactory ()
 		{
 			dotNetProvider = new DotNetProvider ();
 			monoProvider = new MonoProvider ();
