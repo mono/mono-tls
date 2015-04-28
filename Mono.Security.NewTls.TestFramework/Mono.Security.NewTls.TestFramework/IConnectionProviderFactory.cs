@@ -1,5 +1,5 @@
 ﻿//
-// IConnectionProvider.cs
+// IConnectionProviderFactory.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,15 +24,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public interface IConnectionProvider
+	public interface IConnectionProviderFactory
 	{
-		IClient CreateClient (IClientParameters parameters);
+		bool IsSupported (ConnectionProviderType type);
 
-		IServer CreateServer (IServerParameters parameters);
+		bool HasConnectionInfo (ConnectionProviderType type);
+
+		bool CanSelectCiphers (ConnectionProviderType type);
+
+		IConnectionProvider GetProvider (ConnectionProviderType type);
+
+		IMonoConnectionProvider GetMonoProvider (ConnectionProviderType type);
 	}
 }
 

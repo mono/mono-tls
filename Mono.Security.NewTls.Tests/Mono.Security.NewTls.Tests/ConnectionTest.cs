@@ -50,8 +50,9 @@ namespace Mono.Security.NewTls.Tests
 				parameters.ExpectedCipher = requestedCipher;
 			}
 
-			var provider = DependencyInjector.Get<IMonoConnectionProvider> ();
-			return provider.CreateMonoServer (providerType, parameters);
+			var factory = DependencyInjector.Get<IConnectionProviderFactory> ();
+			var provider = factory.GetMonoProvider (providerType);
+			return provider.CreateMonoServer (parameters);
 		}
 	}
 
@@ -74,8 +75,10 @@ namespace Mono.Security.NewTls.Tests
 				parameters.ExpectedCipher = requestedCipher;
 			}
 
-			var provider = DependencyInjector.Get<IMonoConnectionProvider> ();
-			return provider.CreateMonoClient (providerType, parameters);
+
+			var factory = DependencyInjector.Get<IConnectionProviderFactory> ();
+			var provider = factory.GetMonoProvider (providerType);
+			return provider.CreateMonoClient (parameters);
 		}
 	}
 }

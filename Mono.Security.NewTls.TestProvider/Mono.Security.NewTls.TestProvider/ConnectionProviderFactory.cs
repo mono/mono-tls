@@ -33,8 +33,23 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public class MonoConnectionProvider : IMonoConnectionProvider
+	class ConnectionProviderFactory : IConnectionProviderFactory
 	{
+		readonly IConnectionProvider dotNetProvider;
+		readonly IMonoConnectionProvider monoProvider;
+#if HAVE_OPENSSL
+		readonly IMonoConnectionProvider openSslProvider;
+#endif
+
+		internal ConnectionProviderFactory ()
+		{
+			dotNetProvider = new DotNetProvider ();
+			monoProvider = new MonoProvider ();
+#if HAVE_OPENSSL
+			openSslProvider = new OpenSslProvider ();
+#endif
+		}
+
 		public bool IsSupported (ConnectionProviderType type)
 		{
 			switch (type) {
@@ -77,57 +92,90 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 		}
 
-		public IClient CreateClient (ConnectionProviderType type, IClientParameters parameters)
+		public IConnectionProvider GetProvider (ConnectionProviderType type)
 		{
 			if (type == ConnectionProviderType.DotNet)
+				return dotNetProvider;
+			return GetMonoProvider (type);
+		}
+
+		public IMonoConnectionProvider GetMonoProvider (ConnectionProviderType type)
+		{
+			switch (type) {
+			case ConnectionProviderType.Mono:
+				return monoProvider;
+#if HAVE_OPENSSL
+			case ConnectionProviderType.OpenSsl:
+				return openSslProvider;
+#endif
+			default:
+				throw new NotSupportedException ();
+			}
+		}
+
+		abstract class ConnectionProvider : IConnectionProvider
+		{
+			public abstract IClient CreateClient (IClientParameters parameters);
+
+			public abstract IServer CreateServer (IServerParameters parameters);
+		}
+
+		abstract class MonoConnectionProvider : ConnectionProvider, IMonoConnectionProvider
+		{
+			public override IClient CreateClient (IClientParameters parameters)
+			{
+				return CreateMonoClient ((IMonoClientParameters)parameters);
+			}
+
+			public override IServer CreateServer (IServerParameters parameters)
+			{
+				return CreateMonoServer ((IMonoServerParameters)parameters);
+			}
+
+			public abstract IMonoClient CreateMonoClient (IMonoClientParameters parameters);
+
+			public abstract IMonoServer CreateMonoServer (IMonoServerParameters parameters);
+		}
+
+		class DotNetProvider : ConnectionProvider
+		{
+			public override IClient CreateClient (IClientParameters parameters)
+			{
 				return new DotNetClient (GetEndPoint (parameters), parameters);
-			else if (type == ConnectionProviderType.Mono)
-				return new MonoClient (GetEndPoint (parameters), (IMonoClientParameters)parameters);
-#if HAVE_OPENSSL
-			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslClient (GetEndPoint (parameters), (IMonoClientParameters)parameters);
-#endif
-			throw new NotSupportedException ();
-		}
-
-		public IServer CreateServer (ConnectionProviderType type, IServerParameters parameters)
-		{
-			if (type == ConnectionProviderType.DotNet)
+			}
+			public override IServer CreateServer (IServerParameters parameters)
+			{
 				return new DotNetServer (GetEndPoint (parameters), parameters);
-			else if (type == ConnectionProviderType.Mono)
-				return new MonoServer (GetEndPoint (parameters), (IMonoServerParameters)parameters);
-#if HAVE_OPENSSL
-			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslServer (GetEndPoint (parameters), (IMonoServerParameters)parameters);
-#endif
-			else
-				throw new NotSupportedException ();
+			}
 		}
 
-		public IMonoClient CreateMonoClient (ConnectionProviderType type, IMonoClientParameters parameters)
+		class MonoProvider : MonoConnectionProvider
 		{
-			if (type == ConnectionProviderType.Mono)
+			public override IMonoClient CreateMonoClient (IMonoClientParameters parameters)
+			{
 				return new MonoClient (GetEndPoint (parameters), parameters);
-			#if HAVE_OPENSSL
-			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslClient (GetEndPoint (parameters), parameters);
-			#endif
-			throw new NotSupportedException ();
-		}
-
-		public IMonoServer CreateMonoServer (ConnectionProviderType type, IMonoServerParameters parameters)
-		{
-			if (type == ConnectionProviderType.Mono)
+			}
+			public override IMonoServer CreateMonoServer (IMonoServerParameters parameters)
+			{
 				return new MonoServer (GetEndPoint (parameters), parameters);
-			#if HAVE_OPENSSL
-			else if (type == ConnectionProviderType.OpenSsl)
-				return new OpenSslServer (GetEndPoint (parameters), parameters);
-			#endif
-			else
-				throw new NotSupportedException ();
+			}
 		}
 
-		IPEndPoint GetEndPoint (ICommonConnectionParameters parameters)
+#if HAVE_OPENSSL
+		class OpenSslProvider : MonoConnectionProvider
+		{
+			public override IMonoClient CreateMonoClient (IMonoClientParameters parameters)
+			{
+				return new OpenSslClient (GetEndPoint (parameters), parameters);
+			}
+			public override IMonoServer CreateMonoServer (IMonoServerParameters parameters)
+			{
+				return new OpenSslServer (GetEndPoint (parameters), parameters);
+			}
+		}
+#endif
+
+		static IPEndPoint GetEndPoint (ICommonConnectionParameters parameters)
 		{
 			if (parameters.EndPoint != null)
 				return new IPEndPoint (IPAddress.Parse (parameters.EndPoint.Address), parameters.EndPoint.Port);

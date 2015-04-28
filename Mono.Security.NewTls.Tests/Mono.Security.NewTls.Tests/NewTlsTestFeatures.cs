@@ -98,8 +98,8 @@ namespace Mono.Security.NewTls.Tests
 
 		static TestFeature CreateConnectionFeature (string name, string description, ConnectionProviderType type, bool defaultValue = true)
 		{
-			var provider = DependencyInjector.Get<IConnectionProvider> ();
-			if (!provider.IsSupported (type)) {
+			var factory = DependencyInjector.Get<IConnectionProviderFactory> ();
+			if (!factory.IsSupported (type)) {
 				// read-only and disabled
 				return new TestFeature (name, description, () => false);
 			}
@@ -188,7 +188,7 @@ namespace Mono.Security.NewTls.Tests
 				if (filter == null)
 					return true;
 
-				var provider = DependencyInjector.Get<IConnectionProvider> ();
+				var factory = DependencyInjector.Get<IConnectionProviderFactory> ();
 
 				var parts = filter.Split (':');
 				foreach (var part in parts) {
@@ -218,11 +218,11 @@ namespace Mono.Security.NewTls.Tests
 							return false;
 						break;
 					case "connection-info":
-						if (!provider.HasConnectionInfo (type))
+						if (!factory.HasConnectionInfo (type))
 							return false;
 						break;
 					case "select-ciphers":
-						if (!provider.CanSelectCiphers (type))
+						if (!factory.CanSelectCiphers (type))
 							return false;
 						break;
 					default:
