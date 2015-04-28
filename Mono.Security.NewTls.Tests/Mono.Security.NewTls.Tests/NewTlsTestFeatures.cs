@@ -29,11 +29,12 @@ using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.HttpFramework;
+using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
-[assembly: RequireDependency (typeof (IConnectionProvider))]
+[assembly: RequireDependency (typeof (IMonoConnectionProviderFactory))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
 [assembly: RequireDependency (typeof (IPortableWebSupport))]
 [assembly: RequireDependency (typeof (IHttpProviderFactory))]

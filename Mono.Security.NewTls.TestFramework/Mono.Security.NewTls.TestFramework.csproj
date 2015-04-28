@@ -33,11 +33,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionProviderType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CryptoProviderType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CryptoTestParameters.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ICryptoProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IEncryptionTestHost.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IHashTestHost.cs" />
@@ -51,7 +49,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoServer.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoClient.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoConnectionProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IConnectionProviderFactory.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoConnectionProviderFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
