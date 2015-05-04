@@ -33,16 +33,16 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class MonoClient : MonoConnection, IMonoClient
 	{
-		IClientParameters IClient.Parameters {
+		ClientParameters IClient.Parameters {
 			get { return Parameters; }
 		}
 
-		new public IMonoClientParameters Parameters {
-			get { return (IMonoClientParameters)base.Parameters; }
+		new public MonoClientParameters Parameters {
+			get { return (MonoClientParameters)base.Parameters; }
 		}
 
-		public MonoClient (IPEndPoint endpoint, IMonoClientParameters parameters)
-			: base (endpoint, parameters.ConnectionParameters)
+		public MonoClient (IPEndPoint endpoint, MonoClientParameters parameters)
+			: base (endpoint, parameters)
 		{
 		}
 
@@ -60,9 +60,23 @@ namespace Mono.Security.NewTls.TestProvider
 			return settings;
 		}
 
+		static ICertificateValidator GetValidationCallback (ClientParameters parameters)
+		{
+			var validator = parameters.ClientCertificateValidator;
+			if (validator == null)
+				return null;
+
+			var validationCallback = ((CertificateValidator)validator).ValidationCallback;
+
+			var settings = new MonoTlsSettings {
+				ServerCertificateValidationCallback = (s, c, ch, e) => validationCallback (s, c, ch, (SslPolicyErrors)e)
+			};
+			return CertificateValidationHelper.CreateDefaultValidator (settings);
+		}
+
 		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, TlsSettings settings, CancellationToken cancellationToken)
 		{
-			Debug ("Connected.");
+			ctx.LogMessage ("Connected.");
 
 			var clientCerts = new X509Certificate2Collection ();
 			if (Parameters.ClientCertificate != null) {
@@ -74,7 +88,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var stream = new NetworkStream (socket);
 
-			var certificateValidator = GetCertificateValidator ();
+			var certificateValidator = GetValidationCallback (Parameters);
 
 			var provider = DependencyInjector.Get<NewTlsProvider> ();
 			var monoSslStream = provider.CreateSslStream (stream, false, certificateValidator, settings);
@@ -91,11 +105,6 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 
 			return monoSslStream;
-		}
-
-		bool MonoRemoteValidationCallback (string targetHost, X509Certificate certificate, X509Chain chain, MonoSslPolicyErrors errors)
-		{
-			return base.RemoteValidationCallback (this, certificate, chain, (SslPolicyErrors)errors);
 		}
 
 		bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors)

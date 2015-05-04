@@ -41,9 +41,7 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IHashTestHost.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IRandomNumberGenerator.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientAndServerParameters.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoClientParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientParameters.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoCommonConnection.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoServer.cs" />

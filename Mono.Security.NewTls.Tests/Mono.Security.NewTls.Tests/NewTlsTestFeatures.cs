@@ -283,25 +283,6 @@ namespace Mono.Security.NewTls.Tests
 				yield return ServerCertificateType.SelfSigned;
 			}
 		}
-
-		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-		public class SelectHttpTestMode : TestParameterAttribute, ITestParameterSource<HttpTestMode>
-		{
-			public SelectHttpTestMode (string filter = null, TestFlags flags = TestFlags.Browsable)
-				: base (filter, flags)
-			{
-			}
-
-			public IEnumerable<HttpTestMode> GetParameters (TestContext ctx, string filter)
-			{
-				yield return HttpTestMode.Default;
-				yield return HttpTestMode.ReuseConnection;
-				yield return HttpTestMode.RejectServerCertificate;
-				yield return HttpTestMode.RequireClientCertificate;
-				yield return HttpTestMode.RejectClientCertificate;
-				yield return HttpTestMode.MissingClientCertificate;
-			}
-		}
 	}
 }
 

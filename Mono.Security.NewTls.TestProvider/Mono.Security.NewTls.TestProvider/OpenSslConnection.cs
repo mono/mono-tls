@@ -34,6 +34,7 @@ using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -43,8 +44,8 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return true; }
 		}
 
-		public OpenSslConnection (IPEndPoint endpoint, IConnectionParameters parameters)
-			: base (endpoint, parameters)
+		public OpenSslConnection (IPEndPoint endpoint, ConnectionParameters parameters)
+			: base (ConnectionHelper.GetEndPoint (endpoint), parameters)
 		{
 			createTcs = new TaskCompletionSource<object> ();
 		}
@@ -57,11 +58,15 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return openssl; }
 		}
 
-		public override bool SupportsConnectionInfo {
+		public ISslStream SslStream {
+			get { throw new NotImplementedException (); }
+		}
+
+		public bool SupportsConnectionInfo {
 			get { return true; }
 		}
 
-		public override TlsConnectionInfo GetConnectionInfo ()
+		public TlsConnectionInfo GetConnectionInfo ()
 		{
 			if (connectionInfo != null)
 				return connectionInfo;
@@ -75,7 +80,8 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
-			openssl = new NativeOpenSsl (this is IClient, Parameters.EnableDebugging);
+			openssl = new NativeOpenSsl (this is IClient, false);
+			#if FIXME
 			if (!Parameters.VerifyPeerCertificate)
 				openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);
 			else {
@@ -89,6 +95,7 @@ namespace Mono.Security.NewTls.TestProvider
 				}
 				openssl.SetCertificateVerify (mode, RemoteValidationCallback);
 			}
+			#endif
 			Initialize ();
 
 			Task.Factory.StartNew (() => {
@@ -106,12 +113,12 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected abstract void CreateConnection ();
 
-		public sealed override Task WaitForConnection ()
+		public sealed override Task WaitForConnection (TestContext ctx, CancellationToken cancellationToken)
 		{
 			return createTcs.Task;
 		}
 
-		public sealed override Task<bool> Shutdown (bool attemptCleanShutdown, bool waitForReply)
+		public sealed override Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, bool waitForReply, CancellationToken cancellationToken)
 		{
 			return Task.Run (() => {
 				return openssl.Shutdown (waitForReply);

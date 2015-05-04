@@ -97,7 +97,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AsyncTest]
-		public async Task SelectClientCipher (TestContext ctx,
+		public async Task SelectClientCipher (TestContext ctx, CancellationToken cancellationToken,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
 			[MonoServerTestHost] IMonoServer server, [MonoClientTestHost] IMonoClient client)
@@ -105,7 +105,7 @@ namespace Mono.Security.NewTls.Tests
 			ctx.Assert (clientCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
-			await handler.WaitForConnection ();
+			await handler.WaitForConnection (ctx, cancellationToken);
 
 			var serverInfo = server.GetConnectionInfo ();
 			ctx.Assert (serverInfo, Is.Not.Null, "server info");
@@ -115,11 +115,11 @@ namespace Mono.Security.NewTls.Tests
 			ctx.Assert (clientInfo, Is.Not.Null, "client info");
 			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (clientCipher), "client cipher");
 
-			await handler.Run ();
+			await handler.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
-		public async Task SelectServerCipher (TestContext ctx,
+		public async Task SelectServerCipher (TestContext ctx, CancellationToken cancellationToken,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
 			[MonoServerTestHost] IMonoServer server, [MonoClientTestHost] IMonoClient client)
@@ -127,7 +127,7 @@ namespace Mono.Security.NewTls.Tests
 			ctx.Assert (serverCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
-			await handler.WaitForConnection ();
+			await handler.WaitForConnection (ctx, cancellationToken);
 
 			var serverInfo = server.GetConnectionInfo ();
 			ctx.Assert (serverInfo, Is.Not.Null, "server info");
@@ -137,17 +137,17 @@ namespace Mono.Security.NewTls.Tests
 			ctx.Assert (clientInfo, Is.Not.Null, "client info");
 			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (serverCipher), "client cipher");
 
-			await handler.Run ();
+			await handler.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
-		public async Task InvalidCipher (TestContext ctx,
+		public async Task InvalidCipher (TestContext ctx, CancellationToken cancellationToken,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA)] CipherSuiteCode serverCipher,
 			[SelectCipherSuite ("ClientCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
 			[MonoServerTestHost] IServer server, [MonoClientTestHost] IClient client)
 		{
-			await ExpectAlert (ctx, server, client, AlertDescription.HandshakeFailure);
+			await ExpectAlert (ctx, server, client, AlertDescription.HandshakeFailure, cancellationToken);
 		}
 
 		void ExpectAlert (TestContext ctx, Task t, AlertDescription expectedAlert, string message)
@@ -167,10 +167,10 @@ namespace Mono.Security.NewTls.Tests
 			ctx.Assert (alert.Description, Is.EqualTo (expectedAlert), "#4:" + message);
 		}
 
-		async Task ExpectAlert (TestContext ctx, IServer server, IClient client, AlertDescription alert)
+		async Task ExpectAlert (TestContext ctx, IServer server, IClient client, AlertDescription alert, CancellationToken cancellationToken)
 		{
-			var serverTask = server.WaitForConnection ();
-			var clientTask = client.WaitForConnection ();
+			var serverTask = server.WaitForConnection (ctx, cancellationToken);
+			var clientTask = client.WaitForConnection (ctx, cancellationToken);
 
 			var t1 = clientTask.ContinueWith (t => ExpectAlert (ctx, t, alert, "client"));
 			var t2 = serverTask.ContinueWith (t => ExpectAlert (ctx, t, alert, "server"));

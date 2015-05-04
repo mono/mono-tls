@@ -43,7 +43,6 @@ namespace Mono.Security.NewTls.TestProvider
 
 		internal MonoConnectionProviderFactory ()
 		{
-			dotNetProvider = new DotNetProvider ();
 			monoProvider = new MonoProvider ();
 #if HAVE_OPENSSL
 			openSslProvider = new OpenSslProvider ();
@@ -115,47 +114,35 @@ namespace Mono.Security.NewTls.TestProvider
 
 		abstract class ConnectionProvider : IConnectionProvider
 		{
-			public abstract IClient CreateClient (IClientParameters parameters);
+			public abstract IClient CreateClient (ClientParameters parameters);
 
-			public abstract IServer CreateServer (IServerParameters parameters);
+			public abstract IServer CreateServer (ServerParameters parameters);
 		}
 
 		abstract class MonoConnectionProvider : ConnectionProvider, IMonoConnectionProvider
 		{
-			public override IClient CreateClient (IClientParameters parameters)
+			public override IClient CreateClient (ClientParameters parameters)
 			{
-				return CreateMonoClient ((IMonoClientParameters)parameters);
+				return CreateMonoClient ((MonoClientParameters)parameters);
 			}
 
-			public override IServer CreateServer (IServerParameters parameters)
+			public override IServer CreateServer (ServerParameters parameters)
 			{
-				return CreateMonoServer ((IMonoServerParameters)parameters);
+				return CreateMonoServer ((MonoServerParameters)parameters);
 			}
 
-			public abstract IMonoClient CreateMonoClient (IMonoClientParameters parameters);
+			public abstract IMonoClient CreateMonoClient (MonoClientParameters parameters);
 
-			public abstract IMonoServer CreateMonoServer (IMonoServerParameters parameters);
-		}
-
-		class DotNetProvider : ConnectionProvider
-		{
-			public override IClient CreateClient (IClientParameters parameters)
-			{
-				return new DotNetClient (GetEndPoint (parameters), parameters);
-			}
-			public override IServer CreateServer (IServerParameters parameters)
-			{
-				return new DotNetServer (GetEndPoint (parameters), parameters);
-			}
+			public abstract IMonoServer CreateMonoServer (MonoServerParameters parameters);
 		}
 
 		class MonoProvider : MonoConnectionProvider
 		{
-			public override IMonoClient CreateMonoClient (IMonoClientParameters parameters)
+			public override IMonoClient CreateMonoClient (MonoClientParameters parameters)
 			{
 				return new MonoClient (GetEndPoint (parameters), parameters);
 			}
-			public override IMonoServer CreateMonoServer (IMonoServerParameters parameters)
+			public override IMonoServer CreateMonoServer (MonoServerParameters parameters)
 			{
 				return new MonoServer (GetEndPoint (parameters), parameters);
 			}
@@ -164,18 +151,18 @@ namespace Mono.Security.NewTls.TestProvider
 #if HAVE_OPENSSL
 		class OpenSslProvider : MonoConnectionProvider
 		{
-			public override IMonoClient CreateMonoClient (IMonoClientParameters parameters)
+			public override IMonoClient CreateMonoClient (MonoClientParameters parameters)
 			{
 				return new OpenSslClient (GetEndPoint (parameters), parameters);
 			}
-			public override IMonoServer CreateMonoServer (IMonoServerParameters parameters)
+			public override IMonoServer CreateMonoServer (MonoServerParameters parameters)
 			{
 				return new OpenSslServer (GetEndPoint (parameters), parameters);
 			}
 		}
 #endif
 
-		static IPEndPoint GetEndPoint (ICommonConnectionParameters parameters)
+		static IPEndPoint GetEndPoint (ConnectionParameters parameters)
 		{
 			if (parameters.EndPoint != null)
 				return new IPEndPoint (IPAddress.Parse (parameters.EndPoint.Address), parameters.EndPoint.Port);

@@ -53,7 +53,7 @@ namespace Mono.Security.NewTls.Tests
 
 			var factory = DependencyInjector.Get<IMonoConnectionProviderFactory> ();
 			var provider = factory.GetMonoProvider (providerType);
-			return provider.CreateMonoServer (parameters);
+			return provider.CreateMonoServer (parameters.MonoServerParameters);
 		}
 	}
 
@@ -79,7 +79,7 @@ namespace Mono.Security.NewTls.Tests
 
 			var factory = DependencyInjector.Get<IMonoConnectionProviderFactory> ();
 			var provider = factory.GetMonoProvider (providerType);
-			return provider.CreateMonoClient (parameters);
+			return provider.CreateMonoClient (parameters.MonoClientParameters);
 		}
 	}
 }

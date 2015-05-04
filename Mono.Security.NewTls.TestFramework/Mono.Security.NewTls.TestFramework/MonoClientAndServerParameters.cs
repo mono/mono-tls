@@ -31,77 +31,41 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class MonoClientAndServerParameters : ClientAndServerParameters, IClientAndServerParameters, IMonoClientParameters, IMonoServerParameters, ICloneable
+	public class MonoClientAndServerParameters : ClientAndServerParameters
 	{
-		bool askForCert;
-		bool requireCert;
-
 		public MonoClientAndServerParameters (string identifier, IServerCertificate certificate)
-			: base (identifier)
+			: base (new MonoClientParameters (identifier), new MonoServerParameters (identifier, certificate))
 		{
-			ServerCertificate = certificate;
 		}
 
-		MonoClientAndServerParameters (MonoClientAndServerParameters other)
-			: base (other.Identifier)
+		public MonoClientAndServerParameters (MonoClientParameters clientParameters, MonoServerParameters serverParameters)
+			: base (clientParameters, serverParameters)
 		{
-			ServerCertificate = other.ServerCertificate;
-			ClientCertificate = other.ClientCertificate;
-			if (other.ClientCiphers != null)
-				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			askForCert = other.askForCert;
-			requireCert = other.requireCert;
-			ExpectedCipher = other.ExpectedCipher;
 		}
 
-		object ICloneable.Clone ()
+		public override ConnectionParameters DeepClone ()
 		{
-			return DeepClone ();
+			var clonedClient = (MonoClientParameters)ClientParameters.DeepClone ();
+			var clonedServer = (MonoServerParameters)ServerParameters.DeepClone ();
+			return new MonoClientAndServerParameters (clonedClient, clonedServer);
 		}
 
-		public override IClientParameters ClientParameters {
-			get { return this; }
+		public MonoClientParameters MonoClientParameters {
+			get { return (MonoClientParameters)base.ClientParameters; }
 		}
 
-		public override IServerParameters ServerParameters {
-			get { return this; }
-		}
-
-		public override ClientAndServerParameters DeepClone ()
-		{
-			return new MonoClientAndServerParameters (this);
+		public MonoServerParameters MonoServerParameters {
+			get { return (MonoServerParameters)base.ServerParameters; }
 		}
 
 		public ICollection<CipherSuiteCode> ClientCiphers {
-			get; set;
+			get { return MonoClientParameters.ClientCiphers; }
+			set { MonoClientParameters.ClientCiphers = value; }
 		}
 
 		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public IServerCertificate ServerCertificate {
-			get; set;
-		}
-
-		public bool AskForClientCertificate {
-			get { return askForCert || requireCert; }
-			set { askForCert = value; }
-		}
-
-		public bool RequireClientCertificate {
-			get { return requireCert; }
-			set {
-				requireCert = value;
-				if (value)
-					askForCert = true;
-			}
-		}
-
-		public IClientCertificate ClientCertificate {
-			get; set;
+			get { return MonoServerParameters.ServerCiphers; }
+			set { MonoServerParameters.ServerCiphers = value; }
 		}
 
 		public CipherSuiteCode? ExpectedCipher {

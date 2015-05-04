@@ -34,25 +34,25 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return Parameters.ServerCertificate; }
 		}
 
-		IServerParameters IServer.Parameters {
+		ServerParameters IServer.Parameters {
 			get { return Parameters; }
 		}
 
-		new public IMonoServerParameters Parameters {
-			get { return (IMonoServerParameters)base.Parameters; }
+		new public MonoServerParameters Parameters {
+			get { return (MonoServerParameters)base.Parameters; }
 		}
 
-		public MonoServer (IPEndPoint endpoint, IMonoServerParameters parameters)
-			: base (endpoint, parameters.ConnectionParameters)
+		public MonoServer (IPEndPoint endpoint, MonoServerParameters parameters)
+			: base (endpoint, parameters)
 		{
 		}
 
 		protected override TlsSettings GetSettings ()
 		{
 			var settings = new TlsSettings ();
-			if (Parameters.RequireClientCertificate)
-				settings.RequireClientCertificate = true;
-			else if (Parameters.AskForClientCertificate)
+			if ((Parameters.Flags & ServerFlags.RequireClientCertificate) != 0)
+				settings.RequireClientCertificate = settings.AskForClientCertificate = true;
+			else if ((Parameters.Flags & ServerFlags.AskForClientCertificate) != 0)
 				settings.AskForClientCertificate = true;
 			settings.RequestedCiphers = Parameters.ServerCiphers;
 			return settings;

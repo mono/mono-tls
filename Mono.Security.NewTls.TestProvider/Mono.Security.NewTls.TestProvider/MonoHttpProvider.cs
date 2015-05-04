@@ -33,6 +33,7 @@ using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
+using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.HttpFramework;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
@@ -48,8 +49,8 @@ namespace Mono.Security.NewTls.TestProvider
 		readonly HttpProviderType type;
 		readonly MSI.MonoTlsProvider legacyTlsProvider;
 		readonly MSI.MonoTlsProvider newTlsProvider;
-		readonly SslStreamProviderImpl legacyStreamProvider;
-		readonly SslStreamProviderImpl newStreamProvider;
+		// readonly SslStreamProviderImpl legacyStreamProvider;
+		// readonly SslStreamProviderImpl newStreamProvider;
 
 		internal MonoHttpProvider (HttpProviderType type)
 		{
@@ -57,8 +58,8 @@ namespace Mono.Security.NewTls.TestProvider
 
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
 			legacyTlsProvider = MSI.MonoTlsProviderFactory.GetDefaultProvider ();
-			legacyStreamProvider = new SslStreamProviderImpl (legacyTlsProvider);
-			newStreamProvider = new SslStreamProviderImpl (newTlsProvider);
+			// legacyStreamProvider = new SslStreamProviderImpl (legacyTlsProvider);
+			// newStreamProvider = new SslStreamProviderImpl (newTlsProvider);
 		}
 
 		public bool SupportsWebRequest {
@@ -86,11 +87,12 @@ namespace Mono.Security.NewTls.TestProvider
 			return new HttpWebRequestImpl (request);
 		}
 
-		public HttpServer CreateServer (IPortableEndPoint endpoint, ListenerFlags flags, IServerCertificate serverCertificate)
+		public HttpServer CreateServer (IPortableEndPoint endpoint, ListenerFlags flags, ServerParameters parameters = null)
 		{
-			return new HttpServer (this, endpoint, flags, serverCertificate);
+			return new HttpServer (this, endpoint, flags, parameters);
 		}
 
+		#if FIXME
 		class SslStreamProviderImpl : ISslStreamProvider
 		{
 			readonly MSI.MonoTlsProvider provider;
@@ -100,7 +102,7 @@ namespace Mono.Security.NewTls.TestProvider
 				this.provider = provider;
 			}
 
-			Stream ISslStreamProvider.CreateServerStream (Stream stream, IServerCertificate certificate, ICertificateValidator validator, ListenerFlags flags)
+			ISslStream ISslStreamProvider.CreateServerStream (Stream stream, ServerParameters parameters)
 			{
 				var serverCertificate = CertificateProvider.GetCertificate (certificate);
 
@@ -126,6 +128,7 @@ namespace Mono.Security.NewTls.TestProvider
 				return sslStream.AuthenticatedStream;
 			}
 		}
+		#endif
 
 		public bool SupportsHttpClient {
 			get { return false; }
@@ -138,6 +141,8 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public ISslStreamProvider SslStreamProvider {
 			get {
+				throw new NotImplementedException ();
+				#if FIXME
 				switch (type) {
 				case HttpProviderType.MonoWithOldTLS:
 					return legacyStreamProvider;
@@ -146,11 +151,18 @@ namespace Mono.Security.NewTls.TestProvider
 				default:
 					throw new InvalidOperationException ();
 				}
+				#endif
 			}
 		}
 
 		public ISslStreamProvider DefaultSslStreamProvider {
-			get { return newStreamProvider; }
+			get {
+				#if FIXME
+				return newStreamProvider;
+				#else
+				throw new NotImplementedException();
+				#endif
+			}
 		}
 	}
 }

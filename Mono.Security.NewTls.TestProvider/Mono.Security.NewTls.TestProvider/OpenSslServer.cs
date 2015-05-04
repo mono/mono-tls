@@ -21,27 +21,30 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return Parameters.ServerCertificate; }
 		}
 
-		IServerParameters IServer.Parameters {
+		ServerParameters IServer.Parameters {
 			get { return Parameters; }
 		}
 
-		new public IMonoServerParameters Parameters {
-			get { return (IMonoServerParameters)base.Parameters; }
+		new public MonoServerParameters Parameters {
+			get { return (MonoServerParameters)base.Parameters; }
 		}
 
-		public OpenSslServer (IPEndPoint endpoint, IMonoServerParameters parameters)
-			: base (endpoint, parameters.ConnectionParameters)
+		IPEndPoint endpoint;
+
+		public OpenSslServer (IPEndPoint endpoint, MonoServerParameters parameters)
+			: base (endpoint, parameters)
 		{
+			this.endpoint = endpoint;
 		}
 
 		protected override void Initialize ()
 		{
-			if (!IPAddress.IsLoopback (EndPoint.Address) && EndPoint.Address != IPAddress.Any)
+			if (!IPAddress.IsLoopback (endpoint.Address) && endpoint.Address != IPAddress.Any)
 				throw new InvalidOperationException ();
 
 			// openssl.SetCertificate (Certificate.Data, Certificate.Password);
 			openssl.SetCertificate (CertificateProvider.GetCertificate (Certificate).GetRawCertData ());
-			openssl.Bind (EndPoint);
+			openssl.Bind (endpoint);
 		}
 
 		protected override void CreateConnection ()

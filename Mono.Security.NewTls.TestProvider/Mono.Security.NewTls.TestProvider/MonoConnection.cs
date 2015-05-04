@@ -43,13 +43,14 @@ using Mono.Security.NewTls.TestFramework;
 
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	public abstract class MonoConnection : DotNetConnection, ICommonConnection
 	{
-		public MonoConnection (IPEndPoint endpoint, IConnectionParameters parameters)
-			: base (endpoint, parameters)
+		public MonoConnection (IPEndPoint endpoint, ConnectionParameters parameters)
+			: base (endpoint, null, parameters)
 		{
 		}
 
@@ -60,11 +61,11 @@ namespace Mono.Security.NewTls.TestProvider
 		TlsSettings settings;
 		MonoSslStream monoSslStream;
 
-		public override bool SupportsConnectionInfo {
+		public bool SupportsConnectionInfo {
 			get { return true; }
 		}
 
-		public override TlsConnectionInfo GetConnectionInfo ()
+		public TlsConnectionInfo GetConnectionInfo ()
 		{
 			return settings.ConnectionInfo;
 		}
@@ -73,12 +74,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected abstract TlsSettings GetSettings ();
 
-		protected sealed override async Task<Stream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
+		protected sealed override async Task<ISslStream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
 		{
 			settings = GetSettings ();
-			settings.EnableDebugging = Parameters.EnableDebugging;
 			monoSslStream = await Start (ctx, socket, settings, cancellationToken);
-			return monoSslStream.AuthenticatedStream;
+			throw new NotImplementedException ();
 		}
 
 		protected override async Task<bool> TryCleanShutdown (bool waitForReply)

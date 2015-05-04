@@ -29,7 +29,7 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class MonoClientParameters : ClientParameters, IMonoClientParameters
+	public class MonoClientParameters : ClientParameters
 	{
 		public MonoClientParameters (string identifier)
 			: base (identifier)
@@ -44,7 +44,7 @@ namespace Mono.Security.NewTls.TestFramework
 			ExpectedCipher = other.ExpectedCipher;
 		}
 
-		public override ClientParameters DeepClone ()
+		public override ConnectionParameters DeepClone ()
 		{
 			return new MonoClientParameters (this);
 		}

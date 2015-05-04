@@ -16,17 +16,20 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class OpenSslClient : OpenSslConnection, IMonoClient
 	{
-		IClientParameters IClient.Parameters {
+		ClientParameters IClient.Parameters {
 			get { return Parameters; }
 		}
 
-		new public IMonoClientParameters Parameters {
-			get { return (IMonoClientParameters)base.Parameters; }
+		new public MonoClientParameters Parameters {
+			get { return (MonoClientParameters)base.Parameters; }
 		}
 
-		public OpenSslClient (IPEndPoint endpoint, IMonoClientParameters parameters)
-			: base (endpoint, parameters.ConnectionParameters)
+		IPEndPoint endpoint;
+
+		public OpenSslClient (IPEndPoint endpoint, MonoClientParameters parameters)
+			: base (endpoint, parameters)
 		{
+			this.endpoint = endpoint;
 		}
 
 		protected override void Initialize ()
@@ -40,7 +43,7 @@ namespace Mono.Security.NewTls.TestProvider
 				openssl.SetCertificate (CertificateProvider.GetCertificate (Parameters.ClientCertificate).GetRawCertData ());
 			if (Parameters.ClientCiphers != null)
 				openssl.SetCipherList (Parameters.ClientCiphers);
-			openssl.Connect (EndPoint);
+			openssl.Connect (endpoint);
 		}
 
 		protected override void Stop ()
