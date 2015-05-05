@@ -33,17 +33,23 @@ using Mono.Security.Providers.NewTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	class MonoConnectionProviderFactory : DefaultConnectionProviderFactory
+	class MonoConnectionProviderFactory : ConnectionProviderFactory
 	{
 		readonly MSI.MonoTlsProvider newTlsProvider;
 		readonly MSI.MonoTlsProvider legacyTlsProvider;
 		readonly MonoSslStreamProvider newTlsStreamProvider;
 		readonly MonoSslStreamProvider legacyStreamProvider;
+		readonly DotNetSslStreamProvider dotNetStreamProvider;
+		readonly DotNetConnectionProvider dotNetConnectionProvider;
 		readonly MonoConnectionProvider newTlsConnectionProvider;
 		readonly MonoConnectionProvider legacyConnectionProvider;
 
 		internal MonoConnectionProviderFactory ()
 		{
+			dotNetStreamProvider = new DotNetSslStreamProvider ();
+			dotNetConnectionProvider = new DotNetConnectionProvider (this, dotNetStreamProvider);
+			Install (ConnectionProviderType.DotNet, dotNetConnectionProvider);
+
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
 			newTlsStreamProvider = new MonoSslStreamProvider (newTlsProvider);
 			newTlsConnectionProvider = new MonoConnectionProvider (this, newTlsStreamProvider);

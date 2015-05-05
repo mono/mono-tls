@@ -24,16 +24,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Net;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	class MonoConnectionProvider : DefaultConnectionProvider
+	class MonoConnectionProvider : ConnectionProvider
 	{
 		public MonoConnectionProvider (MonoConnectionProviderFactory factory, ISslStreamProvider provider)
 			: base (factory, provider)
 		{
+		}
+
+		public override IClient CreateClient (ClientParameters parameters)
+		{
+			return new DotNetClient (GetEndPoint (parameters), SslStreamProvider, parameters);
+		}
+
+		public override IServer CreateServer (ServerParameters parameters)
+		{
+			return new DotNetServer (GetEndPoint (parameters), SslStreamProvider, parameters);
+		}
+
+		static IPEndPoint GetEndPoint (ConnectionParameters parameters)
+		{
+			if (parameters.EndPoint != null)
+				return new IPEndPoint (IPAddress.Parse (parameters.EndPoint.Address), parameters.EndPoint.Port);
+			else
+				return new IPEndPoint (IPAddress.Loopback, 4433);
 		}
 	}
 }
