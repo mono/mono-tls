@@ -98,12 +98,14 @@ namespace Mono.Security.NewTls.Tests
 			return new TestFeature (name, description, defaultValue);
 		}
 
+		#if FIXME
 		public static readonly TestFeature DotNetConnectionProvider = CreateConnectionFeature (
 			"DotNetConnectionProvider", "DotNetConnectionProvider", ConnectionProviderType.DotNet);
 		public static readonly TestFeature MonoConnectionProvider = CreateConnectionFeature (
 			"MonoConnectionProvider", "MonoConnectionProvider", ConnectionProviderType.Mono);
 		public static readonly TestFeature OpenSslConnectionProvider = CreateConnectionFeature (
 			"OpenSslConnectionProvider", "OpenSslConnectionProvider", ConnectionProviderType.OpenSsl);
+		#endif
 
 		static TestFeature CreateConnectionFeature (string name, string description, ConnectionProviderType type, bool defaultValue = true)
 		{
@@ -134,9 +136,11 @@ namespace Mono.Security.NewTls.Tests
 				yield return NotWorking;
 				yield return MonoCryptoProvider;
 				yield return OpenSslCryptoProvider;
+				#if FIXME
 				yield return DotNetConnectionProvider;
 				yield return MonoConnectionProvider;
 				yield return OpenSslConnectionProvider;
+				#endif
 				yield return HttpsWithOldTLS;
 				yield return HttpsWithNewTLS;
 			}
@@ -185,12 +189,16 @@ namespace Mono.Security.NewTls.Tests
 
 			static IEnumerable<ConnectionProviderType> GetProviders (TestContext ctx)
 			{
+				#if FIXME
 				if (ctx.IsEnabled (DotNetConnectionProvider))
 					yield return ConnectionProviderType.DotNet;
 				if (ctx.IsEnabled (MonoConnectionProvider))
 					yield return ConnectionProviderType.Mono;
 				if (ctx.IsEnabled (OpenSslConnectionProvider))
 					yield return ConnectionProviderType.OpenSsl;
+				#else
+				yield return ConnectionProviderType.DotNet;
+				#endif
 			}
 
 			static bool RunFilter (string filter, ConnectionProviderType type)
@@ -198,6 +206,7 @@ namespace Mono.Security.NewTls.Tests
 				if (filter == null)
 					return true;
 
+				#if FIXME
 				var factory = DependencyInjector.Get<IMonoConnectionProviderFactory> ();
 
 				var parts = filter.Split (':');
@@ -239,8 +248,9 @@ namespace Mono.Security.NewTls.Tests
 						return false;
 					}
 				}
+				#endif
 
-				return true;
+				return false;
 			}
 
 

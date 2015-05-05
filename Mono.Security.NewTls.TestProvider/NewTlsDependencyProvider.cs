@@ -62,12 +62,12 @@ namespace Mono.Security.NewTls.TestProvider
 
 			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
 			DependencyInjector.RegisterDependency<ICertificateProvider> (() => new CertificateProvider ());
-			DependencyInjector.RegisterDependency<IHttpProviderFactory> (() => new MonoHttpProviderFactory ());
-			DependencyInjector.RegisterDependency<ISslStreamProviderFactory> (() => new MonoSslStreamProviderFactory ());
-			DependencyInjector.RegisterDependency<IConnectionProviderFactory> (() => new DefaultConnectionProviderFactory ());
+			// DependencyInjector.RegisterDependency<IHttpProviderFactory> (() => new MonoHttpProviderFactory ());
+			// DependencyInjector.RegisterDependency<ISslStreamProviderFactory> (() => new MonoSslStreamProviderFactory ());
+			DependencyInjector.RegisterDependency<IConnectionProviderFactory> (() => new MonoConnectionProviderFactory ());
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-			DependencyInjector.RegisterDependency<IMonoConnectionProviderFactory> (() => new MonoConnectionProviderFactory ());
+			// DependencyInjector.RegisterDependency<IMonoConnectionProviderFactory> (() => new MonoConnectionProviderFactory ());
 
 			#if MACUI
 			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());
