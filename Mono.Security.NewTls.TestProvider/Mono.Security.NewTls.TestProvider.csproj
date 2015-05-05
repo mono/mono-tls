@@ -129,8 +129,8 @@
       <Link>Xamarin.WebTests.ConnectionFramework\DotNetSslStreamProvider.cs</Link>
     </Compile>
     <Compile Include="NewTlsDependencyProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestProvider\NewTlsStreamProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoSslStreamProviderFactory.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoSslStreamProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

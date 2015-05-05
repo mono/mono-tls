@@ -24,23 +24,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Xamarin.AsyncTests;
 using Xamarin.WebTests.Providers;
+
+using MSI = Mono.Security.Interface;
+using Mono.Security.Providers.NewTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	class MonoSslStreamProviderFactory : SslStreamProviderFactory
 	{
-		NewTlsStreamProvider newTlsProvider;
+		readonly MSI.MonoTlsProvider newTlsProvider;
+		readonly MSI.MonoTlsProvider legacyTlsProvider;
+		readonly MonoSslStreamProvider newTlsStreamProvider;
+		readonly MonoSslStreamProvider legacyStreamProvider;
 
 		internal MonoSslStreamProviderFactory ()
 		{
-			newTlsProvider = new NewTlsStreamProvider ();
-			Install (SslStreamProviderType.MonoNewTls, newTlsProvider);
+			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
+			newTlsStreamProvider = new MonoSslStreamProvider (newTlsProvider);
+			Install (SslStreamProviderType.MonoNewTls, newTlsStreamProvider);
+
+			legacyTlsProvider = MSI.MonoTlsProviderFactory.GetDefaultProvider ();
+			legacyStreamProvider = new MonoSslStreamProvider (legacyTlsProvider);
+			Install (SslStreamProviderType.MonoOldTls, legacyStreamProvider);
 		}
 
 		public override ISslStreamProvider GetDefaultProvider ()
 		{
-			return newTlsProvider;
+			return newTlsStreamProvider;
 		}
 	}
 }
