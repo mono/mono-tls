@@ -63,7 +63,7 @@ namespace Mono.Security.NewTls.TestProvider
 			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
 			DependencyInjector.RegisterDependency<ICertificateProvider> (() => new CertificateProvider ());
 			DependencyInjector.RegisterDependency<IHttpProviderFactory> (() => new MonoHttpProviderFactory ());
-			DependencyInjector.RegisterDependency<ISslStreamProviderFactory> (() => new DefaultSslStreamProviderFactory ());
+			DependencyInjector.RegisterDependency<ISslStreamProviderFactory> (() => new MonoSslStreamProviderFactory ());
 			DependencyInjector.RegisterDependency<IConnectionProviderFactory> (() => new DefaultConnectionProviderFactory ());
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());

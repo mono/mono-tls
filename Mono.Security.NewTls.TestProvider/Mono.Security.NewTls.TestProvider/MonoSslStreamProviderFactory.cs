@@ -1,5 +1,5 @@
 ﻿//
-// TestSslStream.cs
+// MonoSslStreamProviderFactory.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,41 +24,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
+using Xamarin.WebTests.Providers;
 
-using Xamarin.AsyncTests;
-using Xamarin.AsyncTests.Portable;
-using Xamarin.AsyncTests.Constraints;
-
-using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.TestRunners;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Features;
-
-namespace Mono.Security.NewTls.Tests
+namespace Mono.Security.NewTls.TestProvider
 {
-	[Martin]
-	[AsyncTestFixture (Timeout = 5000)]
-	public class TestSslStream
+	class MonoSslStreamProviderFactory : SslStreamProviderFactory
 	{
-		[ConnectionProvider ("NewTLS")]
-		public ConnectionProviderType ConnectionProvider {
-			get;
-			private set;
+		NewTlsStreamProvider newTlsProvider;
+
+		internal MonoSslStreamProviderFactory ()
+		{
+			newTlsProvider = new NewTlsStreamProvider ();
+			Install (SslStreamProviderType.MonoNewTls, newTlsProvider);
 		}
 
-		[AsyncTest]
-		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[ClientAndServerParameters] ClientAndServerParameters parameters,
-			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
+		public override ISslStreamProvider GetDefaultProvider ()
 		{
-			var runner = new SslStreamTestRunner (server, client);
-			await runner.Run (ctx, cancellationToken);
+			return newTlsProvider;
 		}
 	}
 }

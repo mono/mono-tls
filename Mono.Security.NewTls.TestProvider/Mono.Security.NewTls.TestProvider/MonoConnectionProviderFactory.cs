@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Net;
+using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
@@ -46,6 +47,15 @@ namespace Mono.Security.NewTls.TestProvider
 			monoProvider = new MonoProvider ();
 #if HAVE_OPENSSL
 			openSslProvider = new OpenSslProvider ();
+#endif
+		}
+
+		public IEnumerable<ConnectionProviderType> GetSupportedProviders ()
+		{
+			yield return ConnectionProviderType.DotNet;
+			yield return ConnectionProviderType.Mono;
+#if HAVE_OPENSSL
+			yield return ConnectionProviderType.OpenSsl;
 #endif
 		}
 

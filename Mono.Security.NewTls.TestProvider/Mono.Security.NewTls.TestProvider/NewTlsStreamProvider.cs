@@ -1,5 +1,5 @@
 ﻿//
-// TestSslStream.cs
+// NewTlsStreamProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,41 +25,29 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
-
-using Xamarin.AsyncTests;
-using Xamarin.AsyncTests.Portable;
-using Xamarin.AsyncTests.Constraints;
-
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.TestRunners;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Features;
+using Xamarin.WebTests.Providers;
 
-namespace Mono.Security.NewTls.Tests
+namespace Mono.Security.NewTls.TestProvider
 {
-	[Martin]
-	[AsyncTestFixture (Timeout = 5000)]
-	public class TestSslStream
+	class NewTlsStreamProvider : ISslStreamProvider
 	{
-		[ConnectionProvider ("NewTLS")]
-		public ConnectionProviderType ConnectionProvider {
-			get;
-			private set;
-		}
-
-		[AsyncTest]
-		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[ClientAndServerParameters] ClientAndServerParameters parameters,
-			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
+		#region ISslStreamProvider implementation
+		public ISslStream CreateServerStream (Stream stream, ServerParameters parameters)
 		{
-			var runner = new SslStreamTestRunner (server, client);
-			await runner.Run (ctx, cancellationToken);
+			throw new NotImplementedException ();
 		}
+		public Task<ISslStream> CreateServerStreamAsync (Stream stream, ServerParameters parameters, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+		public Task<ISslStream> CreateClientStreamAsync (Stream stream, string targetHost, ClientParameters parameters, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException ();
+		}
+		#endregion
 	}
 }
 
