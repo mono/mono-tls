@@ -27,6 +27,7 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Server;
 
 using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
@@ -39,6 +40,7 @@ namespace Mono.Security.NewTls.TestProvider
 		readonly MSI.MonoTlsProvider legacyTlsProvider;
 		readonly MonoSslStreamProvider newTlsStreamProvider;
 		readonly MonoSslStreamProvider legacyStreamProvider;
+		readonly DefaultHttpProvider dotNetHttpProvider;
 		readonly DotNetSslStreamProvider dotNetStreamProvider;
 		readonly DotNetConnectionProvider dotNetConnectionProvider;
 		readonly MonoConnectionProvider newTlsConnectionProvider;
@@ -47,7 +49,8 @@ namespace Mono.Security.NewTls.TestProvider
 		internal MonoConnectionProviderFactory ()
 		{
 			dotNetStreamProvider = new DotNetSslStreamProvider ();
-			dotNetConnectionProvider = new DotNetConnectionProvider (this, dotNetStreamProvider);
+			dotNetHttpProvider = new DefaultHttpProvider (dotNetStreamProvider);
+			dotNetConnectionProvider = new DotNetConnectionProvider (this, dotNetStreamProvider, dotNetHttpProvider);
 			Install (ConnectionProviderType.DotNet, dotNetConnectionProvider);
 
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
@@ -63,9 +66,12 @@ namespace Mono.Security.NewTls.TestProvider
 			Install (ConnectionProviderType.OldTLS, legacyConnectionProvider);
 		}
 
-		public override ISslStreamProvider GetDefaultSslStreamProvider ()
-		{
-			return newTlsStreamProvider;
+		public override IHttpProvider DefaultHttpProvider {
+			get { return newTlsConnectionProvider.HttpProvider; }
+		}
+
+		public override ISslStreamProvider DefaultSslStreamProvider {
+			get { return newTlsConnectionProvider.SslStreamProvider; }
 		}
 	}
 }

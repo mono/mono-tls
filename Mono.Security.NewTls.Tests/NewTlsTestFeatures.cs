@@ -37,7 +37,7 @@ using Xamarin.WebTests.Resources;
 [assembly: RequireDependency (typeof (IMonoConnectionProviderFactory))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
 [assembly: RequireDependency (typeof (IPortableWebSupport))]
-[assembly: RequireDependency (typeof (IHttpProviderFactory))]
+[assembly: RequireDependency (typeof (IConnectionProviderFactory))]
 
 namespace Mono.Security.NewTls.Tests
 {

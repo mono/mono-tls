@@ -98,9 +98,6 @@
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\DefaultHttpProvider.cs">
       <Link>Xamarin.WebTests.Server\DefaultHttpProvider.cs</Link>
     </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\DefaultHttpProviderFactory.cs">
-      <Link>Xamarin.WebTests.Server\DefaultHttpProviderFactory.cs</Link>
-    </Compile>
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoHttpProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoHttpProviderFactory.cs" />
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\ConnectionHelper.cs">
