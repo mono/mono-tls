@@ -27,6 +27,7 @@ using System;
 using System.Net;
 using System.Threading;
 using Xamarin.AsyncTests;
+using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Server;
@@ -59,13 +60,14 @@ namespace Mono.Security.NewTls.TestProvider
 				return newTlsProvider;
 			});
 
-			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-			DependencyInjector.RegisterDependency<IMonoConnectionProviderFactory> (() => new MonoConnectionProviderFactory ());
-
 			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
 			DependencyInjector.RegisterDependency<ICertificateProvider> (() => new CertificateProvider ());
+			DependencyInjector.RegisterDependency<IHttpProviderFactory> (() => new DefaultHttpProviderFactory ());
+			DependencyInjector.RegisterDependency<ISslStreamProviderFactory> (() => new DefaultSslStreamProviderFactory ());
+			DependencyInjector.RegisterDependency<IConnectionProviderFactory> (() => new DefaultConnectionProviderFactory ());
 
-			DependencyInjector.RegisterDependency<IHttpProviderFactory> (() => new MonoHttpProviderFactory ());
+			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
+			DependencyInjector.RegisterDependency<IMonoConnectionProviderFactory> (() => new MonoConnectionProviderFactory ());
 
 			#if MACUI
 			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());

@@ -36,13 +36,14 @@
     <Compile Include="Mono.Security.NewTls.Tests\CipherTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\ConnectionTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\HashTest.cs" />
-    <Compile Include="Mono.Security.NewTls.Tests\NewTlsTestFeatures.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\SelectCiphersTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestCbcBlockCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestCbcBlockCipher-Generated.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterGipher-Generated.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\MonoConnectionTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\TestHttps.cs" />
+    <Compile Include="NewTlsTestFeatures.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

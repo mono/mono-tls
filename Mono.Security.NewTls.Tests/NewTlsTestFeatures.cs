@@ -50,6 +50,13 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
+	public class MartinAttribute : TestCategoryAttribute
+	{
+		public override TestCategory Category {
+			get { return NewTlsTestFeatures.Martin; }
+		}
+	}
+
 	public class WorkAttribute : TestCategoryAttribute
 	{
 		public override TestCategory Category {
@@ -69,6 +76,7 @@ namespace Mono.Security.NewTls.Tests
 		public static readonly NewTlsTestFeatures Instance;
 
 		public static readonly TestCategory Work = new TestCategory ("Work");
+		public static readonly TestCategory Martin = new TestCategory ("Martin");
 		public static readonly TestCategory CryptoTests = new TestCategory ("CryptoTests");
 
 		public static readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
@@ -137,6 +145,7 @@ namespace Mono.Security.NewTls.Tests
 		public IEnumerable<TestCategory> Categories {
 			get {
 				yield return Work;
+				yield return Martin;
 				yield return CryptoTests;
 			}
 		}
