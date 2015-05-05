@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestFramework
 {
