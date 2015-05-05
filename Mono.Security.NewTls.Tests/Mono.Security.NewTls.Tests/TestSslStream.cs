@@ -1,5 +1,5 @@
 ﻿//
-// TestHttps.cs
+// TestSslStream.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -37,31 +37,22 @@ using Xamarin.AsyncTests.Constraints;
 
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.TestRunners;
-using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Features;
 
 namespace Mono.Security.NewTls.Tests
 {
-	[Work]
+	[Martin]
 	[AsyncTestFixture (Timeout = 5000)]
-	public class TestHttps
+	public class TestSslStream
 	{
-		[HttpProvider ("MonoWithOldTLS")]
-		public HttpProviderType HttpProvider {
-			get;
-			private set;
-		}
-
-		[ClientAndServerParameters]
-		public ClientAndServerParameters ConnectionParameters {
-			get;
-			private set;
-		}
-
 		[AsyncTest]
-		public Task RunCertificateTests (TestContext ctx, CancellationToken cancellationToken, [HttpsTestRunner] HttpsTestRunner runner)
+		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+			[ClientAndServerParameters] ClientAndServerParameters parameters,
+			[ServerTestHost] IServer server, [ClientTestHost] IClient client)
 		{
-			return runner.Run (ctx, cancellationToken);
+			var runner = new SslStreamTestRunner (server, client);
+			await runner.Run (ctx, cancellationToken);
 		}
 	}
 }

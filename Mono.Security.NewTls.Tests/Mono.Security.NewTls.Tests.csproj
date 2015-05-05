@@ -44,6 +44,7 @@
     <Compile Include="Mono.Security.NewTls.Tests\MonoConnectionTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestHttps.cs" />
     <Compile Include="NewTlsTestFeatures.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\TestSslStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
