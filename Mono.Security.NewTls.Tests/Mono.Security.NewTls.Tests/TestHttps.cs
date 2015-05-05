@@ -37,6 +37,7 @@ using Xamarin.AsyncTests.Constraints;
 
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.TestRunners;
+using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Features;
 
 namespace Mono.Security.NewTls.Tests
@@ -45,6 +46,12 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture (Timeout = 5000)]
 	public class TestHttps
 	{
+		[HttpProvider ("MonoWithOldTLS")]
+		public HttpProviderType HttpProvider {
+			get;
+			private set;
+		}
+
 		[HttpsConnectionParameter]
 		public ClientAndServerParameters ConnectionParameters {
 			get;
