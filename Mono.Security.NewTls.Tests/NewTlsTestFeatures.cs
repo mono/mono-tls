@@ -264,31 +264,6 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-		public class SelectHttpsProvider : TestParameterAttribute, ITestParameterSource<HttpProviderType>
-		{
-			public SelectHttpsProvider (string filter = null, TestFlags flags = TestFlags.Browsable)
-				: base (filter, flags)
-			{
-			}
-
-			public IEnumerable<HttpProviderType> GetParameters (TestContext ctx, string filter)
-			{
-				if (filter != null) {
-					if (filter.Equals ("https-with-oldtls"))
-						yield return HttpProviderType.MonoWithOldTLS;
-					else if (filter.Equals ("https-with-newtls"))
-						yield return HttpProviderType.MonoWithNewTLS;
-					yield break;
-				}
-
-				if (ctx.IsEnabled (HttpsWithOldTLS))
-					yield return HttpProviderType.MonoWithOldTLS;
-				if (ctx.IsEnabled (HttpsWithNewTLS))
-					yield return HttpProviderType.MonoWithNewTLS;
-			}
-		}
-
-		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
 		public class SelectServerCertificateAttribute : TestParameterAttribute, ITestParameterSource<ServerCertificateType>
 		{
 			public SelectServerCertificateAttribute (string filter = null, TestFlags flags = TestFlags.Browsable)
