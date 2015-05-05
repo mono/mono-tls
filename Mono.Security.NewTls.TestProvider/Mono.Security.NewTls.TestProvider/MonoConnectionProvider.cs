@@ -27,14 +27,24 @@ using System;
 using System.Net;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Server;
+
+using MSI = Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	class MonoConnectionProvider : ConnectionProvider
 	{
-		public MonoConnectionProvider (MonoConnectionProviderFactory factory, ISslStreamProvider provider)
-			: base (factory, provider)
+		readonly MSI.MonoTlsProvider tlsProvider;
+		readonly ISslStreamProvider sslStreamProvider;
+		readonly MonoHttpProvider httpProvider;
+
+		public MonoConnectionProvider (MonoConnectionProviderFactory factory, MonoSslStreamProvider sslStreamProvider)
+			: base (factory)
 		{
+			this.sslStreamProvider = sslStreamProvider;
+			this.tlsProvider = sslStreamProvider.MonoTlsProvider;
+			this.httpProvider = new MonoHttpProvider (this);
 		}
 
 		public override IClient CreateClient (ClientParameters parameters)
@@ -45,6 +55,28 @@ namespace Mono.Security.NewTls.TestProvider
 		public override IServer CreateServer (ServerParameters parameters)
 		{
 			return new DotNetServer (GetEndPoint (parameters), SslStreamProvider, parameters);
+		}
+
+		public override bool SupportsSslStreams {
+			get { return true; }
+		}
+
+		protected override ISslStreamProvider GetSslStreamProvider ()
+		{
+			return sslStreamProvider;
+		}
+
+		internal MSI.MonoTlsProvider MonoTlsProvider {
+			get { return tlsProvider; }
+		}
+
+		public override bool SupportsHttp {
+			get { return true; }
+		}
+
+		protected override IHttpProvider GetHttpProvider ()
+		{
+			return httpProvider;
 		}
 
 		static IPEndPoint GetEndPoint (ConnectionParameters parameters)

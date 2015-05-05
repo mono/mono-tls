@@ -1,5 +1,5 @@
 //
-// MonoHttpsConnectionProvider.cs
+// MonoHttpProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -23,7 +23,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-#if FIXME
 using System;
 using System.IO;
 using System.Net;
@@ -47,20 +46,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 	class MonoHttpProvider : IHttpProvider
 	{
-		readonly HttpProviderType type;
-		readonly MSI.MonoTlsProvider legacyTlsProvider;
-		readonly MSI.MonoTlsProvider newTlsProvider;
-		// readonly SslStreamProviderImpl legacyStreamProvider;
-		// readonly SslStreamProviderImpl newStreamProvider;
+		readonly MonoConnectionProvider connectionProvider;
 
-		internal MonoHttpProvider (HttpProviderType type)
+		internal MonoHttpProvider (MonoConnectionProvider connectionProvider)
 		{
-			this.type = type;
-
-			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
-			legacyTlsProvider = MSI.MonoTlsProviderFactory.GetDefaultProvider ();
-			// legacyStreamProvider = new SslStreamProviderImpl (legacyTlsProvider);
-			// newStreamProvider = new SslStreamProviderImpl (newTlsProvider);
+			this.connectionProvider = connectionProvider;
 		}
 
 		public bool SupportsWebRequest {
@@ -69,17 +59,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public IHttpWebRequest CreateWebRequest (Uri uri)
 		{
-			HttpWebRequest request;
-			switch (type) {
-			case HttpProviderType.MonoWithOldTLS:
-				request = MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, legacyTlsProvider);
-				break;
-			case HttpProviderType.MonoWithNewTLS:
-				request = MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, newTlsProvider);
-				break;
-			default:
-				throw new InvalidOperationException ();
-			}
+			var request = MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, connectionProvider.MonoTlsProvider);
 			return CreateWebRequest (request);
 		}
 
@@ -93,44 +73,6 @@ namespace Mono.Security.NewTls.TestProvider
 			return new HttpServer (this, endpoint, flags, parameters);
 		}
 
-		#if FIXME
-		class SslStreamProviderImpl : ISslStreamProvider
-		{
-			readonly MSI.MonoTlsProvider provider;
-
-			public SslStreamProviderImpl (MSI.MonoTlsProvider provider)
-			{
-				this.provider = provider;
-			}
-
-			ISslStream ISslStreamProvider.CreateServerStream (Stream stream, ServerParameters parameters)
-			{
-				var serverCertificate = CertificateProvider.GetCertificate (certificate);
-
-				MSI.ICertificateValidator msiValidator = null;
-				if (validator != null) {
-					var settings = new MSI.MonoTlsSettings ();
-					settings.ServerCertificateValidationCallback = (s, c, ch, e) => {
-						return ((CertificateValidator)validator).ValidationCallback (s, c, ch, (SslPolicyErrors)e);
-					};
-					msiValidator = MSI.CertificateValidationHelper.CreateDefaultValidator (settings);
-				}
-
-				return CreateServerStream (stream, serverCertificate, msiValidator, flags);
-			}
-
-			public Stream CreateServerStream (Stream stream, X509Certificate serverCertificate, MSI.ICertificateValidator validator, ListenerFlags flags)
-			{
-				var protocols = (SslProtocols)ServicePointManager.SecurityProtocol;
-				var clientCertificateRequired = (flags & ListenerFlags.RequireClientCertificate) != 0;
-
-				var sslStream = provider.CreateSslStream (stream, false, validator, null);
-				sslStream.AuthenticateAsServer (serverCertificate, clientCertificateRequired, protocols, false);
-				return sslStream.AuthenticatedStream;
-			}
-		}
-		#endif
-
 		public bool SupportsHttpClient {
 			get { return false; }
 		}
@@ -141,31 +83,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public ISslStreamProvider SslStreamProvider {
-			get {
-				throw new NotImplementedException ();
-				#if FIXME
-				switch (type) {
-				case HttpProviderType.MonoWithOldTLS:
-					return legacyStreamProvider;
-				case HttpProviderType.MonoWithNewTLS:
-					return newStreamProvider;
-				default:
-					throw new InvalidOperationException ();
-				}
-				#endif
-			}
-		}
-
-		public ISslStreamProvider DefaultSslStreamProvider {
-			get {
-				#if FIXME
-				return newStreamProvider;
-				#else
-				throw new NotImplementedException();
-				#endif
-			}
+			get { return connectionProvider.SslStreamProvider; }
 		}
 	}
 }
-
-#endif

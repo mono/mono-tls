@@ -52,6 +52,10 @@ namespace Mono.Security.NewTls.TestProvider
 			this.tlsProvider = tlsProvider;
 		}
 
+		public MSI.MonoTlsProvider MonoTlsProvider {
+			get { return tlsProvider; }
+		}
+
 		static SslProtocols GetSslProtocol ()
 		{
 			return (SslProtocols)ServicePointManager.SecurityProtocol;
