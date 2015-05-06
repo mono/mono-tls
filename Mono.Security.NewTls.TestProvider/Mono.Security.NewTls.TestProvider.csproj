@@ -99,7 +99,6 @@
       <Link>Xamarin.WebTests.Server\DefaultHttpProvider.cs</Link>
     </Compile>
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoHttpProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestProvider\MonoHttpProviderFactory.cs" />
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\ConnectionHelper.cs">
       <Link>Xamarin.WebTests.ConnectionFramework\ConnectionHelper.cs</Link>
     </Compile>
@@ -119,7 +118,6 @@
       <Link>Xamarin.WebTests.ConnectionFramework\DotNetSslStreamProvider.cs</Link>
     </Compile>
     <Compile Include="NewTlsDependencyProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestProvider\OldMonoConnectionProviderFactory.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactory.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProvider.cs" />
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\DotNetConnectionProvider.cs">
