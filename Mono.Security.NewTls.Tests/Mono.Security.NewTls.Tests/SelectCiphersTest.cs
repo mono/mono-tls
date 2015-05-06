@@ -31,6 +31,7 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Features;
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -85,13 +86,13 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class SelectCiphersTest
 	{
-		[NewTlsTestFeatures.SelectConnectionProvider ("connection-info:select-ciphers")]
+		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.CanSelectCiphers)]
 		public ConnectionProviderType ServerType {
 			get;
 			private set;
 		}
 
-		[NewTlsTestFeatures.SelectConnectionProvider ("connection-info:select-ciphers")]
+		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.CanSelectCiphers)]
 		public ConnectionProviderType ClientType {
 			get;
 			private set;

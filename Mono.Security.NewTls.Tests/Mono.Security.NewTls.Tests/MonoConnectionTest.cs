@@ -32,6 +32,7 @@ using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.Resources;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Features;
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -97,13 +98,13 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class MonoConnectionTest
 	{
-		[NewTlsTestFeatures.SelectConnectionProvider]
+		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions)]
 		public ConnectionProviderType ServerType {
 			get;
 			private set;
 		}
 
-		[NewTlsTestFeatures.SelectConnectionProvider]
+		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions)]
 		public ConnectionProviderType ClientType {
 			get;
 			private set;
