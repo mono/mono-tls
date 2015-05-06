@@ -20,9 +20,10 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Mono.Security.Providers.NewTls;
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -31,85 +32,51 @@ using MX = Mono.Security.X509;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public class MonoClient : MonoConnection, IMonoClient
+	class MonoClient : MonoConnection, IMonoClient
 	{
 		ClientParameters IClient.Parameters {
 			get { return Parameters; }
 		}
 
-		new public MonoClientParameters Parameters {
-			get { return (MonoClientParameters)base.Parameters; }
+		new public ClientParameters Parameters {
+			get { return (ClientParameters)base.Parameters; }
 		}
 
-		public MonoClient (IPEndPoint endpoint, MonoClientParameters parameters)
-			: base (endpoint, parameters)
+		public MonoClientParameters MonoParameters {
+			get { return base.Parameters as MonoClientParameters; }
+		}
+
+		public MonoClient (ClientParameters parameters, MonoConnectionProvider provider)
+			: base (parameters, provider)
 		{
+		}
+
+		protected override bool IsServer {
+			get { return false; }
 		}
 
 		protected override TlsSettings GetSettings ()
 		{
 			var settings = new TlsSettings ();
-			#if FIXME
-			var monoParams = Parameters as IMonoClientParameters;
-			if (monoParams != null) {
-				settings.ClientCertificateParameters = monoParams.ClientCertificateParameters;
-				settings.Instrumentation = monoParams.ClientInstrumentation;
-			}
-			#endif
-			settings.RequestedCiphers = Parameters.ClientCiphers;
+
+			if (MonoParameters != null)
+				settings.RequestedCiphers = MonoParameters.ClientCiphers;
+
 			return settings;
 		}
 
-		static ICertificateValidator GetValidationCallback (ClientParameters parameters)
-		{
-			var validator = parameters.ClientCertificateValidator;
-			if (validator == null)
-				return null;
-
-			var validationCallback = ((CertificateValidator)validator).ValidationCallback;
-
-			var settings = new MonoTlsSettings {
-				ServerCertificateValidationCallback = (s, c, ch, e) => validationCallback (s, c, ch, (SslPolicyErrors)e)
-			};
-			return CertificateValidationHelper.CreateDefaultValidator (settings);
-		}
-
-		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, TlsSettings settings, CancellationToken cancellationToken)
+		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
 			ctx.LogMessage ("Connected.");
-
-			var clientCerts = new X509Certificate2Collection ();
-			if (Parameters.ClientCertificate != null) {
-				var clientCert = CertificateProvider.GetCertificate (Parameters.ClientCertificate);
-				clientCerts.Add (clientCert);
-			}
 
 			var targetHost = "Hamiller-Tube.local";
 
 			var stream = new NetworkStream (socket);
+			var client = await ConnectionProvider.CreateClientStreamAsync (stream, targetHost, Parameters, settings, cancellationToken);
 
-			var certificateValidator = GetValidationCallback (Parameters);
+			ctx.LogMessage ("Successfully authenticated client.");
 
-			var provider = DependencyInjector.Get<NewTlsProvider> ();
-			var monoSslStream = provider.CreateSslStream (stream, false, certificateValidator, settings);
-
-			var newTlsStream = NewTlsProvider.GetNewTlsStream (monoSslStream);
-
-			try {
-				await monoSslStream.AuthenticateAsClientAsync (targetHost, clientCerts, SslProtocols.Tls12, false);
-			} catch (Exception ex) {
-				var lastError = newTlsStream.LastError;
-				if (lastError != null)
-					throw new AggregateException (ex, lastError);
-				throw;
-			}
-
-			return monoSslStream;
-		}
-
-		bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors)
-		{
-			return true;
+			return client;
 		}
 	}
 }

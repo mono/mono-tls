@@ -37,55 +37,62 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 
 using Mono.Security.NewTls;
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using Mono.Security.NewTls.TestFramework;
 
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public abstract class MonoConnection : DotNetConnection, ICommonConnection
+	abstract class MonoConnection : DotNetConnection
 	{
-		public MonoConnection (IPEndPoint endpoint, ConnectionParameters parameters)
-			: base (endpoint, null, parameters)
+		public MonoConnection (ConnectionParameters parameters, MonoConnectionProvider provider)
+			: base (parameters)
 		{
+			this.provider = provider;
+		}
+
+		MSI.MonoTlsSettings settings;
+		MonoConnectionProvider provider;
+		MonoSslStream monoSslStream;
+
+		public MonoConnectionProvider ConnectionProvider {
+			get { return provider; }
 		}
 
 		public override bool SupportsCleanShutdown {
-			get { return true; }
+			get { return provider.IsNewTls; }
 		}
 
-		TlsSettings settings;
-		MonoSslStream monoSslStream;
-
 		public bool SupportsConnectionInfo {
-			get { return true; }
+			get { return provider.IsNewTls; }
 		}
 
 		public TlsConnectionInfo GetConnectionInfo ()
 		{
-			return settings.ConnectionInfo;
+			var tlsSettings = settings as TlsSettings;
+			return tlsSettings != null ? tlsSettings.ConnectionInfo : null;
 		}
 
-		protected abstract Task<MonoSslStream> Start (TestContext ctx, Socket socket, TlsSettings settings, CancellationToken cancellationToken);
+		protected abstract Task<MonoSslStream> Start (TestContext ctx, Socket socket, MSI.MonoTlsSettings settings, CancellationToken cancellationToken);
 
 		protected abstract TlsSettings GetSettings ();
 
 		protected sealed override async Task<ISslStream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
 		{
-			settings = GetSettings ();
+			if (ConnectionProvider.IsNewTls)
+				settings = GetSettings ();
 			monoSslStream = await Start (ctx, socket, settings, cancellationToken);
-			throw new NotImplementedException ();
+			return monoSslStream;
 		}
 
-		protected override async Task<bool> TryCleanShutdown (bool waitForReply)
+		protected override Task<bool> TryCleanShutdown (bool waitForReply)
 		{
-			var monoNewTlsStream = NewTlsProvider.GetNewTlsStream (monoSslStream);
-			await monoNewTlsStream.Shutdown (waitForReply);
-			return true;
+			return monoSslStream.TryCleanShutdown (waitForReply);
 		}
 	}
 }

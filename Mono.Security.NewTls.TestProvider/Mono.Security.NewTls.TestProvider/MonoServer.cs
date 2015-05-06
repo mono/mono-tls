@@ -17,18 +17,20 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Mono.Security.Providers.NewTls;
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 
 using SSCX = System.Security.Cryptography.X509Certificates;
 using MX = Mono.Security.X509;
+
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public class MonoServer : MonoConnection, IMonoServer
+	class MonoServer : MonoConnection, IMonoServer
 	{
 		public IServerCertificate Certificate {
 			get { return Parameters.ServerCertificate; }
@@ -38,13 +40,21 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return Parameters; }
 		}
 
-		new public MonoServerParameters Parameters {
-			get { return (MonoServerParameters)base.Parameters; }
+		new public ServerParameters Parameters {
+			get { return (ServerParameters)base.Parameters; }
 		}
 
-		public MonoServer (IPEndPoint endpoint, MonoServerParameters parameters)
-			: base (endpoint, parameters)
+		public MonoServerParameters MonoParameters {
+			get { return base.Parameters as MonoServerParameters; }
+		}
+
+		public MonoServer (ServerParameters parameters, MonoConnectionProvider provider)
+			: base (parameters, provider)
 		{
+		}
+
+		protected override bool IsServer {
+			get { return false; }
 		}
 
 		protected override TlsSettings GetSettings ()
@@ -54,44 +64,23 @@ namespace Mono.Security.NewTls.TestProvider
 				settings.RequireClientCertificate = settings.AskForClientCertificate = true;
 			else if ((Parameters.Flags & ServerFlags.AskForClientCertificate) != 0)
 				settings.AskForClientCertificate = true;
-			settings.RequestedCiphers = Parameters.ServerCiphers;
+
+			if (MonoParameters != null)
+				settings.RequestedCiphers = MonoParameters.ServerCiphers;
+
 			return settings;
 		}
 
-		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, TlsSettings settings, CancellationToken cancellationToken)
+		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
-			#if FIXME
-			var monoParams = Parameters as IMonoServerParameters;
-			if (monoParams != null)
-				settings.Instrumentation = monoParams.ServerInstrumentation;
-			#endif
-
-			settings.ClientCertValidationCallback = ClientCertValidationCallback;
-
-			var serverCert = CertificateProvider.GetCertificate (Certificate);
+			ctx.LogMessage ("Accepted connection from {0}.", socket.RemoteEndPoint);
 
 			var stream = new NetworkStream (socket);
+			var server = await ConnectionProvider.CreateServerStreamAsync (stream, Parameters, settings, cancellationToken);
 
-			var provider = DependencyInjector.Get<NewTlsProvider> ();
-			var monoSslStream = provider.CreateSslStream (stream, false, null, settings);
+			ctx.LogMessage ("Successfully authenticated server.");
 
-			var newTlsStream = NewTlsProvider.GetNewTlsStream (monoSslStream);
-
-			try {
-				await monoSslStream.AuthenticateAsServerAsync (serverCert, false, SslProtocols.Tls12, false);
-			} catch (Exception ex) {
-				var lastError = newTlsStream.LastError;
-				if (lastError != null)
-					throw new AggregateException (ex, lastError);
-				throw;
-			}
-
-			return monoSslStream;
-		}
-
-		bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors)
-		{
-			return true;
+			return server;
 		}
 	}
 }

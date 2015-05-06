@@ -38,13 +38,13 @@ namespace Mono.Security.NewTls.TestProvider
 	{
 		readonly MSI.MonoTlsProvider newTlsProvider;
 		readonly MSI.MonoTlsProvider legacyTlsProvider;
-		readonly MonoSslStreamProvider newTlsStreamProvider;
-		readonly MonoSslStreamProvider legacyStreamProvider;
 		readonly DefaultHttpProvider dotNetHttpProvider;
 		readonly DotNetSslStreamProvider dotNetStreamProvider;
 		readonly DotNetConnectionProvider dotNetConnectionProvider;
 		readonly MonoConnectionProvider newTlsConnectionProvider;
 		readonly MonoConnectionProvider legacyConnectionProvider;
+		readonly MonoConnectionProvider monoWithNewTlsConnectionProvider;
+		readonly MonoConnectionProvider monoWithOldTlsConnectionProvider;
 
 		internal MonoConnectionProviderFactory ()
 		{
@@ -54,16 +54,20 @@ namespace Mono.Security.NewTls.TestProvider
 			Install (ConnectionProviderType.DotNet, dotNetConnectionProvider);
 
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
-			newTlsStreamProvider = new MonoSslStreamProvider (newTlsProvider);
-			newTlsConnectionProvider = new MonoConnectionProvider (this, newTlsStreamProvider);
+			newTlsConnectionProvider = new MonoConnectionProvider (this, newTlsProvider, false);
 
 			Install (ConnectionProviderType.NewTLS, newTlsConnectionProvider);
 
 			legacyTlsProvider = MSI.MonoTlsProviderFactory.GetDefaultProvider ();
-			legacyStreamProvider = new MonoSslStreamProvider (legacyTlsProvider);
-			legacyConnectionProvider = new MonoConnectionProvider (this, legacyStreamProvider);
+			legacyConnectionProvider = new MonoConnectionProvider (this, legacyTlsProvider, false);
 
 			Install (ConnectionProviderType.OldTLS, legacyConnectionProvider);
+
+			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (this, newTlsProvider, true);
+			Install (ConnectionProviderType.MonoWithNewTLS, monoWithNewTlsConnectionProvider);
+
+			monoWithOldTlsConnectionProvider = new MonoConnectionProvider (this, legacyTlsProvider, true);
+			Install (ConnectionProviderType.MonoWithOldTLS, monoWithOldTlsConnectionProvider);
 		}
 
 		public override IHttpProvider DefaultHttpProvider {
@@ -71,7 +75,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public override ISslStreamProvider DefaultSslStreamProvider {
-			get { return newTlsConnectionProvider.SslStreamProvider; }
+			get { return newTlsConnectionProvider; }
 		}
 	}
 }
