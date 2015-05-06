@@ -33,6 +33,7 @@ using Mono.Security.NewTls.Cipher;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 
@@ -44,8 +45,8 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return true; }
 		}
 
-		public OpenSslConnection (IPEndPoint endpoint, ConnectionParameters parameters)
-			: base (ConnectionHelper.GetEndPoint (endpoint), parameters)
+		public OpenSslConnection (ConnectionParameters parameters)
+			: base (GetEndPoint (parameters), parameters)
 		{
 			createTcs = new TaskCompletionSource<object> ();
 		}
@@ -66,6 +67,10 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return true; }
 		}
 
+		protected abstract bool IsServer {
+			get;
+		}
+
 		public TlsConnectionInfo GetConnectionInfo ()
 		{
 			if (connectionInfo != null)
@@ -78,9 +83,26 @@ namespace Mono.Security.NewTls.TestProvider
 			return connectionInfo;
 		}
 
+		static IPortableEndPoint GetEndPoint (ConnectionParameters parameters)
+		{
+			if (parameters.EndPoint != null)
+				return parameters.EndPoint;
+
+			var support = DependencyInjector.Get<IPortableEndPointSupport> ();
+			return support.GetLoopbackEndpoint (4433);
+		}
+
+		protected IPEndPoint GetEndPoint ()
+		{
+			if (EndPoint != null)
+				return new IPEndPoint (IPAddress.Parse (EndPoint.Address), EndPoint.Port);
+			else
+				return new IPEndPoint (IPAddress.Loopback, 4433);
+		}
+
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
-			openssl = new NativeOpenSsl (this is IClient, false);
+			openssl = new NativeOpenSsl (!IsServer, false);
 			#if FIXME
 			if (!Parameters.VerifyPeerCertificate)
 				openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);

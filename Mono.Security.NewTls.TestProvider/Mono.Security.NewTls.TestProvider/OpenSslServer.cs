@@ -25,20 +25,26 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return Parameters; }
 		}
 
-		new public MonoServerParameters Parameters {
-			get { return (MonoServerParameters)base.Parameters; }
+		new public ServerParameters Parameters {
+			get { return (ServerParameters)base.Parameters; }
 		}
 
-		IPEndPoint endpoint;
+		public MonoServerParameters MonoParameters {
+			get { return base.Parameters as MonoServerParameters; }
+		}
 
-		public OpenSslServer (IPEndPoint endpoint, MonoServerParameters parameters)
-			: base (endpoint, parameters)
+		public OpenSslServer (ServerParameters parameters)
+			: base (parameters)
 		{
-			this.endpoint = endpoint;
+		}
+
+		protected override bool IsServer {
+			get { return true; }
 		}
 
 		protected override void Initialize ()
 		{
+			var endpoint = GetEndPoint ();
 			if (!IPAddress.IsLoopback (endpoint.Address) && endpoint.Address != IPAddress.Any)
 				throw new InvalidOperationException ();
 
@@ -49,8 +55,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected override void CreateConnection ()
 		{
-			if (Parameters.ServerCiphers != null)
-				openssl.SetCipherList (Parameters.ServerCiphers);
+			if (MonoParameters != null) {
+				if (MonoParameters.ServerCiphers != null)
+					openssl.SetCipherList (MonoParameters.ServerCiphers);
+			}
+
 			openssl.Accept ();
 		}
 	}

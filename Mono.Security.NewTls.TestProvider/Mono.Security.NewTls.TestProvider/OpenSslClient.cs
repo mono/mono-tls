@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -20,16 +22,21 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return Parameters; }
 		}
 
-		new public MonoClientParameters Parameters {
-			get { return (MonoClientParameters)base.Parameters; }
+		new public ClientParameters Parameters {
+			get { return (ClientParameters)base.Parameters; }
 		}
 
-		IPEndPoint endpoint;
+		public MonoClientParameters MonoParameters {
+			get { return base.Parameters as MonoClientParameters; }
+		}
 
-		public OpenSslClient (IPEndPoint endpoint, MonoClientParameters parameters)
-			: base (endpoint, parameters)
+		public OpenSslClient (ClientParameters parameters)
+			: base (parameters)
 		{
-			this.endpoint = endpoint;
+		}
+
+		protected override bool IsServer {
+			get { return false; }
 		}
 
 		protected override void Initialize ()
@@ -39,10 +46,15 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected override void CreateConnection ()
 		{
+			var endpoint = GetEndPoint ();
 			if (Parameters.ClientCertificate != null)
 				openssl.SetCertificate (CertificateProvider.GetCertificate (Parameters.ClientCertificate).GetRawCertData ());
-			if (Parameters.ClientCiphers != null)
-				openssl.SetCipherList (Parameters.ClientCiphers);
+
+			if (MonoParameters != null) {
+				if (MonoParameters.ClientCiphers != null)
+					openssl.SetCipherList (MonoParameters.ClientCiphers);
+			}
+
 			openssl.Connect (endpoint);
 		}
 
