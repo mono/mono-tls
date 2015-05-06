@@ -31,10 +31,6 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IMonoConnectionProviderFactory : IConnectionProviderFactory
 	{
-		bool HasConnectionInfo (ConnectionProviderType type);
-
-		bool CanSelectCiphers (ConnectionProviderType type);
-
 		IMonoConnectionProvider GetMonoProvider (ConnectionProviderType type);
 	}
 }

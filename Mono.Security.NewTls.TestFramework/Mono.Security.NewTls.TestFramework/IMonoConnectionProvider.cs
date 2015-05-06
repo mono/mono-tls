@@ -31,6 +31,10 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IMonoConnectionProvider : IConnectionProvider
 	{
+		bool SupportsMonoExtensions {
+			get;
+		}
+
 		IMonoClient CreateMonoClient (MonoClientParameters parameters);
 
 		IMonoServer CreateMonoServer (MonoServerParameters parameters);

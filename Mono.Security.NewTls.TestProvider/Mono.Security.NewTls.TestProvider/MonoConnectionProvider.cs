@@ -37,7 +37,9 @@ using Mono.Security.Providers.NewTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	class MonoConnectionProvider : ConnectionProvider, ISslStreamProvider
+	using TestFramework;
+
+	class MonoConnectionProvider : ConnectionProvider, ISslStreamProvider, IMonoConnectionProvider
 	{
 		readonly MSI.MonoTlsProvider tlsProvider;
 		readonly MonoHttpProvider httpProvider;
@@ -62,13 +64,27 @@ namespace Mono.Security.NewTls.TestProvider
 			return flags;
 		}
 
-		public bool EnableMonoExtensions {
+		public IMonoClient CreateMonoClient (MonoClientParameters parameters)
+		{
+			if (!SupportsMonoExtensions)
+				throw new InvalidOperationException ();
+			return new MonoClient (parameters, this);
+		}
+
+		public IMonoServer CreateMonoServer (MonoServerParameters parameters)
+		{
+			if (!SupportsMonoExtensions)
+				throw new InvalidOperationException ();
+			return new MonoServer (parameters, this);
+		}
+
+		public bool SupportsMonoExtensions {
 			get { return enableMonoExtensions; }
 		}
 
 		public override IClient CreateClient (ClientParameters parameters)
 		{
-			if (EnableMonoExtensions)
+			if (SupportsMonoExtensions)
 				return new MonoClient (parameters, this);
 			else
 				return new DotNetClient (parameters, this);
@@ -76,7 +92,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public override IServer CreateServer (ServerParameters parameters)
 		{
-			if (EnableMonoExtensions)
+			if (SupportsMonoExtensions)
 				return new MonoServer (parameters, this);
 			else
 				return new DotNetServer (parameters, this);

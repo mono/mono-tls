@@ -34,7 +34,9 @@ using Mono.Security.Providers.NewTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	class MonoConnectionProviderFactory : ConnectionProviderFactory
+	using TestFramework;
+
+	class MonoConnectionProviderFactory : ConnectionProviderFactory, IMonoConnectionProviderFactory
 	{
 		readonly MSI.MonoTlsProvider newTlsProvider;
 		readonly MSI.MonoTlsProvider legacyTlsProvider;
@@ -68,6 +70,14 @@ namespace Mono.Security.NewTls.TestProvider
 
 			monoWithOldTlsConnectionProvider = new MonoConnectionProvider (this, legacyTlsProvider, true);
 			Install (ConnectionProviderType.MonoWithOldTLS, monoWithOldTlsConnectionProvider);
+		}
+
+		public IMonoConnectionProvider GetMonoProvider (ConnectionProviderType type)
+		{
+			var flags = GetProviderFlags (type);
+			if ((flags & ConnectionProviderFlags.SupportsMonoExtensions) == 0)
+				throw new InvalidOperationException ();
+			return (IMonoConnectionProvider)GetProvider (type);
 		}
 
 		public override IHttpProvider DefaultHttpProvider {
