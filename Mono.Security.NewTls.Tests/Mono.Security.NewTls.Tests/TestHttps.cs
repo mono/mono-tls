@@ -46,7 +46,7 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture (Timeout = 5000)]
 	public class TestHttps
 	{
-		[ConnectionProvider ("NewTLS", RequireHttp = true)]
+		[ConnectionProvider ("NewTLS", ProviderFlags = ConnectionProviderFlags.SupportsHttp)]
 		public ConnectionProviderType HttpProvider {
 			get;
 			private set;

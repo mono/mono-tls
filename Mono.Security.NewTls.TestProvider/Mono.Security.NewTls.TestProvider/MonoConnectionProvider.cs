@@ -44,11 +44,22 @@ namespace Mono.Security.NewTls.TestProvider
 		readonly bool enableMonoExtensions;
 
 		public MonoConnectionProvider (MonoConnectionProviderFactory factory, MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
-			: base (factory)
+			: base (factory, GetFlags (tlsProvider, enableMonoExtensions))
 		{
 			this.tlsProvider = tlsProvider;
 			this.enableMonoExtensions = enableMonoExtensions;
 			this.httpProvider = new MonoHttpProvider (this);
+		}
+
+		static ConnectionProviderFlags GetFlags (MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
+		{
+			var flags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
+			if (!enableMonoExtensions)
+				return flags;
+			flags |= ConnectionProviderFlags.SupportsMonoExtensions;
+			if (tlsProvider is NewTlsProvider)
+				flags |= ConnectionProviderFlags.CanSelectCiphers;
+			return flags;
 		}
 
 		public bool EnableMonoExtensions {
@@ -75,10 +86,6 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return tlsProvider is NewTlsProvider; }
 		}
 
-		public override bool SupportsSslStreams {
-			get { return true; }
-		}
-
 		protected override ISslStreamProvider GetSslStreamProvider ()
 		{
 			return this;
@@ -86,10 +93,6 @@ namespace Mono.Security.NewTls.TestProvider
 
 		internal MSI.MonoTlsProvider MonoTlsProvider {
 			get { return tlsProvider; }
-		}
-
-		public override bool SupportsHttp {
-			get { return true; }
 		}
 
 		protected override IHttpProvider GetHttpProvider ()
