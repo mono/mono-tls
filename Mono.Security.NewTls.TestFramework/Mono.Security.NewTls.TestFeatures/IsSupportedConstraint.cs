@@ -1,5 +1,5 @@
 ﻿//
-// IMonoConnectionProviderFactory.cs
+// IsSupportedConstraint.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,14 +24,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Constraints;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
-	public interface IMonoConnectionProviderFactory : IConnectionProviderFactory
+	public class IsSupportedConstraint<T> : Constraint
 	{
-		IMonoConnectionProvider GetMonoProvider (ConnectionProviderType type);
+		Func<T,bool> func;
+
+		public IsSupportedConstraint (Func<T,bool> func)
+		{
+			this.func = func;
+		}
+
+		#region implemented abstract members of Constraint
+
+		public override bool Evaluate (object actual, out string message)
+		{
+			if (func ((T)actual)) {
+				message = null;
+				return true;
+			}
+
+			message = string.Format ("Unsupported: '{0}'.", actual);
+			return false;
+		}
+
+		public override string Print ()
+		{
+			return string.Format ("IsSupported({0})", typeof(T).Name);
+		}
+
+		#endregion
 	}
 }
 

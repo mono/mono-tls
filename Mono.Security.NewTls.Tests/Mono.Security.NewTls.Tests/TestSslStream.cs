@@ -43,11 +43,11 @@ using Xamarin.WebTests.Features;
 
 namespace Mono.Security.NewTls.Tests
 {
-	[Martin]
+	[Work]
 	[AsyncTestFixture (Timeout = 5000)]
 	public class TestSslStream
 	{
-		[ConnectionProvider ("NewTLS")]
+		[ConnectionProvider ("NewTLS", ProviderFlags = ConnectionProviderFlags.SupportsSslStream)]
 		public ConnectionProviderType ConnectionProvider {
 			get;
 			private set;

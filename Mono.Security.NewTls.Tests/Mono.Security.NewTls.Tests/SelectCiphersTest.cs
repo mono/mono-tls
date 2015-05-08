@@ -36,6 +36,7 @@ using Xamarin.WebTests.Features;
 namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
+	using TestFeatures;
 
 	class SelectCipherSuiteAttribute : TestParameterAttribute, ITestParameterSource<CipherSuiteCode>
 	{
@@ -102,7 +103,7 @@ namespace Mono.Security.NewTls.Tests
 		public async Task SelectClientCipher (TestContext ctx, CancellationToken cancellationToken,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
-			[MonoServerTestHost] IMonoServer server, [MonoClientTestHost] IMonoClient client)
+			[MonoServer] IMonoServer server, [MonoClient] IMonoClient client)
 		{
 			ctx.Assert (clientCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
@@ -124,7 +125,7 @@ namespace Mono.Security.NewTls.Tests
 		public async Task SelectServerCipher (TestContext ctx, CancellationToken cancellationToken,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
-			[MonoServerTestHost] IMonoServer server, [MonoClientTestHost] IMonoClient client)
+			[MonoServer] IMonoServer server, [MonoClient] IMonoClient client)
 		{
 			ctx.Assert (serverCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
 
@@ -147,7 +148,7 @@ namespace Mono.Security.NewTls.Tests
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA)] CipherSuiteCode serverCipher,
 			[SelectCipherSuite ("ClientCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
-			[MonoServerTestHost] IServer server, [MonoClientTestHost] IClient client)
+			[MonoServer] IServer server, [MonoClient] IClient client)
 		{
 			await ExpectAlert (ctx, server, client, AlertDescription.HandshakeFailure, cancellationToken);
 		}

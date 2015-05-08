@@ -1,5 +1,5 @@
 ﻿//
-// IMonoConnectionProvider.cs
+// NativeOpenSslProtocol.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,20 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestProvider
 {
-	public interface IMonoConnectionProvider : IConnectionProvider
+	// Keep in sync with the native code
+	public enum NativeOpenSslProtocol
 	{
-		bool SupportsMonoExtensions {
-			get;
-		}
-
-		IMonoClient CreateMonoClient (MonoClientParameters parameters);
-
-		IMonoServer CreateMonoServer (MonoServerParameters parameters);
+		TLS10,
+		TLS11,
+		TLS12
 	}
 }
 

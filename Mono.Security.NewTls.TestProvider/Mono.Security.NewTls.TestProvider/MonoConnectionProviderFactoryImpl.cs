@@ -36,52 +36,42 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	class MonoConnectionProviderFactory : ConnectionProviderFactory, IMonoConnectionProviderFactory
+	class MonoConnectionProviderFactoryImpl : MonoConnectionProviderFactory
 	{
 		readonly MSI.MonoTlsProvider newTlsProvider;
 		readonly MSI.MonoTlsProvider legacyTlsProvider;
 		readonly DefaultHttpProvider dotNetHttpProvider;
 		readonly DotNetSslStreamProvider dotNetStreamProvider;
 		readonly DotNetConnectionProvider dotNetConnectionProvider;
-		readonly MonoConnectionProvider newTlsConnectionProvider;
-		readonly MonoConnectionProvider legacyConnectionProvider;
-		readonly MonoConnectionProvider monoWithNewTlsConnectionProvider;
-		readonly MonoConnectionProvider monoWithOldTlsConnectionProvider;
+		readonly MonoConnectionProviderImpl newTlsConnectionProvider;
+		readonly MonoConnectionProviderImpl legacyConnectionProvider;
+		readonly MonoConnectionProviderImpl monoWithNewTlsConnectionProvider;
+		readonly MonoConnectionProviderImpl monoWithOldTlsConnectionProvider;
 		readonly OpenSslConnectionProvider openSslConnectionProvider;
 
-		internal MonoConnectionProviderFactory ()
+		internal MonoConnectionProviderFactoryImpl ()
 		{
 			dotNetStreamProvider = new DotNetSslStreamProvider ();
 			dotNetHttpProvider = new DefaultHttpProvider (dotNetStreamProvider);
 			dotNetConnectionProvider = new DotNetConnectionProvider (this, dotNetStreamProvider, dotNetHttpProvider);
-			Install (ConnectionProviderType.DotNet, dotNetConnectionProvider);
+			Install (dotNetConnectionProvider);
 
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
-			newTlsConnectionProvider = new MonoConnectionProvider (this, newTlsProvider, false);
-
-			Install (ConnectionProviderType.NewTLS, newTlsConnectionProvider);
+			newTlsConnectionProvider = new MonoConnectionProviderImpl (this, ConnectionProviderType.NewTLS, newTlsProvider, false);
+			Install (newTlsConnectionProvider);
 
 			legacyTlsProvider = MSI.MonoTlsProviderFactory.GetDefaultProvider ();
-			legacyConnectionProvider = new MonoConnectionProvider (this, legacyTlsProvider, false);
+			legacyConnectionProvider = new MonoConnectionProviderImpl (this, ConnectionProviderType.OldTLS, legacyTlsProvider, false);
+			Install (legacyConnectionProvider);
 
-			Install (ConnectionProviderType.OldTLS, legacyConnectionProvider);
+			monoWithNewTlsConnectionProvider = new MonoConnectionProviderImpl (this, ConnectionProviderType.MonoWithNewTLS, newTlsProvider, true);
+			Install (monoWithNewTlsConnectionProvider);
 
-			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (this, newTlsProvider, true);
-			Install (ConnectionProviderType.MonoWithNewTLS, monoWithNewTlsConnectionProvider);
-
-			monoWithOldTlsConnectionProvider = new MonoConnectionProvider (this, legacyTlsProvider, true);
-			Install (ConnectionProviderType.MonoWithOldTLS, monoWithOldTlsConnectionProvider);
+			monoWithOldTlsConnectionProvider = new MonoConnectionProviderImpl (this, ConnectionProviderType.MonoWithOldTLS, legacyTlsProvider, true);
+			Install (monoWithOldTlsConnectionProvider);
 
 			openSslConnectionProvider = new OpenSslConnectionProvider (this);
-			Install (ConnectionProviderType.OpenSsl, openSslConnectionProvider);
-		}
-
-		public IMonoConnectionProvider GetMonoProvider (ConnectionProviderType type)
-		{
-			var flags = GetProviderFlags (type);
-			if ((flags & ConnectionProviderFlags.SupportsMonoExtensions) == 0)
-				throw new InvalidOperationException ();
-			return (IMonoConnectionProvider)GetProvider (type);
+			Install (openSslConnectionProvider);
 		}
 
 		public override IHttpProvider DefaultHttpProvider {

@@ -30,6 +30,7 @@ using System;
 using System.IO;
 using PrebuiltSystem::System.Net;
 using PrebuiltSystem::System.Net.Security;
+using PrebuiltSystem::System.Security.Authentication;
 using Mono.Security.NewTls;
 #if PREBUILT_MSI
 using PrebuiltSystem::Mono.Security.Interface;
@@ -65,6 +66,10 @@ namespace Mono.Security.Providers.NewTls
 
 		public override bool SupportsTlsContext {
 			get { return true; }
+		}
+
+		public override SslProtocols SupportedProtocols {
+			get { return SslProtocols.Tls12; }
 		}
 
 		public override bool IsHttpsStream (Stream stream)

@@ -1,5 +1,5 @@
 ﻿//
-// MonoServerParameters.cs
+// MonoServerTestHostAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,38 +24,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.AsyncTests;
+using Xamarin.WebTests.Providers;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
-	public class MonoServerParameters : ServerParameters
+	using TestFramework;
+
+	public class MonoServerAttribute : TestHostAttribute, ITestHost<IMonoServer>
 	{
-		public MonoServerParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		public MonoServerAttribute (bool requireMonoExtensions = false)
+			: base (typeof (MonoServerAttribute))
 		{
+			RequireMonoExtensions = requireMonoExtensions;
 		}
 
-		protected MonoServerParameters (MonoServerParameters other)
-			: base (other)
+		public bool RequireMonoExtensions {
+			get;
+			private set;
+		}
+
+		public IMonoServer CreateInstance (TestContext ctx)
 		{
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-		}
-
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoServerParameters (this);
-		}
-
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
+			return MonoTestFeatures.CreateMonoServer (ctx, RequireMonoExtensions);
 		}
 	}
 }

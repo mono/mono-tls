@@ -34,10 +34,9 @@ using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
-[assembly: RequireDependency (typeof (IMonoConnectionProviderFactory))]
+[assembly: RequireDependency (typeof (MonoConnectionProviderFactory))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
 [assembly: RequireDependency (typeof (IPortableWebSupport))]
-[assembly: RequireDependency (typeof (IConnectionProviderFactory))]
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -109,7 +108,7 @@ namespace Mono.Security.NewTls.Tests
 
 		static TestFeature CreateConnectionFeature (string name, string description, ConnectionProviderType type, bool defaultValue = true)
 		{
-			var factory = DependencyInjector.Get<IConnectionProviderFactory> ();
+			var factory = DependencyInjector.Get<ConnectionProviderFactory> ();
 			if (!factory.IsSupported (type)) {
 				// read-only and disabled
 				return new TestFeature (name, description, () => false);

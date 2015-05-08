@@ -176,7 +176,7 @@ namespace Mono.Security.NewTls.TestProvider
 		extern static OpenSslHandle native_openssl_initialize (int debug, DebugCallback debug_callback, MessageCallback message_callback);
 
 		[DllImport (DLL)]
-		extern static int native_openssl_create_context (OpenSslHandle handle, bool client);
+		extern static int native_openssl_create_context (OpenSslHandle handle, NativeOpenSslProtocol protocol, bool client);
 
 		[DllImport (DLL)]
 		extern static int native_openssl_create_connection (OpenSslHandle handle);
@@ -311,7 +311,7 @@ namespace Mono.Security.NewTls.TestProvider
 			if (handle.IsInvalid)
 				throw new ConnectionException ("Handle invalid.");
 
-			var ret = native_openssl_create_context (handle, isClient);
+			var ret = native_openssl_create_context (handle, NativeOpenSslProtocol.TLS12, isClient);
 			CheckError (ret);
 		}
 

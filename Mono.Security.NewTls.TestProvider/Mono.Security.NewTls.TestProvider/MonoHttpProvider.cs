@@ -46,9 +46,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 	class MonoHttpProvider : IHttpProvider
 	{
-		readonly MonoConnectionProvider connectionProvider;
+		readonly MonoConnectionProviderImpl connectionProvider;
 
-		internal MonoHttpProvider (MonoConnectionProvider connectionProvider)
+		internal MonoHttpProvider (MonoConnectionProviderImpl connectionProvider)
 		{
 			this.connectionProvider = connectionProvider;
 		}

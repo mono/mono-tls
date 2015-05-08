@@ -37,6 +37,12 @@ typedef enum {
 	NATIVE_OPENSSL_ERROR_INVALID_CIPHER
 } NativeOpenSslError;
 
+typedef enum {
+	NATIVE_OPENSSL_PROTOCOL_TLS10,
+	NATIVE_OPENSSL_PROTOCOL_TLS11,
+	NATIVE_OPENSSL_PROTOCOL_TLS12
+} NativeOpenSslProtocol;
+
 typedef struct {
     int debug;
 	int socket;
@@ -99,7 +105,7 @@ int
 native_openssl_BIO_get_mem_data (BIO *bio, void **data);
 
 int
-native_openssl_create_context (NativeOpenSsl *ptr, short client_p);
+native_openssl_create_context (NativeOpenSsl *ptr, NativeOpenSslProtocol protocol, short client_p);
 
 int
 native_openssl_create_connection (NativeOpenSsl *ptr);

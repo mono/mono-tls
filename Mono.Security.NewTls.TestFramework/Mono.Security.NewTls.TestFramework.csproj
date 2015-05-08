@@ -46,8 +46,14 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoCommonConnection.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoServer.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoClient.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoConnectionProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoConnectionProviderFactory.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\MonoTestFeatures.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\IsSupportedConstraint.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientAndServer.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\MonoClientAndServerAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\MonoServerAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\MonoClientAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionProviderFactory.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
@@ -76,5 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mono.Security.NewTls.TestFramework\" />
+    <Folder Include="Mono.Security.NewTls.TestFeatures\" />
   </ItemGroup>
 </Project>

@@ -48,13 +48,13 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return base.Parameters as MonoServerParameters; }
 		}
 
-		public MonoServer (ServerParameters parameters, MonoConnectionProvider provider)
+		public MonoServer (ServerParameters parameters, MonoConnectionProviderImpl provider)
 			: base (parameters, provider)
 		{
 		}
 
 		protected override bool IsServer {
-			get { return false; }
+			get { return true; }
 		}
 
 		protected override TlsSettings GetSettings ()

@@ -103,6 +103,8 @@ namespace Mono.Security.NewTls.TestProvider
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
 			openssl = new NativeOpenSsl (!IsServer, false);
+			// FIXME
+			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);
 			#if FIXME
 			if (!Parameters.VerifyPeerCertificate)
 				openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);

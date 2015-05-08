@@ -118,14 +118,15 @@
       <Link>Xamarin.WebTests.ConnectionFramework\DotNetSslStreamProvider.cs</Link>
     </Compile>
     <Compile Include="NewTlsDependencyProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactory.cs" />
-    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProvider.cs" />
     <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\DotNetConnectionProvider.cs">
       <Link>Xamarin.WebTests.ConnectionFramework\DotNetConnectionProvider.cs</Link>
     </Compile>
     <Compile Include="Mono.Security.NewTls.TestProvider\CallbackHelpers.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslConnectionProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactoryImpl.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProviderImpl.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\NativeOpenSslProtocol.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

@@ -33,10 +33,12 @@ using Xamarin.WebTests.Resources;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Features;
+using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
+	using TestFeatures;
 
 	/*
 	 * Test Parameters are resolved when the Test Suite is loaded.
@@ -64,13 +66,24 @@ namespace Mono.Security.NewTls.Tests
 
 	class MonoConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<MonoClientAndServerParameters>
 	{
+		public ICertificateValidator AcceptAll {
+			get;
+			private set;
+		}
+
 		public MonoConnectionParameterAttribute (string filter = null)
 			: base (filter)
 		{
+			var provider = DependencyInjector.Get<ICertificateProvider> ();
+			AcceptAll = provider.AcceptAll ();
 		}
 
 		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
+			yield return new MonoClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
+				ClientCertificateValidator = AcceptAll
+			};
+
 			#if FIXME
 			yield return new MonoClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
 				VerifyPeerCertificate = false, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
@@ -94,27 +107,31 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	[Work]
+	[Martin]
 	[AsyncTestFixture]
 	public class MonoConnectionTest
 	{
-		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions)]
-		public ConnectionProviderType ServerType {
+		[ClientAndServerType (ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions)]
+		public ClientAndServerType ConnectionType {
 			get;
 			private set;
 		}
 
-		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions)]
-		public ConnectionProviderType ClientType {
-			get;
-			private set;
-		}
-
-		[Work]
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
 			[MonoConnectionParameterAttribute] MonoClientAndServerParameters parameters,
-			[MonoServerTestHost] IMonoServer server, [MonoClientTestHost] IMonoClient client)
+			[MonoClientAndServer] MonoClientAndServer connection)
+		{
+			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
+			await handler.WaitForConnection (ctx, cancellationToken);
+			await handler.Run (ctx, cancellationToken);
+		}
+
+		// [Work]
+		// [AsyncTest]
+		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+			[MonoConnectionParameterAttribute] MonoClientAndServerParameters parameters,
+			[MonoServer] IMonoServer server, [MonoClient] IMonoClient client)
 		{
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
 			await handler.WaitForConnection (ctx, cancellationToken);

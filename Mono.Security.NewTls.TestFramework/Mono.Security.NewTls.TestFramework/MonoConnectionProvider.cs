@@ -1,5 +1,5 @@
 ﻿//
-// MonoServerParameters.cs
+// MonoConnectionProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,39 +24,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class MonoServerParameters : ServerParameters
+	public abstract class MonoConnectionProvider : ConnectionProvider
 	{
-		public MonoServerParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		public MonoConnectionProvider (MonoConnectionProviderFactory factory, ConnectionProviderType type, ConnectionProviderFlags flags)
+			: base (factory, type, flags)
 		{
+			SupportsMonoExtensions = (flags & ConnectionProviderFlags.SupportsMonoExtensions) != 0;
 		}
 
-		protected MonoServerParameters (MonoServerParameters other)
-			: base (other)
-		{
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			ExpectedCipher = other.ExpectedCipher;
+		public bool SupportsMonoExtensions {
+			get;
+			private set;
 		}
 
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoServerParameters (this);
-		}
+		public abstract IMonoClient CreateMonoClient (ClientParameters parameters);
 
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
+		public abstract IMonoServer CreateMonoServer (ServerParameters parameters);
 	}
 }
 

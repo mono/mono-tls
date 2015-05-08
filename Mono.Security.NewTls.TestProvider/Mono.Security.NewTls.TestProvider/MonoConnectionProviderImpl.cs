@@ -39,17 +39,15 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	class MonoConnectionProvider : ConnectionProvider, ISslStreamProvider, IMonoConnectionProvider
+	class MonoConnectionProviderImpl : MonoConnectionProvider, ISslStreamProvider
 	{
 		readonly MSI.MonoTlsProvider tlsProvider;
 		readonly MonoHttpProvider httpProvider;
-		readonly bool enableMonoExtensions;
 
-		public MonoConnectionProvider (MonoConnectionProviderFactory factory, MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
-			: base (factory, GetFlags (tlsProvider, enableMonoExtensions))
+		public MonoConnectionProviderImpl (MonoConnectionProviderFactoryImpl factory, ConnectionProviderType type, MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
+			: base (factory, type, GetFlags (tlsProvider, enableMonoExtensions))
 		{
 			this.tlsProvider = tlsProvider;
-			this.enableMonoExtensions = enableMonoExtensions;
 			this.httpProvider = new MonoHttpProvider (this);
 		}
 
@@ -64,22 +62,34 @@ namespace Mono.Security.NewTls.TestProvider
 			return flags;
 		}
 
-		public IMonoClient CreateMonoClient (MonoClientParameters parameters)
+		public override bool IsCompatibleWith (ConnectionProviderType type)
+		{
+			switch (type) {
+			case ConnectionProviderType.NewTLS:
+			case ConnectionProviderType.MonoWithNewTLS:
+				return IsNewTls;
+			case ConnectionProviderType.OldTLS:
+			case ConnectionProviderType.MonoWithOldTLS:
+				return !IsNewTls;
+			case ConnectionProviderType.OpenSsl:
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		public override IMonoClient CreateMonoClient (ClientParameters parameters)
 		{
 			if (!SupportsMonoExtensions)
 				throw new InvalidOperationException ();
 			return new MonoClient (parameters, this);
 		}
 
-		public IMonoServer CreateMonoServer (MonoServerParameters parameters)
+		public override IMonoServer CreateMonoServer (ServerParameters parameters)
 		{
 			if (!SupportsMonoExtensions)
 				throw new InvalidOperationException ();
 			return new MonoServer (parameters, this);
-		}
-
-		public bool SupportsMonoExtensions {
-			get { return enableMonoExtensions; }
 		}
 
 		public override IClient CreateClient (ClientParameters parameters)
@@ -125,7 +135,7 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
 
-			var protocol = CallbackHelpers.GetSslProtocol ();
+			var protocol = tlsProvider.SupportedProtocols;
 			var validator = CallbackHelpers.GetCertificateValidator (parameters.ServerCertificateValidator);
 
 			var askForCert = (parameters.Flags & (ServerFlags.AskForClientCertificate|ServerFlags.RequireClientCertificate)) != 0;
@@ -150,7 +160,7 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
 
-			var protocol = CallbackHelpers.GetSslProtocol ();
+			var protocol = tlsProvider.SupportedProtocols;
 
 			MSI.ICertificateValidator validator = null;
 			if (settings != null)
