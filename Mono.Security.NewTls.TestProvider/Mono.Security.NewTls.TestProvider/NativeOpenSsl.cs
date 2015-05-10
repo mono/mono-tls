@@ -42,6 +42,7 @@ namespace Mono.Security.NewTls.TestProvider
 	{
 		bool isClient;
 		bool enableDebugging;
+		NativeOpenSslProtocol protocol;
 		OpenSslHandle handle;
 		CertificateHandle certificate;
 		PrivateKeyHandle privateKey;
@@ -297,10 +298,11 @@ namespace Mono.Security.NewTls.TestProvider
 			throw new InvalidOperationException ();
 		}
 
-		public NativeOpenSsl (bool isClient, bool debug)
+		public NativeOpenSsl (bool isClient, bool debug, NativeOpenSslProtocol protocol = NativeOpenSslProtocol.TLS12)
 		{
 			this.isClient = isClient;
 			this.enableDebugging = debug;
+			this.protocol = protocol;
 
 			if (debug)
 				debug_callback = new DebugCallback (OnDebugCallback);

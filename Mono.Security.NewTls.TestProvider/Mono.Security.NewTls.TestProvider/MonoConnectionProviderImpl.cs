@@ -62,6 +62,10 @@ namespace Mono.Security.NewTls.TestProvider
 			return flags;
 		}
 
+		public override ProtocolVersions SupportedProtocols {
+			get { return (ProtocolVersions)tlsProvider.SupportedProtocols; }
+		}
+
 		public override bool IsCompatibleWith (ConnectionProviderType type)
 		{
 			switch (type) {

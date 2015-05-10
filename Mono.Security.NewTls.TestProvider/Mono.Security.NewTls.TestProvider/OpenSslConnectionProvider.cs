@@ -38,6 +38,10 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 		}
 
+		public override ProtocolVersions SupportedProtocols {
+			get { return ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12; }
+		}
+
 		public override bool IsCompatibleWith (ConnectionProviderType type)
 		{
 			return true;
