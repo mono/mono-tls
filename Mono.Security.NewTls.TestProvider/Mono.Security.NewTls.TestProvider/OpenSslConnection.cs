@@ -45,15 +45,21 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return true; }
 		}
 
-		public OpenSslConnection (ConnectionParameters parameters)
+		public OpenSslConnection (OpenSslConnectionProvider provider, ConnectionParameters parameters)
 			: base (GetEndPoint (parameters), parameters)
 		{
+			this.provider = provider;
 			createTcs = new TaskCompletionSource<object> ();
 		}
 
 		protected NativeOpenSsl openssl;
+		OpenSslConnectionProvider provider;
 		TlsConnectionInfo connectionInfo;
 		TaskCompletionSource<object> createTcs;
+
+		public override ProtocolVersions SupportedProtocols {
+			get { return provider.SupportedProtocols; }
+		}
 
 		public Stream Stream {
 			get { return openssl; }

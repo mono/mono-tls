@@ -30,8 +30,8 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return base.Parameters as MonoClientParameters; }
 		}
 
-		public OpenSslClient (ClientParameters parameters)
-			: base (parameters)
+		public OpenSslClient (OpenSslConnectionProvider provider, ClientParameters parameters)
+			: base (provider, parameters)
 		{
 		}
 

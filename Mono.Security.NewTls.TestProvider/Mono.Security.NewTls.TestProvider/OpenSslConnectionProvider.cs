@@ -31,7 +31,7 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	sealed class OpenSslConnectionProvider : MonoConnectionProvider
+	public sealed class OpenSslConnectionProvider : MonoConnectionProvider
 	{
 		public OpenSslConnectionProvider (MonoConnectionProviderFactory factory)
 			: base (factory, ConnectionProviderType.OpenSsl, ConnectionProviderFlags.CanSelectCiphers | ConnectionProviderFlags.SupportsMonoExtensions)
@@ -49,12 +49,12 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public override IMonoClient CreateMonoClient (ClientParameters parameters)
 		{
-			return new OpenSslClient (parameters);
+			return new OpenSslClient (this, parameters);
 		}
 
 		public override IMonoServer CreateMonoServer (ServerParameters parameters)
 		{
-			return new OpenSslServer (parameters);
+			return new OpenSslServer (this, parameters);
 		}
 
 		public override IClient CreateClient (ClientParameters parameters)

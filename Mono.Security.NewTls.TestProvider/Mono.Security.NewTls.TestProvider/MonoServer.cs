@@ -48,8 +48,8 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return base.Parameters as MonoServerParameters; }
 		}
 
-		public MonoServer (ServerParameters parameters, MonoConnectionProviderImpl provider)
-			: base (parameters, provider)
+		public MonoServer (MonoConnectionProviderImpl provider, ServerParameters parameters)
+			: base (provider, parameters)
 		{
 		}
 

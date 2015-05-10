@@ -86,30 +86,30 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			if (!SupportsMonoExtensions)
 				throw new InvalidOperationException ();
-			return new MonoClient (parameters, this);
+			return new MonoClient (this, parameters);
 		}
 
 		public override IMonoServer CreateMonoServer (ServerParameters parameters)
 		{
 			if (!SupportsMonoExtensions)
 				throw new InvalidOperationException ();
-			return new MonoServer (parameters, this);
+			return new MonoServer (this, parameters);
 		}
 
 		public override IClient CreateClient (ClientParameters parameters)
 		{
 			if (SupportsMonoExtensions)
-				return new MonoClient (parameters, this);
+				return new MonoClient (this, parameters);
 			else
-				return new DotNetClient (parameters, this);
+				return new DotNetClient (this, parameters, this);
 		}
 
 		public override IServer CreateServer (ServerParameters parameters)
 		{
 			if (SupportsMonoExtensions)
-				return new MonoServer (parameters, this);
+				return new MonoServer (this, parameters);
 			else
-				return new DotNetServer (parameters, this);
+				return new DotNetServer (this, parameters, this);
 		}
 
 		public bool IsNewTls {

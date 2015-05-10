@@ -33,8 +33,8 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return base.Parameters as MonoServerParameters; }
 		}
 
-		public OpenSslServer (ServerParameters parameters)
-			: base (parameters)
+		public OpenSslServer (OpenSslConnectionProvider provider, ServerParameters parameters)
+			: base (provider, parameters)
 		{
 		}
 

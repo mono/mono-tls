@@ -50,8 +50,8 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	abstract class MonoConnection : DotNetConnection
 	{
-		public MonoConnection (ConnectionParameters parameters, MonoConnectionProviderImpl provider)
-			: base (parameters)
+		public MonoConnection (MonoConnectionProviderImpl provider, ConnectionParameters parameters)
+			: base (provider, parameters)
 		{
 			this.provider = provider;
 		}
