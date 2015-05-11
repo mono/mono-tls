@@ -34,7 +34,7 @@ namespace Mono.Security.NewTls.TestFramework
 	public class MonoClientAndServerParameters : ClientAndServerParameters
 	{
 		public MonoClientAndServerParameters (string identifier, IServerCertificate certificate)
-			: base (new MonoClientParameters (identifier), new MonoServerParameters (identifier, certificate))
+			: base (identifier, new MonoClientParameters (identifier), new MonoServerParameters (identifier, certificate))
 		{
 		}
 
@@ -44,7 +44,7 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		protected MonoClientAndServerParameters (MonoClientAndServerParameters other)
-			: base ((ClientParameters)other.ClientParameters.DeepClone (), (ServerParameters)other.ServerParameters.DeepClone ())
+			: base (other.Identifier, (ClientParameters)other.ClientParameters.DeepClone (), (ServerParameters)other.ServerParameters.DeepClone ())
 		{
 			ExpectedCipher = other.ExpectedCipher;
 		}
