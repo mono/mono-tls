@@ -95,24 +95,6 @@ namespace Mono.Security.NewTls.Tests
 			yield return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
 				ClientCertificateValidator = AcceptFromCA, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 			};
-
-			#if FIXME
-			yield return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-			};
-			yield return new MonoClientAndServerParameters ("ask-for-certificate", ResourceManager.ServerCertificateFromCA) {
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				AskForClientCertificate = true,  ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-			};
-			yield return new MonoClientAndServerParameters ("require-certificate", ResourceManager.ServerCertificateFromCA) {
-				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
-				RequireClientCertificate = true, ClientCertificate = ResourceManager.MonkeyCertificate,
-				ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-			};
-			#endif
-
-			yield break;
 		}
 	}
 
@@ -145,31 +127,6 @@ namespace Mono.Security.NewTls.Tests
 					ctx.Expect (clientInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value), "client cipher");
 				if (ctx.Expect (serverInfo, Is.Not.Null, "server connection info"))
 					ctx.Expect (serverInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value), "server cipher");
-			}
-
-			await handler.Run (ctx, cancellationToken);
-		}
-
-		// [Work]
-		// [AsyncTest]
-		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[MonoConnectionParameterAttribute] MonoClientAndServerParameters parameters,
-			[MonoServer] IMonoServer server, [MonoClient] IMonoClient client)
-		{
-			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
-			await handler.WaitForConnection (ctx, cancellationToken);
-
-			if (parameters.ExpectedCipher != null) {
-				if (client.SupportsConnectionInfo) {
-					var clientInfo = client.GetConnectionInfo ();
-					ctx.Assert (clientInfo, Is.Not.Null);
-					ctx.Assert (clientInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value));
-				}
-				if (server.SupportsConnectionInfo) {
-					var serverInfo = server.GetConnectionInfo ();
-					ctx.Assert (serverInfo, Is.Not.Null);
-					ctx.Assert (serverInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value));
-				}
 			}
 
 			await handler.Run (ctx, cancellationToken);
