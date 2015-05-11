@@ -38,13 +38,13 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
-		public MonoClientAndServerParameters (MonoClientParameters clientParameters, MonoServerParameters serverParameters)
+		public MonoClientAndServerParameters (ClientParameters clientParameters, ServerParameters serverParameters)
 			: base (clientParameters, serverParameters)
 		{
 		}
 
 		protected MonoClientAndServerParameters (MonoClientAndServerParameters other)
-			: base ((MonoClientParameters)other.MonoClientParameters.DeepClone (), (MonoServerParameters)other.MonoServerParameters.DeepClone ())
+			: base ((ClientParameters)other.ClientParameters.DeepClone (), (ServerParameters)other.ServerParameters.DeepClone ())
 		{
 			ExpectedCipher = other.ExpectedCipher;
 		}
@@ -74,6 +74,16 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public CipherSuiteCode? ExpectedCipher {
 			get; set;
+		}
+
+		public CipherSuiteCode? ExpectedClientCipher {
+			get { return MonoClientParameters.ExpectedCipher; }
+			set { MonoClientParameters.ExpectedCipher = value; }
+		}
+
+		public CipherSuiteCode? ExpectedServerCipher {
+			get { return MonoServerParameters.ExpectedCipher; }
+			set { MonoServerParameters.ExpectedCipher = value; }
 		}
 	}
 }

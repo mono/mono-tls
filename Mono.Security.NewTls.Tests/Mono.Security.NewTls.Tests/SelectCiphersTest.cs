@@ -103,18 +103,18 @@ namespace Mono.Security.NewTls.Tests
 		public async Task SelectClientCipher (TestContext ctx, CancellationToken cancellationToken,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
-			[MonoServer] IMonoServer server, [MonoClient] IMonoClient client)
+			[MonoClientAndServer] MonoClientAndServer connection)
 		{
-			ctx.Assert (clientCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
+			ctx.Assert (clientCipher, Is.EqualTo (connection.MonoParameters.ExpectedClientCipher.Value), "expected cipher");
 
-			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
+			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
 			await handler.WaitForConnection (ctx, cancellationToken);
 
-			var serverInfo = server.GetConnectionInfo ();
+			var serverInfo = connection.Server.GetConnectionInfo ();
 			ctx.Assert (serverInfo, Is.Not.Null, "server info");
 			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (clientCipher), "server cipher code");
 
-			var clientInfo = client.GetConnectionInfo ();
+			var clientInfo = connection.Client.GetConnectionInfo ();
 			ctx.Assert (clientInfo, Is.Not.Null, "client info");
 			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (clientCipher), "client cipher");
 
@@ -125,18 +125,18 @@ namespace Mono.Security.NewTls.Tests
 		public async Task SelectServerCipher (TestContext ctx, CancellationToken cancellationToken,
 			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
 			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
-			[MonoServer] IMonoServer server, [MonoClient] IMonoClient client)
+			[MonoClientAndServer] MonoClientAndServer connection)
 		{
-			ctx.Assert (serverCipher, Is.EqualTo (parameters.ExpectedCipher.Value), "expected cipher");
+			ctx.Assert (serverCipher, Is.EqualTo (connection.MonoParameters.ExpectedServerCipher.Value), "expected cipher");
 
-			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (server, client);
+			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
 			await handler.WaitForConnection (ctx, cancellationToken);
 
-			var serverInfo = server.GetConnectionInfo ();
+			var serverInfo = connection.Server.GetConnectionInfo ();
 			ctx.Assert (serverInfo, Is.Not.Null, "server info");
 			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (serverCipher), "server cipher code");
 
-			var clientInfo = client.GetConnectionInfo ();
+			var clientInfo = connection.Client.GetConnectionInfo ();
 			ctx.Assert (clientInfo, Is.Not.Null, "client info");
 			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (serverCipher), "client cipher");
 

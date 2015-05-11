@@ -38,8 +38,12 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return (IMonoServer)base.Server; }
 		}
 
+		public MonoClientAndServerParameters MonoParameters {
+			get { return base.Parameters as MonoClientAndServerParameters; }
+		}
+
 		public MonoClientAndServer (IMonoServer server, IMonoClient client)
-			: base (server, client)
+			: base (server, client, new MonoClientAndServerParameters (client.Parameters, server.Parameters))
 		{
 		}
 	}

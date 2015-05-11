@@ -98,7 +98,6 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	[Martin]
 	[AsyncTestFixture]
 	public class MonoConnectionTest
 	{
