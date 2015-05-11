@@ -43,11 +43,15 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
+		protected MonoClientAndServerParameters (MonoClientAndServerParameters other)
+			: base ((MonoClientParameters)other.MonoClientParameters.DeepClone (), (MonoServerParameters)other.MonoServerParameters.DeepClone ())
+		{
+			ExpectedCipher = other.ExpectedCipher;
+		}
+
 		public override ConnectionParameters DeepClone ()
 		{
-			var clonedClient = (MonoClientParameters)ClientParameters.DeepClone ();
-			var clonedServer = (MonoServerParameters)ServerParameters.DeepClone ();
-			return new MonoClientAndServerParameters (clonedClient, clonedServer);
+			return new MonoClientAndServerParameters (this);
 		}
 
 		public MonoClientParameters MonoClientParameters {

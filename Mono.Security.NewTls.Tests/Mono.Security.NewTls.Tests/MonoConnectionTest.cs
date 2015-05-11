@@ -71,11 +71,17 @@ namespace Mono.Security.NewTls.Tests
 			private set;
 		}
 
+		public ICertificateValidator AcceptFromCA {
+			get;
+			private set;
+		}
+
 		public MonoConnectionParameterAttribute (string filter = null)
 			: base (filter)
 		{
 			var provider = DependencyInjector.Get<ICertificateProvider> ();
 			AcceptAll = provider.AcceptAll ();
+			AcceptFromCA = provider.AcceptFromCA (ResourceManager.LocalCACertificate);
 		}
 
 		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
@@ -83,11 +89,14 @@ namespace Mono.Security.NewTls.Tests
 			yield return new MonoClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
 				ClientCertificateValidator = AcceptAll
 			};
+			yield return new MonoClientAndServerParameters ("check-cipher", ResourceManager.SelfSignedServerCertificate) {
+				ClientCertificateValidator = AcceptAll, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+			};
+			yield return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
+				ClientCertificateValidator = AcceptFromCA, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+			};
 
 			#if FIXME
-			yield return new MonoClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
-				VerifyPeerCertificate = false, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-			};
 			yield return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
 				VerifyPeerCertificate = true, TrustedCA = ResourceManager.LocalCACertificate,
 				ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
@@ -111,7 +120,7 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class MonoConnectionTest
 	{
-		[ClientAndServerType (ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions)]
+		[ClientAndServerType (ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
 		public ClientAndServerType ConnectionType {
 			get;
 			private set;
@@ -124,6 +133,20 @@ namespace Mono.Security.NewTls.Tests
 		{
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
 			await handler.WaitForConnection (ctx, cancellationToken);
+
+			if (parameters.ExpectedCipher != null) {
+				ctx.Assert (connection.Client.SupportsConnectionInfo, "client supports connection info");
+				ctx.Assert (connection.Server.SupportsConnectionInfo, "server supports connection info");
+
+				var clientInfo = connection.Client.GetConnectionInfo ();
+				var serverInfo = connection.Server.GetConnectionInfo ();
+
+				if (ctx.Expect (clientInfo, Is.Not.Null, "client connection info"))
+					ctx.Expect (clientInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value), "client cipher");
+				if (ctx.Expect (serverInfo, Is.Not.Null, "server connection info"))
+					ctx.Expect (serverInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value), "server cipher");
+			}
+
 			await handler.Run (ctx, cancellationToken);
 		}
 
