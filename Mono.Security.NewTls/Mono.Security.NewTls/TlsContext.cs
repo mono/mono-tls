@@ -118,9 +118,15 @@ namespace Mono.Security.NewTls
 
 		public bool VerifyRemoteCertificate ()
 		{
-			if (Session.CurrentCrypto.ServerCertificateVerified)
+			if (Session.CurrentCrypto.RemoteCertificateVerified)
 				return true;
-			CertificateManager.CheckRemoteCertificate (Configuration, Session.CurrentCrypto.ServerCertificates);
+
+			if (IsServer) {
+				CertificateManager.CheckClientCertificate (Configuration, Session.CurrentCrypto.ClientCertificates);
+			} else {
+				CertificateManager.CheckRemoteCertificate (Configuration, Session.CurrentCrypto.ServerCertificates);
+			}
+
 			return true;
 		}
 

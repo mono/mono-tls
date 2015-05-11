@@ -43,17 +43,23 @@ namespace Mono.Security.Providers.NewTls
 	{
 		TlsConfiguration config;
 		TlsContext context;
+		bool serverMode;
 
-		public TlsContextWrapper (TlsConfiguration config)
+		public TlsContextWrapper (TlsConfiguration config, bool serverMode)
 		{
 			this.config = config;
+			this.serverMode = serverMode;
+		}
+
+		public bool IsServer {
+			get { return serverMode; }
 		}
 
 		public bool IsValid {
 			get { return context != null && context.IsValid; }
 		}
 
-		public void Initialize (bool serverMode)
+		public void Initialize ()
 		{
 			if (context != null)
 				throw new InvalidOperationException ();

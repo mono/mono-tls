@@ -86,7 +86,7 @@ namespace Mono.Security.NewTls.Cipher
 			set { serverCertificates = value; }
 		}
 
-		internal bool ServerCertificateVerified {
+		internal bool RemoteCertificateVerified {
 			get; set;
 		}
 

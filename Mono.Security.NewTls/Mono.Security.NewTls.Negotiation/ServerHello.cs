@@ -149,7 +149,7 @@ namespace Mono.Security.NewTls.Negotiation
 		{
 			CertificateManager.CheckRemoteCertificate (Config, message.Certificates);
 			PendingCrypto.ServerCertificates = message.Certificates;
-			PendingCrypto.ServerCertificateVerified = true;
+			PendingCrypto.RemoteCertificateVerified = true;
 		}
 
 		protected virtual void HandleCertificateRequest (TlsCertificateRequest message)
@@ -159,7 +159,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void HandleServerKeyExchange (TlsServerKeyExchange message)
 		{
-			if (!PendingCrypto.ServerCertificateVerified)
+			if (!PendingCrypto.RemoteCertificateVerified)
 				throw new TlsException (AlertDescription.UnexpectedMessage);
 			if (PendingCrypto.Cipher.ExchangeAlgorithmType != ExchangeAlgorithmType.DiffieHellman)
 				throw new TlsException (AlertDescription.UnexpectedMessage);

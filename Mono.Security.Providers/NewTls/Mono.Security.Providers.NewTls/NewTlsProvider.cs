@@ -95,7 +95,7 @@ namespace Mono.Security.Providers.NewTls
 
 			config.CertificateValidator = certificateValidator;
 
-			return new TlsContextWrapper (config);
+			return new TlsContextWrapper (config, serverMode);
 		}
 
 		public static bool IsNewTlsStream (MonoSslStream stream)
