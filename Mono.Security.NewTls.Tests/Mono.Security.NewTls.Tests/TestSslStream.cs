@@ -47,7 +47,7 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture (Timeout = 5000)]
 	public class TestSslStream
 	{
-		[ConnectionProvider ("NewTLS", ProviderFlags = ConnectionProviderFlags.SupportsSslStream)]
+		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.IsNewTls | ConnectionProviderFlags.SupportsSslStream)]
 		public ConnectionProviderType ConnectionProvider {
 			get;
 			private set;

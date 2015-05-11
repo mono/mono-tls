@@ -54,6 +54,8 @@ namespace Mono.Security.NewTls.TestProvider
 		static ConnectionProviderFlags GetFlags (MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
 		{
 			var flags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
+			if (tlsProvider is NewTlsProvider)
+				flags |= ConnectionProviderFlags.IsNewTls;
 			if (!enableMonoExtensions)
 				return flags;
 			flags |= ConnectionProviderFlags.SupportsMonoExtensions;
