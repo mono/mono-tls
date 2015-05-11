@@ -40,9 +40,8 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class NativeOpenSsl : Stream
 	{
-		bool isClient;
+		bool isServer;
 		bool enableDebugging;
-		NativeOpenSslProtocol protocol;
 		OpenSslHandle handle;
 		CertificateHandle certificate;
 		PrivateKeyHandle privateKey;
@@ -174,10 +173,10 @@ namespace Mono.Security.NewTls.TestProvider
 		internal const string DLL = "NativeOpenSsl";
 
 		[DllImport (DLL)]
-		extern static OpenSslHandle native_openssl_initialize (int debug, DebugCallback debug_callback, MessageCallback message_callback);
+		extern static OpenSslHandle native_openssl_initialize (int debug, NativeOpenSslProtocol protocol, DebugCallback debug_callback, MessageCallback message_callback);
 
 		[DllImport (DLL)]
-		extern static int native_openssl_create_context (OpenSslHandle handle, NativeOpenSslProtocol protocol, bool client);
+		extern static int native_openssl_create_context (OpenSslHandle handle, bool client);
 
 		[DllImport (DLL)]
 		extern static int native_openssl_create_connection (OpenSslHandle handle);
@@ -298,28 +297,27 @@ namespace Mono.Security.NewTls.TestProvider
 			throw new InvalidOperationException ();
 		}
 
-		public NativeOpenSsl (bool isClient, bool debug, NativeOpenSslProtocol protocol = NativeOpenSslProtocol.TLS12)
+		public NativeOpenSsl (bool isServer, bool debug, NativeOpenSslProtocol protocol)
 		{
-			this.isClient = isClient;
+			this.isServer = isServer;
 			this.enableDebugging = debug;
-			this.protocol = protocol;
 
 			if (debug)
 				debug_callback = new DebugCallback (OnDebugCallback);
 
 			message_callback = new MessageCallback (OnMessageCallback);
 
-			handle = native_openssl_initialize (debug ? 1 : 0, debug_callback, message_callback);
+			handle = native_openssl_initialize (debug ? 1 : 0, protocol, debug_callback, message_callback);
 			if (handle.IsInvalid)
 				throw new ConnectionException ("Handle invalid.");
 
-			var ret = native_openssl_create_context (handle, NativeOpenSslProtocol.TLS12, isClient);
+			var ret = native_openssl_create_context (handle, !isServer);
 			CheckError (ret);
 		}
 
 		public void Connect (IPEndPoint endpoint)
 		{
-			if (!isClient)
+			if (isServer)
 				throw new InvalidOperationException ();
 
 			var ret = native_openssl_create_connection (handle);
@@ -331,7 +329,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public void Bind (IPEndPoint endpoint)
 		{
-			if (isClient)
+			if (!isServer)
 				throw new InvalidOperationException ();
 
 			var ret = native_openssl_create_connection (handle);

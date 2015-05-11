@@ -225,6 +225,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 			return monoSslStream;
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[MonoConnectionProvider: {0}", Type);
+		}
 	}
 }
 

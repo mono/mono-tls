@@ -44,7 +44,8 @@ typedef enum {
 } NativeOpenSslProtocol;
 
 typedef struct {
-    int debug;
+	int debug;
+	NativeOpenSslProtocol protocol;
 	int socket;
 	int accepted;
 	SSL_CTX *ctx;
@@ -57,7 +58,7 @@ typedef struct {
 } NativeOpenSsl;
 
 NativeOpenSsl *
-native_openssl_initialize (int debug, DebugCallback debug_callback, MessageCallback message_callback);
+native_openssl_initialize (int debug, NativeOpenSslProtocol protocol, DebugCallback debug_callback, MessageCallback message_callback);
 
 int
 native_openssl_connect (NativeOpenSsl *ptr, unsigned char ip[4], int port);
@@ -105,7 +106,7 @@ int
 native_openssl_BIO_get_mem_data (BIO *bio, void **data);
 
 int
-native_openssl_create_context (NativeOpenSsl *ptr, NativeOpenSslProtocol protocol, short client_p);
+native_openssl_create_context (NativeOpenSsl *ptr, short client_p);
 
 int
 native_openssl_create_connection (NativeOpenSsl *ptr);

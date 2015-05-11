@@ -106,9 +106,25 @@ namespace Mono.Security.NewTls.TestProvider
 				return new IPEndPoint (IPAddress.Loopback, 4433);
 		}
 
+		NativeOpenSslProtocol GetProtocolVersion ()
+		{
+			var version = Parameters.ProtocolVersion;
+			if (version == ProtocolVersions.Default)
+				return NativeOpenSslProtocol.TLS12;
+			if ((version & ProtocolVersions.Tls12) != 0)
+				return NativeOpenSslProtocol.TLS12;
+			if ((version & ProtocolVersions.Tls11) != 0)
+				return NativeOpenSslProtocol.TLS11;
+			if ((version & ProtocolVersions.Tls10) != 0)
+				return NativeOpenSslProtocol.TLS10;
+			throw new InvalidOperationException ();
+		}
+
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
-			openssl = new NativeOpenSsl (!IsServer, false);
+			var protocol = GetProtocolVersion ();
+			ctx.LogMessage ("Starting {0} version {1}.", this, protocol);
+			openssl = new NativeOpenSsl (IsServer, false, protocol);
 			// FIXME
 			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);
 			#if FIXME
@@ -151,7 +167,8 @@ namespace Mono.Security.NewTls.TestProvider
 		public sealed override Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, bool waitForReply, CancellationToken cancellationToken)
 		{
 			return Task.Run (() => {
-				return openssl.Shutdown (waitForReply);
+				ctx.LogMessage ("{0} shutdown: {1} {2}", this, attemptCleanShutdown, waitForReply);
+				return openssl.Shutdown (attemptCleanShutdown && waitForReply);
 			});
 		}
 
@@ -161,6 +178,11 @@ namespace Mono.Security.NewTls.TestProvider
 				openssl.Dispose ();
 				openssl = null;
 			}
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[{0}]", GetType ().Name);
 		}
 
 	}

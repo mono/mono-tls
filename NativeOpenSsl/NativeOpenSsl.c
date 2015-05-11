@@ -169,7 +169,7 @@ native_openssl_init_fd (NativeOpenSsl *ptr, int s)
 }
 
 NativeOpenSsl *
-native_openssl_initialize (int debug, DebugCallback debug_callback, MessageCallback message_callback)
+native_openssl_initialize (int debug, NativeOpenSslProtocol protocol, DebugCallback debug_callback, MessageCallback message_callback)
 {
 	NativeOpenSsl *ptr;
 
@@ -177,6 +177,7 @@ native_openssl_initialize (int debug, DebugCallback debug_callback, MessageCallb
 	
 	ptr = calloc (1, sizeof (NativeOpenSsl));
 	ptr->debug = debug;
+	ptr->protocol = protocol;
 	ptr->debug_callback = debug_callback;
 	ptr->message_callback = message_callback;
 	return ptr;
@@ -419,11 +420,11 @@ native_openssl_free_private_key (EVP_PKEY *private_key)
 }
 
 int
-native_openssl_create_context (NativeOpenSsl *ptr, NativeOpenSslProtocol protocol, short client_p)
+native_openssl_create_context (NativeOpenSsl *ptr, short client_p)
 {
 	const SSL_METHOD *method;
 	
-	switch (protocol) {
+	switch (ptr->protocol) {
 	case NATIVE_OPENSSL_PROTOCOL_TLS10:
 		method = client_p ? TLSv1_client_method() : TLSv1_server_method();
 		break;
