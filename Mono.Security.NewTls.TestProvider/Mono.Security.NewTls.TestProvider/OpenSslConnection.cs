@@ -36,6 +36,8 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Server;
+using System.Net.Security;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -120,13 +122,31 @@ namespace Mono.Security.NewTls.TestProvider
 			throw new InvalidOperationException ();
 		}
 
+		NativeOpenSsl.RemoteValidationCallback GetValidationCallback ()
+		{
+			var clientParams = Parameters as ClientParameters;
+			if (clientParams == null)
+				return null;
+			var validator = (CertificateValidator)clientParams.ClientCertificateValidator;
+			if (validator == null)
+				return null;
+
+			return (ok, cert) => {
+				var errors = SslPolicyErrors.None;
+				if (!ok)
+					errors |= SslPolicyErrors.RemoteCertificateChainErrors;
+				return validator.ValidationCallback (this, cert, null, errors);
+			};
+		}
+
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
 			var protocol = GetProtocolVersion ();
 			ctx.LogMessage ("Starting {0} version {1}.", this, protocol);
 			openssl = new NativeOpenSsl (IsServer, false, protocol);
 			// FIXME
-			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);
+			var validationCallback = GetValidationCallback ();
+			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_PEER, validationCallback);
 			#if FIXME
 			if (!Parameters.VerifyPeerCertificate)
 				openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);
