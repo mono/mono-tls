@@ -48,8 +48,20 @@ namespace Mono.Security.NewTls.TestProvider
 				monoNewTlsStream = NewTlsProvider.GetNewTlsStream (stream);
 		}
 
-		public bool HasClientCertificate {
-			get { return stream.IsAuthenticated && stream.IsMutuallyAuthenticated; }
+		public bool IsAuthenticated {
+			get { return stream.IsAuthenticated; }
+		}
+
+		public bool IsMutuallyAuthenticated {
+			get { return stream.IsMutuallyAuthenticated; }
+		}
+
+		public bool HasLocalCertificate {
+			get { return stream.InternalLocalCertificate != null; }
+		}
+
+		public bool HasRemoteCertificate {
+			get { return stream.RemoteCertificate != null; }
 		}
 
 		public Stream AuthenticatedStream {
