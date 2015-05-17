@@ -123,7 +123,7 @@ namespace Mono.Security.Providers.NewTls
 		{
 			var buffer = new TlsBuffer (BOSWrapper.Wrap (incoming));
 			var retval = Context.DecryptMessage (ref buffer);
-			incoming = BOSWrapper.Wrap (buffer.GetRemaining ());
+			incoming = buffer != null ? BOSWrapper.Wrap (buffer.GetRemaining ()) : null;
 			return (int)retval;
 		}
 
