@@ -1,5 +1,5 @@
 ﻿//
-// TestSslStream.cs
+// TestPuppy.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -37,29 +37,20 @@ using Xamarin.AsyncTests.Constraints;
 
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.TestRunners;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Features;
 
 namespace Mono.Security.NewTls.Tests
 {
-	[Work]
+	[Puppy]
+	[Martin]
 	[AsyncTestFixture (Timeout = 5000)]
-	public class TestSslStream
+	public class TestPuppy
 	{
-		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.IsNewTls | ConnectionProviderFlags.SupportsSslStream)]
-		public ConnectionProviderType ConnectionProvider {
-			get;
-			private set;
-		}
-
 		[AsyncTest]
-		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[ClientAndServerParameters] ClientAndServerParameters parameters,
-			[Server] IServer server, [Client] IClient client)
+		public Task Run (TestContext ctx, CancellationToken cancellationToken)
 		{
-			var runner = new SslStreamTestRunner (server, client);
-			await runner.Run (ctx, cancellationToken);
+			var runner = new PuppyTestRunner ();
+			return runner.Run (ctx, cancellationToken);
 		}
 	}
 }
