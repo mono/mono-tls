@@ -1,5 +1,5 @@
 ﻿//
-// TestPuppy.cs
+// TestRenegotiation.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -37,19 +37,40 @@ using Xamarin.AsyncTests.Constraints;
 
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.TestRunners;
+using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Features;
+using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.Tests
 {
-	[Puppy]
+	using TestFramework;
+	using TestFeatures;
+	using Instrumentation;
+
+	[Martin]
 	[AsyncTestFixture (Timeout = 5000)]
-	public class TestPuppy
+	public class TestRenegotiation
 	{
+		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsMonoExtensions)]
+		public ConnectionProviderType ClientType {
+			get;
+			private set;
+		}
+
+		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.SupportsInstrumentation)]
+		public ConnectionProviderType ServerType {
+			get;
+			private set;
+		}
+
 		[AsyncTest]
-		public Task Run (TestContext ctx, CancellationToken cancellationToken)
+		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationParameters] MonoClientAndServerParameters parameters,
+			[MonoServer] IMonoServer server, [MonoClient] IMonoClient client)
 		{
-			var runner = new PuppyTestRunner ();
-			return runner.Run (ctx, cancellationToken);
+			var runner = new InstrumentationTestRunner (server, client, parameters);
+			await runner.Run (ctx, cancellationToken);
 		}
 	}
 }

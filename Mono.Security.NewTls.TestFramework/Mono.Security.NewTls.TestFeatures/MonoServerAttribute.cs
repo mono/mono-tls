@@ -34,7 +34,7 @@ namespace Mono.Security.NewTls.TestFeatures
 	public class MonoServerAttribute : TestHostAttribute, ITestHost<IMonoServer>
 	{
 		public MonoServerAttribute (bool requireMonoExtensions = false)
-			: base (typeof (MonoServerAttribute))
+			: base (typeof (MonoServerAttribute), TestFlags.Hidden)
 		{
 			RequireMonoExtensions = requireMonoExtensions;
 		}

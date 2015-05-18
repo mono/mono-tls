@@ -1,5 +1,5 @@
 ﻿//
-// MonoServerParameters.cs
+// InstrumentationParametersAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,45 +24,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Resources;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
+	using TestFramework;
 	using Instrumentation;
 
-	public class MonoServerParameters : ServerParameters
+	public class InstrumentationParametersAttribute : TestParameterAttribute, ITestParameterSource<MonoClientAndServerParameters>
 	{
-		public MonoServerParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		public ICertificateValidator AcceptAll {
+			get;
+			private set;
+		}
+
+		public InstrumentationParametersAttribute (string filter = null)
+			: base (filter)
 		{
+			AcceptAll = DependencyInjector.Get<ICertificateProvider> ().AcceptAll ();
 		}
 
-		protected MonoServerParameters (MonoServerParameters other)
-			: base (other)
+		MonoClientAndServerParameters CreateWithInstrumentation (string name, Action<InstrumentCollection> action)
 		{
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			Instrumentation = other.Instrumentation;
+			var instrument = new InstrumentCollection ();
+			action (instrument);
+			return new MonoClientAndServerParameters (name, ResourceManager.SelfSignedServerCertificate) {
+				ClientCertificateValidator = AcceptAll, ServerInstrumentation = instrument
+			};
 		}
 
-		public override ConnectionParameters DeepClone ()
+		IEnumerable<InstrumentationType> GetInstrumentationTypes ()
 		{
-			return new MonoServerParameters (this);
+			return Enum.GetValues (typeof(InstrumentationType)).Cast<InstrumentationType> ();
 		}
 
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public InstrumentCollection Instrumentation {
-			get; set;
+		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
+		{
+			return GetInstrumentationTypes ().Select (t => InstrumentationTestRunner.GetParameters (t));
 		}
 	}
 }

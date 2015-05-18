@@ -49,6 +49,7 @@ using Mono.Security.Providers.NewTls;
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
+	using Instrumentation;
 
 	public class NewTlsDependencyProvider : IDependencyProvider
 	{
@@ -62,12 +63,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
 			DependencyInjector.RegisterDependency<ICertificateProvider> (() => new CertificateProvider ());
-			// DependencyInjector.RegisterDependency<IHttpProviderFactory> (() => new MonoHttpProviderFactory ());
-			// DependencyInjector.RegisterDependency<ISslStreamProviderFactory> (() => new MonoSslStreamProviderFactory ());
 			DependencyInjector.RegisterDependency<MonoConnectionProviderFactory,ConnectionProviderFactory> (() => new MonoConnectionProviderFactoryImpl ());
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-			// DependencyInjector.RegisterDependency<IMonoConnectionProviderFactory> (() => new MonoConnectionProviderFactory ());
+
+			DependencyInjector.RegisterDependency<IInstrumentationProvider> (() => new InstrumentationProvider ());
 
 			#if MACUI
 			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());

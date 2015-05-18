@@ -127,10 +127,6 @@
     <Compile Include="Mono.Security.NewTls.Handshake\TlsServerHello.cs" />
     <Compile Include="Mono.Security.NewTls.Handshake\TlsServerHelloDone.cs" />
     <Compile Include="Mono.Security.NewTls.Handshake\TlsServerKeyExchange.cs" />
-    <Compile Include="Mono.Security.NewTls.Instrumentation\ContextInstrument.cs" />
-    <Compile Include="Mono.Security.NewTls.Instrumentation\Instrument.cs" />
-    <Compile Include="Mono.Security.NewTls.Instrumentation\InstrumentCollection.cs" />
-    <Compile Include="Mono.Security.NewTls.Instrumentation\NegotiationInstrument.cs" />
     <Compile Include="Mono.Security.NewTls.Negotiation\ClientConnection.cs" />
     <Compile Include="Mono.Security.NewTls.Negotiation\ClientKeyExchange.cs" />
     <Compile Include="Mono.Security.NewTls.Negotiation\NegotiationHandler.cs" />
@@ -138,6 +134,7 @@
     <Compile Include="Mono.Security.NewTls.Negotiation\ServerConnection.cs" />
     <Compile Include="Mono.Security.NewTls.Negotiation\ServerFinished.cs" />
     <Compile Include="Mono.Security.NewTls.Negotiation\ServerHello.cs" />
+    <Compile Include="Mono.Security.NewTls.Instrumentation\InstrumentationProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">

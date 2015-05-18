@@ -1,5 +1,5 @@
 ﻿//
-// MonoServerParameters.cs
+// InstrumentCollection.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,45 +24,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Threading;
 using System.Collections.Generic;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.Instrumentation
 {
-	using Instrumentation;
-
-	public class MonoServerParameters : ServerParameters
+	public class InstrumentCollection
 	{
-		public MonoServerParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		SettingsInstrument settings;
+		HashSet<HandshakeInstrumentType> handshakeInstruments = new HashSet<HandshakeInstrumentType> ();
+
+		public bool HasSettings {
+			get { return settings != null; }
+		}
+
+		public SettingsInstrument Settings {
+			get {
+				if (settings == null)
+					Interlocked.CompareExchange<SettingsInstrument> (ref settings, new SettingsInstrument (), null);
+				return settings;
+			}
+		}
+
+		public void Install (HandshakeInstrumentType type)
 		{
+			handshakeInstruments.Add (type);
 		}
 
-		protected MonoServerParameters (MonoServerParameters other)
-			: base (other)
+		public bool HasInstrument (HandshakeInstrumentType type)
 		{
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			Instrumentation = other.Instrumentation;
-		}
-
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoServerParameters (this);
-		}
-
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public InstrumentCollection Instrumentation {
-			get; set;
+			return handshakeInstruments.Contains (type);
 		}
 	}
 }

@@ -87,20 +87,24 @@ namespace Mono.Security.NewTls
 
 		#if INSTRUMENTATION
 
-		public ContextInstrument Instrument {
+		internal InstrumentCollection Instrumentation {
 			get;
 			private set;
+		}
+
+		internal bool HasInstrument (HandshakeInstrumentType type)
+		{
+			return Instrumentation != null ? Instrumentation.HasInstrument (type) : false;
 		}
 		
 		void SetupInstrumentation ()
 		{
 			if (configuration.UserSettings == null || configuration.UserSettings.Instrumentation == null)
 				return;
-			if (configuration.UserSettings.Instrumentation.IsEmpty)
-				return;
-			Instrument = configuration.UserSettings.Instrumentation.Context;
-			if (Instrument == null)
-				throw new InvalidOperationException ();
+
+			Instrumentation = configuration.UserSettings.Instrumentation;
+			if (Instrumentation.HasSettings)
+				configuration.Apply (Instrumentation.Settings);
 		}
 
 		#endif
@@ -368,14 +372,6 @@ namespace Mono.Security.NewTls
 
 		internal NegotiationHandler CreateNegotiationHandler (NegotiationState state)
 		{
-			#if INSTRUMENTATION
-			if (Instrument != null) {
-				var handler = Instrument.CreateNegotiationHandler (this, state);
-				if (handler != null)
-					return handler;
-			}
-			#endif
-
 			switch (state) {
 			case NegotiationState.InitialClientConnection:
 				return new ClientConnection (this, false);

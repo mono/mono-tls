@@ -7,6 +7,10 @@ namespace Mono.Security.NewTls.Negotiation
 	using Cipher;
 	using X509;
 
+	#if INSTRUMENTATION
+	using Instrumentation;
+	#endif
+
 	class ServerConnection : NegotiationHandler
 	{
 		public bool Renegotiating {

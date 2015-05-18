@@ -1,5 +1,5 @@
 ﻿//
-// MonoServerParameters.cs
+// InstrumentationType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,46 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using Instrumentation;
-
-	public class MonoServerParameters : ServerParameters
+	public enum InstrumentationType
 	{
-		public MonoServerParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
-		{
-		}
-
-		protected MonoServerParameters (MonoServerParameters other)
-			: base (other)
-		{
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			Instrumentation = other.Instrumentation;
-		}
-
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoServerParameters (this);
-		}
-
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public InstrumentCollection Instrumentation {
-			get; set;
-		}
+		None,
+		DisableRenegotiation,
+		CloseServerConnection
 	}
 }
 

@@ -7,6 +7,10 @@ using SSCX = System.Security.Cryptography.X509Certificates;
 
 namespace Mono.Security.NewTls
 {
+	#if INSTRUMENTATION
+	using Instrumentation;
+	#endif
+
 	public delegate bool RemoteCertValidationCallback (string host, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);
 	public delegate bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);
 	public delegate SSCX.X509Certificate LocalCertSelectionCallback (string targetHost, SSCX.X509CertificateCollection localCertificates, SSCX.X509Certificate remoteCertificate, string[] acceptableIssuers);
@@ -175,6 +179,16 @@ namespace Mono.Security.NewTls
 			PrivateKey = null;
 			Certificate = null;
 		}
+
+		#if INSTRUMENTATION
+
+		public void Apply (SettingsInstrument instrument)
+		{
+			if (instrument.DisableRenegotiation)
+				RenegotiationFlags = RenegotiationFlags.DisallowRenegotiation;
+		}
+
+		#endif
 	}
 }
 
