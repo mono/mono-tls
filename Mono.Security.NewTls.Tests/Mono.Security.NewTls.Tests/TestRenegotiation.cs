@@ -48,7 +48,6 @@ namespace Mono.Security.NewTls.Tests
 	using TestFeatures;
 	using Instrumentation;
 
-	[Martin]
 	[AsyncTestFixture (Timeout = 5000)]
 	public class TestRenegotiation
 	{
