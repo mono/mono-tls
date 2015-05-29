@@ -94,6 +94,18 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 		}
 
+		int GetMacSize (HandshakeHashType algorithm)
+		{
+			switch (algorithm) {
+			case HandshakeHashType.SHA256:
+				return 32;
+			case HandshakeHashType.SHA384:
+				return 48;
+			default:
+				throw new NotSupportedException();
+			}
+		}
+
 		public byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length)
 		{
 			var digest_mask = GetAlgorithm (algorithm);
@@ -112,11 +124,11 @@ namespace Mono.Security.NewTls.TestProvider
 		public byte[] TestHMac (HandshakeHashType algorithm, byte[] key, byte[] data)
 		{
 			var type = GetAlgorithm (algorithm);
+			int macSize = GetMacSize (algorithm);
 
-			int blockSize = 32;
-			var output = new byte [blockSize];
+			var output = new byte [macSize];
 
-			int ret = native_crypto_test_HMac (type, data, data.Length, null, 0, null, 0, null, 0, null, 0, key, key.Length, output, blockSize);
+			int ret = native_crypto_test_HMac (type, data, data.Length, null, 0, null, 0, null, 0, null, 0, key, key.Length, output, macSize);
 			if (ret != 1)
 				throw new InvalidOperationException ();
 

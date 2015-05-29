@@ -31,6 +31,7 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
+	[Martin]
 	[AsyncTestFixture]
 	public class HashTest : ITestHost<IHashTestHost>
 	{
@@ -314,12 +315,6 @@ namespace Mono.Security.NewTls.Tests
 		{
 			var output = provider.TestPRF (HandshakeHashType.SHA384, TestSecret6, TestSeed6, TestData6, KeyExpansion6.Length);
 			ctx.Assert (output, Is.EqualTo (KeyExpansion6));
-		}
-
-		[AsyncTest]
-		public void SimpleTest (TestContext ctx, [TestHost] IHashTestHost provider)
-		{
-			ctx.LogMessage ("HASH TEST: {0}", provider);
 		}
 	}
 }
