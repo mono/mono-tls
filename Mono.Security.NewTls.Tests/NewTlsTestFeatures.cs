@@ -159,7 +159,7 @@ namespace Mono.Security.NewTls.Tests
 		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
 		public class SelectCryptoProvider : TestParameterAttribute, ITestParameterSource<CryptoProviderType>
 		{
-			public SelectCryptoProvider (string filter = null, TestFlags flags = TestFlags.Hidden)
+			public SelectCryptoProvider (string filter = null, TestFlags flags = TestFlags.ContinueOnError)
 				: base (filter, flags)
 			{
 			}
