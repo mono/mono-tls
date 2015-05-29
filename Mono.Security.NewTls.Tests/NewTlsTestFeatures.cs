@@ -81,6 +81,8 @@ namespace Mono.Security.NewTls.Tests
 		public static readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
 		public static readonly TestFeature NotWorking = new TestFeature ("NotWorking", "Not Working");
 
+		public static readonly TestFeature DotNetCryptoProvider = CreateCryptoFeature (
+			"DotNetCryptoProvider", "Use .NET as crypto provider", CryptoProviderType.DotNet, false);
 		public static readonly TestFeature MonoCryptoProvider = CreateCryptoFeature (
 			"MonoCryptoProvider", "Use Mono.Security as crypto provider", CryptoProviderType.Mono, false);
 		public static readonly TestFeature OpenSslCryptoProvider = CreateCryptoFeature (
@@ -133,6 +135,7 @@ namespace Mono.Security.NewTls.Tests
 			get {
 				yield return Hello;
 				yield return NotWorking;
+				yield return DotNetCryptoProvider;
 				yield return MonoCryptoProvider;
 				yield return OpenSslCryptoProvider;
 				#if FIXME
@@ -164,13 +167,17 @@ namespace Mono.Security.NewTls.Tests
 			public IEnumerable<CryptoProviderType> GetParameters (TestContext ctx, string filter)
 			{
 				if (filter != null) {
-					if (filter.Equals ("mono"))
+					if (filter.Equals ("dotnet"))
+						yield return CryptoProviderType.DotNet;
+					else if (filter.Equals ("mono"))
 						yield return CryptoProviderType.Mono;
 					else if (filter.Equals ("openssl"))
 						yield return CryptoProviderType.OpenSsl;
 					yield break;
 				}
 
+				if (ctx.IsEnabled (DotNetCryptoProvider))
+					yield return CryptoProviderType.DotNet;
 				if (ctx.IsEnabled (MonoCryptoProvider))
 					yield return CryptoProviderType.Mono;
 				if (ctx.IsEnabled (OpenSslCryptoProvider))
