@@ -16,16 +16,15 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;NET_4_5;INSIDE_MONO_SECURITY;INSTRUMENTATION</DefineConstants>
+    <DefineConstants>DEBUG;NET_4_5;INSIDE_MONO_SECURITY;INSTRUMENTATION;INSIDE_MONO_NEWTLS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>NET_4_5;INSIDE_MONO_SECURITY</DefineConstants>
+    <DefineConstants>NET_4_5;INSIDE_MONO_SECURITY;INSIDE_MONO_NEWTLS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>

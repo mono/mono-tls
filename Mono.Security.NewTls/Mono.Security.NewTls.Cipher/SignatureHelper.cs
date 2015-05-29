@@ -50,10 +50,14 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			if (!VerifyHashType (type, hash))
 				throw new TlsException (AlertDescription.IlegalParameter);
+			#if INSIDE_MONO_NEWTLS
 			if (type.Signature == SignatureAlgorithmType.Rsa)
 				return new SecureBuffer (PKCS1.Sign_v15 ((RSA)key, hash, hashData.Buffer));
 			else
 				throw new NotSupportedException ();
+			#else
+			throw new NotSupportedException ();
+			#endif
 		}
 
 		public static bool VerifySignature (SignatureAndHashAlgorithm type, SecureBuffer data, AsymmetricAlgorithm key, SecureBuffer signature)
@@ -69,12 +73,17 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			if (!VerifyHashType (type, hash))
 				throw new TlsException (AlertDescription.IlegalParameter);
+			#if INSIDE_MONO_NEWTLS
 			if (type.Signature == SignatureAlgorithmType.Rsa)
 				return PKCS1.Verify_v15 ((RSA)key, hash, hashData.Buffer, signature.Buffer);
 			else
 				throw new NotSupportedException ();
+			#else
+			throw new NotSupportedException ();
+			#endif
 		}
 
+		#if INSIDE_MONO_NEWTLS
 		public static SignatureAndHashAlgorithm SelectSignatureType (HandshakeParameters handshakeParameters)
 		{
 			if (handshakeParameters.SignatureAlgorithms != null)
@@ -84,6 +93,7 @@ namespace Mono.Security.NewTls.Cipher
 			else
 				return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
 		}
+		#endif
 
 		public static bool IsAlgorithmSupported (SignatureAndHashAlgorithm algorithm)
 		{

@@ -29,10 +29,13 @@ using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
+	#if INSIDE_MONO_NEWTLS
 	using Handshake;
+	#endif
 
 	abstract class PseudoRandomFunction
 	{
+		#if INSIDE_MONO_NEWTLS
 		public SecureBuffer ComputeClientHash (SecureBuffer secret, SecureBuffer digest)
 		{
 			return PRF (secret, TlsFinished.ClientSeed, digest, 12);
@@ -42,6 +45,7 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			return PRF (secret, TlsFinished.ServerSeed, digest, 12);
 		}
+		#endif
 
 		public SecureBuffer ComputeMasterSecret (SecureBuffer preMasterSecret, SecureBuffer cs)
 		{

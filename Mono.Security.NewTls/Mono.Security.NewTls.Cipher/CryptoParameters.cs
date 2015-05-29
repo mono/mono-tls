@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Security.Cryptography;
-using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Cipher
 {
+	#if INSIDE_MONO_NEWTLS
 	using X509;
+	#endif
 
 	abstract class CryptoParameters : DisposeContext
 	{
@@ -21,8 +22,10 @@ namespace Mono.Security.NewTls.Cipher
 		ulong writeSequenceNumber;
 		ulong readSequenceNumber;
 		TlsProtocolCode protocol;
+		#if INSIDE_MONO_NEWTLS
 		X509CertificateCollection clientCertificates;
 		X509CertificateCollection serverCertificates;
+		#endif
 
 		internal CryptoParameters (bool isServer, TlsProtocolCode protocol, CipherSuite cipher)
 		{
@@ -31,9 +34,11 @@ namespace Mono.Security.NewTls.Cipher
 			this.cipher = cipher;
 		}
 
+		#if INSIDE_MONO_NEWTLS
 		public bool IsAtLeastTls12 {
 			get { return TlsConfiguration.IsTls12OrNewer (protocol); }
 		}
+		#endif
 
 		public bool IsServer {
 			get { return isServer; }
@@ -76,6 +81,7 @@ namespace Mono.Security.NewTls.Cipher
 			set { serverWriteKey = Add (value); }
 		}
 
+		#if INSIDE_MONO_NEWTLS
 		internal X509CertificateCollection ClientCertificates {
 			get { return clientCertificates; }
 			set { clientCertificates = value; }
@@ -85,6 +91,7 @@ namespace Mono.Security.NewTls.Cipher
 			get { return serverCertificates; }
 			set { serverCertificates = value; }
 		}
+		#endif
 
 		internal bool RemoteCertificateVerified {
 			get; set;
