@@ -33,6 +33,8 @@ namespace Mono.Security.NewTls.TestFramework
 		byte[] TestPRF (HandshakeHashType algorithm, byte[] secret, string seed, byte[] data, int length);
 
 		byte[] TestDigest (HandshakeHashType algorithm, byte[] data);
+
+		byte[] TestHMac (HandshakeHashType algorithm, byte[] key, byte[] data);
 	}
 }
 

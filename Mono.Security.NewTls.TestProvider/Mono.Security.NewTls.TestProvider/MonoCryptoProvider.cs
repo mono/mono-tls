@@ -178,6 +178,19 @@ namespace Mono.Security.NewTls.TestProvider
 			return result.StealBuffer ();
 		}
 
+		public byte[] TestHMac (HandshakeHashType algorithm, byte[] key, byte[] data)
+		{
+			var hmac = HMac.Create (algorithm, new SecureBuffer (key));
+
+			hmac.Reset ();
+			hmac.TransformBlock (data, 0, data.Length);
+
+			var output = new byte [hmac.MacSize];
+			hmac.TransformFinalBlock (output, 0, output.Length);
+
+			return output;
+		}
+
 		HashAlgorithm CreateHash (HandshakeHashType algorithm)
 		{
 			switch (algorithm) {
