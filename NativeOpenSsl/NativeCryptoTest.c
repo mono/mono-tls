@@ -83,14 +83,15 @@ static int ssl_get_handshake_digest(int idx, long *mask, const EVP_MD **md)
 }
 
 /* seed1 through seed5 are virtually concatenated */
-static int tls1_P_hash(const EVP_MD *md, const unsigned char *sec,
-		       int sec_len,
-		       const void *seed1, int seed1_len,
-		       const void *seed2, int seed2_len,
-		       const void *seed3, int seed3_len,
-		       const void *seed4, int seed4_len,
-		       const void *seed5, int seed5_len,
-		       unsigned char *out, int olen)
+static int
+tls1_P_hash(const EVP_MD *md, int compute_mac,
+	    const unsigned char *sec, int sec_len,
+	    const void *seed1, int seed1_len,
+	    const void *seed2, int seed2_len,
+	    const void *seed3, int seed3_len,
+	    const void *seed4, int seed4_len,
+	    const void *seed5, int seed5_len,
+	    unsigned char *out, int olen)
 {
 	int chunk;
 	size_t j;
@@ -126,6 +127,14 @@ static int tls1_P_hash(const EVP_MD *md, const unsigned char *sec,
 		goto err;
 	if (!EVP_DigestSignFinal(&ctx,A1,&A1_len))
 		goto err;
+
+	if (!compute_mac) {
+		if(olen > A1_len)
+			return -1;
+		memcpy(out, A1, olen);
+		ret = 1;
+		goto err;
+	}
 
 	for (;;)
 	{
@@ -233,35 +242,41 @@ native_crypto_test_init (void)
 	EVP_MD_size(ssl_digest_methods[SSL_MD_SHA384_IDX]);
 }
 
-int
-native_crypto_test_get_prf_algorithm_sha256 (void)
+static int
+get_digest_mask(NativeCryptoHashType type)
 {
-	return TLS1_PRF_SHA256;
-}
-
-int
-native_crypto_test_get_prf_algorithm_sha384 (void)
-{
-	return TLS1_PRF_SHA384;
+	switch (type) {
+	case NATIVE_CRYPTO_HASH_TYPE_SHA256:
+		return TLS1_PRF_SHA256;
+	case NATIVE_CRYPTO_HASH_TYPE_SHA384:
+		return TLS1_PRF_SHA384;
+	default:
+		return -1;
+	}
 }
 
 /* seed1 through seed5 are virtually concatenated */
 int
-native_crypto_test_PRF(int digest_mask,
-		    const void *seed1, int seed1_len,
-		    const void *seed2, int seed2_len,
-		    const void *seed3, int seed3_len,
-		    const void *seed4, int seed4_len,
-		    const void *seed5, int seed5_len,
-		    const unsigned char *sec, int slen,
-		    unsigned char *out1,
-		    unsigned char *out2, int olen)
+native_crypto_test_PRF(NativeCryptoHashType type,
+		       const void *seed1, int seed1_len,
+		       const void *seed2, int seed2_len,
+		       const void *seed3, int seed3_len,
+		       const void *seed4, int seed4_len,
+		       const void *seed5, int seed5_len,
+		       const unsigned char *sec, int slen,
+		       unsigned char *out1,
+		       unsigned char *out2, int olen)
 {
+	int digest_mask;
 	int len,i,idx,count;
 	const unsigned char *S1;
 	long m;
 	const EVP_MD *md;
 	int ret = 0;
+
+	digest_mask = get_digest_mask(type);
+	if (digest_mask < 0)
+		return -1;
 
 	/* Count number of digests and partition sec evenly */
 	count=0;
@@ -278,7 +293,7 @@ native_crypto_test_PRF(int digest_mask,
 			if (!md) {
 				goto err;
 			}
-			if (!tls1_P_hash(md ,S1,len+(slen&1),
+			if (!tls1_P_hash(md, 1, S1,len+(slen&1),
 					 seed1,seed1_len,seed2,seed2_len,seed3,seed3_len,seed4,seed4_len,seed5,seed5_len,
 					 out2,olen))
 				goto err;
@@ -290,13 +305,66 @@ native_crypto_test_PRF(int digest_mask,
 		}
 	}
 	ret = 1;
+#if DEBUG_FULL
+	fprintf(stderr, "PRF #5: %x,%x,%x,%x\n", out1[0], out1[1], out1[2], out1[3]);
+#endif
+err:
+	return ret;
+}
+/* seed1 through seed5 are virtually concatenated */
+int
+native_crypto_test_HMac(NativeCryptoHashType type,
+			const void *seed1, int seed1_len,
+			const void *seed2, int seed2_len,
+			const void *seed3, int seed3_len,
+			const void *seed4, int seed4_len,
+			const void *seed5, int seed5_len,
+			const unsigned char *sec, int slen,
+			unsigned char *out, int olen)
+{
+	int digest_mask;
+	int len,idx,count;
+	const unsigned char *S1;
+	long m;
+	const EVP_MD *md;
+	int ret = 0;
+
+	digest_mask = get_digest_mask(type);
+	if (digest_mask < 0)
+		return -1;
+
+	/* Count number of digests and partition sec evenly */
+	count=0;
+	for (idx=0;ssl_get_handshake_digest(idx,&m,&md);idx++) {
+		if ((m<<TLS1_PRF_DGST_SHIFT) & digest_mask) count++;
+	}
+	len=slen/count;
+	if (count == 1)
+		slen = 0;
+	S1=sec;
+	memset(out,0,olen);
+	for (idx=0;ssl_get_handshake_digest(idx,&m,&md);idx++) {
+		if ((m<<TLS1_PRF_DGST_SHIFT) & digest_mask) {
+			if (!md) {
+				goto err;
+			}
+			if (!tls1_P_hash(md, 0, S1,len+(slen&1),
+					 seed1,seed1_len,seed2,seed2_len,seed3,seed3_len,seed4,seed4_len,seed5,seed5_len,
+					 out,olen))
+				goto err;
+			break;
+		}
+	}
+	ret = 1;
 err:
 	return ret;
 }
 
+
 /* seed1 through seed5 are virtually concatenated */
-static int tls1_digest(const EVP_MD *md, const void *data, int data_len,
-		       unsigned char *out, int olen)
+static int
+tls1_digest(const EVP_MD *md, const void *data, int data_len,
+	    unsigned char *out, int olen)
 {
 	int chunk;
 	EVP_MD_CTX ctx;
@@ -327,12 +395,17 @@ err:
 }
 
 int
-native_crypto_test_digest(int digest_mask, const void *data, int data_len, unsigned char *out, int olen)
+native_crypto_test_digest(NativeCryptoHashType type, const void *data, int data_len, unsigned char *out, int olen)
 {
+	int digest_mask;
 	int idx,count;
 	long m;
 	const EVP_MD *md;
 	int ret = 0;
+
+	digest_mask = get_digest_mask(type);
+	if (digest_mask < 0)
+		return -1;
 
 	/* Count number of digests and partition sec evenly */
 	count=0;

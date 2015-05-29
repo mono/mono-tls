@@ -58,7 +58,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		[DllImport (NativeOpenSsl.DLL)]
 		extern static int native_crypto_test_PRF (
-			int digest_mask,
+			NativeCryptoHashType type,
 			byte[] seed1, int seed1_len,
 			byte[] seed2, int seed2_len,
 			byte[] seed3, int seed3_len,
@@ -68,22 +68,27 @@ namespace Mono.Security.NewTls.TestProvider
 			byte[] out1, byte[] out2, int olen);
 
 		[DllImport (NativeOpenSsl.DLL)]
+		extern static int native_crypto_test_HMac (
+			NativeCryptoHashType type,
+			byte[] seed1, int seed1_len,
+			byte[] seed2, int seed2_len,
+			byte[] seed3, int seed3_len,
+			byte[] seed4, int seed4_len,
+			byte[] seed5, int seed5_len,
+			byte[] sec, int slen,
+			byte[] output, int olen);
+
+		[DllImport (NativeOpenSsl.DLL)]
 		extern static int native_crypto_test_digest (
-			int digest_mask, byte[] data, int data_len, byte[] output, int length);
+			NativeCryptoHashType type, byte[] data, int data_len, byte[] output, int length);
 
-		[DllImport (NativeOpenSsl.DLL)]
-		extern static int native_crypto_test_get_prf_algorithm_sha256 ();
-
-		[DllImport (NativeOpenSsl.DLL)]
-		extern static int native_crypto_test_get_prf_algorithm_sha384 ();
-
-		int GetAlgorithm (HandshakeHashType algorithm)
+		NativeCryptoHashType GetAlgorithm (HandshakeHashType algorithm)
 		{
 			switch (algorithm) {
 			case HandshakeHashType.SHA256:
-				return native_crypto_test_get_prf_algorithm_sha256 ();
+				return NativeCryptoHashType.SHA256;
 			case HandshakeHashType.SHA384:
-				return native_crypto_test_get_prf_algorithm_sha384 ();
+				return NativeCryptoHashType.SHA384;
 			default:
 				throw new NotSupportedException ();
 			}
@@ -104,12 +109,26 @@ namespace Mono.Security.NewTls.TestProvider
 			return output;
 		}
 
+		public byte[] TestHMac (HandshakeHashType algorithm, byte[] key, byte[] data)
+		{
+			var type = GetAlgorithm (algorithm);
+
+			int blockSize = 32;
+			var output = new byte [blockSize];
+
+			int ret = native_crypto_test_HMac (type, data, data.Length, null, 0, null, 0, null, 0, null, 0, key, key.Length, output, blockSize);
+			if (ret != 1)
+				throw new InvalidOperationException ();
+
+			return output;
+		}
+
 		public byte[] TestDigest (HandshakeHashType algorithm, byte[] data)
 		{
-			var digest_mask = GetAlgorithm (algorithm);
+			var type = GetAlgorithm (algorithm);
 
 			var output = new byte [200];
-			var ret = native_crypto_test_digest (digest_mask, data, data.Length, output, output.Length);
+			var ret = native_crypto_test_digest (type, data, data.Length, output, output.Length);
 			if (ret <= 0)
 				throw new InvalidOperationException ();
 
