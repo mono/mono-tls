@@ -52,14 +52,9 @@ namespace Mono.Security.NewTls.Tests
 			private set;
 		}
 
-		[ClientAndServerParameters]
-		public ClientAndServerParameters ConnectionParameters {
-			get;
-			private set;
-		}
-
 		[AsyncTest]
-		public Task RunCertificateTests (TestContext ctx, CancellationToken cancellationToken, [HttpsTestRunner] HttpsTestRunner runner)
+		public Task RunCertificateTests (TestContext ctx, CancellationToken cancellationToken,
+			[HttpsTestType] HttpsTestType type, [HttpsTestRunner] HttpsTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
 		}

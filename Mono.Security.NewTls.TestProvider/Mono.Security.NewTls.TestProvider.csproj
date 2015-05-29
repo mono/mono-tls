@@ -51,77 +51,8 @@
     <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslConnection.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslServer.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs" />
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpClient.cs">
-      <Link>Xamarin.WebTests.HttpClient\HttpClient.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpClientHandler.cs">
-      <Link>Xamarin.WebTests.HttpClient\HttpClientHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpContent.cs">
-      <Link>Xamarin.WebTests.HttpClient\HttpContent.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpRequestMessage.cs">
-      <Link>Xamarin.WebTests.HttpClient\HttpRequestMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\HttpResponseMessage.cs">
-      <Link>Xamarin.WebTests.HttpClient\HttpResponseMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\StreamContent.cs">
-      <Link>Xamarin.WebTests.HttpClient\StreamContent.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.HttpClient\StringContent.cs">
-      <Link>Xamarin.WebTests.HttpClient\StringContent.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpListener.cs">
-      <Link>Xamarin.WebTests.Server\HttpListener.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\Listener.cs">
-      <Link>Xamarin.WebTests.Server\Listener.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableWebSupportImpl.cs">
-      <Link>Xamarin.WebTests.Server\PortableWebSupportImpl.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\ProxyListener.cs">
-      <Link>Xamarin.WebTests.Server\ProxyListener.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\PortableProxy.cs">
-      <Link>Xamarin.WebTests.Server\PortableProxy.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\HttpWebRequestImpl.cs">
-      <Link>Xamarin.WebTests.Server\HttpWebRequestImpl.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateValidator.cs">
-      <Link>Xamarin.WebTests.Server\CertificateValidator.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\CertificateProvider.cs">
-      <Link>Xamarin.WebTests.Server\CertificateProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.Server\DefaultHttpProvider.cs">
-      <Link>Xamarin.WebTests.Server\DefaultHttpProvider.cs</Link>
-    </Compile>
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoHttpProvider.cs" />
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\ConnectionHelper.cs">
-      <Link>Xamarin.WebTests.ConnectionFramework\ConnectionHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\DotNetClient.cs">
-      <Link>Xamarin.WebTests.ConnectionFramework\DotNetClient.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\DotNetConnection.cs">
-      <Link>Xamarin.WebTests.ConnectionFramework\DotNetConnection.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\DotNetServer.cs">
-      <Link>Xamarin.WebTests.ConnectionFramework\DotNetServer.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\DotNetSslStream.cs">
-      <Link>Xamarin.WebTests.ConnectionFramework\DotNetSslStream.cs</Link>
-    </Compile>
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\DotNetSslStreamProvider.cs">
-      <Link>Xamarin.WebTests.ConnectionFramework\DotNetSslStreamProvider.cs</Link>
-    </Compile>
     <Compile Include="NewTlsDependencyProvider.cs" />
-    <Compile Include="..\external\web-tests\Xamarin.WebTests.Console\Xamarin.WebTests.ConnectionFramework\DotNetConnectionProvider.cs">
-      <Link>Xamarin.WebTests.ConnectionFramework\DotNetConnectionProvider.cs</Link>
-    </Compile>
     <Compile Include="Mono.Security.NewTls.TestProvider\CallbackHelpers.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslConnectionProvider.cs" />
@@ -129,6 +60,7 @@
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProviderImpl.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\NativeOpenSslProtocol.cs" />
   </ItemGroup>
+  <Import Project="..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
   <ProjectExtensions>

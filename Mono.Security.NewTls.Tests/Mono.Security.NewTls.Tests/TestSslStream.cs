@@ -55,10 +55,8 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[ClientAndServerParameters] ClientAndServerParameters parameters,
-			[Server] IServer server, [Client] IClient client)
+			[HttpsTestType] HttpsTestType type, [SslStreamTestRunner] SslStreamTestRunner runner)
 		{
-			var runner = new SslStreamTestRunner (server, client);
 			await runner.Run (ctx, cancellationToken);
 		}
 	}
