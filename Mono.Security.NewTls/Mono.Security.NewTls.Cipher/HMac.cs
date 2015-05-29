@@ -158,6 +158,8 @@ namespace Mono.Security.NewTls.Cipher
 			algorithm.TransformFinalBlock (TlsBuffer.EmptyArray, 0, 0);
 			var tmp = algorithm.Hash;
 
+			algorithm.Initialize ();
+
 			algorithm.TransformBlock (outputPad.Buffer, 0, outputPad.Size, null, 0);
 			algorithm.TransformFinalBlock (tmp, 0, tmp.Length);
 

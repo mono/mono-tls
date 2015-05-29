@@ -101,9 +101,6 @@ namespace Mono.Security.NewTls.DotNetConsole
 			var output = new byte [hmac.MacSize];
 			hmac.TransformFinalBlock (output, 0, output.Length);
 
-			DebugHelper.WriteLine ("RESULT");
-			DebugHelper.WriteBuffer (output);
-
 			return output;
 		}
 
