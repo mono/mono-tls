@@ -174,13 +174,13 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var prf = new PseudoRandomFunctionTls12 (algorithm);
 
-			var result = prf.PRF (new SecureBuffer (secret), seed, new SecureBuffer (data), length);
+			var result = prf.PRF (SecureBuffer.CreateCopy (secret), seed, SecureBuffer.CreateCopy (data), length);
 			return result.StealBuffer ();
 		}
 
 		public byte[] TestHMac (HandshakeHashType algorithm, byte[] key, byte[] data)
 		{
-			var hmac = HMac.Create (algorithm, new SecureBuffer (key));
+			var hmac = HMac.Create (algorithm, SecureBuffer.CreateCopy (key));
 
 			hmac.Reset ();
 			hmac.TransformBlock (data, 0, data.Length);
