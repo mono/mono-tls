@@ -33,8 +33,6 @@ using M = Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	using Handshake;
-
 	internal abstract class CipherSuite
 	{
 		#region Static Fields
