@@ -82,6 +82,26 @@ static int ssl_get_handshake_digest(int idx, long *mask, const EVP_MD **md)
 	return 1;
 }
 
+#if DEBUG_FULL
+static void
+print_buffer(const char *name, const void *buffer, int len)
+{
+	const unsigned char *ptr = buffer;
+	fprintf(stderr, "%s\n", name);
+	for(int i = 0; i < len; i++) {
+		if ((i % 16) == 0) {
+			if (i > 0)
+				fprintf(stderr, "\n");
+			fprintf(stderr, "    %04x  ", i);
+		} else if ((i % 8) == 0) {
+			fprintf(stderr, " -");
+		}
+		fprintf(stderr, " %02x", ptr[i]);
+	}
+	fprintf(stderr, "\n");
+}
+#endif
+
 /* seed1 through seed5 are virtually concatenated */
 static int
 tls1_P_hash(const EVP_MD *md, int compute_mac,
@@ -100,6 +120,21 @@ tls1_P_hash(const EVP_MD *md, int compute_mac,
 	unsigned char A1[EVP_MAX_MD_SIZE];
 	size_t A1_len;
 	int ret = 0;
+
+#if DEBUG_FULL
+	fprintf(stderr, "P_HASH\n");
+	print_buffer("sec", sec, sec_len);
+	if (seed1)
+		print_buffer("seed1", seed1, seed1_len);
+	if (seed2)
+		print_buffer("seed2", seed2, seed2_len);
+	if (seed3)
+		print_buffer("seed3", seed3, seed3_len);
+	if (seed4)
+		print_buffer("seed4", seed4, seed4_len);
+	if (seed5)
+		print_buffer("seed5", seed5, seed5_len);
+#endif
 
 	chunk=EVP_MD_size(md);
 	OPENSSL_assert(chunk >= 0);
@@ -127,6 +162,12 @@ tls1_P_hash(const EVP_MD *md, int compute_mac,
 		goto err;
 	if (!EVP_DigestSignFinal(&ctx,A1,&A1_len))
 		goto err;
+
+#if DEBUG_FULL
+	fprintf(stderr, "P_HASH #1: %lx\n", A1_len);
+	print_buffer("A1", A1, A1_len);
+	print_buffer("out", out, olen);
+#endif
 
 	if (!compute_mac) {
 		if(olen > A1_len)
@@ -188,6 +229,10 @@ err:
 void
 native_crypto_test_init (void)
 {
+#if DEBUG_FULL
+	fprintf(stderr, "NATIVE CRYPTO TEST INIT!\n");
+#endif
+
 	EVP_add_cipher(EVP_aes_128_cbc());
 	EVP_add_cipher(EVP_aes_192_cbc());
 	EVP_add_cipher(EVP_aes_256_cbc());
@@ -278,6 +323,10 @@ native_crypto_test_PRF(NativeCryptoHashType type,
 	if (digest_mask < 0)
 		return -1;
 
+#if DEBUG_FULL
+	fprintf(stderr, "PRF: %x - %p,%x - %p,%x - %p,%x\n", digest_mask, seed1, seed1_len, seed2, seed2_len, sec, slen);
+#endif
+
 	/* Count number of digests and partition sec evenly */
 	count=0;
 	for (idx=0;ssl_get_handshake_digest(idx,&m,&md);idx++) {
@@ -286,17 +335,30 @@ native_crypto_test_PRF(NativeCryptoHashType type,
 	len=slen/count;
 	if (count == 1)
 		slen = 0;
+#if DEBUG_FULL
+	fprintf(stderr, "PRF #1: %x - %x\n", count,len);
+#endif
 	S1=sec;
 	memset(out1,0,olen);
 	for (idx=0;ssl_get_handshake_digest(idx,&m,&md);idx++) {
+#if DEBUG_FULL
+		fprintf(stderr, "PRF #2: %x - %lx\n", idx, m);
+#endif
 		if ((m<<TLS1_PRF_DGST_SHIFT) & digest_mask) {
 			if (!md) {
 				goto err;
 			}
+#if DEBUG_FULL
+			fprintf(stderr, "PRF #3a: %x,%x,%x,%x\n", out1[0], out1[1], out1[2], out1[3]);
+			fprintf(stderr, "PRF #3b: %x,%x,%x,%x\n", out2[0], out2[1], out2[2], out2[3]);
+#endif
 			if (!tls1_P_hash(md, 1, S1,len+(slen&1),
 					 seed1,seed1_len,seed2,seed2_len,seed3,seed3_len,seed4,seed4_len,seed5,seed5_len,
 					 out2,olen))
 				goto err;
+#if DEBUG_FULL
+			fprintf(stderr, "PRF #4: %x,%x,%x,%x\n", out2[0], out2[1], out2[2], out2[3]);
+#endif
 			S1+=len;
 			for (i=0; i<olen; i++)
 			{
@@ -333,6 +395,10 @@ native_crypto_test_HMac(NativeCryptoHashType type,
 	if (digest_mask < 0)
 		return -1;
 
+#if DEBUG_FULL
+	fprintf(stderr, "HMAC: %x - %p,%x - %p,%x - %p,%x\n", digest_mask, seed1, seed1_len, seed2, seed2_len, sec, slen);
+#endif
+
 	/* Count number of digests and partition sec evenly */
 	count=0;
 	for (idx=0;ssl_get_handshake_digest(idx,&m,&md);idx++) {
@@ -341,13 +407,22 @@ native_crypto_test_HMac(NativeCryptoHashType type,
 	len=slen/count;
 	if (count == 1)
 		slen = 0;
+#if DEBUG_FULL
+	fprintf(stderr, "HMAC #1: %x - %x\n", count,len);
+#endif
 	S1=sec;
 	memset(out,0,olen);
 	for (idx=0;ssl_get_handshake_digest(idx,&m,&md);idx++) {
+#if DEBUG_FULL
+		fprintf(stderr, "HMAC #2: %x - %lx\n", idx, m);
+#endif
 		if ((m<<TLS1_PRF_DGST_SHIFT) & digest_mask) {
 			if (!md) {
 				goto err;
 			}
+#if DEBUG_FULL
+			fprintf(stderr, "HMAC #3: %x,%x,%x,%x\n", out[0], out[1], out[2], out[3]);
+#endif
 			if (!tls1_P_hash(md, 0, S1,len+(slen&1),
 					 seed1,seed1_len,seed2,seed2_len,seed3,seed3_len,seed4,seed4_len,seed5,seed5_len,
 					 out,olen))
@@ -356,6 +431,9 @@ native_crypto_test_HMac(NativeCryptoHashType type,
 		}
 	}
 	ret = 1;
+#if DEBUG_FULL
+	fprintf(stderr, "HMAC #5: %x,%x,%x,%x\n", out[0], out[1], out[2], out[3]);
+#endif
 err:
 	return ret;
 }
