@@ -46,7 +46,7 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		protected MonoClientAndServerParameters (MonoClientAndServerParameters other)
-			: base (other.Identifier, (ClientParameters)other.ClientParameters.DeepClone (), (ServerParameters)other.ServerParameters.DeepClone ())
+			: base (other)
 		{
 			ExpectedCipher = other.ExpectedCipher;
 		}

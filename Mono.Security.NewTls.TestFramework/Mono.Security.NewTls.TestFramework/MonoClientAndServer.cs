@@ -46,6 +46,11 @@ namespace Mono.Security.NewTls.TestFramework
 			: base (server, client, new MonoClientAndServerParameters (client.Parameters, server.Parameters))
 		{
 		}
+
+		public MonoClientAndServer (IMonoServer server, IMonoClient client, MonoClientAndServerParameters parameters)
+			: base (server, client, parameters)
+		{
+		}
 	}
 }
 
