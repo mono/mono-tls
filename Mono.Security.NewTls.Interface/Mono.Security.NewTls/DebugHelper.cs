@@ -132,6 +132,22 @@ namespace Mono.Security.NewTls
 		}
 
 		[Conditional ("DEBUG")]
+		public static void WriteBuffer(string message, byte[] buffer)
+		{
+			Initialize ();
+			DebugHelper.WriteLine (String.Format ("{0} ({1} bytes)", message, buffer.Length));
+			DebugHelper.WriteBuffer (buffer);
+		}
+
+		[Conditional ("DEBUG")]
+		public static void WriteBuffer(string message, IBufferOffsetSize buffer)
+		{
+			Initialize ();
+			DebugHelper.WriteLine (String.Format ("{0} ({1} bytes)", message, buffer.Size));
+			DebugHelper.WriteBuffer (buffer);
+		}
+
+		[Conditional ("DEBUG")]
 		public static void WriteBuffer(string message, bool full, TlsBuffer buffer)
 		{
 			Initialize ();
