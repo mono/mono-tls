@@ -106,7 +106,7 @@ namespace Mono.Security.NewTls.Cipher
 			get { return Cipher.HasFixedIV ? 0 : BlockSize; }
 		}
 
-		protected override void EncryptRecord (DisposeContext d, IBufferOffsetSize buffer)
+		protected override void EncryptRecord (DisposeContext d, IBufferOffsetSize input)
 		{
 			ICryptoTransform cipher;
 			if (!Cipher.HasFixedIV) {
@@ -117,9 +117,17 @@ namespace Mono.Security.NewTls.Cipher
 			}
 
 			if (!Cipher.HasFixedIV)
-				Buffer.BlockCopy (EncryptionAlgorithm.IV, 0, buffer.Buffer, buffer.Offset, BlockSize);
+				Buffer.BlockCopy (EncryptionAlgorithm.IV, 0, input.Buffer, input.Offset, BlockSize);
 
-			cipher.TransformBlock (buffer.Buffer, buffer.Offset + HeaderSize, buffer.Size - HeaderSize, buffer.Buffer, buffer.Offset + HeaderSize);
+			var ret = cipher.TransformBlock (input.Buffer, input.Offset + HeaderSize, input.Size - HeaderSize, input.Buffer, input.Offset + HeaderSize);
+			if (ret <= 0 || ret != input.Size - HeaderSize)
+				throw new InvalidOperationException ();
+
+			if (Cipher.HasFixedIV) {
+				var IV = new byte [BlockSize];
+				Buffer.BlockCopy (input.Buffer, input.Offset + input.Size - BlockSize, IV, 0, BlockSize);
+				EncryptionAlgorithm.IV = IV;
+			}
 		}
 
 		protected override int DecryptRecord (DisposeContext d, IBufferOffsetSize input, IBufferOffsetSize output)
@@ -144,6 +152,12 @@ namespace Mono.Security.NewTls.Cipher
 			var ret = cipher.TransformBlock (input.Buffer, input.Offset + ivSize, input.Size - ivSize, output.Buffer, output.Offset);
 			if (ret <= 0 || ret != input.Size - ivSize)
 				return -1;
+
+			if (Cipher.HasFixedIV) {
+				var IV = new byte [BlockSize];
+				Buffer.BlockCopy (input.Buffer, input.Offset + input.Size - BlockSize, IV, 0, BlockSize);
+				DecryptionAlgorithm.IV = IV;
+			}
 
 			return ret;
 		}
