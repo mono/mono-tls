@@ -33,6 +33,12 @@ Dependencies:
     $ make
     $ make install
 ```
+
+  For full debugging use
+
+```
+    $ make CC='cc -g -O0 -DKSSL_DEBUG -DNDEBUG -DCRYPTO_MDEBUG -DTLS_DEBUG'
+```
   
 * Xcode
 
