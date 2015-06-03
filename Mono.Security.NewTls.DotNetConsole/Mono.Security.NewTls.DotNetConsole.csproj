@@ -20,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
+    <NoWarn>3021,436,1635</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -28,6 +29,7 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <DefineConstants>INSIDE_MONO_SECURITY</DefineConstants>
+    <NoWarn>3021,436,1635</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
