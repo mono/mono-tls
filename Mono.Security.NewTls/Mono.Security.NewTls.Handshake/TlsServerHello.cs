@@ -10,9 +10,7 @@ namespace Mono.Security.NewTls.Handshake
 		public TlsServerHello (TlsContext context, TlsBuffer incoming)
 			: base (HandshakeType.ServerHello)
 		{
-			// Read and verify protocol version
 			ServerProtocol = (TlsProtocolCode)incoming.ReadInt16 ();
-			context.VerifyServerProtocol (ServerProtocol);
 
 			Read (incoming);
 		}

@@ -99,7 +99,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void HandleClientHello (TlsClientHello message)
 		{
-			Context.VerifyServerProtocol (message.ClientProtocol);
+			Context.VerifyClientProtocol (message.ClientProtocol);
 
 			HandshakeParameters.ClientRandom = message.ClientRandom;
 

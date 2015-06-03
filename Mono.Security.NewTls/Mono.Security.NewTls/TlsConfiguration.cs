@@ -97,15 +97,29 @@ namespace Mono.Security.NewTls
 			throw new TlsException (AlertDescription.ProtocolVersion);
 		}
 
-		public bool IsSupportedProtocol (TlsProtocolCode protocol)
+		public bool IsSupportedClientProtocol (TlsProtocolCode protocol)
 		{
 			switch (protocol) {
 			case TlsProtocolCode.Tls10:
-				return (supportedProtocols & TlsProtocols.Tls10) != 0;
+				return (supportedProtocols & TlsProtocols.Tls10Server) != 0;
 			case TlsProtocolCode.Tls11:
-				return (supportedProtocols & TlsProtocols.Tls11) != 0;
+				return (supportedProtocols & TlsProtocols.Tls11Server) != 0;
 			case TlsProtocolCode.Tls12:
-				return (supportedProtocols & TlsProtocols.Tls12) != 0;
+				return (supportedProtocols & TlsProtocols.Tls12Server) != 0;
+			default:
+				return false;
+			}
+		}
+
+		public bool IsSupportedServerProtocol (TlsProtocolCode protocol)
+		{
+			switch (protocol) {
+			case TlsProtocolCode.Tls10:
+				return (supportedProtocols & TlsProtocols.Tls10Client) != 0;
+			case TlsProtocolCode.Tls11:
+				return (supportedProtocols & TlsProtocols.Tls11Client) != 0;
+			case TlsProtocolCode.Tls12:
+				return (supportedProtocols & TlsProtocols.Tls12Client) != 0;
 			default:
 				return false;
 			}

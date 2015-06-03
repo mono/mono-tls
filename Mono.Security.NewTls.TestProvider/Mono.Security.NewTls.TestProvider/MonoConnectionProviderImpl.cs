@@ -28,6 +28,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Security.Authentication;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Server;
@@ -166,7 +167,12 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
 
-			var protocol = tlsProvider.SupportedProtocols;
+			var protocol = ((ProtocolVersions)tlsProvider.SupportedProtocols) & ProtocolVersions.ServerMask;
+			if (parameters.ProtocolVersion != ProtocolVersions.Default) {
+				protocol &= parameters.ProtocolVersion;
+				if (protocol == ProtocolVersions.Default)
+					throw new NotSupportedException ();
+			}
 
 			MSI.ICertificateValidator validator = null;
 			if (settings != null)
@@ -180,7 +186,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var monoSslStream = new MonoSslStream (sslStream);
 
 			try {
-				await sslStream.AuthenticateAsServerAsync (certificate, askForCert, protocol, false).ConfigureAwait (false);
+				await sslStream.AuthenticateAsServerAsync (certificate, askForCert, (SslProtocols)protocol, false).ConfigureAwait (false);
 			} catch (Exception ex) {
 				var lastError = monoSslStream.LastError;
 				if (lastError != null)
@@ -203,7 +209,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public async Task<MonoSslStream> CreateClientStreamAsync (Stream stream, string targetHost, ClientParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
-			var protocol = CallbackHelpers.GetSslProtocol ();
+			var protocol = (SslProtocols)parameters.ProtocolVersion;
+			if (protocol == SslProtocols.None)
+				protocol = CallbackHelpers.GetSslProtocol ();
 
 			MSI.ICertificateValidator validator = null;
 			if (settings != null)

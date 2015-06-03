@@ -171,21 +171,40 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		TlsProtocolCode ValidateProtocolCode (TlsProtocolCode protocol)
+		bool IsAcceptableServerProtocol (TlsProtocolCode serverProtocol)
 		{
-			if (!Configuration.IsSupportedProtocol (protocol))
-				throw new TlsException (AlertDescription.ProtocolVersion);
-			if (HasNegotiatedProtocol && protocol != NegotiatedProtocol)
-				throw new TlsException (AlertDescription.ProtocolVersion);
-			return protocol;
+			if (serverProtocol == Configuration.RequestedProtocol)
+				return true;
+
+			if (Configuration.RequestedProtocol == TlsProtocolCode.Tls12) {
+				switch (serverProtocol) {
+				case TlsProtocolCode.Tls11:
+					return (Configuration.SupportedProtocols & TlsProtocols.Tls11Server) != 0;
+				case TlsProtocolCode.Tls10:
+					return (Configuration.SupportedProtocols & TlsProtocols.Tls10Server) != 0;
+				default:
+					return false;
+				}
+			} else if (Configuration.RequestedProtocol == TlsProtocolCode.Tls11) {
+				switch (serverProtocol) {
+				case TlsProtocolCode.Tls10:
+					return (Configuration.SupportedProtocols & TlsProtocols.Tls10Server) != 0;
+				default:
+					return false;
+				}
+			} else {
+				return false;
+			}
 		}
 
-		internal void VerifyServerProtocol (TlsProtocolCode code)
+		internal void VerifyServerProtocol (TlsProtocolCode serverProtocol)
 		{
-			var serverProtocol = ValidateProtocolCode (code);
+			if (!Configuration.IsSupportedServerProtocol (serverProtocol))
+				throw new TlsException (AlertDescription.ProtocolVersion);
+			if (HasNegotiatedProtocol && serverProtocol != NegotiatedProtocol)
+				throw new TlsException (AlertDescription.ProtocolVersion);
 
-			// FIXME: we're overly strict at the moment
-			if (serverProtocol != Configuration.RequestedProtocol)
+			if (!IsAcceptableServerProtocol (serverProtocol))
 				throw new TlsException (
 					AlertDescription.ProtocolVersion,
 					"Incorrect protocol version received from server");
@@ -193,9 +212,12 @@ namespace Mono.Security.NewTls
 			negotiatedProtocol = serverProtocol;
 		}
 
-		internal void VerifyClientProtocol (TlsProtocolCode code)
+		internal void VerifyClientProtocol (TlsProtocolCode clientProtocol)
 		{
-			var clientProtocol = ValidateProtocolCode (code);
+			if (!Configuration.IsSupportedClientProtocol (clientProtocol))
+				throw new TlsException (AlertDescription.ProtocolVersion);
+			if (HasNegotiatedProtocol && clientProtocol != NegotiatedProtocol)
+				throw new TlsException (AlertDescription.ProtocolVersion);
 
 			// FIXME: we're overly strict at the moment
 			if (clientProtocol != Configuration.RequestedProtocol)

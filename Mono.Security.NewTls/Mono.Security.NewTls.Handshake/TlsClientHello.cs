@@ -11,9 +11,7 @@ namespace Mono.Security.NewTls.Handshake
 		public TlsClientHello (TlsContext context, TlsBuffer incoming)
 			: base (HandshakeType.ClientHello)
 		{
-			// FIXME: Fallback
 			ClientProtocol = (TlsProtocolCode)incoming.ReadInt16 ();
-			context.VerifyServerProtocol (ClientProtocol);
 
 			Read (incoming);
 		}
