@@ -34,13 +34,13 @@ namespace Mono.Security.NewTls.Cipher
 			get;
 		}
 
-		public static KeyExchange Create (ExchangeAlgorithmType algorithm)
+		public static KeyExchange Create (TlsProtocolCode protocol, ExchangeAlgorithmType algorithm)
 		{
 			switch (algorithm) {
 			case ExchangeAlgorithmType.RsaSign:
 				return new RSAKeyExchange ();
 			case ExchangeAlgorithmType.DiffieHellman:
-				return new DiffieHellmanKeyExchange ();
+				return new DiffieHellmanKeyExchange (protocol);
 			default:
 				throw new InvalidOperationException ();
 			}

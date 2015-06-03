@@ -10,17 +10,13 @@ namespace Mono.Security.NewTls.Cipher
 		byte[] Y;
 
 		DiffieHellmanManaged dh;
+		TlsProtocolCode protocol;
 
 		public override ExchangeAlgorithmType ExchangeAlgorithm {
 			get { return ExchangeAlgorithmType.DiffieHellman; }
 		}
 
-		public SignatureAndHashAlgorithm SignatureAlgorithm {
-			get;
-			private set;
-		}
-
-		public SecureBuffer Signature {
+		public Signature Signature {
 			get;
 			private set;
 		}
@@ -31,8 +27,16 @@ namespace Mono.Security.NewTls.Cipher
 			G = incoming.ReadBytes (incoming.ReadInt16 ());
 			Y = incoming.ReadBytes (incoming.ReadInt16 ());
 
-			SignatureAlgorithm = new SignatureAndHashAlgorithm (incoming);
-			Signature = incoming.ReadSecureBuffer (incoming.ReadInt16 ());
+			switch (protocol) {
+			case TlsProtocolCode.Tls10:
+				Signature = new SignatureTls10 (incoming);
+				break;
+			case TlsProtocolCode.Tls12:
+				Signature = new SignatureTls12 (incoming);
+				break;
+			default:
+				throw new NotSupportedException ();
+			}
 		}
 
 		public override void ReadClient (TlsBuffer incoming)
@@ -56,8 +60,26 @@ namespace Mono.Security.NewTls.Cipher
 			}
 		}
 
-		void CreateServer (TlsContext ctx)
+		public DiffieHellmanKeyExchange (TlsProtocolCode protocol)
 		{
+			this.protocol = protocol;
+		}
+
+		public DiffieHellmanKeyExchange (TlsContext ctx, SignatureAndHashAlgorithm algorithm)
+		{
+			this.protocol = ctx.NegotiatedProtocol;
+
+			switch (protocol) {
+			case TlsProtocolCode.Tls12:
+				Signature = new SignatureTls12 (algorithm);
+				break;
+			case TlsProtocolCode.Tls10:
+				Signature = new SignatureTls10 ();
+				break;
+			default:
+				throw new NotSupportedException ();
+			}
+
 			dh = new DiffieHellmanManaged ();
 			Y = dh.CreateKeyExchange ();
 			var dhparams = dh.ExportParameters (true);
@@ -65,22 +87,14 @@ namespace Mono.Security.NewTls.Cipher
 			G = dhparams.G;
 
 			using (var buffer = CreateParameterBuffer (ctx.HandshakeParameters))
-				Signature = SignatureHelper.CreateSignature (SignatureAlgorithm, buffer, ctx.Configuration.PrivateKey);
-		}
-
-		public static DiffieHellmanKeyExchange Create (TlsContext ctx, SignatureAndHashAlgorithm algorithm)
-		{
-			var exchange = new DiffieHellmanKeyExchange ();
-			exchange.SignatureAlgorithm = algorithm;
-			exchange.CreateServer (ctx);
-			return exchange;
+				Signature.Create (buffer, ctx.Configuration.PrivateKey);
 		}
 
 		public override void HandleServer (TlsContext ctx)
 		{
 			using (var buffer = CreateParameterBuffer (ctx.HandshakeParameters)) {
 				var certificate = ctx.Session.PendingCrypto.ServerCertificates [0];
-				if (!SignatureHelper.VerifySignature (SignatureAlgorithm, buffer, certificate.RSA, Signature))
+				if (!Signature.Verify (buffer, certificate.RSA))
 					throw new TlsException (AlertDescription.HandshakeFailure);
 			}
 		}
@@ -118,9 +132,7 @@ namespace Mono.Security.NewTls.Cipher
 			stream.Write ((short)Y.Length);
 			stream.Write (Y);
 
-			SignatureAlgorithm.Encode (stream);
-			stream.Write ((short)Signature.Size);
-			stream.Write (Signature.Buffer);
+			Signature.Write (stream);
 		}
 
 		protected override void Clear ()

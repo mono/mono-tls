@@ -199,7 +199,7 @@ namespace Mono.Security.NewTls.Negotiation
 			}
 
 			var signatureType = SelectSignatureAlgorithm ();
-			var dh = DiffieHellmanKeyExchange.Create (Context, signatureType);
+			var dh = new DiffieHellmanKeyExchange (Context, signatureType);
 			HandshakeParameters.KeyExchange = dh;
 
 			return new TlsServerKeyExchange (dh);

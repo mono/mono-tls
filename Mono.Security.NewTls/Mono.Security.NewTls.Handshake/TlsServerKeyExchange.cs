@@ -11,7 +11,7 @@ namespace Mono.Security.NewTls.Handshake
 		public TlsServerKeyExchange (TlsContext context, TlsBuffer incoming)
 			: base (HandshakeType.ServerKeyExchange)
 		{
-			KeyExchange = KeyExchange.Create (context.Session.PendingCrypto.Cipher.ExchangeAlgorithmType);
+			KeyExchange = KeyExchange.Create (context.NegotiatedProtocol, context.Session.PendingCrypto.Cipher.ExchangeAlgorithmType);
 			Read (incoming);
 		}
 
