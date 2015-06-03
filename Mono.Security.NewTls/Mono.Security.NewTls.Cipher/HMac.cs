@@ -44,6 +44,8 @@ namespace Mono.Security.NewTls.Cipher
 		readonly SecureBuffer inputPad;
 		readonly SecureBuffer outputPad;
 
+		bool final;
+
 		public int MacSize {
 			get { return digestSize; }
 		}
@@ -143,15 +145,22 @@ namespace Mono.Security.NewTls.Cipher
 
 			// Initialise the digest
 			algorithm.TransformBlock (inputPad.Buffer, 0, inputPad.Size, null, 0);
+
+			final = false;
 		}
 
 		public void TransformBlock (byte[] input, int inOff, int len)
 		{
+			if (final)
+				throw new InvalidOperationException ();
+
 			algorithm.TransformBlock (input, inOff, len, null, 0);
 		}
 
 		public void TransformFinalBlock (byte[] output, int outOff, int len)
 		{
+			if (final)
+				throw new InvalidOperationException ();
 			if (len > digestSize)
 				throw new ArgumentException ();
 
@@ -167,6 +176,8 @@ namespace Mono.Security.NewTls.Cipher
 
 			// Initialise the digest
 			algorithm.TransformBlock (inputPad.Buffer, 0, inputPad.Size, null, 0);
+
+			final = true;
 		}
 
 		public byte[] TransformFinalBlock ()
@@ -183,6 +194,8 @@ namespace Mono.Security.NewTls.Cipher
 
 			// Initialise the digest
 			algorithm.TransformBlock (inputPad.Buffer, 0, inputPad.Size, null, 0);
+
+			final = false;
 		}
 
 		static void xor (byte[] a, byte n)

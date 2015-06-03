@@ -91,6 +91,7 @@ namespace Mono.Security.NewTls.Cipher
 			header.Write ((short)protocol);
 			header.Write ((short)fragment.Size);
 
+			hmac.Reset ();
 			hmac.TransformBlock (header.Buffer, 0, header.Size);
 			hmac.TransformBlock (fragment.Buffer, fragment.Offset, fragment.Size);
 			return hmac.TransformFinalBlock ();
