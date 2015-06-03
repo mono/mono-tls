@@ -17,6 +17,8 @@ namespace Mono.Security.NewTls.Extensions
 
 		public ServerNameExtension (TlsBuffer incoming)
 		{
+			if (incoming.Remaining == 0)
+				return;
 			var length = incoming.ReadInt16 ();
 			if (length != incoming.Remaining)
 				throw new TlsException (AlertDescription.DecodeError);
