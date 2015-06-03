@@ -65,7 +65,7 @@ namespace Mono.Security.Providers.NewTls
 		}
 
 		public override SslProtocols SupportedProtocols {
-			get { return SslProtocols.Tls12; }
+			get { return SslProtocols.Tls | SslProtocols.Tls12; }
 		}
 
 		public override MonoSslStream CreateSslStream (

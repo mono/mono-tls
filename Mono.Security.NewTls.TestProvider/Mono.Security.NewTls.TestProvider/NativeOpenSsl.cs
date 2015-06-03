@@ -148,7 +148,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 				if ((ContentType)content_type == ContentType.Alert) {
 					var alert = new Alert ((AlertLevel)buffer [0], (AlertDescription)buffer [1]);
-					if (enableDebugging)
+					if (true || enableDebugging)
 						DebugHelper.WriteLine ("ALERT: {0}", alert);
 					lastAlert = new TlsException (alert);
 				}

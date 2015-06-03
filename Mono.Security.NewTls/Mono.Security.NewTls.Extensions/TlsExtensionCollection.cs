@@ -62,6 +62,10 @@ namespace Mono.Security.NewTls.Extensions
 			if (incoming.Remaining == 0)
 				return;
 
+			#if DEBUG_FULL
+			DebugHelper.WriteBuffer ("TlsExtensionCollection", false, incoming);
+			#endif
+
 			var length = incoming.ReadInt16 ();
 			if (incoming.Remaining != length)
 				throw new TlsException (AlertDescription.DecodeError);

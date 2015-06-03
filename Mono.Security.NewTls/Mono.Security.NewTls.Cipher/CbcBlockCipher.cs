@@ -92,6 +92,9 @@ namespace Mono.Security.NewTls.Cipher
 
 			// Legacy mode for TLS 1.0
 			if (Cipher.HasFixedIV) {
+				DebugHelper.WriteLine ("FIXED IV: {0}", IsClient);
+				DebugHelper.WriteBuffer ("CLIENT WRITE IV", ClientWriteIV);
+				DebugHelper.WriteBuffer ("SERVER WRITE IV", ServerWriteIV);
 				EncryptionAlgorithm.IV = (IsClient ? ClientWriteIV : ServerWriteIV).Buffer;
 				DecryptionAlgorithm.IV = (IsClient ? ServerWriteIV : ClientWriteIV).Buffer;
 
@@ -119,14 +122,22 @@ namespace Mono.Security.NewTls.Cipher
 			if (!Cipher.HasFixedIV)
 				Buffer.BlockCopy (EncryptionAlgorithm.IV, 0, input.Buffer, input.Offset, BlockSize);
 
+			DebugHelper.WriteLine ("ENCRYPT RECORD: {0} - {1} {2}", HeaderSize, input.Offset + HeaderSize, input.Size - HeaderSize);
+			DebugHelper.WriteBuffer ("IV", EncryptionAlgorithm.IV);
+			DebugHelper.WriteBuffer ("INPUT", input);
+
 			var ret = cipher.TransformBlock (input.Buffer, input.Offset + HeaderSize, input.Size - HeaderSize, input.Buffer, input.Offset + HeaderSize);
+			DebugHelper.WriteLine ("ENCRYPT #1: {0}", ret);
 			if (ret <= 0 || ret != input.Size - HeaderSize)
 				throw new InvalidOperationException ();
+
+			DebugHelper.WriteBuffer ("OUTPUT", input);
 
 			if (Cipher.HasFixedIV) {
 				var IV = new byte [BlockSize];
 				Buffer.BlockCopy (input.Buffer, input.Offset + input.Size - BlockSize, IV, 0, BlockSize);
 				EncryptionAlgorithm.IV = IV;
+				DebugHelper.WriteBuffer ("IV", IV);
 			}
 		}
 
@@ -149,7 +160,13 @@ namespace Mono.Security.NewTls.Cipher
 				cipher = decryptionCipher;
 			}
 
+			DebugHelper.WriteLine ("DECRYPT RECORD: {0} - {1} {2}", ivSize, input.Offset + ivSize, input.Size - ivSize);
+			DebugHelper.WriteBuffer ("IV", DecryptionAlgorithm.IV);
+			DebugHelper.WriteBuffer ("INPUT", input);
+
 			var ret = cipher.TransformBlock (input.Buffer, input.Offset + ivSize, input.Size - ivSize, output.Buffer, output.Offset);
+			DebugHelper.WriteLine ("DECRYPT #1: {0}", ret);
+			DebugHelper.WriteBuffer ("OUTPUT", output);
 			if (ret <= 0 || ret != input.Size - ivSize)
 				return -1;
 
@@ -157,6 +174,7 @@ namespace Mono.Security.NewTls.Cipher
 				var IV = new byte [BlockSize];
 				Buffer.BlockCopy (input.Buffer, input.Offset + input.Size - BlockSize, IV, 0, BlockSize);
 				DecryptionAlgorithm.IV = IV;
+				DebugHelper.WriteBuffer ("IV", IV);
 			}
 
 			return ret;

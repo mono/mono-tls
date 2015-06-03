@@ -145,8 +145,9 @@ namespace Mono.Security.NewTls.TestProvider
 			ctx.LogMessage ("Starting {0} version {1}.", this, protocol);
 			openssl = new NativeOpenSsl (IsServer, false, protocol);
 			// FIXME
-			var validationCallback = GetValidationCallback ();
-			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_PEER, validationCallback);
+			// var validationCallback = GetValidationCallback ();
+			// openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_PEER, validationCallback);
+			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);
 			#if FIXME
 			if (!Parameters.VerifyPeerCertificate)
 				openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);

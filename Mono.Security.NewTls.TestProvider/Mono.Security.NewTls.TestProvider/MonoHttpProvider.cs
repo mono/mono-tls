@@ -59,7 +59,10 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public IHttpWebRequest CreateWebRequest (Uri uri)
 		{
-			var request = MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, connectionProvider.MonoTlsProvider);
+			var settings = new TlsSettings {
+				UseServicePointManagerCallback = true, SkipSystemValidators = true, CallbackNeedsCertificateChain = false
+			};
+			var request = MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, connectionProvider.MonoTlsProvider, settings);
 			return CreateWebRequest (request);
 		}
 

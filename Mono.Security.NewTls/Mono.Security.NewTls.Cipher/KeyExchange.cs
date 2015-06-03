@@ -87,10 +87,10 @@ namespace Mono.Security.NewTls.Cipher
 
 			#if DEBUG_FULL
 			if (ctx.EnableDebugging) {
-				DebugHelper.WriteLine ("CS", cs);
-				DebugHelper.WriteLine ("SC", sc);
-				DebugHelper.WriteLine ("PRE-MASTER", preMasterSecret);
-				DebugHelper.WriteLine ("MASTER SECRET", crypto.MasterSecret.Buffer);
+				DebugHelper.WriteBuffer ("CS", cs);
+				DebugHelper.WriteBuffer ("SC", sc);
+				DebugHelper.WriteBuffer ("PRE-MASTER", preMasterSecret);
+				DebugHelper.WriteBuffer ("MASTER SECRET", crypto.MasterSecret.Buffer);
 			}
 			#endif
 
@@ -99,7 +99,7 @@ namespace Mono.Security.NewTls.Cipher
 			#if DEBUG_FULL
 			if (ctx.EnableDebugging) {
 				DebugHelper.WriteLine ("KEY BLOCK SIZE: {0}", crypto.Cipher.KeyBlockSize);
-				DebugHelper.WriteLine ("KEY BLOCK", keyBlock.Buffer);
+				DebugHelper.WriteBuffer ("KEY BLOCK", true, keyBlock);
 			}
 			#endif
 
@@ -108,17 +108,29 @@ namespace Mono.Security.NewTls.Cipher
 			crypto.ClientWriteKey = keyBlock.ReadSecureBuffer (crypto.Cipher.KeyMaterialSize);
 			crypto.ServerWriteKey = keyBlock.ReadSecureBuffer (crypto.Cipher.KeyMaterialSize);
 
+			#if DEBUG_FULL
+			if (ctx.EnableDebugging) {
+				DebugHelper.WriteBuffer ("CLIENT WRITE MAC", crypto.ClientWriteMac);
+				DebugHelper.WriteBuffer ("SERVER WRITE MAC", crypto.ServerWriteMac);
+				DebugHelper.WriteBuffer ("CLIENT WRITE KEY", crypto.ClientWriteKey);
+				DebugHelper.WriteBuffer ("SERVER WRITE KEY", crypto.ServerWriteKey);
+			}
+			#endif
+
 			if (crypto.Cipher.HasFixedIV) {
 				crypto.ClientWriteIV = keyBlock.ReadSecureBuffer (crypto.Cipher.FixedIvSize);
 				crypto.ServerWriteIV = keyBlock.ReadSecureBuffer (crypto.Cipher.FixedIvSize);
 
 				#if DEBUG_FULL
 				if (ctx.EnableDebugging) {
-					DebugHelper.WriteLine ("CLIENT IV", crypto.ClientWriteIV.Buffer);
-					DebugHelper.WriteLine ("SERVER IV", crypto.ServerWriteIV.Buffer);
+					DebugHelper.WriteBuffer ("CLIENT IV", crypto.ClientWriteIV);
+					DebugHelper.WriteBuffer ("SERVER IV", crypto.ServerWriteIV);
 				}
 				#endif
 			}
+
+			if (keyBlock.Remaining != 0)
+				throw new InvalidOperationException ();
 		}
 	}
 }
