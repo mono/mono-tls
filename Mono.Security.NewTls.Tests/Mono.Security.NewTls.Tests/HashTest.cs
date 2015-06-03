@@ -31,7 +31,6 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
-	[Martin]
 	[AsyncTestFixture]
 	public class HashTest : ITestHost<IHashTestHost>
 	{
@@ -260,8 +259,6 @@ namespace Mono.Security.NewTls.Tests
 			ctx.Assert (output, Is.EqualTo (PRF1));
 		}
 
-
-		[Martin]
 		[AsyncTest]
 		public void TestHMac (TestContext ctx, [TestHost] IHashTestHost provider)
 		{

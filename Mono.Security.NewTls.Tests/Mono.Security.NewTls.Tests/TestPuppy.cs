@@ -36,8 +36,10 @@ using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
 
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.HttpHandlers;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.Features;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -48,8 +50,31 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		public Task Run (TestContext ctx, CancellationToken cancellationToken)
 		{
-			var runner = new PuppyTestRunner ();
+			var factory = DependencyInjector.Get<ConnectionProviderFactory> ();
+			var provider = factory.GetProvider (ConnectionProviderType.MonoWithNewTLS);
+
+			var runner = new MyPuppyTestRunner (provider);
 			return runner.Run (ctx, cancellationToken);
+		}
+
+		class MyPuppyTestRunner : PuppyTestRunner
+		{
+			public ConnectionProvider Provider {
+				get;
+				private set;
+			}
+
+			public MyPuppyTestRunner (ConnectionProvider provider)
+			{
+				Provider = provider;
+			}
+
+			public override Request CreateRequest (TestContext ctx)
+			{
+				var uri = new Uri (GetPuppyURL (ctx));
+				var request = Provider.HttpProvider.CreateWebRequest (uri);
+				return new TraditionalRequest (request);
+			}
 		}
 	}
 }
