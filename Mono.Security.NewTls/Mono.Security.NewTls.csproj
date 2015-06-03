@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;NET_4_5;INSIDE_MONO_SECURITY;INSTRUMENTATION;INSIDE_MONO_NEWTLS;DEBUG_FULL</DefineConstants>
+    <DefineConstants>DEBUG;NET_4_5;INSIDE_MONO_SECURITY;INSTRUMENTATION;INSIDE_MONO_NEWTLS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>

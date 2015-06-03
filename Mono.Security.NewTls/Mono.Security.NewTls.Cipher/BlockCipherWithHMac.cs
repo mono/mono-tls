@@ -83,7 +83,7 @@ namespace Mono.Security.NewTls.Cipher
 			return GetEncryptedSize (size, out plen, out padLen);
 		}
 
-		byte[] ComputeRecordMAC (TlsProtocolCode protocol, HMac hmac, ulong seqnum, ContentType contentType, IBufferOffsetSize fragment)
+		static byte[] ComputeRecordMAC (TlsProtocolCode protocol, HMac hmac, ulong seqnum, ContentType contentType, IBufferOffsetSize fragment)
 		{
 			var header = new TlsBuffer (13);
 			header.Write (seqnum);
@@ -91,16 +91,10 @@ namespace Mono.Security.NewTls.Cipher
 			header.Write ((short)protocol);
 			header.Write ((short)fragment.Size);
 
-			DebugHelper.WriteLine ("COMPUTE RECORD MAC: {0} {1} {2}", IsClient, contentType, seqnum);
-			DebugHelper.WriteBuffer ("HEADER", true, header);
-			DebugHelper.WriteBuffer ("FRAGMENT", fragment);
-
 			hmac.Reset ();
 			hmac.TransformBlock (header.Buffer, 0, header.Size);
 			hmac.TransformBlock (fragment.Buffer, fragment.Offset, fragment.Size);
-			var mac = hmac.TransformFinalBlock ();
-			DebugHelper.WriteBuffer ("MAC", mac);
-			return mac;
+			return hmac.TransformFinalBlock ();
 		}
 
 		byte[] ComputeClientRecordMAC (ContentType contentType, IBufferOffsetSize fragment)
@@ -168,8 +162,6 @@ namespace Mono.Security.NewTls.Cipher
 			if (input.Size < MinExtraEncryptedBytes)
 				return -1;
 
-			System.Threading.Thread.Sleep (750);
-
 			var plen = DecryptRecord (d, input, output);
 			if (plen <= 0)
 				return -1;
@@ -177,7 +169,7 @@ namespace Mono.Security.NewTls.Cipher
 			var padlen = output.Buffer [output.Offset + plen - 1];
 			#if DEBUG_FULL
 			if (Cipher.EnableDebugging) {
-				DebugHelper.WriteLine ("DECRYPT: {0} {1} {2} {3} {4}", input.Size, plen, padlen, BlockSize, MacSize);
+				DebugHelper.WriteLine ("DECRYPT: {0} {1} {2}", input.Size, plen, padlen);
 				DebugHelper.WriteBuffer (output.Buffer, output.Offset, plen);
 			}
 			#endif
@@ -227,8 +219,6 @@ namespace Mono.Security.NewTls.Cipher
 						dummyOk--;
 				}
 
-				DebugHelper.WriteLine ("CHECK MAC: {0} {1} {2} {3}", ok, plen, padlen, resultLength);
-
 				if (ok < 0) {
 					// Now assume there's no padding, compute the MAC over the entire buffer.
 					var first = new BufferOffsetSize (output.Buffer, output.Offset, plen - MacSize);
@@ -241,18 +231,10 @@ namespace Mono.Security.NewTls.Cipher
 					var first = new BufferOffsetSize (output.Buffer, output.Offset, resultLength);
 					var checkMac = ComputeRecordMAC (contentType, first);
 
-					#if DEBUG_FULL
-					DebugHelper.WriteBuffer ("FIRST", first);
-					DebugHelper.WriteBuffer ("MAC", checkMac);;
-					#endif
-
 					var L1 = 13 + plen - MacSize;
 					var L2 = 13 + plen - padlen - 1 - MacSize;
 
 					var additional = ((L1 - 55) / 64) - ((L2 - 55) / 64);
-					#if DEBUG_FULL
-					DebugHelper.WriteLine ("TEST:{0} {1} {2}", L1, L2, additional);
-					#endif
 					if (additional > 0) {
 						var algorithm = HMac.CreateHash (Cipher.HashAlgorithmType);
 						for (int i = 0; i < additional; i++)
@@ -260,7 +242,6 @@ namespace Mono.Security.NewTls.Cipher
 					}
 
 					ok += TlsBuffer.ConstantTimeCompare (checkMac, 0, checkMac.Length, output.Buffer, output.Offset + resultLength, MacSize);
-					DebugHelper.WriteLine ("CHECK MAC #1: {0}", ok);
 					if (ok == 0)
 						ok = resultLength;
 					return ok;

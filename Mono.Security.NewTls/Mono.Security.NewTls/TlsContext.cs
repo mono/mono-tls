@@ -83,10 +83,6 @@ namespace Mono.Security.NewTls
 
 			if (Configuration.UserSettings != null && Configuration.UserSettings.EnableDebugging)
 				EnableDebugging = true;
-
-			#if DEBUG_FULL
-			EnableDebugging = true;
-			#endif
 		}
 
 		#if INSTRUMENTATION

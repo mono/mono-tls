@@ -173,7 +173,6 @@ namespace Mono.Security.NewTls.TestProvider
 				if (protocol == ProtocolVersions.Default)
 					throw new NotSupportedException ();
 			}
-			DebugHelper.WriteLine ("CREATE SERVER STREAM ASYNC: {0}", protocol);
 
 			MSI.ICertificateValidator validator = null;
 			if (settings != null)

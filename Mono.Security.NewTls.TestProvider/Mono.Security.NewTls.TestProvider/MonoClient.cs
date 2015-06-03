@@ -58,8 +58,6 @@ namespace Mono.Security.NewTls.TestProvider
 		protected override TlsSettings GetSettings ()
 		{
 			var settings = new TlsSettings ();
-			settings.SkipSystemValidators = true;
-			settings.CallbackNeedsCertificateChain = false;
 
 			if (MonoParameters != null)
 				settings.RequestedCiphers = MonoParameters.ClientCiphers;
