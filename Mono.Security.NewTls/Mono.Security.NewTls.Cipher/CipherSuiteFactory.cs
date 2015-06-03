@@ -9,6 +9,8 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			if (protocol == TlsProtocolCode.Tls12)
 				return CreateCipherSuiteTls12 (code);
+			else if (protocol == TlsProtocolCode.Tls10)
+				return CreateCipherSuiteTls10 (code);
 			else
 				throw new TlsException (AlertDescription.ProtocolVersion);
 		}
@@ -57,6 +59,26 @@ namespace Mono.Security.NewTls.Cipher
 			}
 		}
 
+		static CipherSuite CreateCipherSuiteTls10 (CipherSuiteCode code)
+		{
+			// Sanity check.
+			if (!IsCipherSupported (TlsProtocolCode.Tls10, code))
+				throw new TlsException (AlertDescription.InsuficientSecurity, "Unknown cipher suite: {0}", code);
+
+			switch (code) {
+			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA:
+				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.RsaSign);
+			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
+				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.RsaSign);
+			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
+				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.DiffieHellman);
+			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
+				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.DiffieHellman);
+			default:
+				throw new TlsException (AlertDescription.InsuficientSecurity, "Unknown cipher suite: {0}", code);
+			}
+		}
+
 		public static bool IsCipherSupported (TlsProtocolCode protocol, CipherSuiteCode code)
 		{
 			var array = GetSupportedCiphersArray (protocol);
@@ -80,6 +102,8 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			if (protocol == TlsProtocolCode.Tls12)
 				return DefaultCiphersTls12;
+			else if (protocol == TlsProtocolCode.Tls10)
+				return DefaultCiphersTls10;
 			else
 				throw new TlsException (AlertDescription.ProtocolVersion);
 		}
@@ -88,6 +112,8 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			if (protocol == TlsProtocolCode.Tls12)
 				return SupportedCiphersTls12;
+			else if (protocol == TlsProtocolCode.Tls10)
+				return SupportedCiphersTls10;
 			else
 				throw new TlsException (AlertDescription.ProtocolVersion);
 		}
@@ -118,8 +144,16 @@ namespace Mono.Security.NewTls.Cipher
 			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
 		};
 
+		static readonly CipherSuiteCode[] SupportedCiphersTls10 = {
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
+		};
+
 		// Currently the same as SupportedCiphers12, but we may change this in future.
 		static readonly CipherSuiteCode[] DefaultCiphersTls12 = SupportedCiphersTls12;
+		static readonly CipherSuiteCode[] DefaultCiphersTls10 = SupportedCiphersTls10;
 	}
 }
 
