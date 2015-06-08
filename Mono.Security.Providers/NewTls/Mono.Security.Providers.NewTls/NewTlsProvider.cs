@@ -33,9 +33,9 @@ using PrebuiltSystem::System.Net.Security;
 using PrebuiltSystem::System.Security.Authentication;
 using Mono.Security.NewTls;
 #if PREBUILT_MSI
-using PrebuiltSystem::Mono.Security.Interface;
+using MSI = PrebuiltSystem::Mono.Security.Interface;
 #else
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 #endif
 using PrebuiltSystem::Mono.Net.Security;
 
@@ -50,7 +50,7 @@ namespace Mono.Security.Providers.NewTls
 	 * 
 	 * It is primarily intended for testing.
 	 */
-	public class NewTlsProvider : MonoTlsProvider
+	public class NewTlsProvider : MSI.MonoTlsProvider
 	{
 		public override bool SupportsSslStream {
 			get { return true; }
@@ -65,22 +65,22 @@ namespace Mono.Security.Providers.NewTls
 		}
 
 		public override SslProtocols SupportedProtocols {
-			get { return SslProtocols.Tls12; }
+			get { return SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls; }
 		}
 
-		public override MonoSslStream CreateSslStream (
+		public override MSI.MonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
-			ICertificateValidator certificateValidator,
-			MonoTlsSettings settings = null)
+			MSI.ICertificateValidator certificateValidator,
+			MSI.MonoTlsSettings settings = null)
 		{
 			return MonoNewTlsStreamFactory.CreateSslStream (innerStream, leaveInnerStreamOpen, certificateValidator, settings);
 		}
 
-		public override IMonoTlsContext CreateTlsContext (
-			string hostname, bool serverMode, TlsProtocols protocolFlags,
+		public override MSI.IMonoTlsContext CreateTlsContext (
+			string hostname, bool serverMode, MSI.TlsProtocols protocolFlags,
 			SSCX.X509Certificate serverCertificate, PSSCX.X509CertificateCollection clientCertificates,
-			bool remoteCertRequired, MonoEncryptionPolicy encryptionPolicy,
-			ICertificateValidator certificateValidator, MonoTlsSettings settings)
+			bool remoteCertRequired, MSI.MonoEncryptionPolicy encryptionPolicy,
+			MSI.ICertificateValidator certificateValidator, MSI.MonoTlsSettings settings)
 		{
 			TlsConfiguration config;
 			if (serverMode) {
@@ -98,12 +98,12 @@ namespace Mono.Security.Providers.NewTls
 			return new TlsContextWrapper (config, serverMode);
 		}
 
-		public static bool IsNewTlsStream (MonoSslStream stream)
+		public static bool IsNewTlsStream (MSI.MonoSslStream stream)
 		{
 			return stream is MonoSslStreamImpl;
 		}
 
-		public static MonoNewTlsStream GetNewTlsStream (MonoSslStream stream)
+		public static MonoNewTlsStream GetNewTlsStream (MSI.MonoSslStream stream)
 		{
 			return ((MonoSslStreamImpl)stream).Impl;
 		}

@@ -29,6 +29,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.ConnectionFramework;
 
 using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
@@ -70,6 +71,10 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public bool SupportsCleanShutdown {
 			get { return monoNewTlsStream != null; }
+		}
+
+		public ProtocolVersions ProtocolVersion {
+			get { return (ProtocolVersions)stream.SslProtocol; }
 		}
 
 		public Exception LastError {

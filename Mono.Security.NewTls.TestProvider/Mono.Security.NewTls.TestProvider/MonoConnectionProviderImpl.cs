@@ -133,6 +133,18 @@ namespace Mono.Security.NewTls.TestProvider
 			return httpProvider;
 		}
 
+		SslProtocols GetProtocol (ConnectionParameters parameters, bool server)
+		{
+			var protocol = (ProtocolVersions)tlsProvider.SupportedProtocols;
+			protocol &= server ? ProtocolVersions.ServerMask : ProtocolVersions.ClientMask;
+			if (parameters.ProtocolVersion != ProtocolVersions.Unspecified) {
+				protocol &= parameters.ProtocolVersion;
+				if (protocol == ProtocolVersions.Unspecified)
+					throw new NotSupportedException ();
+			}
+			return (SslProtocols)protocol;
+		}
+
 		ISslStream ISslStreamProvider.CreateServerStream (Stream stream, ServerParameters parameters)
 		{
 			return CreateServerStream (stream, parameters);
@@ -142,7 +154,7 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
 
-			var protocol = tlsProvider.SupportedProtocols;
+			var protocol = GetProtocol (parameters, true);
 			var validator = CallbackHelpers.GetCertificateValidator (parameters.ServerCertificateValidator);
 
 			var askForCert = (parameters.Flags & (ServerFlags.AskForClientCertificate|ServerFlags.RequireClientCertificate)) != 0;
@@ -166,13 +178,7 @@ namespace Mono.Security.NewTls.TestProvider
 		public async Task<MonoSslStream> CreateServerStreamAsync (Stream stream, ServerParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
-
-			var protocol = ((ProtocolVersions)tlsProvider.SupportedProtocols) & ProtocolVersions.ServerMask;
-			if (parameters.ProtocolVersion != ProtocolVersions.Default) {
-				protocol &= parameters.ProtocolVersion;
-				if (protocol == ProtocolVersions.Default)
-					throw new NotSupportedException ();
-			}
+			var protocol = GetProtocol (parameters, true);
 
 			MSI.ICertificateValidator validator = null;
 			if (settings != null)
@@ -186,7 +192,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var monoSslStream = new MonoSslStream (sslStream);
 
 			try {
-				await sslStream.AuthenticateAsServerAsync (certificate, askForCert, (SslProtocols)protocol, false).ConfigureAwait (false);
+				await sslStream.AuthenticateAsServerAsync (certificate, askForCert, protocol, false).ConfigureAwait (false);
 			} catch (Exception ex) {
 				var lastError = monoSslStream.LastError;
 				if (lastError != null)
@@ -209,9 +215,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public async Task<MonoSslStream> CreateClientStreamAsync (Stream stream, string targetHost, ClientParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
-			var protocol = (SslProtocols)parameters.ProtocolVersion;
-			if (protocol == SslProtocols.None)
-				protocol = CallbackHelpers.GetSslProtocol ();
+			var protocol = GetProtocol (parameters, false);
 
 			MSI.ICertificateValidator validator = null;
 			if (settings != null)

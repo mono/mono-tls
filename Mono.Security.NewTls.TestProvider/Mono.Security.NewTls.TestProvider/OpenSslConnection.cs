@@ -79,6 +79,21 @@ namespace Mono.Security.NewTls.TestProvider
 			get;
 		}
 
+		public ProtocolVersions ProtocolVersion {
+			get {
+				switch (openssl.Protocol) {
+				case NativeOpenSslProtocol.TLS10:
+					return ProtocolVersions.Tls10;
+				case NativeOpenSslProtocol.TLS11:
+					return ProtocolVersions.Tls11;
+				case NativeOpenSslProtocol.TLS12:
+					return ProtocolVersions.Tls12;
+				default:
+					throw new InvalidOperationException ();
+				}
+			}
+		}
+
 		public TlsConnectionInfo GetConnectionInfo ()
 		{
 			if (connectionInfo != null)
@@ -111,7 +126,7 @@ namespace Mono.Security.NewTls.TestProvider
 		NativeOpenSslProtocol GetProtocolVersion ()
 		{
 			var version = Parameters.ProtocolVersion;
-			if (version == ProtocolVersions.Default)
+			if (version == ProtocolVersions.Unspecified)
 				return NativeOpenSslProtocol.TLS12;
 			if ((version & ProtocolVersions.Tls12) != 0)
 				return NativeOpenSslProtocol.TLS12;

@@ -49,6 +49,7 @@ namespace Mono.Security.NewTls.TestProvider
 		MessageCallback message_callback;
 		VerifyCallback verify_callback;
 		RemoteValidationCallback managed_cert_callback;
+		NativeOpenSslProtocol protocol;
 		ShutdownState shutdownState;
 		TlsException lastAlert;
 
@@ -297,10 +298,15 @@ namespace Mono.Security.NewTls.TestProvider
 			throw new InvalidOperationException ();
 		}
 
+		public NativeOpenSslProtocol Protocol {
+			get { return protocol; }
+		}
+
 		public NativeOpenSsl (bool isServer, bool debug, NativeOpenSslProtocol protocol)
 		{
 			this.isServer = isServer;
 			this.enableDebugging = debug;
+			this.protocol = protocol;
 
 			if (debug)
 				debug_callback = new DebugCallback (OnDebugCallback);

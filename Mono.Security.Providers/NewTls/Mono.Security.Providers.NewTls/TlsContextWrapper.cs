@@ -202,6 +202,16 @@ namespace Mono.Security.Providers.NewTls
 				return Context.ReceivedCloseNotify;
 			}
 		}
+
+		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
+		{
+			var info = Context.ConnectionInfo;
+			if (info == null)
+				return null;
+			return new MSI.MonoTlsConnectionInfo {
+				CipherSuiteCode = (short)info.CipherCode, ProtocolVersion = (MSI.TlsProtocols)info.ProtocolVersion
+			};
+		}
 	}
 }
 

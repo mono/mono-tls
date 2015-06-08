@@ -27,6 +27,8 @@ namespace Mono.Security.NewTls
 
 		NegotiationHandler negotiationHandler;
 
+		TlsConnectionInfo connectionInfo;
+
 		TlsBuffer cachedFragment;
 		int skipToOffset = -1;
 
@@ -424,15 +426,31 @@ namespace Mono.Security.NewTls
 			if (Session.CurrentCrypto.Cipher == null)
 				throw new TlsException (AlertDescription.InsuficientSecurity, "No ciper");
 
+			TlsProtocols protocol;
+			switch (Session.CurrentCrypto.Protocol) {
+			case TlsProtocolCode.Tls10:
+				protocol = TlsProtocols.Tls10;
+				break;
+			case TlsProtocolCode.Tls11:
+				protocol = TlsProtocols.Tls11;
+				break;
+			case TlsProtocolCode.Tls12:
+				protocol = TlsProtocols.Tls12;
+				break;
+			default:
+				throw new TlsException (AlertDescription.ProtocolVersion);
+			}
+
+			connectionInfo = new TlsConnectionInfo {
+				CipherCode = Session.CurrentCrypto.Cipher.Code, ProtocolVersion = protocol
+			};
+
 			if (configuration.UserSettings != null)
-				configuration.UserSettings.ConnectionInfo = GetConnectionInfo ();
+				configuration.UserSettings.ConnectionInfo = connectionInfo;
 		}
 
-		TlsConnectionInfo GetConnectionInfo ()
-		{
-			return new TlsConnectionInfo {
-				CipherCode = Session.CurrentCrypto.Cipher.Code
-			};
+		public TlsConnectionInfo ConnectionInfo {
+			get { return connectionInfo; }
 		}
 
 		#endregion

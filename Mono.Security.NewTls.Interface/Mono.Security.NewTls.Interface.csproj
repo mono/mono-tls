@@ -61,6 +61,7 @@
     <Compile Include="Mono.Security.NewTls.Instrumentation\HandshakeInstrumentType.cs" />
     <Compile Include="Mono.Security.NewTls.Instrumentation\SettingsInstrument.cs" />
     <Compile Include="Mono.Security.NewTls.Instrumentation\InstrumentCollection.cs" />
+    <Compile Include="Mono.Security.NewTls\TlsProtocols.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
