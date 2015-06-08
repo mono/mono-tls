@@ -212,7 +212,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 			var parameters = UserSettings.ClientCertificateParameters;
 			parameters.EnsureDefaultValues ();
-			return new TlsCertificateRequest (parameters);
+			return new TlsCertificateRequest (Context.NegotiatedProtocol, parameters);
 		}
 
 		protected override NegotiationHandler GenerateOutput (TlsMultiBuffer outgoing)

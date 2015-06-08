@@ -52,7 +52,7 @@ namespace Mono.Security.NewTls.Handshake
 			case HandshakeType.ClientKeyExchange:
 				return new TlsClientKeyExchange (context, incoming);
 			case HandshakeType.CertificateRequest:
-				return new TlsCertificateRequest (incoming);
+				return new TlsCertificateRequest (context.NegotiatedProtocol, incoming);
 			case HandshakeType.CertificateVerify:
 				return new TlsCertificateVerify (incoming);
 			case HandshakeType.ServerKeyExchange:
