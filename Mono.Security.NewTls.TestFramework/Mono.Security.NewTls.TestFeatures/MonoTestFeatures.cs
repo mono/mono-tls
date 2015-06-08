@@ -36,15 +36,25 @@ namespace Mono.Security.NewTls.TestFeatures
 
 	public static class MonoTestFeatures
 	{
-		static readonly MonoConnectionProviderFactory Factory;
+		static readonly ConnectionProviderFactory Factory;
+		static readonly MonoConnectionProviderFactory MonoFactory;
 		static readonly Constraint isProviderSupported;
 		static readonly Constraint isMonoProviderSupported;
 
 		static MonoTestFeatures ()
 		{
-			Factory = DependencyInjector.Get<MonoConnectionProviderFactory> ();
+			if (DependencyInjector.TryGet<MonoConnectionProviderFactory> (out MonoFactory))
+				Factory = MonoFactory;
+			else
+				Factory = DependencyInjector.Get<ConnectionProviderFactory> ();
 			isProviderSupported = new IsSupportedConstraint<ConnectionProviderType> (f => Factory.IsSupported (f));
-			isMonoProviderSupported = new IsSupportedConstraint<ConnectionProviderType> (f => Factory.IsMonoSupported (f));
+			isMonoProviderSupported = new IsSupportedConstraint<ConnectionProviderType> (f => MonoFactory != null && MonoFactory.IsMonoSupported (f));
+		}
+
+		static void RequireMono ()
+		{
+			if (MonoFactory == null)
+				throw new NotSupportedException ();
 		}
 
 		public static Constraint IsProviderSupported {
@@ -163,9 +173,10 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public static IMonoClient CreateMonoClient (TestContext ctx, bool requireMonoExtensions)
 		{
+			RequireMono ();
 			var providerType = GetClientType (ctx);
 			ctx.Assert (providerType, IsMonoProviderSupported);
-			var provider = Factory.GetMonoProvider (providerType);
+			var provider = MonoFactory.GetMonoProvider (providerType);
 
 			var parameters = GetClientParameters (ctx, requireMonoExtensions);
 			return provider.CreateMonoClient (parameters);
@@ -183,9 +194,10 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public static IMonoServer CreateMonoServer (TestContext ctx, bool requireMonoExtensions)
 		{
+			RequireMono ();
 			var providerType = GetServerType (ctx);
 			ctx.Assert (providerType, IsMonoProviderSupported);
-			var provider = Factory.GetMonoProvider (providerType);
+			var provider = MonoFactory.GetMonoProvider (providerType);
 
 			var parameters = GetServerParameters (ctx, requireMonoExtensions);
 			return provider.CreateMonoServer (parameters);
@@ -215,13 +227,14 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public static MonoClientAndServer CreateMonoClientAndServer (TestContext ctx, bool requireMonoExtensions)
 		{
+			RequireMono ();
 			var clientProviderType = GetClientType (ctx);
 			ctx.Assert (clientProviderType, IsMonoProviderSupported);
-			var clientProvider = Factory.GetMonoProvider (clientProviderType);
+			var clientProvider = MonoFactory.GetMonoProvider (clientProviderType);
 
 			var serverProviderType = GetServerType (ctx);
 			ctx.Assert (serverProviderType, IsMonoProviderSupported);
-			var serverProvider = Factory.GetMonoProvider (serverProviderType);
+			var serverProvider = MonoFactory.GetMonoProvider (serverProviderType);
 
 			ClientAndServerParameters clientAndServerParameters;
 			var clientParameters = GetClientParameters (ctx, true, out clientAndServerParameters);

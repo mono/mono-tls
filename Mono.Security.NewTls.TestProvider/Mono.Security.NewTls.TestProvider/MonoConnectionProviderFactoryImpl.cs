@@ -53,7 +53,7 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			dotNetStreamProvider = new DotNetSslStreamProvider ();
 			dotNetHttpProvider = new DefaultHttpProvider (dotNetStreamProvider);
-			dotNetConnectionProvider = new DotNetConnectionProvider (this, dotNetStreamProvider, dotNetHttpProvider);
+			dotNetConnectionProvider = new DotNetConnectionProvider (this, ConnectionProviderType.DotNet, dotNetStreamProvider, dotNetHttpProvider);
 			Install (dotNetConnectionProvider);
 
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();

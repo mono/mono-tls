@@ -57,6 +57,7 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationParametersAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\ClientAndServerAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
