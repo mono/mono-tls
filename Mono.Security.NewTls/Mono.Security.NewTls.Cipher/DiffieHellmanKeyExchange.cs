@@ -29,6 +29,7 @@ namespace Mono.Security.NewTls.Cipher
 
 			switch (protocol) {
 			case TlsProtocolCode.Tls10:
+			case TlsProtocolCode.Tls11:
 				Signature = new SignatureTls10 (incoming);
 				break;
 			case TlsProtocolCode.Tls12:
@@ -74,6 +75,7 @@ namespace Mono.Security.NewTls.Cipher
 				Signature = new SignatureTls12 (algorithm);
 				break;
 			case TlsProtocolCode.Tls10:
+			case TlsProtocolCode.Tls11:
 				Signature = new SignatureTls10 ();
 				break;
 			default:

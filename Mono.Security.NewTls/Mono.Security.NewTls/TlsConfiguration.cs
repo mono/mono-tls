@@ -87,10 +87,8 @@ namespace Mono.Security.NewTls
 
 			if ((protocols & TlsProtocols.Tls12) != 0)
 				return TlsProtocolCode.Tls12;
-			#if FIXME // we don't support TLS 1.1 yet.
 			if ((protocols & TlsProtocols.Tls11) != 0)
 				return TlsProtocolCode.Tls11;
-			#endif
 			if ((protocols & TlsProtocols.Tls10) != 0)
 				return TlsProtocolCode.Tls10;
 

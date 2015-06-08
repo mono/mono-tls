@@ -219,6 +219,9 @@
     <Compile Include="..\Mono.Security.NewTls\System.Security.Cryptography\SHAConstants.cs">
       <Link>System.Security.Cryptography\SHAConstants.cs</Link>
     </Compile>
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs">
+      <Link>Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems')" />

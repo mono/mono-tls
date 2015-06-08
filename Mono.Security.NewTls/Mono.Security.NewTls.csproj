@@ -127,6 +127,7 @@
     <Compile Include="Mono.Security.NewTls.Cipher\Signature.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls12.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls10.cs" />
+    <Compile Include="Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">
