@@ -171,15 +171,15 @@ namespace Mono.Security.NewTls.Cipher
 		};
 
 		static readonly CipherSuiteCode[] SupportedCiphersTls10 = {
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
 			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
 			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
 		};
 
 		static readonly CipherSuiteCode[] SupportedCiphersTls11 = {
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
 			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
 			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
 		};
