@@ -43,6 +43,7 @@ namespace Mono.Security.NewTls.DotNetConsole
 {
 	using TestFramework;
 	using Instrumentation;
+	using Tests;
 
 	public class DotNetDependencyProvider : IDependencyProvider
 	{
@@ -55,6 +56,8 @@ namespace Mono.Security.NewTls.DotNetConsole
 			DependencyInjector.RegisterDependency<IHttpClientProvider> (() => new HttpClientProvider ());
 			DependencyInjector.RegisterDependency<ConnectionProviderFactory> (() => new DefaultConnectionProviderFactory ());
 			DependencyInjector.RegisterDependency<IStreamProvider> (() => new StreamProvider ());
+
+			DependencyInjector.RegisterDependency<NewTlsTestFeatures> (() => new NewTlsTestFeatures ());
 
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 		}
