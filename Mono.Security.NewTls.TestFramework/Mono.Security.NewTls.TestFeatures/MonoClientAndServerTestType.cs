@@ -30,11 +30,16 @@ namespace Mono.Security.NewTls.TestFeatures
 	public enum MonoClientAndServerTestType
 	{
 		Simple,
-		CheckCipher,
 		ValidateCertificate,
+		CheckDefaultCipher,
+
 		SimpleTls10,
 		SimpleTls11,
-		SimpleTls12
+		SimpleTls12,
+
+		SelectCiphersTls10,
+		SelectCiphersTls11,
+		SelectCiphersTls12
 	}
 }
 

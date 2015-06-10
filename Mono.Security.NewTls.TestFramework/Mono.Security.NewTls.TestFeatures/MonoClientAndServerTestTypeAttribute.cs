@@ -39,7 +39,7 @@ namespace Mono.Security.NewTls.TestFeatures
 			get; set;
 		}
 
-		public bool SelectCiphers {
+		public MonoClientAndServerTestType? TestType {
 			get; set;
 		}
 
@@ -48,14 +48,20 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
+		public MonoClientAndServerTestTypeAttribute (MonoClientAndServerTestType type)
+		{
+			TestType = type;
+		}
+
 		public IEnumerable<MonoClientAndServerTestType> GetParameters (TestContext ctx, string filter)
 		{
-			yield return MonoClientAndServerTestType.Simple;
-
-			if (!SelectCiphers) {
-				yield return MonoClientAndServerTestType.ValidateCertificate;
-				yield return MonoClientAndServerTestType.CheckCipher;
+			if (TestType != null) {
+				yield return TestType.Value;
+				yield break;
 			}
+
+			yield return MonoClientAndServerTestType.Simple;
+			yield return MonoClientAndServerTestType.CheckDefaultCipher;
 
 			if (IncludeVersionTests) {
 				yield return MonoClientAndServerTestType.SimpleTls10;

@@ -40,15 +40,22 @@ namespace Mono.Security.NewTls.Tests
 
 	class SelectCipherSuiteAttribute : TestParameterAttribute, ITestParameterSource<CipherSuiteCode>
 	{
-		public SelectCipherSuiteAttribute (string name)
+		public SelectCipherSuiteAttribute (string name, TlsProtocolCode protocol)
 		{
 			Identifier = name;
+			Protocol = protocol;
 		}
 
-		public SelectCipherSuiteAttribute (string name, CipherSuiteCode code)
+		public SelectCipherSuiteAttribute (string name, TlsProtocolCode protocol, CipherSuiteCode code)
 			: base (code.ToString ())
 		{
 			Identifier = name;
+			Protocol = protocol;
+		}
+
+		public TlsProtocolCode Protocol {
+			get;
+			private set;
 		}
 
 		public IEnumerable<CipherSuiteCode> GetParameters (TestContext ctx, string filter)
@@ -62,28 +69,45 @@ namespace Mono.Security.NewTls.Tests
 				yield break;
 			}
 
-			// Galois-Counter Cipher Suites.
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384;
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256;
+			switch (Protocol) {
+			case TlsProtocolCode.Tls10:
+			case TlsProtocolCode.Tls11:
+				yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
+				yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+				yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA;
+				yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA;
+				yield break;
 
-			// Galois-Counter with Legacy RSA Key Exchange.
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256;
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384;
+			case TlsProtocolCode.Tls12:
+				// Galois-Counter Cipher Suites.
+				yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384;
+				yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256;
 
-			// Diffie-Hellman Cipher Suites
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256;
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256;
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+				// Galois-Counter with Legacy RSA Key Exchange.
+				yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256;
+				yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384;
 
-			// Legacy AES Cipher Suites
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256;
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256;
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA;
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA;
+				// Diffie-Hellman Cipher Suites
+				yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256;
+				yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256;
+				yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
+				yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+
+				// Legacy AES Cipher Suites
+				yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256;
+				yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256;
+				yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA;
+				yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA;
+
+				yield break;
+
+			default:
+				throw new InvalidOperationException ();
+			}
 		}
 	}
 
+	[Work]
 	[AsyncTestFixture]
 	public class SelectCiphersTest
 	{
@@ -101,34 +125,72 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task SelectClientCipher (TestContext ctx, CancellationToken cancellationToken,
-			[MonoClientAndServerTestType (SelectCiphers = true)] MonoClientAndServerTestType type,
-			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
+			[MonoClientAndServerTestType (MonoClientAndServerTestType.SelectCiphersTls12)] MonoClientAndServerTestType type,
+			[SelectCipherSuite ("ClientCipher", TlsProtocolCode.Tls12)] CipherSuiteCode clientCipher,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			ctx.Assert (clientCipher, Is.EqualTo (runner.Parameters.ExpectedClientCipher.Value), "expected cipher");
-
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
 		public async Task SelectServerCipher (TestContext ctx, CancellationToken cancellationToken,
-			[MonoClientAndServerTestType (SelectCiphers = true)] MonoClientAndServerTestType type,
-			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
+			[MonoClientAndServerTestType (MonoClientAndServerTestType.SelectCiphersTls12)] MonoClientAndServerTestType type,
+			[SelectCipherSuite ("ServerCipher", TlsProtocolCode.Tls12)] CipherSuiteCode serverCipher,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			ctx.Assert (serverCipher, Is.EqualTo (runner.Parameters.ExpectedServerCipher.Value), "expected cipher");
-
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
 		public async Task InvalidCipher (TestContext ctx, CancellationToken cancellationToken,
-			[MonoClientAndServerTestType (SelectCiphers = true)] MonoClientAndServerTestType type,
-			[SelectCipherSuite ("ServerCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA)] CipherSuiteCode serverCipher,
-			[SelectCipherSuite ("ClientCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
+			[MonoClientAndServerTestType (MonoClientAndServerTestType.SelectCiphersTls12)] MonoClientAndServerTestType type,
+			[SelectCipherSuite ("ServerCipher", TlsProtocolCode.Tls12, CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA)] CipherSuiteCode serverCipher,
+			[SelectCipherSuite ("ClientCipher", TlsProtocolCode.Tls12, CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			await runner.ExpectAlert (ctx, AlertDescription.HandshakeFailure, cancellationToken);
+		}
+
+		[AsyncTest]
+		public async Task SelectClientCipher10 (TestContext ctx, CancellationToken cancellationToken,
+			[MonoClientAndServerTestType (MonoClientAndServerTestType.SelectCiphersTls10)] MonoClientAndServerTestType type,
+			[SelectCipherSuite ("ClientCipher", TlsProtocolCode.Tls10)] CipherSuiteCode clientCipher,
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
+		{
+			ctx.Assert (clientCipher, Is.EqualTo (runner.Parameters.ExpectedClientCipher.Value), "expected cipher");
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		public async Task SelectServerCipher10 (TestContext ctx, CancellationToken cancellationToken,
+			[MonoClientAndServerTestType (MonoClientAndServerTestType.SelectCiphersTls10)] MonoClientAndServerTestType type,
+			[SelectCipherSuite ("ServerCipher", TlsProtocolCode.Tls10)] CipherSuiteCode serverCipher,
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
+		{
+			ctx.Assert (serverCipher, Is.EqualTo (runner.Parameters.ExpectedServerCipher.Value), "expected cipher");
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		public async Task SelectClientCipher11 (TestContext ctx, CancellationToken cancellationToken,
+			[MonoClientAndServerTestType (MonoClientAndServerTestType.SelectCiphersTls11)] MonoClientAndServerTestType type,
+			[SelectCipherSuite ("ClientCipher", TlsProtocolCode.Tls11)] CipherSuiteCode clientCipher,
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
+		{
+			ctx.Assert (clientCipher, Is.EqualTo (runner.Parameters.ExpectedClientCipher.Value), "expected cipher");
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		public async Task SelectServerCipher11 (TestContext ctx, CancellationToken cancellationToken,
+			[MonoClientAndServerTestType (MonoClientAndServerTestType.SelectCiphersTls11)] MonoClientAndServerTestType type,
+			[SelectCipherSuite ("ServerCipher", TlsProtocolCode.Tls11)] CipherSuiteCode serverCipher,
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
+		{
+			ctx.Assert (serverCipher, Is.EqualTo (runner.Parameters.ExpectedServerCipher.Value), "expected cipher");
+			await runner.Run (ctx, cancellationToken);
 		}
 	}
 }
