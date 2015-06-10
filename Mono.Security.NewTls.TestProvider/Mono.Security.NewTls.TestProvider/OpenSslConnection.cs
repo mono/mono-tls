@@ -126,7 +126,7 @@ namespace Mono.Security.NewTls.TestProvider
 		NativeOpenSslProtocol GetProtocolVersion ()
 		{
 			var version = Parameters.ProtocolVersion;
-			if (version == ProtocolVersions.Unspecified)
+			if (version == null)
 				return NativeOpenSslProtocol.TLS12;
 			if ((version & ProtocolVersions.Tls12) != 0)
 				return NativeOpenSslProtocol.TLS12;
