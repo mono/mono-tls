@@ -134,17 +134,10 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	[Work]
 	[AsyncTestFixture]
 	public class MonoConnectionTest
 	{
-		[AsyncTest]
-		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[ClientAndServerType (Identifier = "ConnectionType", ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
-			ClientAndServerType connectionType,
-			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
-			MonoClientAndServerParameters parameters,
-			[MonoClientAndServer] MonoClientAndServer connection)
+		async Task Run (TestContext ctx, CancellationToken cancellationToken, MonoClientAndServerParameters parameters, MonoClientAndServer connection)
 		{
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
 			await handler.WaitForConnection (ctx, cancellationToken);
@@ -168,6 +161,39 @@ namespace Mono.Security.NewTls.Tests
 			}
 
 			await handler.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		public Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+			[ClientAndServerType (Identifier = "ConnectionType", ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
+			ClientAndServerType connectionType,
+			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
+			MonoClientAndServerParameters parameters,
+			[MonoClientAndServer] MonoClientAndServer connection)
+		{
+			return Run (ctx, cancellationToken, parameters, connection);
+		}
+
+		[AsyncTest]
+		public Task TestClient (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
+			[ConnectionProvider ("OpenSsl", Identifier = "ServerType")] ConnectionProviderType serverType,
+			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
+			MonoClientAndServerParameters parameters,
+			[MonoClientAndServer] MonoClientAndServer connection)
+		{
+			return Run (ctx, cancellationToken, parameters, connection);
+		}
+
+		[AsyncTest]
+		public Task TestServer (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("OpenSsl", Identifier = "ClientType")] ConnectionProviderType clientType,
+			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
+			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
+			MonoClientAndServerParameters parameters,
+			[MonoClientAndServer] MonoClientAndServer connection)
+		{
+			return Run (ctx, cancellationToken, parameters, connection);
 		}
 	}
 }

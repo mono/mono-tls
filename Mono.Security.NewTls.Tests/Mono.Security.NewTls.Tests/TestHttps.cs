@@ -42,7 +42,6 @@ using Xamarin.WebTests.Features;
 
 namespace Mono.Security.NewTls.Tests
 {
-	[Work]
 	[AsyncTestFixture (Timeout = 5000)]
 	public class TestHttps
 	{
