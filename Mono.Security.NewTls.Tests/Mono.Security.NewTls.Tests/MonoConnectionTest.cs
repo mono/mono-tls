@@ -76,9 +76,22 @@ namespace Mono.Security.NewTls.Tests
 			private set;
 		}
 
+		public ProtocolVersions? IncludeProtocols {
+			get; set;
+		}
+
 		public MonoConnectionParameterAttribute (string filter = null)
 			: base (filter)
 		{
+			var provider = DependencyInjector.Get<ICertificateProvider> ();
+			AcceptAll = provider.AcceptAll ();
+			AcceptFromCA = provider.AcceptFromCA (ResourceManager.LocalCACertificate);
+		}
+
+		public MonoConnectionParameterAttribute (ProtocolVersions protocols, string filter = null)
+			: this (filter)
+		{
+			IncludeProtocols = protocols;
 			var provider = DependencyInjector.Get<ICertificateProvider> ();
 			AcceptAll = provider.AcceptAll ();
 			AcceptFromCA = provider.AcceptFromCA (ResourceManager.LocalCACertificate);
@@ -95,6 +108,29 @@ namespace Mono.Security.NewTls.Tests
 			yield return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
 				ClientCertificateValidator = AcceptFromCA, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 			};
+
+			if (IncludeProtocols != null) {
+				if ((IncludeProtocols & ProtocolVersions.Tls10) != ProtocolVersions.None) {
+					yield return new MonoClientAndServerParameters ("simple-tls10", ResourceManager.SelfSignedServerCertificate) {
+						ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls10,
+						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+					};
+				}
+
+				if ((IncludeProtocols & ProtocolVersions.Tls11) != ProtocolVersions.None) {
+					yield return new MonoClientAndServerParameters ("simple-tls11", ResourceManager.SelfSignedServerCertificate) {
+						ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls11,
+						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+					};
+				}
+
+				if ((IncludeProtocols & ProtocolVersions.Tls12) != ProtocolVersions.None) {
+					yield return new MonoClientAndServerParameters ("simple-tls12", ResourceManager.SelfSignedServerCertificate) {
+						ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls12,
+						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+					};
+				}
+			}
 		}
 	}
 
@@ -106,7 +142,8 @@ namespace Mono.Security.NewTls.Tests
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
 			[ClientAndServerType (Identifier = "ConnectionType", ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
 			ClientAndServerType connectionType,
-			[MonoConnectionParameterAttribute] MonoClientAndServerParameters parameters,
+			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
+			MonoClientAndServerParameters parameters,
 			[MonoClientAndServer] MonoClientAndServer connection)
 		{
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
