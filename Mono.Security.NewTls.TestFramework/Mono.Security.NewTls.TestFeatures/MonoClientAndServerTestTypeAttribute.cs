@@ -35,7 +35,7 @@ namespace Mono.Security.NewTls.TestFeatures
 
 	public class MonoClientAndServerTestTypeAttribute : TestParameterAttribute, ITestParameterSource<MonoClientAndServerTestType>
 	{
-		public ProtocolVersions? IncludeProtocols {
+		public bool IncludeVersionTests {
 			get; set;
 		}
 
@@ -44,25 +44,16 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
-		public MonoClientAndServerTestTypeAttribute (ProtocolVersions protocols, string filter = null)
-			: this (filter)
-		{
-			IncludeProtocols = protocols;
-		}
-
 		public IEnumerable<MonoClientAndServerTestType> GetParameters (TestContext ctx, string filter)
 		{
 			yield return MonoClientAndServerTestType.Simple;
 			yield return MonoClientAndServerTestType.CheckCipher;
 			yield return MonoClientAndServerTestType.ValidateCertificate;
 
-			if (IncludeProtocols != null) {
-				if ((IncludeProtocols & ProtocolVersions.Tls10) != ProtocolVersions.None)
-					yield return MonoClientAndServerTestType.SimpleTls10;
-				if ((IncludeProtocols & ProtocolVersions.Tls11) != ProtocolVersions.None)
-					yield return MonoClientAndServerTestType.SimpleTls11;
-				if ((IncludeProtocols & ProtocolVersions.Tls12) != ProtocolVersions.None)
-					yield return MonoClientAndServerTestType.SimpleTls12;
+			if (IncludeVersionTests) {
+				yield return MonoClientAndServerTestType.SimpleTls10;
+				yield return MonoClientAndServerTestType.SimpleTls11;
+				yield return MonoClientAndServerTestType.SimpleTls12;
 			}
 		}
 	}

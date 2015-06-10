@@ -48,8 +48,7 @@ namespace Mono.Security.NewTls.Tests
 		public Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
 			[ClientAndServerType (Identifier = "ConnectionType", ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
 			ClientAndServerType connectionType,
-			[MonoClientAndServerTestType (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
-			MonoClientAndServerTestType type,
+			[MonoClientAndServerTestType (IncludeVersionTests = true)] MonoClientAndServerTestType type,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
@@ -59,8 +58,7 @@ namespace Mono.Security.NewTls.Tests
 		public Task TestClient (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider ("OpenSsl", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[MonoClientAndServerTestType (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
-			MonoClientAndServerTestType type,
+			[MonoClientAndServerTestType (IncludeVersionTests = true)] MonoClientAndServerTestType type,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
@@ -70,8 +68,7 @@ namespace Mono.Security.NewTls.Tests
 		public Task TestServer (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("OpenSsl", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[MonoClientAndServerTestType (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
-			MonoClientAndServerTestType type,
+			[MonoClientAndServerTestType (IncludeVersionTests = true)] MonoClientAndServerTestType type,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
