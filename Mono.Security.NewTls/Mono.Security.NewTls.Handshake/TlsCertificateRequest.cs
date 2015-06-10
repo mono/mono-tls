@@ -22,7 +22,9 @@ namespace Mono.Security.NewTls.Handshake
 		public TlsCertificateRequest (TlsProtocolCode protocol, TlsBuffer incoming)
 			: base (HandshakeType.CertificateRequest)
 		{
+			Protocol = protocol;
 			Parameters = new ClientCertificateParameters ();
+
 			Read (incoming);
 		}
 
