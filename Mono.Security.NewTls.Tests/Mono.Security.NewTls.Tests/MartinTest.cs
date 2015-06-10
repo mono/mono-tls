@@ -62,8 +62,14 @@ namespace Mono.Security.NewTls.Tests
 
 		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
-			yield return new MonoClientAndServerParameters ("martin", ResourceManager.SelfSignedServerCertificate) {
+			yield return new MonoClientAndServerParameters ("tls10", ResourceManager.SelfSignedServerCertificate) {
 				ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls10
+			};
+			yield return new MonoClientAndServerParameters ("tls11", ResourceManager.SelfSignedServerCertificate) {
+				ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls11
+			};
+			yield return new MonoClientAndServerParameters ("tls12", ResourceManager.SelfSignedServerCertificate) {
+				ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls12
 			};
 		}
 	}
@@ -72,28 +78,54 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class MartinTest
 	{
-		[ConnectionProvider ("MonoWithNewTLS")]
-		public ConnectionProviderType ClientType {
-			get;
-			private set;
-		}
-
-		[ConnectionProvider ("OpenSsl")]
-		public ConnectionProviderType ServerType {
-			get;
-			private set;
-		}
-
 		[AsyncTest]
-		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("MonoWithNewTLS")] ConnectionProviderType ClientType,
+			[ConnectionProvider ("OpenSsl")] ConnectionProviderType ServerType,
 			[MartinTestParameter] MonoClientAndServerParameters parameters,
 			[MonoClientAndServer] MonoClientAndServer connection)
 		{
 			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
 			await handler.WaitForConnection (ctx, cancellationToken);
 
+			ctx.Expect (connection.Client.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "client protocol version");
+			ctx.Expect (connection.Server.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "server protocol version");
+
 			await handler.Run (ctx, cancellationToken);
 		}
+
+		[AsyncTest]
+		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("OpenSsl")] ConnectionProviderType ClientType,
+			[ConnectionProvider ("MonoWithNewTLS")] ConnectionProviderType ServerType,
+			[MartinTestParameter] MonoClientAndServerParameters parameters,
+			[MonoClientAndServer] MonoClientAndServer connection)
+		{
+			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
+			await handler.WaitForConnection (ctx, cancellationToken);
+
+			ctx.Expect (connection.Client.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "client protocol version");
+			ctx.Expect (connection.Server.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "server protocol version");
+
+			await handler.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("MonoWithNewTLS")] ConnectionProviderType ClientType,
+			[ConnectionProvider ("MonoWithNewTLS")] ConnectionProviderType ServerType,
+			[MartinTestParameter] MonoClientAndServerParameters parameters,
+			[MonoClientAndServer] MonoClientAndServer connection)
+		{
+			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
+			await handler.WaitForConnection (ctx, cancellationToken);
+
+			ctx.Expect (connection.Client.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "client protocol version");
+			ctx.Expect (connection.Server.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "server protocol version");
+
+			await handler.Run (ctx, cancellationToken);
+		}
+
 	}
 }
 
