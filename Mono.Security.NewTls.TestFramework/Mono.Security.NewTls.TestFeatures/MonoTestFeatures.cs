@@ -247,6 +247,29 @@ namespace Mono.Security.NewTls.TestFeatures
 			var client = clientProvider.CreateMonoClient (clientAndServerParameters.ClientParameters);
 			return new MonoClientAndServer (server, client, (MonoClientAndServerParameters)clientAndServerParameters);
 		}
+
+		public static MonoClientAndServerTestRunner CreateMonoClientAndServerTestRunner (TestContext ctx, bool requireMonoExtensions)
+		{
+			RequireMono ();
+			var clientProviderType = GetClientType (ctx);
+			ctx.Assert (clientProviderType, IsMonoProviderSupported);
+			var clientProvider = MonoFactory.GetMonoProvider (clientProviderType);
+
+			var serverProviderType = GetServerType (ctx);
+			ctx.Assert (serverProviderType, IsMonoProviderSupported);
+			var serverProvider = MonoFactory.GetMonoProvider (serverProviderType);
+
+			ClientAndServerParameters clientAndServerParameters;
+			var clientParameters = GetClientParameters (ctx, true, out clientAndServerParameters);
+			var serverParameters = GetServerParameters (ctx, true, out clientAndServerParameters);
+
+			if (clientAndServerParameters == null)
+				clientAndServerParameters = new MonoClientAndServerParameters (clientParameters, serverParameters);
+
+			var server = serverProvider.CreateMonoServer (clientAndServerParameters.ServerParameters);
+			var client = clientProvider.CreateMonoClient (clientAndServerParameters.ClientParameters);
+			return new MonoClientAndServerTestRunner (server, client, (MonoClientAndServerParameters)clientAndServerParameters);
+		}
 	}
 }
 

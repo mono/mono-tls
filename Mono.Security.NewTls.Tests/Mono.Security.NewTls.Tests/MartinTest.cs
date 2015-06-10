@@ -62,8 +62,9 @@ namespace Mono.Security.NewTls.Tests
 
 		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
-			yield return new MonoClientAndServerParameters ("tls12", ResourceManager.SelfSignedServerCertificate) {
-				ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls12
+			yield return new MonoClientAndServerParameters ("martin", ResourceManager.SelfSignedServerCertificate) {
+				ClientCertificateValidator = AcceptAll, ServerCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls12,
+				ClientCertificate = ResourceManager.MonkeyCertificate, ServerFlags = ServerFlags.RequireClientCertificate
 			};
 		}
 	}

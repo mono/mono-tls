@@ -66,16 +66,6 @@ namespace Mono.Security.NewTls.Tests
 
 	class MonoConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<MonoClientAndServerParameters>
 	{
-		public ICertificateValidator AcceptAll {
-			get;
-			private set;
-		}
-
-		public ICertificateValidator AcceptFromCA {
-			get;
-			private set;
-		}
-
 		public ProtocolVersions? IncludeProtocols {
 			get; set;
 		}
@@ -83,95 +73,33 @@ namespace Mono.Security.NewTls.Tests
 		public MonoConnectionParameterAttribute (string filter = null)
 			: base (filter)
 		{
-			var provider = DependencyInjector.Get<ICertificateProvider> ();
-			AcceptAll = provider.AcceptAll ();
-			AcceptFromCA = provider.AcceptFromCA (ResourceManager.LocalCACertificate);
 		}
 
 		public MonoConnectionParameterAttribute (ProtocolVersions protocols, string filter = null)
 			: this (filter)
 		{
 			IncludeProtocols = protocols;
-			var provider = DependencyInjector.Get<ICertificateProvider> ();
-			AcceptAll = provider.AcceptAll ();
-			AcceptFromCA = provider.AcceptFromCA (ResourceManager.LocalCACertificate);
 		}
 
 		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
 		{
-			yield return new MonoClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
-				ClientCertificateValidator = AcceptAll
-			};
-			yield return new MonoClientAndServerParameters ("check-cipher", ResourceManager.SelfSignedServerCertificate) {
-				ClientCertificateValidator = AcceptAll, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-			};
-			yield return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
-				ClientCertificateValidator = AcceptFromCA, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-			};
-
-			if (IncludeProtocols != null) {
-				if ((IncludeProtocols & ProtocolVersions.Tls10) != ProtocolVersions.None) {
-					yield return new MonoClientAndServerParameters ("simple-tls10", ResourceManager.SelfSignedServerCertificate) {
-						ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls10,
-						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
-					};
-				}
-
-				if ((IncludeProtocols & ProtocolVersions.Tls11) != ProtocolVersions.None) {
-					yield return new MonoClientAndServerParameters ("simple-tls11", ResourceManager.SelfSignedServerCertificate) {
-						ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls11,
-						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
-					};
-				}
-
-				if ((IncludeProtocols & ProtocolVersions.Tls12) != ProtocolVersions.None) {
-					yield return new MonoClientAndServerParameters ("simple-tls12", ResourceManager.SelfSignedServerCertificate) {
-						ClientCertificateValidator = AcceptAll, ProtocolVersion = ProtocolVersions.Tls12,
-						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-					};
-				}
-			}
+			return MonoClientAndServerTestRunner.GetParameters (ctx, filter, IncludeProtocols);
 		}
 	}
 
+	[Work]
 	[AsyncTestFixture]
 	public class MonoConnectionTest
 	{
-		async Task Run (TestContext ctx, CancellationToken cancellationToken, MonoClientAndServerParameters parameters, MonoClientAndServer connection)
-		{
-			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
-			await handler.WaitForConnection (ctx, cancellationToken);
-
-			if (parameters.ExpectedCipher != null) {
-				ctx.Assert (connection.Client.SupportsConnectionInfo, "client supports connection info");
-				ctx.Assert (connection.Server.SupportsConnectionInfo, "server supports connection info");
-
-				var clientInfo = connection.Client.GetConnectionInfo ();
-				var serverInfo = connection.Server.GetConnectionInfo ();
-
-				if (ctx.Expect (clientInfo, Is.Not.Null, "client connection info"))
-					ctx.Expect (clientInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value), "client cipher");
-				if (ctx.Expect (serverInfo, Is.Not.Null, "server connection info"))
-					ctx.Expect (serverInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value), "server cipher");
-			}
-
-			if (parameters.ProtocolVersion != null) {
-				ctx.Expect (connection.Client.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "client protocol version");
-				ctx.Expect (connection.Server.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "server protocol version");
-			}
-
-			await handler.Run (ctx, cancellationToken);
-		}
-
 		[AsyncTest]
 		public Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
 			[ClientAndServerType (Identifier = "ConnectionType", ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
 			ClientAndServerType connectionType,
 			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
 			MonoClientAndServerParameters parameters,
-			[MonoClientAndServer] MonoClientAndServer connection)
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
-			return Run (ctx, cancellationToken, parameters, connection);
+			return runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
@@ -180,9 +108,9 @@ namespace Mono.Security.NewTls.Tests
 			[ConnectionProvider ("OpenSsl", Identifier = "ServerType")] ConnectionProviderType serverType,
 			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
 			MonoClientAndServerParameters parameters,
-			[MonoClientAndServer] MonoClientAndServer connection)
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
-			return Run (ctx, cancellationToken, parameters, connection);
+			return runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
@@ -191,9 +119,9 @@ namespace Mono.Security.NewTls.Tests
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
 			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
 			MonoClientAndServerParameters parameters,
-			[MonoClientAndServer] MonoClientAndServer connection)
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
-			return Run (ctx, cancellationToken, parameters, connection);
+			return runner.Run (ctx, cancellationToken);
 		}
 	}
 }
