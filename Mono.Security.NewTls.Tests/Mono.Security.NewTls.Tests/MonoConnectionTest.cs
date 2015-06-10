@@ -40,53 +40,6 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
-	/*
-	 * Test Parameters are resolved when the Test Suite is loaded.
-	 * 
-	 * Each value returned by ITestParameterSource<T> must have a unique ITestParameter.Value, which is a stringified
-	 * representation that will be used during serialization and displayed in the UI.
-	 * 
-	 * The class that implements ITestParameterSource<T> may be instantiated multiple times and GetParameters() may also
-	 * be called multiple times.  Returned values will be identified by their ITestParameter.Value identifier and returned
-	 * objects from different invocations with the same identifier will be assumed to be identical.
-	 * 
-	 * You may choose to ignore 'filter' - if you use it, then you must ignore any unknown filter values and treat theam as
-	 * if 'null' has been used.
-	 * 
-	 * The order in which multiple ITestParameterSource<T>'s are invoked can not be guaranteed - on the provided TestContext,
-	 * only CurrentCategory and IsEnabled(TestFeature) may be used.
-	 * 
-	 * It is very important not to store any kind of state in these attribute classes.
-	 * 
-	 * If any consumer of these test parameters wishes to modify the returned objects, then these must implement
-	 * Xamarin.AsyncTests.ICloneable to provide a deep copy.  GetParameters() may or may not be re-invoked on subsequent
-	 * test runs, so modifying the returned object without using ICloneable will ask for trouble.
-	 * 
-	 */
-
-	class MonoConnectionParameterAttribute : TestParameterAttribute, ITestParameterSource<MonoClientAndServerParameters>
-	{
-		public ProtocolVersions? IncludeProtocols {
-			get; set;
-		}
-
-		public MonoConnectionParameterAttribute (string filter = null)
-			: base (filter)
-		{
-		}
-
-		public MonoConnectionParameterAttribute (ProtocolVersions protocols, string filter = null)
-			: this (filter)
-		{
-			IncludeProtocols = protocols;
-		}
-
-		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
-		{
-			return MonoClientAndServerTestRunner.GetParameters (ctx, filter, IncludeProtocols);
-		}
-	}
-
 	[Work]
 	[AsyncTestFixture]
 	public class MonoConnectionTest
@@ -95,8 +48,8 @@ namespace Mono.Security.NewTls.Tests
 		public Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
 			[ClientAndServerType (Identifier = "ConnectionType", ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
 			ClientAndServerType connectionType,
-			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
-			MonoClientAndServerParameters parameters,
+			[MonoClientAndServerTestType (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
+			MonoClientAndServerTestType type,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
@@ -106,8 +59,8 @@ namespace Mono.Security.NewTls.Tests
 		public Task TestClient (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider ("OpenSsl", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
-			MonoClientAndServerParameters parameters,
+			[MonoClientAndServerTestType (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
+			MonoClientAndServerTestType type,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
@@ -117,8 +70,8 @@ namespace Mono.Security.NewTls.Tests
 		public Task TestServer (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("OpenSsl", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[MonoConnectionParameter (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
-			MonoClientAndServerParameters parameters,
+			[MonoClientAndServerTestType (ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12)]
+			MonoClientAndServerTestType type,
 			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);

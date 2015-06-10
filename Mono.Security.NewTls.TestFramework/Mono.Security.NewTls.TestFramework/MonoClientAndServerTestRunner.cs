@@ -35,6 +35,8 @@ using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using TestFeatures;
+
 	public class MonoClientAndServerTestRunner : ClientAndServerTestRunner
 	{
 		new public MonoClientAndServerParameters Parameters {
@@ -54,43 +56,42 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
-		public static IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter = null, ProtocolVersions? protocols = null)
+		public static MonoClientAndServerParameters GetParameters (TestContext ctx, MonoClientAndServerTestType type)
 		{
 			var provider = DependencyInjector.Get<ICertificateProvider> ();
 			var acceptAll = provider.AcceptAll ();
 			var acceptFromCA = provider.AcceptFromCA (ResourceManager.LocalCACertificate);
 
-			yield return new MonoClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
-				ClientCertificateValidator = acceptAll
-			};
-			yield return new MonoClientAndServerParameters ("check-cipher", ResourceManager.SelfSignedServerCertificate) {
-				ClientCertificateValidator = acceptAll, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-			};
-			yield return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
-				ClientCertificateValidator = acceptFromCA, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-			};
-
-			if (protocols != null) {
-				if ((protocols & ProtocolVersions.Tls10) != ProtocolVersions.None) {
-					yield return new MonoClientAndServerParameters ("simple-tls10", ResourceManager.SelfSignedServerCertificate) {
-						ClientCertificateValidator = acceptAll, ProtocolVersion = ProtocolVersions.Tls10,
-						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
-					};
-				}
-
-				if ((protocols & ProtocolVersions.Tls11) != ProtocolVersions.None) {
-					yield return new MonoClientAndServerParameters ("simple-tls11", ResourceManager.SelfSignedServerCertificate) {
-						ClientCertificateValidator = acceptAll, ProtocolVersion = ProtocolVersions.Tls11,
-						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
-					};
-				}
-
-				if ((protocols & ProtocolVersions.Tls12) != ProtocolVersions.None) {
-					yield return new MonoClientAndServerParameters ("simple-tls12", ResourceManager.SelfSignedServerCertificate) {
-						ClientCertificateValidator = acceptAll, ProtocolVersion = ProtocolVersions.Tls12,
-						ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
-					};
-				}
+			switch (type) {
+			case MonoClientAndServerTestType.Simple:
+				return new MonoClientAndServerParameters ("simple", ResourceManager.SelfSignedServerCertificate) {
+					ClientCertificateValidator = acceptAll
+				};
+			case MonoClientAndServerTestType.CheckCipher:
+				return new MonoClientAndServerParameters ("check-cipher", ResourceManager.SelfSignedServerCertificate) {
+					ClientCertificateValidator = acceptAll, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+				};
+			case MonoClientAndServerTestType.ValidateCertificate:
+				return new MonoClientAndServerParameters ("verify-certificate", ResourceManager.ServerCertificateFromCA) {
+					ClientCertificateValidator = acceptFromCA, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+				};
+			case MonoClientAndServerTestType.SimpleTls10:
+				return new MonoClientAndServerParameters ("simple-tls10", ResourceManager.SelfSignedServerCertificate) {
+					ClientCertificateValidator = acceptAll, ProtocolVersion = ProtocolVersions.Tls10,
+					ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+				};
+			case MonoClientAndServerTestType.SimpleTls11:
+				return new MonoClientAndServerParameters ("simple-tls11", ResourceManager.SelfSignedServerCertificate) {
+					ClientCertificateValidator = acceptAll, ProtocolVersion = ProtocolVersions.Tls11,
+					ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+				};
+			case MonoClientAndServerTestType.SimpleTls12:
+				return new MonoClientAndServerParameters ("simple-tls12", ResourceManager.SelfSignedServerCertificate) {
+					ClientCertificateValidator = acceptAll, ProtocolVersion = ProtocolVersions.Tls12,
+					ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+				};
+			default:
+				throw new InvalidOperationException ();
 			}
 		}
 

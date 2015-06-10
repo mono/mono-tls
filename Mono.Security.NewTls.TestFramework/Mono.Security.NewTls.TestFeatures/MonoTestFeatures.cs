@@ -76,6 +76,7 @@ namespace Mono.Security.NewTls.TestFeatures
 			ClientParameters clientParameters;
 			MonoClientParameters monoClientParameters;
 			MonoClientAndServerParameters monoClientAndServerParameters;
+			MonoClientAndServerTestType testType;
 
 			if (ctx.TryGetParameter<MonoClientParameters> (out monoClientParameters)) {
 				clientParameters = monoClientParameters;
@@ -87,6 +88,10 @@ namespace Mono.Security.NewTls.TestFeatures
 				clientParameters = monoClientParameters = monoClientAndServerParameters.MonoClientParameters;
 			} else if (!requireMonoExtensions && ctx.TryGetParameter<ClientAndServerParameters> (out clientAndServerParameters)) {
 				clientParameters = clientAndServerParameters.ClientParameters;
+			} else if (ctx.TryGetParameter<MonoClientAndServerTestType> (out testType)) {
+				monoClientAndServerParameters = MonoClientAndServerTestRunner.GetParameters (ctx, testType);
+				clientAndServerParameters = monoClientAndServerParameters;
+				clientParameters = monoClientParameters = monoClientAndServerParameters.MonoClientParameters;
 			} else {
 				ctx.AssertFail ("Missing '{0}' property.", requireMonoExtensions ? "MonoClientParameters" : "ClientParameters");
 				clientAndServerParameters = null;
@@ -116,6 +121,7 @@ namespace Mono.Security.NewTls.TestFeatures
 			ServerParameters serverParameters;
 			MonoServerParameters monoServerParameters;
 			MonoClientAndServerParameters monoClientAndServerParameters;
+			MonoClientAndServerTestType testType;
 
 			if (ctx.TryGetParameter<MonoServerParameters> (out monoServerParameters)) {
 				serverParameters = monoServerParameters;
@@ -127,6 +133,10 @@ namespace Mono.Security.NewTls.TestFeatures
 				serverParameters = monoServerParameters = monoClientAndServerParameters.MonoServerParameters;
 			} else if (!requireMonoExtensions && ctx.TryGetParameter<ClientAndServerParameters> (out clientAndServerParameters)) {
 				serverParameters = clientAndServerParameters.ServerParameters;
+			} else if (ctx.TryGetParameter<MonoClientAndServerTestType> (out testType)) {
+				monoClientAndServerParameters = MonoClientAndServerTestRunner.GetParameters (ctx, testType);
+				clientAndServerParameters = monoClientAndServerParameters;
+				serverParameters = monoServerParameters = monoClientAndServerParameters.MonoServerParameters;
 			} else {
 				ctx.AssertFail ("Missing '{0}' property.", requireMonoExtensions ? "MonoServerParameters" : "ServerParameters");
 				clientAndServerParameters = null;
