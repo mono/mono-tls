@@ -125,6 +125,11 @@ namespace Mono.Security.NewTls.Tests
 					ctx.Expect (serverInfo.CipherCode, Is.EqualTo (parameters.ExpectedCipher.Value), "server cipher");
 			}
 
+			if (parameters.ProtocolVersion != null) {
+				ctx.Expect (connection.Client.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "client protocol version");
+				ctx.Expect (connection.Server.ProtocolVersion, Is.EqualTo (parameters.ProtocolVersion), "server protocol version");
+			}
+
 			await handler.Run (ctx, cancellationToken);
 		}
 	}
