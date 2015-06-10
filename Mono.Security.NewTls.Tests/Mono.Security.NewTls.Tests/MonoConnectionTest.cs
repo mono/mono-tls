@@ -102,14 +102,10 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class MonoConnectionTest
 	{
-		[ClientAndServerType (ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
-		public ClientAndServerType ConnectionType {
-			get;
-			private set;
-		}
-
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+			[ClientAndServerType (Identifier = "ConnectionType", ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
+			ClientAndServerType connectionType,
 			[MonoConnectionParameterAttribute] MonoClientAndServerParameters parameters,
 			[MonoClientAndServer] MonoClientAndServer connection)
 		{
