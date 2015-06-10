@@ -67,18 +67,23 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public static ClientParameters GetClientParameters (TestContext ctx, bool requireMonoExtensions)
 		{
-			ClientAndServerParameters clientAndServerParameters;
-			return GetClientParameters (ctx, requireMonoExtensions, out clientAndServerParameters);
+			ClientAndServerParameters clientAndServerParameters = null;
+			return GetClientParameters (ctx, requireMonoExtensions, ref clientAndServerParameters);
 		}
 
-		public static ClientParameters GetClientParameters (TestContext ctx, bool requireMonoExtensions, out ClientAndServerParameters clientAndServerParameters)
+		public static ClientParameters GetClientParameters (TestContext ctx, bool requireMonoExtensions, ref ClientAndServerParameters clientAndServerParameters)
 		{
 			ClientParameters clientParameters;
 			MonoClientParameters monoClientParameters;
-			MonoClientAndServerParameters monoClientAndServerParameters;
+			MonoClientAndServerParameters monoClientAndServerParameters = clientAndServerParameters as MonoClientAndServerParameters;
 			MonoClientAndServerTestType testType;
 
-			if (ctx.TryGetParameter<MonoClientParameters> (out monoClientParameters)) {
+			if (monoClientAndServerParameters != null) {
+				clientParameters = monoClientParameters = monoClientAndServerParameters.MonoClientParameters;
+			} else if (!requireMonoExtensions && clientAndServerParameters != null) {
+				clientParameters = clientAndServerParameters.ClientParameters;
+				monoClientParameters = clientParameters as MonoClientParameters;
+			} else if (ctx.TryGetParameter<MonoClientParameters> (out monoClientParameters)) {
 				clientParameters = monoClientParameters;
 				clientAndServerParameters = null;
 			} else if (!requireMonoExtensions && ctx.TryGetParameter<ClientParameters> (out clientParameters)) {
@@ -112,18 +117,23 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public static ServerParameters GetServerParameters (TestContext ctx, bool requireMonoExtensions)
 		{
-			ClientAndServerParameters clientAndServerParameters;
-			return GetServerParameters (ctx, requireMonoExtensions, out clientAndServerParameters);
+			ClientAndServerParameters clientAndServerParameters = null;
+			return GetServerParameters (ctx, requireMonoExtensions, ref clientAndServerParameters);
 		}
 
-		public static ServerParameters GetServerParameters (TestContext ctx, bool requireMonoExtensions, out ClientAndServerParameters clientAndServerParameters)
+		public static ServerParameters GetServerParameters (TestContext ctx, bool requireMonoExtensions, ref ClientAndServerParameters clientAndServerParameters)
 		{
 			ServerParameters serverParameters;
 			MonoServerParameters monoServerParameters;
-			MonoClientAndServerParameters monoClientAndServerParameters;
+			MonoClientAndServerParameters monoClientAndServerParameters = clientAndServerParameters as MonoClientAndServerParameters;
 			MonoClientAndServerTestType testType;
 
-			if (ctx.TryGetParameter<MonoServerParameters> (out monoServerParameters)) {
+			if (monoClientAndServerParameters != null) {
+				serverParameters = monoServerParameters = monoClientAndServerParameters.MonoServerParameters;
+			} else if (!requireMonoExtensions && clientAndServerParameters != null) {
+				serverParameters = clientAndServerParameters.ServerParameters;
+				monoServerParameters = serverParameters as MonoServerParameters;
+			} else if (ctx.TryGetParameter<MonoServerParameters> (out monoServerParameters)) {
 				serverParameters = monoServerParameters;
 				clientAndServerParameters = null;
 			} else if (!requireMonoExtensions && ctx.TryGetParameter<ServerParameters> (out serverParameters)) {
@@ -223,9 +233,9 @@ namespace Mono.Security.NewTls.TestFeatures
 			ctx.Assert (serverProviderType, IsProviderSupported);
 			var serverProvider = Factory.GetProvider (serverProviderType);
 
-			ClientAndServerParameters clientAndServerParameters;
-			var clientParameters = GetClientParameters (ctx, false, out clientAndServerParameters);
-			var serverParameters = GetServerParameters (ctx, false, out clientAndServerParameters);
+			ClientAndServerParameters clientAndServerParameters = null;
+			var clientParameters = GetClientParameters (ctx, false, ref clientAndServerParameters);
+			var serverParameters = GetServerParameters (ctx, false, ref clientAndServerParameters);
 
 			if (clientAndServerParameters == null)
 				clientAndServerParameters = new ClientAndServerParameters (clientParameters, serverParameters);
@@ -246,9 +256,9 @@ namespace Mono.Security.NewTls.TestFeatures
 			ctx.Assert (serverProviderType, IsMonoProviderSupported);
 			var serverProvider = MonoFactory.GetMonoProvider (serverProviderType);
 
-			ClientAndServerParameters clientAndServerParameters;
-			var clientParameters = GetClientParameters (ctx, true, out clientAndServerParameters);
-			var serverParameters = GetServerParameters (ctx, true, out clientAndServerParameters);
+			ClientAndServerParameters clientAndServerParameters = null;
+			var clientParameters = GetClientParameters (ctx, true, ref clientAndServerParameters);
+			var serverParameters = GetServerParameters (ctx, true, ref clientAndServerParameters);
 
 			if (clientAndServerParameters == null)
 				clientAndServerParameters = new MonoClientAndServerParameters (clientParameters, serverParameters);
@@ -269,9 +279,9 @@ namespace Mono.Security.NewTls.TestFeatures
 			ctx.Assert (serverProviderType, IsMonoProviderSupported);
 			var serverProvider = MonoFactory.GetMonoProvider (serverProviderType);
 
-			ClientAndServerParameters clientAndServerParameters;
-			var clientParameters = GetClientParameters (ctx, true, out clientAndServerParameters);
-			var serverParameters = GetServerParameters (ctx, true, out clientAndServerParameters);
+			ClientAndServerParameters clientAndServerParameters = null;
+			var clientParameters = GetClientParameters (ctx, true, ref clientAndServerParameters);
+			var serverParameters = GetServerParameters (ctx, true, ref clientAndServerParameters);
 
 			if (clientAndServerParameters == null)
 				clientAndServerParameters = new MonoClientAndServerParameters (clientParameters, serverParameters);

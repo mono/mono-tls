@@ -101,46 +101,24 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task SelectClientCipher (TestContext ctx, CancellationToken cancellationToken,
-			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
+			[MonoClientAndServerTestType (SelectCiphers = true)] MonoClientAndServerTestType type,
 			[SelectCipherSuite ("ClientCipher")] CipherSuiteCode clientCipher,
-			[MonoClientAndServer] MonoClientAndServer connection)
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
-			ctx.Assert (clientCipher, Is.EqualTo (connection.MonoParameters.ExpectedClientCipher.Value), "expected cipher");
+			ctx.Assert (clientCipher, Is.EqualTo (runner.Parameters.ExpectedClientCipher.Value), "expected cipher");
 
-			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
-			await handler.WaitForConnection (ctx, cancellationToken);
-
-			var serverInfo = connection.Server.GetConnectionInfo ();
-			ctx.Assert (serverInfo, Is.Not.Null, "server info");
-			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (clientCipher), "server cipher code");
-
-			var clientInfo = connection.Client.GetConnectionInfo ();
-			ctx.Assert (clientInfo, Is.Not.Null, "client info");
-			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (clientCipher), "client cipher");
-
-			await handler.Run (ctx, cancellationToken);
+			await runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
 		public async Task SelectServerCipher (TestContext ctx, CancellationToken cancellationToken,
-			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
+			[MonoClientAndServerTestType (SelectCiphers = true)] MonoClientAndServerTestType type,
 			[SelectCipherSuite ("ServerCipher")] CipherSuiteCode serverCipher,
-			[MonoClientAndServer] MonoClientAndServer connection)
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
-			ctx.Assert (serverCipher, Is.EqualTo (connection.MonoParameters.ExpectedServerCipher.Value), "expected cipher");
+			ctx.Assert (serverCipher, Is.EqualTo (runner.Parameters.ExpectedServerCipher.Value), "expected cipher");
 
-			var handler = ClientAndServerHandlerFactory.HandshakeAndDone.Create (connection);
-			await handler.WaitForConnection (ctx, cancellationToken);
-
-			var serverInfo = connection.Server.GetConnectionInfo ();
-			ctx.Assert (serverInfo, Is.Not.Null, "server info");
-			ctx.Assert (serverInfo.CipherCode, Is.EqualTo (serverCipher), "server cipher code");
-
-			var clientInfo = connection.Client.GetConnectionInfo ();
-			ctx.Assert (clientInfo, Is.Not.Null, "client info");
-			ctx.Assert (clientInfo.CipherCode, Is.EqualTo (serverCipher), "client cipher");
-
-			await handler.Run (ctx, cancellationToken);
+			await runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
