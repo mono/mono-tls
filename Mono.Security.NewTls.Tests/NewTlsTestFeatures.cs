@@ -45,47 +45,49 @@ namespace Mono.Security.NewTls.Tests
 	public class NotWorkingAttribute : TestFeatureAttribute
 	{
 		public override TestFeature Feature {
-			get { return NewTlsTestFeatures.NotWorking; }
+			get { return NewTlsTestFeatures.Instance.NotWorking; }
 		}
 	}
 
 	public class MartinAttribute : TestCategoryAttribute
 	{
 		public override TestCategory Category {
-			get { return NewTlsTestFeatures.Martin; }
+			get { return NewTlsTestFeatures.Instance.Martin; }
 		}
 	}
 
 	public class WorkAttribute : TestCategoryAttribute
 	{
 		public override TestCategory Category {
-			get { return NewTlsTestFeatures.Work; }
+			get { return NewTlsTestFeatures.Instance.Work; }
 		}
 	}
 
 	public class CryptoTestsAttribute : TestCategoryAttribute
 	{
 		public override TestCategory Category {
-			get { return NewTlsTestFeatures.CryptoTests; }
+			get { return NewTlsTestFeatures.Instance.CryptoTests; }
 		}
 	}
 
 	public class NewTlsTestFeatures : ITestConfigurationProvider
 	{
-		public static readonly NewTlsTestFeatures Instance;
+		public static NewTlsTestFeatures Instance {
+			get { return DependencyInjector.Get<NewTlsTestFeatures> (); }
+		}
 
-		public static readonly TestCategory Work = new TestCategory ("Work");
-		public static readonly TestCategory Martin = new TestCategory ("Martin");
-		public static readonly TestCategory CryptoTests = new TestCategory ("CryptoTests");
+		public readonly TestCategory Work = new TestCategory ("Work");
+		public readonly TestCategory Martin = new TestCategory ("Martin");
+		public readonly TestCategory CryptoTests = new TestCategory ("CryptoTests");
 
-		public static readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
-		public static readonly TestFeature NotWorking = new TestFeature ("NotWorking", "Not Working");
+		public readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
+		public readonly TestFeature NotWorking = new TestFeature ("NotWorking", "Not Working");
 
-		public static readonly TestFeature DotNetCryptoProvider = CreateCryptoFeature (
+		public readonly TestFeature DotNetCryptoProvider = CreateCryptoFeature (
 			"DotNetCryptoProvider", "Use .NET as crypto provider", CryptoProviderType.DotNet, false);
-		public static readonly TestFeature MonoCryptoProvider = CreateCryptoFeature (
+		public readonly TestFeature MonoCryptoProvider = CreateCryptoFeature (
 			"MonoCryptoProvider", "Use Mono.Security as crypto provider", CryptoProviderType.Mono, false);
-		public static readonly TestFeature OpenSslCryptoProvider = CreateCryptoFeature (
+		public readonly TestFeature OpenSslCryptoProvider = CreateCryptoFeature (
 			"OpenSslCryptoProvider", "Use OpenSSL as crypto provider", CryptoProviderType.OpenSsl, false);
 
 		static TestFeature CreateCryptoFeature (string name, string description, CryptoProviderType type, bool needsEncryption, bool defaultValue = true)
@@ -100,15 +102,15 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		#if FIXME
-		public static readonly TestFeature DotNetConnectionProvider = CreateConnectionFeature (
+		public readonly TestFeature DotNetConnectionProvider = CreateConnectionFeature (
 			"DotNetConnectionProvider", "DotNetConnectionProvider", ConnectionProviderType.DotNet);
-		public static readonly TestFeature MonoConnectionProvider = CreateConnectionFeature (
+		public readonly TestFeature MonoConnectionProvider = CreateConnectionFeature (
 			"MonoConnectionProvider", "MonoConnectionProvider", ConnectionProviderType.Mono);
-		public static readonly TestFeature OpenSslConnectionProvider = CreateConnectionFeature (
+		public readonly TestFeature OpenSslConnectionProvider = CreateConnectionFeature (
 			"OpenSslConnectionProvider", "OpenSslConnectionProvider", ConnectionProviderType.OpenSsl);
 		#endif
 
-		static TestFeature CreateConnectionFeature (string name, string description, ConnectionProviderType type, bool defaultValue = true)
+		TestFeature CreateConnectionFeature (string name, string description, ConnectionProviderType type, bool defaultValue = true)
 		{
 			var factory = DependencyInjector.Get<ConnectionProviderFactory> ();
 			if (!factory.IsSupported (type)) {
@@ -119,13 +121,8 @@ namespace Mono.Security.NewTls.Tests
 			return new TestFeature (name, description, defaultValue);
 		}
 
-		public static readonly TestFeature HttpsWithOldTLS = new TestFeature ("HttpsWithOldTLS", "Use Mono's existing web stack with the old TLS", false);
-		public static readonly TestFeature HttpsWithNewTLS = new TestFeature ("HttpsWithNewTLS", "Use Mono's existing web stack with the new TLS", true);
-
-		static NewTlsTestFeatures ()
-		{
-			Instance = new NewTlsTestFeatures ();
-		}
+		public readonly TestFeature HttpsWithOldTLS = new TestFeature ("HttpsWithOldTLS", "Use Mono's existing web stack with the old TLS", false);
+		public readonly TestFeature HttpsWithNewTLS = new TestFeature ("HttpsWithNewTLS", "Use Mono's existing web stack with the new TLS", true);
 
 		public string Name {
 			get { return "Mono.Security.NewTls.Tests"; }
@@ -176,11 +173,11 @@ namespace Mono.Security.NewTls.Tests
 					yield break;
 				}
 
-				if (ctx.IsEnabled (DotNetCryptoProvider))
+				if (ctx.IsEnabled (Instance.DotNetCryptoProvider))
 					yield return CryptoProviderType.DotNet;
-				if (ctx.IsEnabled (MonoCryptoProvider))
+				if (ctx.IsEnabled (Instance.MonoCryptoProvider))
 					yield return CryptoProviderType.Mono;
-				if (ctx.IsEnabled (OpenSslCryptoProvider))
+				if (ctx.IsEnabled (Instance.OpenSslCryptoProvider))
 					yield return CryptoProviderType.OpenSsl;
 			}
 		}

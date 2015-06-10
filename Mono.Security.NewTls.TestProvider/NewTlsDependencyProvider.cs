@@ -50,6 +50,7 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 	using Instrumentation;
+	using Tests;
 
 	public class NewTlsDependencyProvider : IDependencyProvider
 	{
@@ -72,6 +73,8 @@ namespace Mono.Security.NewTls.TestProvider
 			#if MACUI
 			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());
 			#endif
+
+			DependencyInjector.RegisterDependency<NewTlsTestFeatures> (() => new NewTlsTestFeatures ());
 
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 		}
