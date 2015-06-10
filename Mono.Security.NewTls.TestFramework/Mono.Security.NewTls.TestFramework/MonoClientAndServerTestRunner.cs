@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
@@ -116,6 +117,34 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 
 			base.OnRun (ctx, cancellationToken);
+		}
+
+		static void ExpectAlert (TestContext ctx, Task t, AlertDescription expectedAlert, string message)
+		{
+			ctx.Assert (t.IsFaulted, Is.True, "#1:" + message);
+			var baseException = t.Exception.GetBaseException ();
+			if (baseException is AggregateException) {
+				var aggregate = baseException as AggregateException;
+				ctx.Assert (aggregate.InnerExceptions.Count, Is.EqualTo (2), "#2a:" + message);
+				var authExcType = aggregate.InnerExceptions [0].GetType ();
+				ctx.Assert (authExcType.FullName, Is.EqualTo ("System.Security.Authentication.AuthenticationException"), "#2b:" + message);
+				baseException = aggregate.InnerExceptions [1];
+			}
+			ctx.Assert (baseException, Is.InstanceOf<TlsException> (), "#2:" + message);
+			var alert = ((TlsException)baseException).Alert;
+			ctx.Assert (alert.Level, Is.EqualTo (AlertLevel.Fatal), "#3:" + message);
+			ctx.Assert (alert.Description, Is.EqualTo (expectedAlert), "#4:" + message);
+		}
+
+		public async Task ExpectAlert (TestContext ctx, AlertDescription alert, CancellationToken cancellationToken)
+		{
+			var serverTask = Server.WaitForConnection (ctx, cancellationToken);
+			var clientTask = Client.WaitForConnection (ctx, cancellationToken);
+
+			var t1 = clientTask.ContinueWith (t => ExpectAlert (ctx, t, alert, "client"));
+			var t2 = serverTask.ContinueWith (t => ExpectAlert (ctx, t, alert, "server"));
+
+			await Task.WhenAll (t1, t2);
 		}
 	}
 }

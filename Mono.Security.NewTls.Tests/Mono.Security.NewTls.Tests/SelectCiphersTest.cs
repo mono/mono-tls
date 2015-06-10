@@ -123,40 +123,12 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task InvalidCipher (TestContext ctx, CancellationToken cancellationToken,
-			[MonoConnectionParameter] MonoClientAndServerParameters parameters,
+			[MonoClientAndServerTestType (SelectCiphers = true)] MonoClientAndServerTestType type,
 			[SelectCipherSuite ("ServerCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA)] CipherSuiteCode serverCipher,
 			[SelectCipherSuite ("ClientCipher", CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256)] CipherSuiteCode clientCipher,
-			[MonoServer] IServer server, [MonoClient] IClient client)
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
 		{
-			await ExpectAlert (ctx, server, client, AlertDescription.HandshakeFailure, cancellationToken);
-		}
-
-		void ExpectAlert (TestContext ctx, Task t, AlertDescription expectedAlert, string message)
-		{
-			ctx.Assert (t.IsFaulted, Is.True, "#1:" + message);
-			var baseException = t.Exception.GetBaseException ();
-			if (baseException is AggregateException) {
-				var aggregate = baseException as AggregateException;
-				ctx.Assert (aggregate.InnerExceptions.Count, Is.EqualTo (2), "#2a:" + message);
-				var authExcType = aggregate.InnerExceptions [0].GetType ();
-				ctx.Assert (authExcType.FullName, Is.EqualTo ("System.Security.Authentication.AuthenticationException"), "#2b:" + message);
-				baseException = aggregate.InnerExceptions [1];
-			}
-			ctx.Assert (baseException, Is.InstanceOf<TlsException> (), "#2:" + message);
-			var alert = ((TlsException)baseException).Alert;
-			ctx.Assert (alert.Level, Is.EqualTo (AlertLevel.Fatal), "#3:" + message);
-			ctx.Assert (alert.Description, Is.EqualTo (expectedAlert), "#4:" + message);
-		}
-
-		async Task ExpectAlert (TestContext ctx, IServer server, IClient client, AlertDescription alert, CancellationToken cancellationToken)
-		{
-			var serverTask = server.WaitForConnection (ctx, cancellationToken);
-			var clientTask = client.WaitForConnection (ctx, cancellationToken);
-
-			var t1 = clientTask.ContinueWith (t => ExpectAlert (ctx, t, alert, "client"));
-			var t2 = serverTask.ContinueWith (t => ExpectAlert (ctx, t, alert, "server"));
-
-			await Task.WhenAll (t1, t2);
+			await runner.ExpectAlert (ctx, AlertDescription.HandshakeFailure, cancellationToken);
 		}
 	}
 }
