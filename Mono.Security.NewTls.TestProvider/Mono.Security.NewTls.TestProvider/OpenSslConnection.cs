@@ -26,6 +26,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Mono.Security.NewTls;
@@ -36,8 +37,8 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
-using System.Net.Security;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -139,10 +140,18 @@ namespace Mono.Security.NewTls.TestProvider
 
 		NativeOpenSsl.RemoteValidationCallback GetValidationCallback ()
 		{
-			var clientParams = Parameters as ClientParameters;
-			if (clientParams == null)
-				return null;
-			var validator = (CertificateValidator)clientParams.ClientCertificateValidator;
+			CertificateValidator validator = null;
+
+			if (IsServer) {
+				var serverParameters = Parameters as ServerParameters;
+				if (serverParameters != null)
+					validator = (CertificateValidator)serverParameters.ServerCertificateValidator;
+			} else {
+				var clientParameters = Parameters as ClientParameters;
+				if (clientParameters != null)
+					validator = (CertificateValidator)clientParameters.ClientCertificateValidator;
+			}
+
 			if (validator == null)
 				return null;
 
@@ -159,24 +168,8 @@ namespace Mono.Security.NewTls.TestProvider
 			var protocol = GetProtocolVersion ();
 			ctx.LogMessage ("Starting {0} version {1}.", this, protocol);
 			openssl = new NativeOpenSsl (IsServer, false, protocol);
-			// FIXME
 			var validationCallback = GetValidationCallback ();
 			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_PEER, validationCallback);
-			#if FIXME
-			if (!Parameters.VerifyPeerCertificate)
-				openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_NONE, null);
-			else {
-				NativeOpenSsl.VerifyMode mode = NativeOpenSsl.VerifyMode.SSL_VERIFY_PEER;
-				var serverParams = Parameters as IServerParameters;
-				if (serverParams != null) {
-					if (serverParams.RequireClientCertificate)
-						mode |= NativeOpenSsl.VerifyMode.SSL_VERIFY_FAIL_IF_NO_PEER_CERT;
-					else if (serverParams.AskForClientCertificate)
-						mode |= NativeOpenSsl.VerifyMode.SSL_VERIFY_CLIENT_ONCE;
-				}
-				openssl.SetCertificateVerify (mode, RemoteValidationCallback);
-			}
-			#endif
 			Initialize ();
 
 			Task.Factory.StartNew (() => {
