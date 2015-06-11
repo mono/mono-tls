@@ -1,5 +1,5 @@
 ﻿//
-// MonoConnectionTestType.cs
+// ProtocolVersionsAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,24 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Framework;
+using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFeatures
 {
-	public enum MonoClientAndServerTestType
+	using TestFramework;
+
+	public class ProtocolVersionsAttribute : TestParameterAttribute, ITestParameterSource<ProtocolVersions>
 	{
-		Simple,
-		ValidateCertificate,
-		CheckDefaultCipher,
+		public ProtocolVersionsAttribute (string filter = null)
+			: base (filter)
+		{
+		}
 
-		SimpleTls10,
-		SimpleTls11,
-		SimpleTls12,
-
-		SelectCiphersTls10,
-		SelectCiphersTls11,
-		SelectCiphersTls12,
-
-		RequestClientCertificate
+		public IEnumerable<ProtocolVersions> GetParameters (TestContext ctx, string filter)
+		{
+			yield return ProtocolVersions.Tls10;
+			yield return ProtocolVersions.Tls11;
+			yield return ProtocolVersions.Tls12;
+		}
 	}
 }
 

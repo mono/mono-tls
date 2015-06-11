@@ -73,6 +73,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			var provider = DependencyInjector.Get<ICertificateProvider> ();
 			var acceptAll = provider.AcceptAll ();
+			var acceptSelfSigned = provider.AcceptThisCertificate (ResourceManager.SelfSignedServerCertificate);
 			var acceptFromCA = provider.AcceptFromCA (ResourceManager.LocalCACertificate);
 
 			var name = type.ToString ();
@@ -84,7 +85,7 @@ namespace Mono.Security.NewTls.TestFramework
 				};
 			case MonoClientAndServerTestType.ValidateCertificate:
 				return new MonoClientAndServerParameters (name, ResourceManager.ServerCertificateFromCA) {
-					ClientCertificateValidator = acceptFromCA, ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+					ClientCertificateValidator = acceptFromCA
 				};
 			case MonoClientAndServerTestType.CheckDefaultCipher:
 				return new MonoClientAndServerParameters (name, ResourceManager.SelfSignedServerCertificate) {
@@ -116,6 +117,18 @@ namespace Mono.Security.NewTls.TestFramework
 			case MonoClientAndServerTestType.SelectCiphersTls12:
 				return new MonoClientAndServerParameters (name, ResourceManager.SelfSignedServerCertificate) {
 					ClientCertificateValidator = acceptAll, ProtocolVersion = ProtocolVersions.Tls12
+				};
+
+			case MonoClientAndServerTestType.RequestClientCertificate:
+				/*
+				 * Request client certificate, but do not require it.
+				 *
+				 * FIXME:
+				 * SslStream with Mono's old implementation fails here.
+				 */
+				return new MonoClientAndServerParameters (name, ResourceManager.SelfSignedServerCertificate) {
+					ClientCertificate = ResourceManager.MonkeyCertificate, ClientCertificateValidator = acceptSelfSigned,
+					ServerFlags = ServerFlags.AskForClientCertificate, ServerCertificateValidator = acceptFromCA
 				};
 
 			default:

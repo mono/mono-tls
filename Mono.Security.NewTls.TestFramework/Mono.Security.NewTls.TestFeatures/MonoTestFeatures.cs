@@ -286,6 +286,10 @@ namespace Mono.Security.NewTls.TestFeatures
 			if (clientAndServerParameters == null)
 				clientAndServerParameters = new MonoClientAndServerParameters (clientParameters, serverParameters);
 
+			ProtocolVersions protocolVersion;
+			if (ctx.TryGetParameter<ProtocolVersions> (out protocolVersion))
+				clientAndServerParameters.ProtocolVersion = protocolVersion;
+
 			var server = serverProvider.CreateMonoServer (clientAndServerParameters.ServerParameters);
 			var client = clientProvider.CreateMonoClient (clientAndServerParameters.ClientParameters);
 			return new MonoClientAndServerTestRunner (server, client, (MonoClientAndServerParameters)clientAndServerParameters);

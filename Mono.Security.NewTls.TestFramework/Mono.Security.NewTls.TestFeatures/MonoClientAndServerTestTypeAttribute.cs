@@ -39,6 +39,10 @@ namespace Mono.Security.NewTls.TestFeatures
 			get; set;
 		}
 
+		public bool AllVersions {
+			get; set;
+		}
+
 		public MonoClientAndServerTestType? TestType {
 			get; set;
 		}
@@ -60,7 +64,13 @@ namespace Mono.Security.NewTls.TestFeatures
 				yield break;
 			}
 
-			yield return MonoClientAndServerTestType.Simple;
+			if (AllVersions) {
+				yield return MonoClientAndServerTestType.Simple;
+				yield return MonoClientAndServerTestType.ValidateCertificate;
+				yield return MonoClientAndServerTestType.RequestClientCertificate;
+				yield break;
+			}
+
 			yield return MonoClientAndServerTestType.CheckDefaultCipher;
 
 			if (IncludeVersionTests) {
