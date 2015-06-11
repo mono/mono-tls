@@ -40,8 +40,23 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
+		public ProtocolVersionsAttribute (ProtocolVersions versions)
+		{
+			Versions = versions;
+		}
+
+		public ProtocolVersions? Versions {
+			get;
+			private set;
+		}
+
 		public IEnumerable<ProtocolVersions> GetParameters (TestContext ctx, string filter)
 		{
+			if (Versions != null) {
+				yield return Versions.Value;
+				yield break;
+			}
+
 			yield return ProtocolVersions.Tls10;
 			yield return ProtocolVersions.Tls11;
 			yield return ProtocolVersions.Tls12;

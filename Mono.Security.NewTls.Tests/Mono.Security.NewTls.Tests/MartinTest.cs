@@ -88,6 +88,18 @@ namespace Mono.Security.NewTls.Tests
 
 			await handler.Run (ctx, cancellationToken);
 		}
+
+		[Martin]
+		[AsyncTest]
+		public Task TestAllVersions (TestContext ctx, CancellationToken cancellationToken,
+			[ClientAndServerType (Identifier = "ConnectionType", ProviderFlags = ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.CanSelectCiphers)]
+			ClientAndServerType connectionType,
+			[ProtocolVersions (ProtocolVersions.Tls10)] ProtocolVersions protocolVersion,
+			[MonoClientAndServerTestType (MonoClientAndServerTestType.RequestClientCertificate, AllVersions = true)] MonoClientAndServerTestType type,
+			[MonoClientAndServerTestRunner] MonoClientAndServerTestRunner runner)
+		{
+			return runner.Run (ctx, cancellationToken);
+		}
 	}
 }
 
