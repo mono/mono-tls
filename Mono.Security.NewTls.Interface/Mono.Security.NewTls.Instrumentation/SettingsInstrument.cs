@@ -24,12 +24,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Threading;
 
 namespace Mono.Security.NewTls.Instrumentation
 {
 	public class SettingsInstrument
 	{
 		public bool DisableRenegotiation {
+			get; set;
+		}
+
+		SignatureParameters clientSignatureParameters;
+
+		public bool HasClientSignatureParameters {
+			get { return clientSignatureParameters != null; }
+		}
+
+		public SignatureParameters ClientSignatureParameters {
+			get {
+				if (clientSignatureParameters == null)
+					Interlocked.CompareExchange<SignatureParameters> (ref clientSignatureParameters, new SignatureParameters (), null);
+				return clientSignatureParameters;
+			}
+		}
+
+		public SignatureAndHashAlgorithm? ExpectSignatureAlgorithm {
 			get; set;
 		}
 	}

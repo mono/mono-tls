@@ -31,7 +31,8 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		None,
 		DisableRenegotiation,
-		CloseServerConnection
+		CloseServerConnection,
+		ClientSignatureAlgorithm
 	}
 }
 

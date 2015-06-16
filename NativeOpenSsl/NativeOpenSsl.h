@@ -118,6 +118,9 @@ void
 native_openssl_destroy (NativeOpenSsl *ptr);
 
 void
+native_openssl_close (NativeOpenSsl *ptr);
+
+void
 native_openssl_free_certificate (X509 *certificate);
 
 void

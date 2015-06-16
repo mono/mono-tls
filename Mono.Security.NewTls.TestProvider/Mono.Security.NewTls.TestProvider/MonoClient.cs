@@ -59,8 +59,10 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var settings = new TlsSettings ();
 
-			if (MonoParameters != null)
+			if (MonoParameters != null) {
 				settings.RequestedCiphers = MonoParameters.ClientCiphers;
+				settings.Instrumentation = MonoParameters.Instrumentation;
+			}
 
 			return settings;
 		}
@@ -69,7 +71,8 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			ctx.LogMessage ("Connected.");
 
-			var targetHost = "Hamiller-Tube.local";
+			var targetHost = Parameters.TargetHost ?? EndPoint.HostName ?? EndPoint.Address;
+			ctx.LogDebug (1, "Using '{0}' as target host.", targetHost);
 
 			var stream = new NetworkStream (socket);
 			var client = await ConnectionProvider.CreateClientStreamAsync (stream, targetHost, Parameters, settings, cancellationToken);

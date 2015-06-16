@@ -1,5 +1,5 @@
 ﻿//
-// MonoClientParameters.cs
+// InstrumentationTestRunnerAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,44 +24,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
+using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
-	using Instrumentation;
+	using TestFramework;
 
-	public class MonoClientParameters : ClientParameters
+	public class InstrumentationTestRunnerAttribute : TestHostAttribute, ITestHost<InstrumentationTestRunner>
 	{
-		public MonoClientParameters (string identifier)
-			: base (identifier)
+		public InstrumentationTestRunnerAttribute (InstrumentationFlags flags = InstrumentationFlags.Default)
+			: base (typeof (InstrumentationTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
 		{
+			InstrumentationFlags = flags;
 		}
 
-		MonoClientParameters (MonoClientParameters other)
-			: base (other)
+		public InstrumentationFlags InstrumentationFlags {
+			get;
+			private set;
+		}
+
+		public InstrumentationTestRunner CreateInstance (TestContext ctx)
 		{
-			if (other.ClientCiphers != null)
-				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			Instrumentation = other.Instrumentation;
-		}
-
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoClientParameters (this);
-		}
-
-		public ICollection<CipherSuiteCode> ClientCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public InstrumentCollection Instrumentation {
-			get; set;
+			return MonoTestFeatures.CreateInstrumentationTestRunner (ctx, InstrumentationFlags);
 		}
 	}
 }

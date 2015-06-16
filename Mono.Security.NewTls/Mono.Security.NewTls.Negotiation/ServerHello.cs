@@ -257,7 +257,15 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual SignatureAndHashAlgorithm SelectSignatureType ()
 		{
-			foreach (var sigType in HandshakeParameters.ClientCertificateParameters.SignatureAndHashAlgorithms) {
+			SignatureParameters signatureParameters;
+			if (HandshakeParameters.ClientCertificateParameters != null && HandshakeParameters.ClientCertificateParameters.HasSignatureParameters)
+				signatureParameters = HandshakeParameters.ClientCertificateParameters.SignatureParameters;
+			else if (HandshakeParameters.SignatureParameters != null)
+				signatureParameters = HandshakeParameters.SignatureParameters;
+			else
+				signatureParameters = SignatureParameters.GetDefaultParameters ();
+
+			foreach (var sigType in signatureParameters.SignatureAndHashAlgorithms) {
 				if (sigType.Signature != SignatureAlgorithmType.Rsa)
 					continue;
 				switch (sigType.Hash) {

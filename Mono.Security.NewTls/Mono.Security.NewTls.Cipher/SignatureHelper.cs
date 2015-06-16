@@ -39,6 +39,8 @@ namespace Mono.Security.NewTls.Cipher
 
 		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, SecureBuffer data, AsymmetricAlgorithm key)
 		{
+			if (!IsAlgorithmSupported (type))
+				throw new TlsException (AlertDescription.IlegalParameter);
 			using (var d = new DisposeContext ()) {
 				var algorithm = d.Add ((HashAlgorithm)GetAlgorithm (type.Hash));
 				algorithm.TransformFinalBlock (data.Buffer, 0, data.Size);
@@ -62,6 +64,8 @@ namespace Mono.Security.NewTls.Cipher
 
 		public static bool VerifySignature (SignatureAndHashAlgorithm type, SecureBuffer data, AsymmetricAlgorithm key, SecureBuffer signature)
 		{
+			if (!IsAlgorithmSupported (type))
+				throw new TlsException (AlertDescription.IlegalParameter);
 			using (var d = new DisposeContext ()) {
 				var algorithm = d.Add ((HashAlgorithm)GetAlgorithm (type.Hash));
 				algorithm.TransformFinalBlock (data.Buffer, 0, data.Size);
@@ -86,10 +90,8 @@ namespace Mono.Security.NewTls.Cipher
 		#if INSIDE_MONO_NEWTLS
 		public static SignatureAndHashAlgorithm SelectSignatureType (HandshakeParameters handshakeParameters)
 		{
-			if (handshakeParameters.SignatureAlgorithms != null)
-				return SelectSignatureType (handshakeParameters.SignatureAlgorithms);
-			else if (handshakeParameters.ClientCertificateParameters != null)
-				return SelectSignatureType (handshakeParameters.ClientCertificateParameters.SignatureAndHashAlgorithms);
+			if (handshakeParameters.ClientCertificateParameters != null && handshakeParameters.ClientCertificateParameters.HasSignatureParameters)
+				return SelectSignatureType (handshakeParameters.ClientCertificateParameters.SignatureParameters);
 			else
 				return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
 		}
@@ -110,14 +112,22 @@ namespace Mono.Security.NewTls.Cipher
 			}
 		}
 
-		static SignatureAndHashAlgorithm SelectSignatureType (ICollection<SignatureAndHashAlgorithm> algorithms)
+		static SignatureAndHashAlgorithm SelectSignatureType (SignatureParameters parameters)
 		{
-			foreach (var algorithm in algorithms) {
+			foreach (var algorithm in parameters.SignatureAndHashAlgorithms) {
 				if (IsAlgorithmSupported (algorithm))
 					return algorithm;
 			}
 
 			throw new TlsException (AlertDescription.HandshakeFailure, "Client did not offer any supported signature type.");
+		}
+
+		public static void VerifySignatureParameters (SignatureParameters parameters)
+		{
+			foreach (var algorithm in parameters.SignatureAndHashAlgorithms) {
+				if (!IsAlgorithmSupported (algorithm))
+					throw new TlsException (AlertDescription.IlegalParameter);
+			}
 		}
 	}
 }

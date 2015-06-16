@@ -198,6 +198,8 @@ namespace Mono.Security.NewTls
 		{
 			if (instrument.DisableRenegotiation)
 				RenegotiationFlags = RenegotiationFlags.DisallowRenegotiation;
+			if (instrument.HasClientSignatureParameters)
+				UserSettings.SignatureParameters = instrument.ClientSignatureParameters;
 		}
 
 		#endif

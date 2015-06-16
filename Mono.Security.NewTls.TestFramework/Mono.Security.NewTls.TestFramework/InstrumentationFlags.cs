@@ -1,5 +1,5 @@
 ﻿//
-// MonoClientParameters.cs
+// InstrumentationFlags.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,45 +24,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using Instrumentation;
-
-	public class MonoClientParameters : ClientParameters
+	[Flags]
+	public enum InstrumentationFlags
 	{
-		public MonoClientParameters (string identifier)
-			: base (identifier)
-		{
-		}
+		None			= 0,
+		RequiresMonoClient	= 1,
+		RequiresMonoServer	= 2,
+		ManualClient		= 4,
+		ManualServer		= 8,
 
-		MonoClientParameters (MonoClientParameters other)
-			: base (other)
-		{
-			if (other.ClientCiphers != null)
-				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			Instrumentation = other.Instrumentation;
-		}
-
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoClientParameters (this);
-		}
-
-		public ICollection<CipherSuiteCode> ClientCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public InstrumentCollection Instrumentation {
-			get; set;
-		}
+		Default			= RequiresMonoClient | RequiresMonoServer
 	}
 }
 

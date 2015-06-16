@@ -36,9 +36,14 @@ namespace Mono.Security.NewTls
 		}
 
 		ClientCertificateParameters clientCertParams;
+		SignatureParameters signatureParameters;
 
 		public bool HasClientCertificateParameters {
 			get { return clientCertParams != null; }
+		}
+
+		public bool HasSignatureParameters {
+			get { return signatureParameters != null; }
 		}
 
 		public ClientCertificateParameters ClientCertificateParameters {
@@ -49,6 +54,17 @@ namespace Mono.Security.NewTls
 			}
 			set {
 				clientCertParams = value;
+			}
+		}
+
+		public SignatureParameters SignatureParameters {
+			get {
+				if (signatureParameters == null)
+					signatureParameters = new SignatureParameters ();
+				return signatureParameters;
+			}
+			set {
+				signatureParameters = value;
 			}
 		}
 

@@ -94,6 +94,10 @@ namespace Mono.Security.NewTls
 			private set;
 		}
 
+		internal bool HasSettingsInstrument {
+			get { return Instrumentation != null && Instrumentation.HasSettings; }
+		}
+
 		internal bool HasInstrument (HandshakeInstrumentType type)
 		{
 			return Instrumentation != null ? Instrumentation.HasInstrument (type) : false;

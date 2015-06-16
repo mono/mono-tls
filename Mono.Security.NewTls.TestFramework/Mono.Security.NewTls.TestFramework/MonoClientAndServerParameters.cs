@@ -40,6 +40,11 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
+		protected MonoClientAndServerParameters (string identifier, MonoClientParameters clientParameters, MonoServerParameters serverParameters)
+			: base (identifier, clientParameters, serverParameters)
+		{
+		}
+
 		public MonoClientAndServerParameters (ClientParameters clientParameters, ServerParameters serverParameters)
 			: base (clientParameters, serverParameters)
 		{
@@ -86,6 +91,11 @@ namespace Mono.Security.NewTls.TestFramework
 		public CipherSuiteCode? ExpectedServerCipher {
 			get { return MonoServerParameters.ExpectedCipher; }
 			set { MonoServerParameters.ExpectedCipher = value; }
+		}
+
+		public InstrumentCollection ClientInstrumentation {
+			get { return MonoClientParameters.Instrumentation; }
+			set { MonoClientParameters.Instrumentation = value; }
 		}
 
 		public InstrumentCollection ServerInstrumentation {

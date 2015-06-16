@@ -40,9 +40,9 @@ namespace Mono.Security.NewTls.Handshake
 				stream.Write ((byte)Parameters.CertificateTypes [i]);
 
 			if (Protocol == TlsProtocolCode.Tls12) {
-				stream.Write ((short)(Parameters.SignatureAndHashAlgorithms.Count * 2));
-				for (int i = 0; i < Parameters.SignatureAndHashAlgorithms.Count; i++)
-					Parameters.SignatureAndHashAlgorithms [i].Encode (stream);
+				stream.Write ((short)(Parameters.SignatureParameters.SignatureAndHashAlgorithms.Count * 2));
+				for (int i = 0; i < Parameters.SignatureParameters.SignatureAndHashAlgorithms.Count; i++)
+					Parameters.SignatureParameters.SignatureAndHashAlgorithms [i].Encode (stream);
 			}
 
 			var startPos = stream.Position;
@@ -70,7 +70,7 @@ namespace Mono.Security.NewTls.Handshake
 					throw new TlsException (AlertDescription.IlegalParameter);
 				var signatureTypes = new SignatureAndHashAlgorithm [length2 >> 1];
 				for (int i = 0; i < signatureTypes.Length; i++)
-					Parameters.SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (incoming));
+					Parameters.SignatureParameters.SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (incoming));
 			}
 
 			var length3 = incoming.ReadInt16 ();

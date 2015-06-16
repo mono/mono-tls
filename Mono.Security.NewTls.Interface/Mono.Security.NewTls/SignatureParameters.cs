@@ -1,5 +1,5 @@
 ﻿//
-// MonoClientParameters.cs
+// SignatureParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,43 +25,46 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls
 {
-	using Instrumentation;
-
-	public class MonoClientParameters : ClientParameters
+	public class SignatureParameters
 	{
-		public MonoClientParameters (string identifier)
-			: base (identifier)
+		List<SignatureAndHashAlgorithm> signatureTypes;
+
+		public IList<SignatureAndHashAlgorithm> SignatureAndHashAlgorithms {
+			get {
+				if (signatureTypes == null)
+					signatureTypes = new List<SignatureAndHashAlgorithm> ();
+				return signatureTypes;
+			}
+		}
+
+		public void Add (SignatureAndHashAlgorithm algorithm)
 		{
+			SignatureAndHashAlgorithms.Add (algorithm);
 		}
 
-		MonoClientParameters (MonoClientParameters other)
-			: base (other)
+		public void Add (HashAlgorithmType hash, SignatureAlgorithmType signature)
 		{
-			if (other.ClientCiphers != null)
-				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			Instrumentation = other.Instrumentation;
+			SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (hash, signature));
 		}
 
-		public override ConnectionParameters DeepClone ()
+		public static SignatureParameters GetDefaultParameters ()
 		{
-			return new MonoClientParameters (this);
+			var parameters = new SignatureParameters ();
+			parameters.EnsureDefaultValues ();
+			return parameters;
 		}
 
-		public ICollection<CipherSuiteCode> ClientCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public InstrumentCollection Instrumentation {
-			get; set;
+		internal void EnsureDefaultValues ()
+		{
+			if (SignatureAndHashAlgorithms.Count == 0) {
+				Add (HashAlgorithmType.Sha512, SignatureAlgorithmType.Rsa);
+				Add (HashAlgorithmType.Sha384, SignatureAlgorithmType.Rsa);
+				Add (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
+				Add (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa);
+			}
 		}
 	}
 }

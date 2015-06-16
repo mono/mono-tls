@@ -111,6 +111,7 @@ native_openssl_shutdown (NativeOpenSsl *ptr)
 void
 native_openssl_destroy (NativeOpenSsl *ptr)
 {
+	native_openssl_close (ptr);
 	if (ptr->ssl) {
 		SSL_free (ptr->ssl);
 		ptr->ssl = NULL;
@@ -119,11 +120,20 @@ native_openssl_destroy (NativeOpenSsl *ptr)
 		SSL_CTX_free (ptr->ctx);
 		ptr->ctx = NULL;
 	}
+	free (ptr);
+}
+
+void
+native_openssl_close (NativeOpenSsl *ptr)
+{
+	if (ptr->accepted > 0) {
+		close (ptr->accepted);
+		ptr->accepted = 0;
+	}
 	if (ptr->socket > 0) {
 		close (ptr->socket);
 		ptr->socket = 0;
 	}
-	free (ptr);
 }
 
 static long

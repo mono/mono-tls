@@ -31,6 +31,11 @@ namespace Mono.Security.NewTls.Cipher
 {
 	class SignatureTls10 : Signature
 	{
+		public SignatureAndHashAlgorithm SignatureAlgorithm {
+			get;
+			private set;
+		}
+
 		public SecureBuffer Signature {
 			get;
 			private set;
@@ -38,6 +43,7 @@ namespace Mono.Security.NewTls.Cipher
 
 		public SignatureTls10 (TlsBuffer incoming)
 		{
+			SignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa);
 			Signature = Add (incoming.ReadSecureBuffer (incoming.ReadInt16 ()));
 		}
 

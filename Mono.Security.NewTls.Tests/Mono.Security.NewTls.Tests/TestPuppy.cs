@@ -43,8 +43,8 @@ using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.Tests
 {
-	[Puppy]
-	[AsyncTestFixture (Timeout = 5000)]
+	// [Puppy]
+	// [AsyncTestFixture (Timeout = 5000)]
 	public class TestPuppy
 	{
 		[AsyncTest]

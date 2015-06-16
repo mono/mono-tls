@@ -88,7 +88,7 @@ namespace Mono.Security.NewTls
 			get; set;
 		}
 
-		internal ICollection<SignatureAndHashAlgorithm> SignatureAlgorithms {
+		internal SignatureParameters SignatureParameters {
 			get; set;
 		}
 

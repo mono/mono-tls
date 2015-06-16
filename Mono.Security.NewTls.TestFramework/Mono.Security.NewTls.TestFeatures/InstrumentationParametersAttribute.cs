@@ -36,36 +36,22 @@ namespace Mono.Security.NewTls.TestFeatures
 	using TestFramework;
 	using Instrumentation;
 
-	public class InstrumentationParametersAttribute : TestParameterAttribute, ITestParameterSource<MonoClientAndServerParameters>
+	public class InstrumentationParametersAttribute : TestParameterAttribute, ITestParameterSource<InstrumentationParameters>
 	{
-		public ICertificateValidator AcceptAll {
+		public InstrumentationTestCategory Category {
 			get;
 			private set;
 		}
 
-		public InstrumentationParametersAttribute (string filter = null)
-			: base (filter)
+		public InstrumentationParametersAttribute (InstrumentationTestCategory category, string filter = null)
+			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
-			AcceptAll = DependencyInjector.Get<ICertificateProvider> ().AcceptAll ();
+			Category = category;
 		}
 
-		MonoClientAndServerParameters CreateWithInstrumentation (string name, Action<InstrumentCollection> action)
+		public IEnumerable<InstrumentationParameters> GetParameters (TestContext ctx, string filter)
 		{
-			var instrument = new InstrumentCollection ();
-			action (instrument);
-			return new MonoClientAndServerParameters (name, ResourceManager.SelfSignedServerCertificate) {
-				ClientCertificateValidator = AcceptAll, ServerInstrumentation = instrument
-			};
-		}
-
-		IEnumerable<InstrumentationType> GetInstrumentationTypes ()
-		{
-			return Enum.GetValues (typeof(InstrumentationType)).Cast<InstrumentationType> ();
-		}
-
-		public IEnumerable<MonoClientAndServerParameters> GetParameters (TestContext ctx, string filter)
-		{
-			return GetInstrumentationTypes ().Select (t => InstrumentationTestRunner.GetParameters (t));
+			return InstrumentationTestRunner.GetParameters (ctx, Category, filter);
 		}
 	}
 }

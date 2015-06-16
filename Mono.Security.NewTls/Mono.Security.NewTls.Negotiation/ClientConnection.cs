@@ -88,8 +88,10 @@ namespace Mono.Security.NewTls.Negotiation
 				HandshakeParameters.RequestedExtensions.Add (new ServerNameExtension (Config.TargetHost));
 			if (Config.EnableSecureRenegotiation && (Session.SecureRenegotiation || ((Config.RenegotiationFlags & RenegotiationFlags.SendClientHelloExtension) != 0)))
 				HandshakeParameters.RequestedExtensions.Add (RenegotiationExtension.CreateClient (Context));
-			if (UserSettings.HasClientCertificateParameters)
-				HandshakeParameters.RequestedExtensions.Add (new SignatureAlgorithmsExtension (UserSettings.ClientCertificateParameters.SignatureAndHashAlgorithms));
+			if (UserSettings.HasSignatureParameters) {
+				SignatureHelper.VerifySignatureParameters (UserSettings.SignatureParameters);
+				HandshakeParameters.RequestedExtensions.Add (new SignatureAlgorithmsExtension (UserSettings.SignatureParameters));
+			}
 
 			return new TlsClientHello (
 				Config.RequestedProtocol, HandshakeParameters.ClientRandom, HandshakeParameters.SessionId,

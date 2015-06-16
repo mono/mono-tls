@@ -210,8 +210,7 @@ namespace Mono.Security.NewTls.Negotiation
 			if (!UserSettings.AskForClientCertificate)
 				return null;
 
-			var parameters = UserSettings.ClientCertificateParameters;
-			parameters.EnsureDefaultValues ();
+			var parameters = UserSettings.HasClientCertificateParameters ? UserSettings.ClientCertificateParameters : ClientCertificateParameters.GetDefaultParameters ();
 			return new TlsCertificateRequest (Context.NegotiatedProtocol, parameters);
 		}
 

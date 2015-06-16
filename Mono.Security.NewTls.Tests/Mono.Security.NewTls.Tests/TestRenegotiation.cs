@@ -65,10 +65,9 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationParameters] MonoClientAndServerParameters parameters,
-			[MonoServer] IMonoServer server, [MonoClient] IMonoClient client)
+			[InstrumentationParameters (InstrumentationTestCategory.Renegotiation)] InstrumentationParameters parameters,
+			[InstrumentationTestRunner] InstrumentationTestRunner runner)
 		{
-			var runner = new InstrumentationTestRunner (server, client, parameters);
 			await runner.Run (ctx, cancellationToken);
 		}
 	}

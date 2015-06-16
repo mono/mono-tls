@@ -1,5 +1,5 @@
 ﻿//
-// MonoClientParameters.cs
+// InstrumentationParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,43 +25,44 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using Xamarin.AsyncTests;
+using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
 	using Instrumentation;
 
-	public class MonoClientParameters : ClientParameters
+	public class InstrumentationParameters : MonoClientAndServerParameters
 	{
-		public MonoClientParameters (string identifier)
-			: base (identifier)
-		{
+		public InstrumentationType Type {
+			get;
+			private set;
 		}
 
-		MonoClientParameters (MonoClientParameters other)
+		public InstrumentationParameters (string identifier, IServerCertificate certificate, InstrumentationType type)
+			: base (identifier, new MonoClientParameters (identifier), new MonoServerParameters (identifier, certificate))
+		{
+			Type = type;
+		}
+
+		public InstrumentationParameters (InstrumentationType type, ClientParameters clientParameters, ServerParameters serverParameters)
+			: base (clientParameters, serverParameters)
+		{
+			Type = type;
+		}
+
+		protected InstrumentationParameters (InstrumentationParameters other)
 			: base (other)
 		{
-			if (other.ClientCiphers != null)
-				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			Instrumentation = other.Instrumentation;
+			Type = other.Type;
+			ClientInstrumentation = other.ClientInstrumentation;
+			ServerInstrumentation = other.ServerInstrumentation;
 		}
 
 		public override ConnectionParameters DeepClone ()
 		{
-			return new MonoClientParameters (this);
-		}
-
-		public ICollection<CipherSuiteCode> ClientCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public InstrumentCollection Instrumentation {
-			get; set;
+			return new InstrumentationParameters (this);
 		}
 	}
 }

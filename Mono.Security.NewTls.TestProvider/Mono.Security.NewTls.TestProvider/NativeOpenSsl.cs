@@ -151,6 +151,8 @@ namespace Mono.Security.NewTls.TestProvider
 					var alert = new Alert ((AlertLevel)buffer [0], (AlertDescription)buffer [1]);
 					if (enableDebugging)
 						DebugHelper.WriteLine ("ALERT: {0}", alert);
+					if (!alert.IsWarning)
+						DebugHelper.WriteLine ("ALERT: {0}", alert);
 					lastAlert = new TlsException (alert);
 				}
 			} catch (Exception ex) {
@@ -181,6 +183,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 		[DllImport (DLL)]
 		extern static int native_openssl_create_connection (OpenSslHandle handle);
+
+		[DllImport (DLL)]
+		extern static int native_openssl_close (OpenSslHandle handle);
 
 		[DllImport (DLL)]
 		extern static int native_openssl_connect (OpenSslHandle handle, byte[] ip, int port);
@@ -486,6 +491,7 @@ namespace Mono.Security.NewTls.TestProvider
 					privateKey = null;
 				}
 				if (handle != null) {
+					native_openssl_close (handle);
 					handle.Dispose ();
 					handle = null;
 				}

@@ -48,6 +48,7 @@ namespace Mono.Security.NewTls.TestProvider
 		readonly MonoConnectionProviderImpl monoWithNewTlsConnectionProvider;
 		readonly MonoConnectionProviderImpl monoWithOldTlsConnectionProvider;
 		readonly OpenSslConnectionProvider openSslConnectionProvider;
+		readonly ManualConnectionProvider manualConnectionProvider;
 
 		internal MonoConnectionProviderFactoryImpl ()
 		{
@@ -72,6 +73,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 			openSslConnectionProvider = new OpenSslConnectionProvider (this);
 			Install (openSslConnectionProvider);
+
+			manualConnectionProvider = new ManualConnectionProvider (this, ConnectionProviderFlags.None);
+			Install (manualConnectionProvider);
 		}
 
 		public override IHttpProvider DefaultHttpProvider {

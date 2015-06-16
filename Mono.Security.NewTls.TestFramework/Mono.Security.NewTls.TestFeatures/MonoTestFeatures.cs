@@ -27,6 +27,7 @@ using System;
 using System.Threading;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -293,6 +294,75 @@ namespace Mono.Security.NewTls.TestFeatures
 			var server = serverProvider.CreateMonoServer (clientAndServerParameters.ServerParameters);
 			var client = clientProvider.CreateMonoClient (clientAndServerParameters.ClientParameters);
 			return new MonoClientAndServerTestRunner (server, client, (MonoClientAndServerParameters)clientAndServerParameters);
+		}
+
+		public static InstrumentationTestRunner CreateInstrumentationTestRunner (TestContext ctx, InstrumentationFlags flags)
+		{
+			var clientProviderType = GetClientType (ctx);
+			MonoConnectionProvider monoClientProvider;
+			ConnectionProvider clientProvider;
+			if ((flags & InstrumentationFlags.RequiresMonoClient) != 0) {
+				ctx.Assert (clientProviderType, IsMonoProviderSupported);
+				clientProvider = monoClientProvider = MonoFactory.GetMonoProvider (clientProviderType);
+			} else {
+				clientProvider = Factory.GetProvider (clientProviderType);
+				monoClientProvider = clientProvider as MonoConnectionProvider;
+			}
+
+			var serverProviderType = GetServerType (ctx);
+			MonoConnectionProvider monoServerProvider;
+			ConnectionProvider serverProvider;
+			if ((flags & InstrumentationFlags.RequiresMonoServer) != 0) {
+				ctx.Assert (serverProviderType, IsMonoProviderSupported);
+				serverProvider = monoServerProvider = MonoFactory.GetMonoProvider (serverProviderType);
+			} else {
+				serverProvider = Factory.GetProvider (serverProviderType);
+				monoServerProvider = serverProvider as MonoConnectionProvider;
+			}
+
+			var parameters = ctx.GetParameter<InstrumentationParameters> ();
+
+			ProtocolVersions protocolVersion;
+			if (ctx.TryGetParameter<ProtocolVersions> (out protocolVersion))
+				parameters.ProtocolVersion = protocolVersion;
+
+			if (serverProviderType == ConnectionProviderType.Manual) {
+				string serverAddress;
+				if (!ctx.Settings.TryGetValue ("ServerAddress", out serverAddress))
+					throw new NotSupportedException ("Missing 'ServerAddress' setting.");
+
+				var support = DependencyInjector.Get<IPortableEndPointSupport> ();
+				parameters.EndPoint = support.ParseEndpoint (serverAddress, 443, true);
+				flags |= InstrumentationFlags.ManualServer;
+
+				string serverHost;
+				if (ctx.Settings.TryGetValue ("ServerHost", out serverHost))
+					parameters.ClientParameters.TargetHost = serverHost;
+			}
+
+			if (parameters.EndPoint != null) {
+				if (parameters.ClientParameters.EndPoint == null)
+					parameters.ClientParameters.EndPoint = parameters.EndPoint;
+				if (parameters.ServerParameters.EndPoint == null)
+					parameters.ServerParameters.EndPoint = parameters.EndPoint;
+
+				if (parameters.ClientParameters.TargetHost == null)
+					parameters.ClientParameters.TargetHost = parameters.EndPoint.HostName;
+			}
+
+			IServer server;
+			if (monoServerProvider != null)
+				server = monoServerProvider.CreateMonoServer (parameters.ServerParameters);
+			else
+				server = serverProvider.CreateServer (parameters.ServerParameters);
+
+			IClient client;
+			if (monoClientProvider != null)
+				client = monoClientProvider.CreateMonoClient (parameters.ClientParameters);
+			else
+				client = clientProvider.CreateClient (parameters.ClientParameters);
+
+			return new InstrumentationTestRunner (server, client, parameters, flags);
 		}
 	}
 }

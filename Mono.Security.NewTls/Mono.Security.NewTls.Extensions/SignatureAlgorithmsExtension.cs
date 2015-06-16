@@ -9,7 +9,7 @@ namespace Mono.Security.NewTls.Extensions
 			get { return ExtensionType.SignatureAlgorithms; }
 		}
 
-		public ICollection<SignatureAndHashAlgorithm> Algorithms {
+		public SignatureParameters SignatureParameters {
 			get;
 			private set;
 		}
@@ -20,26 +20,26 @@ namespace Mono.Security.NewTls.Extensions
 			if ((length % 2) != 0)
 				throw new TlsException (AlertDescription.DecodeError);
 
-			var count = length >> 1;
-			var algorithms = new List<SignatureAndHashAlgorithm> (count);
-			for (int i = 0; i < count; i++) {
-				algorithms.Add (new SignatureAndHashAlgorithm (incoming));
-			}
+			SignatureParameters = new SignatureParameters ();
 
-			Algorithms = algorithms;
+			var count = length >> 1;
+			for (int i = 0; i < count; i++) {
+				SignatureParameters.SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (incoming));
+			}
  		}
 
-		public SignatureAlgorithmsExtension (ICollection<SignatureAndHashAlgorithm> algorithms)
+		public SignatureAlgorithmsExtension (SignatureParameters parameters)
 		{
-			Algorithms = algorithms;
+			SignatureParameters = parameters;
 		}
 
 		public override void Encode (TlsBuffer buffer)
 		{
+			var algorithms = SignatureParameters.SignatureAndHashAlgorithms;
 			buffer.Write ((short)ExtensionType);
-			buffer.Write ((short)(Algorithms.Count * 2 + 2));
-			buffer.Write ((short)(Algorithms.Count * 2));
-			foreach (var algorithm in Algorithms)
+			buffer.Write ((short)(algorithms.Count * 2 + 2));
+			buffer.Write ((short)(algorithms.Count * 2));
+			foreach (var algorithm in algorithms)
 				algorithm.Encode (buffer);
 		}
 
@@ -51,7 +51,7 @@ namespace Mono.Security.NewTls.Extensions
 
 		public override TlsExtension ProcessServer (TlsContext context)
 		{
-			context.HandshakeParameters.SignatureAlgorithms = Algorithms;
+			context.HandshakeParameters.SignatureParameters = SignatureParameters;
 			return this;
 		}
 	}
