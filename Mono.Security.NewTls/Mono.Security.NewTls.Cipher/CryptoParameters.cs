@@ -7,7 +7,7 @@ namespace Mono.Security.NewTls.Cipher
 	using X509;
 	#endif
 
-	abstract class CryptoParameters : DisposeContext
+	public abstract class CryptoParameters : DisposeContext
 	{
 		bool isServer;
 		CipherSuite cipher;

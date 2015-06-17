@@ -32,7 +32,7 @@ using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	class HMac : DisposeContext
+	public class HMac : DisposeContext
 	{
 		const byte IPAD = (byte)0x36;
 		const byte OPAD = (byte)0x5C;

@@ -5,7 +5,7 @@ namespace Mono.Security.NewTls.Cipher
 	[CLSCompliant (false)]
 	public static class CipherSuiteFactory
 	{
-		internal static CipherSuite CreateCipherSuite (TlsProtocolCode protocol, CipherSuiteCode code)
+		public static CipherSuite CreateCipherSuite (TlsProtocolCode protocol, CipherSuiteCode code)
 		{
 			if (protocol == TlsProtocolCode.Tls12)
 				return CreateCipherSuiteTls12 (code);

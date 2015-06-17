@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	abstract class BlockCipherWithHMac : BlockCipher
+	public abstract class BlockCipherWithHMac : BlockCipher
 	{
 		HMac clientHMac;
 		HMac serverHMac;

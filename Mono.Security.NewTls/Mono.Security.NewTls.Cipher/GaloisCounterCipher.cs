@@ -33,7 +33,7 @@ namespace Mono.Security.NewTls.Cipher
 	using Org.BouncyCastle.Crypto.Parameters;
 	using Org.BouncyCastle.Crypto;
 
-	class GaloisCounterCipher : BlockCipher
+	public class GaloisCounterCipher : BlockCipher
 	{
 		public GaloisCounterCipher (bool isServer, TlsProtocolCode protocol, CipherSuite cipher)
 			: base (isServer, protocol, cipher)

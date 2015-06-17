@@ -29,7 +29,7 @@ using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	class PseudoRandomFunctionTls10 : PseudoRandomFunction
+	public class PseudoRandomFunctionTls10 : PseudoRandomFunction
 	{
 		protected override SecureBuffer PRF (DisposeContext d, SecureBuffer secret, string label, SecureBuffer data, int length)
 		{

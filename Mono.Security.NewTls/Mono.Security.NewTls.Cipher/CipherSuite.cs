@@ -33,7 +33,7 @@ using M = Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	internal abstract class CipherSuite
+	public abstract class CipherSuite
 	{
 		#region Static Fields
 

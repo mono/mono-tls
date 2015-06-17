@@ -28,7 +28,7 @@ using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	class CbcBlockCipher : BlockCipherWithHMac
+	public class CbcBlockCipher : BlockCipherWithHMac
 	{
 		public CbcBlockCipher (bool isServer, TlsProtocolCode protocol, CipherSuite cipher)
 			: base (isServer, protocol, cipher)

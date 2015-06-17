@@ -33,7 +33,7 @@ namespace Mono.Security.NewTls.Cipher
 	using Handshake;
 	#endif
 
-	abstract class PseudoRandomFunction
+	public abstract class PseudoRandomFunction
 	{
 		#if INSIDE_MONO_NEWTLS
 		public SecureBuffer ComputeClientHash (SecureBuffer secret, SecureBuffer digest)

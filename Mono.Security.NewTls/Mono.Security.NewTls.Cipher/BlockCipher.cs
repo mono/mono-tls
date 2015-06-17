@@ -28,7 +28,7 @@ using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	abstract class BlockCipher : CryptoParameters
+	public abstract class BlockCipher : CryptoParameters
 	{
 		public byte BlockSize {
 			get;

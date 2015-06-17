@@ -5,7 +5,7 @@ using Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	static class SignatureHelper
+	public static class SignatureHelper
 	{
 		static IRunningHash GetAlgorithm (HashAlgorithmType type)
 		{
@@ -88,7 +88,7 @@ namespace Mono.Security.NewTls.Cipher
 		}
 
 		#if INSIDE_MONO_NEWTLS
-		public static SignatureAndHashAlgorithm SelectSignatureType (HandshakeParameters handshakeParameters)
+		internal static SignatureAndHashAlgorithm SelectSignatureType (HandshakeParameters handshakeParameters)
 		{
 			if (handshakeParameters.ClientCertificateParameters != null && handshakeParameters.ClientCertificateParameters.HasSignatureParameters)
 				return SelectSignatureType (handshakeParameters.ClientCertificateParameters.SignatureParameters);

@@ -581,7 +581,7 @@ namespace Mono.Security.NewTls
 			return result;
 		}
 
-		static internal void EncodeRecord (TlsProtocolCode protocol, ContentType contentType, CryptoParameters crypto, IBufferOffsetSize buffer, TlsStream output)
+		public static void EncodeRecord (TlsProtocolCode protocol, ContentType contentType, CryptoParameters crypto, IBufferOffsetSize buffer, TlsStream output)
 		{
 			var maxExtraBytes = crypto != null ? crypto.MaxExtraEncryptedBytes : 0;
 

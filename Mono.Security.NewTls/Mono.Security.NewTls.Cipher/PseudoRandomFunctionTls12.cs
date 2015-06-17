@@ -29,7 +29,7 @@ using System.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	class PseudoRandomFunctionTls12 : PseudoRandomFunction
+	public class PseudoRandomFunctionTls12 : PseudoRandomFunction
 	{
 		public HandshakeHashType HandshakeHashType {
 			get;

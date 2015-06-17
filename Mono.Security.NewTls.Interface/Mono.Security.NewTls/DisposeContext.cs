@@ -28,7 +28,7 @@ using System.Collections.Generic;
 
 namespace Mono.Security.NewTls
 {
-	class DisposeContext : SecretParameters
+	public class DisposeContext : SecretParameters
 	{
 		List<IDisposable> disposables = new List<IDisposable> ();
 
