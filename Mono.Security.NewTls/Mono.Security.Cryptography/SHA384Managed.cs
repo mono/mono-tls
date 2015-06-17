@@ -32,10 +32,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Cryptography
 {
-internal class SHA384Managed : SHA384, IRunningHash
+internal class SHA384Managed : SHA384, IHashAlgorithm
 {
 	private byte[] xBuf;
 	private int xBufOff;
@@ -77,12 +78,16 @@ internal class SHA384Managed : SHA384, IRunningHash
 		wOff = other.wOff;
 	}
 
-	void IRunningHash.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
+	HashAlgorithmType IHashAlgorithm.Algorithm {
+		get { return HashAlgorithmType.Sha384; }
+	}
+
+	void IHashAlgorithm.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
 	{
 		TransformBlock (inputBuffer, inputOffset, inputCount, null, 0);
 	}
 
-	byte[] IRunningHash.GetRunningHash ()
+	byte[] IHashAlgorithm.GetRunningHash ()
 	{
 		var copy = new SHA384Managed (this);
 		copy.TransformFinalBlock (empty, 0, 0);

@@ -121,7 +121,6 @@
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls12.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls10.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs" />
-    <Compile Include="Mono.Security.Cryptography\IRunningHash.cs" />
     <Compile Include="Mono.Security.Cryptography\MD5CryptoServiceProvider.cs" />
     <Compile Include="Mono.Security.Cryptography\SHA1CryptoServiceProvider.cs" />
     <Compile Include="Mono.Security.Cryptography\SHA256Managed.cs" />

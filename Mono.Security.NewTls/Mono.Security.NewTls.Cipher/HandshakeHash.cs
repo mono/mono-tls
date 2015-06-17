@@ -8,11 +8,11 @@ namespace Mono.Security.NewTls.Cipher
 
 	class HandshakeHash : SecretParameters
 	{
-		MSC.IRunningHash[] hashes;
+		IHashAlgorithm[] hashes;
 
 		public HandshakeHash ()
 		{
-			hashes = new MSC.IRunningHash [5];
+			hashes = new IHashAlgorithm [5];
 			hashes [0] = new MSC.MD5SHA1 ();
 			hashes [1] = new MSC.SHA1CryptoServiceProvider ();
 			hashes [2] = new MSC.SHA256Managed ();
@@ -28,7 +28,7 @@ namespace Mono.Security.NewTls.Cipher
 				hashes [i].TransformBlock (buffer.Buffer, buffer.Offset, buffer.Size);
 		}
 
-		MSC.IRunningHash GetAlgorithm (HandshakeHashType type)
+		IHashAlgorithm GetAlgorithm (HandshakeHashType type)
 		{
 			switch (type) {
 			case HandshakeHashType.MD5SHA1:
@@ -42,7 +42,7 @@ namespace Mono.Security.NewTls.Cipher
 			}
 		}
 
-		MSC.IRunningHash GetAlgorithm (HashAlgorithmType type)
+		IHashAlgorithm GetAlgorithm (HashAlgorithmType type)
 		{
 			switch (type) {
 			case HashAlgorithmType.Sha1:

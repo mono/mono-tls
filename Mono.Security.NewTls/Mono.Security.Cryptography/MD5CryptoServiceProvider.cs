@@ -30,10 +30,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Cryptography
 {
-	internal sealed class MD5CryptoServiceProvider : MD5, IRunningHash
+	internal sealed class MD5CryptoServiceProvider : MD5, IHashAlgorithm
 	{
 		private const int BLOCK_SIZE_BYTES =  64;
 		private uint[] _H;
@@ -87,12 +88,16 @@ namespace Mono.Security.Cryptography
 			Array.Copy (other.buff, buff, buff.Length);
 		}
 
-		void IRunningHash.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
+		HashAlgorithmType IHashAlgorithm.Algorithm {
+			get { return HashAlgorithmType.Md5; }
+		}
+
+		void IHashAlgorithm.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
 		{
 			TransformBlock (inputBuffer, inputOffset, inputCount, null, 0);
 		}
 
-		byte[] IRunningHash.GetRunningHash ()
+		byte[] IHashAlgorithm.GetRunningHash ()
 		{
 			var copy = new MD5CryptoServiceProvider (this);
 			copy.TransformFinalBlock (empty, 0, 0);

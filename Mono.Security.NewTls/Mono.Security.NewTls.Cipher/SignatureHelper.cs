@@ -7,7 +7,7 @@ namespace Mono.Security.NewTls.Cipher
 {
 	public static class SignatureHelper
 	{
-		public static MSC.IRunningHash GetAlgorithm (HashAlgorithmType type)
+		public static IHashAlgorithm GetAlgorithm (HashAlgorithmType type)
 		{
 			switch (type) {
 			case HashAlgorithmType.Sha1:

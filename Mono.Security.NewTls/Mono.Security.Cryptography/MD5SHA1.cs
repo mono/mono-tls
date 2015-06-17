@@ -45,10 +45,11 @@
 
 using System;
 using System.Security.Cryptography;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Cryptography
 {
-	internal class MD5SHA1 : HashAlgorithm, IRunningHash
+	internal class MD5SHA1 : HashAlgorithm, IHashAlgorithm
 	{
 		#region Fields
 
@@ -62,15 +63,10 @@ namespace Mono.Security.Cryptography
 
 		public MD5SHA1() : base()
 		{
-			#if INSIDE_MONO_SECURITY
 			#pragma warning disable 436
 			this.md5 = new MD5CryptoServiceProvider ();
 			this.sha = new SHA1CryptoServiceProvider ();
 			#pragma warning restore 436
-			#else
-			this.md5 = MD5.Create();
-			this.sha = SHA1.Create();
-			#endif
 
 			// Set HashSizeValue
 			this.HashSizeValue = this.md5.HashSize + this.sha.HashSize;
@@ -80,15 +76,19 @@ namespace Mono.Security.Cryptography
 
 		#region Running Hash
 
-		void IRunningHash.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
+		HashAlgorithmType IHashAlgorithm.Algorithm {
+			get { return HashAlgorithmType.Md5; }
+		}
+
+		void IHashAlgorithm.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
 		{
 			TransformBlock (inputBuffer, inputOffset, inputCount, null, 0);
 		}
 
 		public byte[] GetRunningHash ()
 		{
-			var runningMD5 = ((IRunningHash)md5).GetRunningHash ();
-			var runningSHA = ((IRunningHash)sha).GetRunningHash ();
+			var runningMD5 = ((IHashAlgorithm)md5).GetRunningHash ();
+			var runningSHA = ((IHashAlgorithm)sha).GetRunningHash ();
 
 			var hash = new byte[36];
 

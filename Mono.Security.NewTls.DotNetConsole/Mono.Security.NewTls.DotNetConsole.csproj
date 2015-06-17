@@ -194,9 +194,6 @@
     <Compile Include="..\Mono.Security.NewTls\BouncyCastle\util\Arrays.cs">
       <Link>BouncyCastle\util\Arrays.cs</Link>
     </Compile>
-    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\IRunningHash.cs">
-      <Link>Mono.Security.Cryptography\IRunningHash.cs</Link>
-    </Compile>
     <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\MD5CryptoServiceProvider.cs">
       <Link>Mono.Security.Cryptography\MD5CryptoServiceProvider.cs</Link>
     </Compile>

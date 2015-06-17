@@ -37,10 +37,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Cryptography
 {
-	internal class SHA1Internal : IRunningHash
+	internal class SHA1Internal
 	{
 	
 		private const int BLOCK_SIZE_BYTES =  64;
@@ -69,16 +70,6 @@ namespace Mono.Security.Cryptography
 			Array.Copy (other._ProcessingBuffer, _ProcessingBuffer, _ProcessingBuffer.Length);
 			buff = new uint [other.buff.Length];
 			Array.Copy (other.buff, buff, buff.Length);
-		}
-
-		void IRunningHash.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
-		{
-			HashCore (inputBuffer, inputOffset, inputCount);
-		}
-
-		void IRunningHash.Clear ()
-		{
-			Initialize ();
 		}
 
 		public byte[] GetRunningHash ()
@@ -346,7 +337,7 @@ namespace Mono.Security.Cryptography
 		}
 	}
 
-	internal sealed class SHA1CryptoServiceProvider : SHA1, IRunningHash
+	internal sealed class SHA1CryptoServiceProvider : SHA1, IHashAlgorithm
 	{
 		private SHA1Internal sha;
 
@@ -355,23 +346,16 @@ namespace Mono.Security.Cryptography
 			sha = new SHA1Internal ();
 		}
 
-		~SHA1CryptoServiceProvider () 
-		{
-			Dispose (false);
+		HashAlgorithmType IHashAlgorithm.Algorithm {
+			get { return HashAlgorithmType.Sha1; }
 		}
 
-		protected override void Dispose (bool disposing) 
-		{
-			// nothing new to do (managed implementation)
-			base.Dispose (disposing);
-		}
-
-		void IRunningHash.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
+		void IHashAlgorithm.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
 		{
 			sha.HashCore (inputBuffer, inputOffset, inputCount);
 		}
 
-		byte[] IRunningHash.GetRunningHash ()
+		byte[] IHashAlgorithm.GetRunningHash ()
 		{
 			return sha.GetRunningHash ();
 		}

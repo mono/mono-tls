@@ -29,10 +29,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Cryptography
 {
-	internal class SHA256Managed : SHA256, IRunningHash
+	internal class SHA256Managed : SHA256, IHashAlgorithm
 	{
 		private const int BLOCK_SIZE_BYTES =  64;
 		private uint[] _H;
@@ -64,12 +65,16 @@ namespace Mono.Security.Cryptography
 			Array.Copy (other.buff, buff, buff.Length);
 		}
 
-		void IRunningHash.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
+		HashAlgorithmType IHashAlgorithm.Algorithm {
+			get { return HashAlgorithmType.Sha256; }
+		}
+
+		void IHashAlgorithm.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
 		{
 			TransformBlock (inputBuffer, inputOffset, inputCount, null, 0);
 		}
 
-		byte[] IRunningHash.GetRunningHash ()
+		byte[] IHashAlgorithm.GetRunningHash ()
 		{
 			var copy = new SHA256Managed (this);
 			copy.TransformFinalBlock (empty, 0, 0);

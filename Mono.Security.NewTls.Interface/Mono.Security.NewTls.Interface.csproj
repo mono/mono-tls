@@ -63,6 +63,7 @@
     <Compile Include="Mono.Security.NewTls.Instrumentation\InstrumentCollection.cs" />
     <Compile Include="Mono.Security.NewTls\TlsProtocols.cs" />
     <Compile Include="Mono.Security.NewTls\SignatureParameters.cs" />
+    <Compile Include="Mono.Security.NewTls\IHashAlgorithm.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
