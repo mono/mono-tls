@@ -38,13 +38,6 @@
     <Compile Include="Mono.Security.Cryptography\MD5SHA1.cs" />
     <Compile Include="Mono.Security.Cryptography\RSASslSignatureFormatter.cs" />
     <Compile Include="Mono.Security.Cryptography\RSASslSignatureDeformatter.cs" />
-    <Compile Include="System.Security.Cryptography\IRunningHash.cs" />
-    <Compile Include="System.Security.Cryptography\MD5CryptoServiceProvider.cs" />
-    <Compile Include="System.Security.Cryptography\SHA1CryptoServiceProvider.cs" />
-    <Compile Include="System.Security.Cryptography\SHA256Managed.cs" />
-    <Compile Include="System.Security.Cryptography\SHA384Managed.cs" />
-    <Compile Include="System.Security.Cryptography\SHA512Managed.cs" />
-    <Compile Include="System.Security.Cryptography\SHAConstants.cs" />
     <Compile Include="BouncyCastle\crypto\CryptoException.cs" />
     <Compile Include="BouncyCastle\crypto\DataLengthException.cs" />
     <Compile Include="BouncyCastle\crypto\IBlockCipher.cs" />
@@ -128,6 +121,13 @@
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls12.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls10.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs" />
+    <Compile Include="Mono.Security.Cryptography\IRunningHash.cs" />
+    <Compile Include="Mono.Security.Cryptography\MD5CryptoServiceProvider.cs" />
+    <Compile Include="Mono.Security.Cryptography\SHA1CryptoServiceProvider.cs" />
+    <Compile Include="Mono.Security.Cryptography\SHA256Managed.cs" />
+    <Compile Include="Mono.Security.Cryptography\SHA384Managed.cs" />
+    <Compile Include="Mono.Security.Cryptography\SHA512Managed.cs" />
+    <Compile Include="Mono.Security.Cryptography\SHAConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">

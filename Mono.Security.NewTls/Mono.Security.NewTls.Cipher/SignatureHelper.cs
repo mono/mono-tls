@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using Mono.Security.Cryptography;
+using MSC = Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
 	public static class SignatureHelper
 	{
-		static IRunningHash GetAlgorithm (HashAlgorithmType type)
+		public static MSC.IRunningHash GetAlgorithm (HashAlgorithmType type)
 		{
 			switch (type) {
 			case HashAlgorithmType.Sha1:
-				return new SHA1CryptoServiceProvider ();
+				return new MSC.SHA1CryptoServiceProvider ();
 			case HashAlgorithmType.Sha256:
-				return new SHA256Managed ();
+				return new MSC.SHA256Managed ();
 			case HashAlgorithmType.Sha384:
-				return new SHA384Managed ();
+				return new MSC.SHA384Managed ();
 			case HashAlgorithmType.Sha512:
-				return new SHA512Managed ();
+				return new MSC.SHA512Managed ();
 			default:
 				throw new NotSupportedException ();
 			}
@@ -54,7 +54,7 @@ namespace Mono.Security.NewTls.Cipher
 				throw new TlsException (AlertDescription.IlegalParameter);
 			#if INSIDE_MONO_NEWTLS
 			if (type.Signature == SignatureAlgorithmType.Rsa)
-				return new SecureBuffer (PKCS1.Sign_v15 ((RSA)key, hash, hashData.Buffer));
+				return new SecureBuffer (MSC.PKCS1.Sign_v15 ((RSA)key, hash, hashData.Buffer));
 			else
 				throw new NotSupportedException ();
 			#else
@@ -79,7 +79,7 @@ namespace Mono.Security.NewTls.Cipher
 				throw new TlsException (AlertDescription.IlegalParameter);
 			#if INSIDE_MONO_NEWTLS
 			if (type.Signature == SignatureAlgorithmType.Rsa)
-				return PKCS1.Verify_v15 ((RSA)key, hash, hashData.Buffer, signature.Buffer);
+				return MSC.PKCS1.Verify_v15 ((RSA)key, hash, hashData.Buffer, signature.Buffer);
 			else
 				throw new NotSupportedException ();
 			#else

@@ -1,7 +1,6 @@
-#if INSIDE_MONO_SECURITY
-namespace System.Security.Cryptography
+namespace Mono.Security.Cryptography
 {
-	internal interface IRunningHash
+	public interface IRunningHash
 	{
 		void TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount);
 
@@ -10,4 +9,3 @@ namespace System.Security.Cryptography
 		void Clear ();
 	}
 }
-#endif

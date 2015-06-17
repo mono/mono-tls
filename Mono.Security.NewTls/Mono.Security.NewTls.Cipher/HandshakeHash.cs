@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
-using Mono.Security.Cryptography;
+using MSC = Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
@@ -8,16 +8,16 @@ namespace Mono.Security.NewTls.Cipher
 
 	class HandshakeHash : SecretParameters
 	{
-		IRunningHash[] hashes;
+		MSC.IRunningHash[] hashes;
 
 		public HandshakeHash ()
 		{
-			hashes = new IRunningHash [5];
-			hashes [0] = new MD5SHA1 ();
-			hashes [1] = new SHA1CryptoServiceProvider ();
-			hashes [2] = new SHA256Managed ();
-			hashes [3] = new SHA384Managed ();
-			hashes [4] = new SHA512Managed ();
+			hashes = new MSC.IRunningHash [5];
+			hashes [0] = new MSC.MD5SHA1 ();
+			hashes [1] = new MSC.SHA1CryptoServiceProvider ();
+			hashes [2] = new MSC.SHA256Managed ();
+			hashes [3] = new MSC.SHA384Managed ();
+			hashes [4] = new MSC.SHA512Managed ();
 		}
 
 		public void Add (HandshakeMessage message, IBufferOffsetSize buffer)
@@ -28,7 +28,7 @@ namespace Mono.Security.NewTls.Cipher
 				hashes [i].TransformBlock (buffer.Buffer, buffer.Offset, buffer.Size);
 		}
 
-		IRunningHash GetAlgorithm (HandshakeHashType type)
+		MSC.IRunningHash GetAlgorithm (HandshakeHashType type)
 		{
 			switch (type) {
 			case HandshakeHashType.MD5SHA1:
@@ -42,7 +42,7 @@ namespace Mono.Security.NewTls.Cipher
 			}
 		}
 
-		IRunningHash GetAlgorithm (HashAlgorithmType type)
+		MSC.IRunningHash GetAlgorithm (HashAlgorithmType type)
 		{
 			switch (type) {
 			case HashAlgorithmType.Sha1:

@@ -1,5 +1,5 @@
 //
-// System.Security.Cryptography.SHA384Managed.cs
+// System.Security.Cryptography.SHA512Managed.cs
 //
 // Authors:
 //	Dan Lewis (dihlewis@yahoo.co.uk)
@@ -29,21 +29,13 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-
+using System;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
-namespace System.Security.Cryptography {
-	
-[ComVisible (true)]
-#if INSIDE_MONO_SECURITY
-internal
-#else
-public
-#endif
-class SHA384Managed : SHA384
-#if INSIDE_MONO_SECURITY
-	, IRunningHash
-#endif
+namespace Mono.Security.Cryptography
+{
+internal class SHA512Managed : SHA512, IRunningHash
 {
 	private byte[] xBuf;
 	private int xBufOff;
@@ -52,21 +44,21 @@ class SHA384Managed : SHA384
 	private ulong byteCount2;
 
 	private ulong H1, H2, H3, H4, H5, H6, H7, H8;
+
 	private ulong[] W;
 	private int wOff;
 
-	public SHA384Managed () 
+	public SHA512Managed () 
 	{
 		xBuf = new byte [8];
 		W = new ulong [80];
 		Initialize (false); // limited initialization
 	}
 
-#if INSIDE_MONO_SECURITY
 #pragma warning disable 436
 	static readonly byte[] empty = new byte [0];
 
-	SHA384Managed (SHA384Managed other)
+	SHA512Managed (SHA512Managed other)
 	{
 		xBuf = new byte [other.xBuf.Length];
 		Array.Copy (other.xBuf, xBuf, xBuf.Length);
@@ -93,26 +85,25 @@ class SHA384Managed : SHA384
 
 	byte[] IRunningHash.GetRunningHash ()
 	{
-		var copy = new SHA384Managed (this);
+		var copy = new SHA512Managed (this);
 		copy.TransformFinalBlock (empty, 0, 0);
 		return copy.Hash;
 	}
 #pragma warning restore 436
-#endif
 
 	private void Initialize (bool reuse) 
 	{
-		// SHA-384 initial hash value
+		// SHA-512 initial hash value
 		// The first 64 bits of the fractional parts of the square roots
-		// of the 9th through 16th prime numbers
-		H1 = 0xcbbb9d5dc1059ed8L;
-		H2 = 0x629a292a367cd507L;
-		H3 = 0x9159015a3070dd17L;
-		H4 = 0x152fecd8f70e5939L;
-		H5 = 0x67332667ffc00b31L;
-		H6 = 0x8eb44a8768581511L;
-		H7 = 0xdb0c2e0d64f98fa7L;
-		H8 = 0x47b5481dbefa4fa4L;
+		// of the first eight prime numbers
+		H1 = 0x6a09e667f3bcc908L;
+		H2 = 0xbb67ae8584caa73bL;
+		H3 = 0x3c6ef372fe94f82bL;
+		H4 = 0xa54ff53a5f1d36f1L;
+		H5 = 0x510e527fade682d1L;
+		H6 = 0x9b05688c2b3e6c1fL;
+		H7 = 0x1f83d9abfb41bd6bL;
+		H8 = 0x5be0cd19137e2179L;
 
 		if (reuse) {
 			byteCount1 = 0;
@@ -168,26 +159,28 @@ class SHA384Managed : SHA384
 		ulong hiBitLength = byteCount2;
 
 		// add the pad bytes.
-		update ( (byte) 128);
+		update (128);
 		while (xBufOff != 0)
-			update ( (byte)0);
+			update (0);
 
 		processLength (lowBitLength, hiBitLength);
 		processBlock ();
-		
-		byte[] output = new byte [48];
+	
+		byte[] output = new byte [64];
 		unpackWord(H1, output, 0);
 		unpackWord(H2, output, 8);
 		unpackWord(H3, output, 16);
 		unpackWord(H4, output, 24);
 		unpackWord(H5, output, 32);
 		unpackWord(H6, output, 40);
+	        unpackWord(H7, output, 48);
+		unpackWord(H8, output, 56);
 
 		Initialize ();
 		return output;
 	}
 
-	private void update (byte input)
+	private void update (byte input) 
 	{
 		xBuf [xBufOff++] = input;
 		if (xBufOff == xBuf.Length) {
@@ -197,13 +190,13 @@ class SHA384Managed : SHA384
 		byteCount1++;
 	}
 
-	private void processWord (byte[] input, int inOff)
+	private void processWord (byte[] input, int inOff) 
 	{
 		W [wOff++] = ( (ulong) input [inOff] << 56)
 			| ( (ulong) input [inOff + 1] << 48)
 			| ( (ulong) input [inOff + 2] << 40)
 			| ( (ulong) input [inOff + 3] << 32)
-        		| ( (ulong) input [inOff + 4] << 24)
+			| ( (ulong) input [inOff + 4] << 24)
 			| ( (ulong) input [inOff + 5] << 16)
 			| ( (ulong) input [inOff + 6] << 8)
 			| ( (ulong) input [inOff + 7]); 
@@ -211,7 +204,7 @@ class SHA384Managed : SHA384
 			processBlock ();
 	}
 
-	private void unpackWord (ulong word, byte[] output, int outOff)
+	private void unpackWord (ulong word, byte[] output, int outOff) 
 	{
 		output[outOff]     = (byte) (word >> 56);
 		output[outOff + 1] = (byte) (word >> 48);
@@ -225,7 +218,7 @@ class SHA384Managed : SHA384
 
 	// adjust the byte counts so that byteCount2 represents the
 	// upper long (less 3 bits) word of the byte count.
-	private void adjustByteCounts()
+	private void adjustByteCounts () 
 	{
 		if (byteCount1 > 0x1fffffffffffffffL) {
 			byteCount2 += (byteCount1 >> 61);
@@ -233,50 +226,34 @@ class SHA384Managed : SHA384
 		}
 	}
 
-	private void processLength (ulong lowW, ulong hiW)
+	private void processLength (ulong lowW, ulong hiW) 
 	{
 		if (wOff > 14)
-			processBlock ();
+			processBlock();
 		W[14] = hiW;
 		W[15] = lowW;
 	}
 
-	private void processBlock ()
+	private void processBlock () 
 	{
-		ulong a, b, c, d, e, f, g, h;
-
-		// abcrem doesn't work on fields
-		ulong[] W = this.W;
-		ulong[] K2 = SHAConstants.K2;
-
 		adjustByteCounts ();
 		// expand 16 word block into 80 word blocks.
 		for (int t = 16; t <= 79; t++)
-		{
-			a = W[t-15];
-			a = ((a >> 1) | (a << 63)) ^ ((a >> 8) | (a << 56)) ^ (a >> 7);
-			b = W[t - 2];
-			b = ((b >> 19) | (b << 45)) ^ ((b >> 61) | (b << 3)) ^ (b >> 6);
-			W[t] = b + W[t - 7] + a + W[t - 16];
-		}
+			W[t] = Sigma1 (W [t - 2]) + W [t - 7] + Sigma0 (W [t - 15]) + W [t - 16];
+
 		// set up working variables.
-		a = H1;
-		b = H2;
-		c = H3;
-		d = H4;
-		e = H5;
-		f = H6;
-		g = H7;
-		h = H8;
+		ulong a = H1;
+		ulong b = H2;
+		ulong c = H3;
+		ulong d = H4;
+		ulong e = H5;
+		ulong f = H6;
+		ulong g = H7;
+		ulong h = H8;
 
-		for (int t = 0; t <= 79; t++)
-		{
-			ulong T1 = ((e >> 14) | (e << 50)) ^ ((e >> 18) | (e << 46)) ^ ((e >> 41) | (e << 23));
-			T1 += h + ((e & f) ^ ((~e) & g)) + K2[t] + W[t];
-
-			ulong T2 = ((a >> 28) | (a << 36)) ^ ((a >> 34) | (a << 30)) ^ ((a >> 39) | (a << 25));
-			T2 += ((a & b) ^ (a & c) ^ (b & c));
-
+		for (int t = 0; t <= 79; t++) {
+			ulong T1 = h + Sum1 (e) + Ch (e, f, g) + SHAConstants.K2 [t] + W [t];
+			ulong T2 = Sum0 (a) + Maj (a, b, c);
 			h = g;
 			g = f;
 			f = e;
@@ -299,6 +276,42 @@ class SHA384Managed : SHA384
 		wOff = 0;
 		for (int i = 0; i != W.Length; i++)
 			W[i] = 0;
+	}
+
+	private ulong rotateRight (ulong x, int n) 
+	{
+		return (x >> n) | (x << (64 - n));
+	}
+
+	/* SHA-512 and SHA-512 functions (as for SHA-256 but for longs) */
+	private ulong Ch (ulong x, ulong y, ulong z) 
+	{
+		return ((x & y) ^ ((~x) & z));
+	}
+
+	private ulong Maj (ulong x, ulong y, ulong z) 
+	{
+		return ((x & y) ^ (x & z) ^ (y & z));
+	}
+
+	private ulong Sum0 (ulong x) 
+	{
+		return rotateRight (x, 28) ^ rotateRight (x, 34) ^ rotateRight (x, 39);
+	}
+
+	private ulong Sum1 (ulong x) 
+	{
+		return rotateRight (x, 14) ^ rotateRight (x, 18) ^ rotateRight (x, 41);
+	}
+
+	private ulong Sigma0 (ulong x) 
+	{
+		return rotateRight (x, 1) ^ rotateRight(x, 8) ^ (x >> 7);
+	}
+
+	private ulong Sigma1 (ulong x) 
+	{
+		return rotateRight (x, 19) ^ rotateRight (x, 61) ^ (x >> 6);
 	}
 }
 

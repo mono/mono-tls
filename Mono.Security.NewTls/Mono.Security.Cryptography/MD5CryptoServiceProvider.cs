@@ -27,22 +27,13 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-
+using System;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
-namespace System.Security.Cryptography
+namespace Mono.Security.Cryptography
 {
-
-	[ComVisible (true)]
-	#if INSIDE_MONO_SECURITY
-	internal
-	#else
-	public
-	#endif
-	sealed class MD5CryptoServiceProvider : MD5
-	#if INSIDE_MONO_SECURITY
-		, IRunningHash
-	#endif
+	internal sealed class MD5CryptoServiceProvider : MD5, IRunningHash
 	{
 		private const int BLOCK_SIZE_BYTES =  64;
 		private uint[] _H;
@@ -81,7 +72,6 @@ namespace System.Security.Cryptography
 			}
 		}
 
-		#if INSIDE_MONO_SECURITY
 		#pragma warning disable 436
 		static readonly byte[] empty = new byte [0];
 
@@ -109,7 +99,6 @@ namespace System.Security.Cryptography
 			return copy.Hash;
 		}
 		#pragma warning restore 436
-		#endif
 
 		protected override void HashCore (byte[] rgb, int ibStart, int cbSize) 
 		{

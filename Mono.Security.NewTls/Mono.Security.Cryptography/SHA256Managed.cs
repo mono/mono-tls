@@ -26,21 +26,13 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-
+using System;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
-namespace System.Security.Cryptography {
-	
-	[ComVisible (true)]
-	#if INSIDE_MONO_SECURITY
-	internal
-	#else
-	public
-	#endif
-	class SHA256Managed : SHA256
-	#if INSIDE_MONO_SECURITY
-		, IRunningHash
-	#endif
+namespace Mono.Security.Cryptography
+{
+	internal class SHA256Managed : SHA256, IRunningHash
 	{
 		private const int BLOCK_SIZE_BYTES =  64;
 		private uint[] _H;
@@ -57,7 +49,6 @@ namespace System.Security.Cryptography {
 			Initialize ();
 		}
 
-		#if INSIDE_MONO_SECURITY
 		#pragma warning disable 436
 		static readonly byte[] empty = new byte [0];
 
@@ -85,7 +76,6 @@ namespace System.Security.Cryptography {
 			return copy.Hash;
 		}
 		#pragma warning restore 436
-		#endif
 
 		protected override void HashCore (byte[] rgb, int ibStart, int cbSize) 
 		{

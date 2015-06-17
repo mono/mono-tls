@@ -34,15 +34,13 @@
 //	SHA1CryptoServiceProvider (this file) is a wrapper on CryptoAPI.
 // Mono must provide those two class for binary compatibility.
 // In our case both class are wrappers around a managed internal class SHA1Internal.
-
+using System;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
-namespace System.Security.Cryptography {
-
-	internal class SHA1Internal
-	#if INSIDE_MONO_SECURITY
-		: IRunningHash
-	#endif
+namespace Mono.Security.Cryptography
+{
+	internal class SHA1Internal : IRunningHash
 	{
 	
 		private const int BLOCK_SIZE_BYTES =  64;
@@ -61,7 +59,6 @@ namespace System.Security.Cryptography {
 			Initialize();
 		}
 
-		#if INSIDE_MONO_SECURITY
 		SHA1Internal (SHA1Internal other)
 		{
 			count = other.count;
@@ -89,7 +86,6 @@ namespace System.Security.Cryptography {
 			var copy = new SHA1Internal (this);
 			return copy.HashFinal ();
 		}
-		#endif
 
 		public void HashCore (byte[] rgb, int ibStart, int cbSize) 
 		{
@@ -350,18 +346,8 @@ namespace System.Security.Cryptography {
 		}
 	}
 
-	[ComVisible (true)]
-	#if INSIDE_MONO_SECURITY
-	internal
-	#else
-	public
-	#endif
-	sealed class SHA1CryptoServiceProvider : SHA1
-	#if INSIDE_MONO_SECURITY
-		, IRunningHash
-	#endif
+	internal sealed class SHA1CryptoServiceProvider : SHA1, IRunningHash
 	{
-
 		private SHA1Internal sha;
 
 		public SHA1CryptoServiceProvider () 
@@ -380,7 +366,6 @@ namespace System.Security.Cryptography {
 			base.Dispose (disposing);
 		}
 
-		#if INSIDE_MONO_SECURITY
 		void IRunningHash.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
 		{
 			sha.HashCore (inputBuffer, inputOffset, inputCount);
@@ -390,7 +375,6 @@ namespace System.Security.Cryptography {
 		{
 			return sha.GetRunningHash ();
 		}
-		#endif
 
 		protected override void HashCore (byte[] rgb, int ibStart, int cbSize) 
 		{

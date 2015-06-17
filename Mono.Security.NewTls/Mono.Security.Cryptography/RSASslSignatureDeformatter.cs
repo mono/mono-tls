@@ -77,20 +77,16 @@ namespace Mono.Security.Cryptography
 
 		public override void SetHashAlgorithm(string strName)
 		{
-#if INSIDE_SYSTEM
-			hash = new Mono.Security.Cryptography.MD5SHA1 ();
-#else
 			switch (strName)
 			{
 				case "MD5SHA1":
-					this.hash = new Mono.Security.Cryptography.MD5SHA1();
+					this.hash = new MD5SHA1();
 					break;
 
 				default:
 					this.hash = HashAlgorithm.Create(strName);
 					break;
 			}
-#endif
 		}
 
 		public override void SetKey(AsymmetricAlgorithm key)
