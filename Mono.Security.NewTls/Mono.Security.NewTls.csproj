@@ -127,6 +127,7 @@
     <Compile Include="Mono.Security.Cryptography\SHA384Managed.cs" />
     <Compile Include="Mono.Security.Cryptography\SHA512Managed.cs" />
     <Compile Include="Mono.Security.Cryptography\SHAConstants.cs" />
+    <Compile Include="Mono.Security.Cryptography\PKCS1.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">
