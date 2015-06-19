@@ -1,11 +1,13 @@
 //
-// System.Security.Cryptography.SHA256Managed.cs
+// Mono.Security.Cryptography SHA224 class implementation
+//	based on SHA256Managed class implementation (mscorlib.dll)
 //
-// Author:
-//   Matthew S. Ford (Matthew.S.Ford@Rose-Hulman.Edu)
+// Authors:
+//	Matthew S. Ford (Matthew.S.Ford@Rose-Hulman.Edu)
+//	Sebastien Pouliot <sebastien@ximian.com>
 //
 // (C) 2001 
-// Copyright (C) 2004, 2005 Novell, Inc (http://www.novell.com)
+// Copyright (C) 2004-2005 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -27,22 +29,23 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Mono.Security.NewTls;
 
-namespace Mono.Security.Cryptography
-{
-	internal class SHA256Managed : SHA256, IHashAlgorithm
-	{
+namespace Mono.Security.Cryptography {
+	
+	#pragma warning disable 436
+	internal class SHA224Managed : SHA224, IHashAlgorithm {
+
 		private const int BLOCK_SIZE_BYTES =  64;
+
 		private uint[] _H;
 		private ulong count;
 		private byte[] _ProcessingBuffer;   // Used to start data when passed less than a block worth.
 		private int _ProcessingBufferCount; // Counts how much data we have stored that still needs processed.
 		private uint[] buff;
-	
-		public SHA256Managed () 
+
+		public SHA224Managed ()
 		{
 			_H = new uint [8];
 			_ProcessingBuffer = new byte [BLOCK_SIZE_BYTES];
@@ -50,10 +53,9 @@ namespace Mono.Security.Cryptography
 			Initialize ();
 		}
 
-		#pragma warning disable 436
 		static readonly byte[] empty = new byte [0];
 
-		SHA256Managed (SHA256Managed other)
+		SHA224Managed (SHA224Managed other)
 		{
 			count = other.count;
 			_H = new uint [other._H.Length];
@@ -76,7 +78,7 @@ namespace Mono.Security.Cryptography
 
 		byte[] IHashAlgorithm.GetRunningHash ()
 		{
-			var copy = new SHA256Managed (this);
+			var copy = new SHA224Managed (this);
 			copy.TransformFinalBlock (empty, 0, 0);
 			return copy.Hash;
 		}
@@ -85,47 +87,84 @@ namespace Mono.Security.Cryptography
 		{
 			Initialize ();
 		}
-		#pragma warning restore 436
 
-		protected override void HashCore (byte[] rgb, int ibStart, int cbSize) 
+		private uint Ch (uint u, uint v, uint w) 
+		{
+			return (u&v) ^ (~u&w);
+		}
+
+		private uint Maj (uint u, uint v, uint w) 
+		{
+			return (u&v) ^ (u&w) ^ (v&w);
+		}
+
+		private uint Ro0 (uint x) 
+		{
+			return ((x >> 7) | (x << 25))
+				^ ((x >> 18) | (x << 14))
+				^ (x >> 3);
+		}
+
+		private uint Ro1 (uint x) 
+		{
+			return ((x >> 17) | (x << 15))
+				^ ((x >> 19) | (x << 13))
+				^ (x >> 10);
+		}
+
+		private uint Sig0 (uint x) 
+		{
+			return ((x >> 2) | (x << 30))
+				^ ((x >> 13) | (x << 19))
+				^ ((x >> 22) | (x << 10));
+		}
+
+		private uint Sig1 (uint x) 
+		{
+			return ((x >> 6) | (x << 26))
+				^ ((x >> 11) | (x << 21))
+				^ ((x >> 25) | (x << 7));
+		}
+
+		protected override void HashCore (byte[] rgb, int start, int size) 
 		{
 			int i;
 			State = 1;
 
 			if (_ProcessingBufferCount != 0) {
-				if (cbSize < (BLOCK_SIZE_BYTES - _ProcessingBufferCount)) {
-					System.Buffer.BlockCopy (rgb, ibStart, _ProcessingBuffer, _ProcessingBufferCount, cbSize);
-					_ProcessingBufferCount += cbSize;
+				if (size < (BLOCK_SIZE_BYTES - _ProcessingBufferCount)) {
+					System.Buffer.BlockCopy (rgb, start, _ProcessingBuffer, _ProcessingBufferCount, size);
+					_ProcessingBufferCount += size;
 					return;
 				}
 				else {
 					i = (BLOCK_SIZE_BYTES - _ProcessingBufferCount);
-					System.Buffer.BlockCopy (rgb, ibStart, _ProcessingBuffer, _ProcessingBufferCount, i);
+					System.Buffer.BlockCopy (rgb, start, _ProcessingBuffer, _ProcessingBufferCount, i);
 					ProcessBlock (_ProcessingBuffer, 0);
 					_ProcessingBufferCount = 0;
-					ibStart += i;
-					cbSize -= i;
+					start += i;
+					size -= i;
 				}
 			}
 
-			for (i = 0; i < cbSize - cbSize % BLOCK_SIZE_BYTES; i += BLOCK_SIZE_BYTES) {
-				ProcessBlock (rgb, ibStart + i);
+			for (i=0; i<size-size%BLOCK_SIZE_BYTES; i += BLOCK_SIZE_BYTES) {
+				ProcessBlock (rgb, start+i);
 			}
 
-			if (cbSize % BLOCK_SIZE_BYTES != 0) {
-				System.Buffer.BlockCopy (rgb, cbSize - cbSize % BLOCK_SIZE_BYTES + ibStart, _ProcessingBuffer, 0, cbSize % BLOCK_SIZE_BYTES);
-				_ProcessingBufferCount = cbSize % BLOCK_SIZE_BYTES;
+			if (size%BLOCK_SIZE_BYTES != 0) {
+				System.Buffer.BlockCopy (rgb, size-size%BLOCK_SIZE_BYTES+start, _ProcessingBuffer, 0, size%BLOCK_SIZE_BYTES);
+				_ProcessingBufferCount = size%BLOCK_SIZE_BYTES;
 			}
 		}
 	
 		protected override byte[] HashFinal () 
 		{
-			byte[] hash = new byte[32];
+			byte[] hash = new byte[28];
 			int i, j;
 
 			ProcessFinalBlock (_ProcessingBuffer, 0, _ProcessingBufferCount);
 
-			for (i=0; i<8; i++) {
+			for (i=0; i<7; i++) {
 				for (j=0; j<4; j++) {
 					hash[i*4+j] = (byte)(_H[i] >> (24-j*8));
 				}
@@ -140,14 +179,14 @@ namespace Mono.Security.Cryptography
 			count = 0;
 			_ProcessingBufferCount = 0;
 		
-			_H[0] = 0x6A09E667;
-			_H[1] = 0xBB67AE85;
-			_H[2] = 0x3C6EF372;
-			_H[3] = 0xA54FF53A;
-			_H[4] = 0x510E527F;
-			_H[5] = 0x9B05688C;
-			_H[6] = 0x1F83D9AB;
-			_H[7] = 0x5BE0CD19;
+			_H[0] = 0xC1059ED8;
+			_H[1] = 0x367CD507;
+			_H[2] = 0x3070DD17;
+			_H[3] = 0xF70E5939;
+			_H[4] = 0xFFC00B31;
+			_H[5] = 0x68581511;
+			_H[6] = 0x64F98FA7;
+			_H[7] = 0xBEFA4FA4;
 		}
 
 		private void ProcessBlock (byte[] inputBuffer, int inputOffset) 
@@ -159,12 +198,12 @@ namespace Mono.Security.Cryptography
 			uint[] buff = this.buff;
 		
 			count += BLOCK_SIZE_BYTES;
-
+		
 			for (i=0; i<16; i++) {
-				buff[i] = (uint)(((inputBuffer[inputOffset + 4 * i]) << 24)
-					| ((inputBuffer[inputOffset + 4 * i + 1]) << 16)
-					| ((inputBuffer[inputOffset + 4 * i + 2]) << 8)
-					| ((inputBuffer[inputOffset + 4 * i + 3])));
+				buff[i] = (uint)(((inputBuffer[inputOffset+4*i]) << 24)
+					| ((inputBuffer[inputOffset+4*i+1]) << 16)
+					| ((inputBuffer[inputOffset+4*i+2]) <<  8)
+					| ((inputBuffer[inputOffset+4*i+3])));
 			}
 
 		
@@ -252,5 +291,6 @@ namespace Mono.Security.Cryptography
 			buffer [position]   = (byte)(length);
 		}
 	}
+	#pragma warning disable 436
 }
 

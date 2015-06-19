@@ -16,6 +16,6 @@ namespace Mono.Security.NewTls
 
 		byte[] GetRunningHash ();
 
-		void Clear ();
+		void Reset ();
 	}
 }

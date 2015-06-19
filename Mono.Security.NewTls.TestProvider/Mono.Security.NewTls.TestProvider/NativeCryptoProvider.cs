@@ -152,6 +152,20 @@ namespace Mono.Security.NewTls.TestProvider
 		public bool SupportsEncryption {
 			get { return false; }
 		}
+
+		public bool SupportsHashAlgorithms {
+			get { return false; }
+		}
+
+		public bool IsAlgorithmSupported (HashAlgorithmType algorithm)
+		{
+			return false;
+		}
+
+		public IHashAlgorithm CreateAlgorithm (HashAlgorithmType algorithm)
+		{
+			throw new NotSupportedException ();
+		}
 	}
 }
 

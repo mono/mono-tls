@@ -93,6 +93,11 @@ internal class SHA384Managed : SHA384, IHashAlgorithm
 		copy.TransformFinalBlock (empty, 0, 0);
 		return copy.Hash;
 	}
+
+	void IHashAlgorithm.Reset ()
+	{
+		Initialize ();
+	}
 #pragma warning restore 436
 
 	private void Initialize (bool reuse) 

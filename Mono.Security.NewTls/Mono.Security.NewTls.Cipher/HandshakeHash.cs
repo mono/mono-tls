@@ -67,20 +67,20 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			var algorithm = GetAlgorithm (type.Hash);
 			using (var hash = new SecureBuffer (algorithm.GetRunningHash ()))
-				return SignatureHelper.CreateSignature (type, (HashAlgorithm)algorithm, hash, key);
+				return SignatureHelper.CreateSignature (type, algorithm, hash, key);
 		}
 
 		public bool VerifySignature (SignatureAndHashAlgorithm type, AsymmetricAlgorithm key, SecureBuffer signature)
 		{
 			var algorithm = GetAlgorithm (type.Hash);
 			using (var hash = new SecureBuffer (algorithm.GetRunningHash ()))
-				return SignatureHelper.VerifySignature (type, (HashAlgorithm)algorithm, hash, key, signature);
+				return SignatureHelper.VerifySignature (type, algorithm, hash, key, signature);
 		}
 
 		protected override void Clear ()
 		{
 			for (int i = 0; i < hashes.Length; i++) {
-				hashes [0].Clear ();
+				hashes [0].Dispose ();
 			}
 		}
 	}

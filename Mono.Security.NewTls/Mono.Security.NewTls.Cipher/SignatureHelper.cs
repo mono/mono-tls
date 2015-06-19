@@ -7,50 +7,20 @@ namespace Mono.Security.NewTls.Cipher
 {
 	public static class SignatureHelper
 	{
-		public static IHashAlgorithm GetAlgorithm (HashAlgorithmType type)
-		{
-			switch (type) {
-			case HashAlgorithmType.Sha1:
-				return new MSC.SHA1CryptoServiceProvider ();
-			case HashAlgorithmType.Sha256:
-				return new MSC.SHA256Managed ();
-			case HashAlgorithmType.Sha384:
-				return new MSC.SHA384Managed ();
-			case HashAlgorithmType.Sha512:
-				return new MSC.SHA512Managed ();
-			default:
-				throw new NotSupportedException ();
-			}
-		}
-
-		static bool VerifyHashType (SignatureAndHashAlgorithm type, HashAlgorithm hash)
-		{
-			if (hash is SHA1)
-				return type.Hash == HashAlgorithmType.Sha1;
-			else if (hash is SHA256)
-				return type.Hash == HashAlgorithmType.Sha256;
-			else if (hash is SHA384)
-				return type.Hash == HashAlgorithmType.Sha384;
-			else if (hash is SHA512)
-				return type.Hash == HashAlgorithmType.Sha512;
-			else
-				return false;
-		}
-
 		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, SecureBuffer data, AsymmetricAlgorithm key)
 		{
 			if (!IsAlgorithmSupported (type))
 				throw new TlsException (AlertDescription.IlegalParameter);
 			using (var d = new DisposeContext ()) {
-				var algorithm = d.Add ((HashAlgorithm)GetAlgorithm (type.Hash));
-				algorithm.TransformFinalBlock (data.Buffer, 0, data.Size);
-				return CreateSignature (type, algorithm, d.Add (algorithm.Hash), key);
+				var algorithm = d.Add (MSC.HashAlgorithmProvider.CreateAlgorithm (type.Hash));
+				algorithm.TransformBlock (data.Buffer, 0, data.Size);
+				return CreateSignature (type, algorithm, d.Add (algorithm.GetRunningHash ()), key);
 			}
 		}
 
-		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, HashAlgorithm hash, SecureBuffer hashData, AsymmetricAlgorithm key)
+		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, IHashAlgorithm hash, SecureBuffer hashData, AsymmetricAlgorithm key)
 		{
-			if (!VerifyHashType (type, hash))
+			if (type.Hash != hash.Algorithm)
 				throw new TlsException (AlertDescription.IlegalParameter);
 			#if INSIDE_MONO_NEWTLS
 			if (type.Signature == SignatureAlgorithmType.Rsa)
@@ -67,15 +37,15 @@ namespace Mono.Security.NewTls.Cipher
 			if (!IsAlgorithmSupported (type))
 				throw new TlsException (AlertDescription.IlegalParameter);
 			using (var d = new DisposeContext ()) {
-				var algorithm = d.Add ((HashAlgorithm)GetAlgorithm (type.Hash));
-				algorithm.TransformFinalBlock (data.Buffer, 0, data.Size);
-				return VerifySignature (type, algorithm, d.Add (algorithm.Hash), key, signature);
+				var algorithm = d.Add (MSC.HashAlgorithmProvider.CreateAlgorithm (type.Hash));
+				algorithm.TransformBlock (data.Buffer, 0, data.Size);
+				return VerifySignature (type, algorithm, d.Add (algorithm.GetRunningHash ()), key, signature);
 			}
 		}
 
-		public static bool VerifySignature (SignatureAndHashAlgorithm type, HashAlgorithm hash, SecureBuffer hashData, AsymmetricAlgorithm key, SecureBuffer signature)
+		public static bool VerifySignature (SignatureAndHashAlgorithm type, IHashAlgorithm hash, SecureBuffer hashData, AsymmetricAlgorithm key, SecureBuffer signature)
 		{
-			if (!VerifyHashType (type, hash))
+			if (type.Hash != hash.Algorithm)
 				throw new TlsException (AlertDescription.IlegalParameter);
 			#if INSIDE_MONO_NEWTLS
 			if (type.Signature == SignatureAlgorithmType.Rsa)
@@ -105,6 +75,7 @@ namespace Mono.Security.NewTls.Cipher
 			case HashAlgorithmType.Sha512:
 			case HashAlgorithmType.Sha384:
 			case HashAlgorithmType.Sha256:
+			case HashAlgorithmType.Sha224:
 			case HashAlgorithmType.Sha1:
 				return true;
 			default:

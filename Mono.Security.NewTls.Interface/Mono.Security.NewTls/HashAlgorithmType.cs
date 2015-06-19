@@ -9,6 +9,7 @@ namespace Mono.Security.NewTls
 		Sha256	= 4,
 		Sha384	= 5,
 		Sha512	= 6,
+		Md5Sha1	= 7,
 		Unknown	= 255
 	}
 }

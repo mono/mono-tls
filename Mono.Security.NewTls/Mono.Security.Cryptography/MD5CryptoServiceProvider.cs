@@ -103,6 +103,11 @@ namespace Mono.Security.Cryptography
 			copy.TransformFinalBlock (empty, 0, 0);
 			return copy.Hash;
 		}
+
+		void IHashAlgorithm.Reset ()
+		{
+			Initialize ();
+		}
 		#pragma warning restore 436
 
 		protected override void HashCore (byte[] rgb, int ibStart, int cbSize) 

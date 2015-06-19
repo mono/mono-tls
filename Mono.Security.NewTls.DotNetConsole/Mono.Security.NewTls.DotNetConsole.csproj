@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;MONO_NEWTLS_SOURCE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
@@ -29,6 +29,7 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <NoWarn>3021,436,1635</NoWarn>
+    <DefineConstants>MONO_NEWTLS_SOURCE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -214,6 +215,31 @@
     </Compile>
     <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs">
       <Link>Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\HashAlgorithmProvider.cs">
+      <Link>Mono.Security.Cryptography\HashAlgorithmProvider.cs</Link>
+    </Compile>
+    <Compile Include="Mono.Security.NewTls.DotNetConsole\HashAlgorithmWrapper.cs" />
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\SHA224Managed.cs">
+      <Link>Mono.Security.Cryptography\SHA224Managed.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\SHA224.cs">
+      <Link>Mono.Security.Cryptography\SHA224.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\MD5SHA1.cs">
+      <Link>Mono.Security.Cryptography\MD5SHA1.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\RSASslSignatureDeformatter.cs">
+      <Link>Mono.Security.Cryptography\RSASslSignatureDeformatter.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\RSASslSignatureFormatter.cs">
+      <Link>Mono.Security.Cryptography\RSASslSignatureFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\PKCS1.cs">
+      <Link>Mono.Security.Cryptography\PKCS1.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.Cryptography\ASN1.cs">
+      <Link>Mono.Security.Cryptography\ASN1.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />

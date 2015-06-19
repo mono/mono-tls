@@ -77,7 +77,7 @@ namespace Mono.Security.Cryptography
 		#region Running Hash
 
 		HashAlgorithmType IHashAlgorithm.Algorithm {
-			get { return HashAlgorithmType.Md5; }
+			get { return HashAlgorithmType.Md5Sha1; }
 		}
 
 		void IHashAlgorithm.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
@@ -95,6 +95,11 @@ namespace Mono.Security.Cryptography
 			Buffer.BlockCopy(runningMD5, 0, hash, 0, 16);
 			Buffer.BlockCopy(runningSHA, 0, hash, 16, 20);
 			return hash;
+		}
+
+		void IHashAlgorithm.Reset ()
+		{
+			Initialize ();
 		}
 
 		#endregion

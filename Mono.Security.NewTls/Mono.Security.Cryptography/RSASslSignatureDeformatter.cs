@@ -24,6 +24,7 @@
 
 using System;
 using System.Security.Cryptography;
+using Mono.Security.NewTls;
 
 namespace Mono.Security.Cryptography
 {
@@ -31,8 +32,8 @@ namespace Mono.Security.Cryptography
 	{
 		#region Fields
 
-		private RSA				key;
-		private HashAlgorithm	hash;
+		private RSA key;
+		private IHashAlgorithm hash;
 
 		#endregion
 
@@ -68,25 +69,14 @@ namespace Mono.Security.Cryptography
 				throw new ArgumentNullException("The rgbHash parameter is a null reference.");
 			}
 
-			return Mono.Security.Cryptography.PKCS1.Verify_v15(
-				this.key,
-				this.hash,
-				rgbHash,
-				rgbSignature);
+			#pragma warning disable 436
+			return PKCS1.Verify_v15(key, hash, rgbHash, rgbSignature);
+			#pragma warning restore 436
 		}
 
 		public override void SetHashAlgorithm(string strName)
 		{
-			switch (strName)
-			{
-				case "MD5SHA1":
-					this.hash = new MD5SHA1();
-					break;
-
-				default:
-					this.hash = HashAlgorithm.Create(strName);
-					break;
-			}
+			hash = HashAlgorithmProvider.CreateAlgorithmFromName(strName);
 		}
 
 		public override void SetKey(AsymmetricAlgorithm key)

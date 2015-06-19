@@ -360,6 +360,11 @@ namespace Mono.Security.Cryptography
 			return sha.GetRunningHash ();
 		}
 
+		void IHashAlgorithm.Reset ()
+		{
+			Initialize ();
+		}
+
 		protected override void HashCore (byte[] rgb, int ibStart, int cbSize) 
 		{
 			State = 1;

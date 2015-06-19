@@ -40,7 +40,7 @@ namespace Mono.Security {
 	// a.	ITU ASN.1 standards (free download)
 	//	http://www.itu.int/ITU-T/studygroups/com17/languages/
 
-#if INSIDE_CORLIB
+#if INSIDE_CORLIB || MONO_NEWTLS_SOURCE
 	internal
 #else
 	public

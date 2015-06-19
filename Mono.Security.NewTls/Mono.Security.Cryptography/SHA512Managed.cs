@@ -94,6 +94,11 @@ internal class SHA512Managed : SHA512, IHashAlgorithm
 		copy.TransformFinalBlock (empty, 0, 0);
 		return copy.Hash;
 	}
+
+	void IHashAlgorithm.Reset ()
+	{
+		Initialize ();
+	}
 #pragma warning restore 436
 
 	private void Initialize (bool reuse) 

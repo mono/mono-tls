@@ -38,6 +38,7 @@ using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.Cipher;
 using Mono.Security.NewTls.TestFramework;
+using Mono.Security.Cryptography;
 using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestProvider
@@ -259,6 +260,20 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			crypto.ReadSequenceNumber = 0;
 			return crypto.Decrypt (ContentType.ApplicationData, input, output);
+		}
+
+		public bool SupportsHashAlgorithms {
+			get { return true; }
+		}
+
+		public bool IsAlgorithmSupported (HashAlgorithmType algorithm)
+		{
+			return HashAlgorithmProvider.IsAlgorithmSupported (algorithm);
+		}
+
+		public IHashAlgorithm CreateAlgorithm (HashAlgorithmType algorithm)
+		{
+			return HashAlgorithmProvider.CreateAlgorithm (algorithm);
 		}
 	}
 }

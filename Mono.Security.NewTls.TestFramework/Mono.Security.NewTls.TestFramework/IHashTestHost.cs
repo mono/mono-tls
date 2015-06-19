@@ -35,6 +35,14 @@ namespace Mono.Security.NewTls.TestFramework
 		byte[] TestDigest (HandshakeHashType algorithm, byte[] data);
 
 		byte[] TestHMac (HandshakeHashType algorithm, byte[] key, byte[] data);
+
+		bool SupportsHashAlgorithms {
+			get;
+		}
+
+		bool IsAlgorithmSupported (HashAlgorithmType algorithm);
+
+		IHashAlgorithm CreateAlgorithm (HashAlgorithmType algorithm);
 	}
 }
 
