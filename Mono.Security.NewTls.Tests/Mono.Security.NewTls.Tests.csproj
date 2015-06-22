@@ -47,6 +47,7 @@
     <Compile Include="Mono.Security.NewTls.Tests\TestPuppy.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestRenegotiation.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\MartinTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\TestSignatureAlgorithms.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

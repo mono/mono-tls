@@ -306,7 +306,7 @@ namespace Mono.Security.NewTls.TestFeatures
 				clientProvider = monoClientProvider = MonoFactory.GetMonoProvider (clientProviderType);
 			} else {
 				clientProvider = Factory.GetProvider (clientProviderType);
-				monoClientProvider = clientProvider as MonoConnectionProvider;
+				monoClientProvider = null;
 			}
 
 			var serverProviderType = GetServerType (ctx);
@@ -317,7 +317,7 @@ namespace Mono.Security.NewTls.TestFeatures
 				serverProvider = monoServerProvider = MonoFactory.GetMonoProvider (serverProviderType);
 			} else {
 				serverProvider = Factory.GetProvider (serverProviderType);
-				monoServerProvider = serverProvider as MonoConnectionProvider;
+				monoServerProvider = null;
 			}
 
 			var parameters = ctx.GetParameter<InstrumentationParameters> ();
