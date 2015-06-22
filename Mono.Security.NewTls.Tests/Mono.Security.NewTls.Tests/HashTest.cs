@@ -32,7 +32,6 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
-	[Work]
 	[AsyncTestFixture]
 	public class HashTest : ITestHost<IHashTestHost>
 	{
