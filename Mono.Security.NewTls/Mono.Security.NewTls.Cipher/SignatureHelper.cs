@@ -72,6 +72,7 @@ namespace Mono.Security.NewTls.Cipher
 			if (algorithm.Signature != SignatureAlgorithmType.Rsa)
 				return false;
 			switch (algorithm.Hash) {
+			case HashAlgorithmType.Md5:
 			case HashAlgorithmType.Sha512:
 			case HashAlgorithmType.Sha384:
 			case HashAlgorithmType.Sha256:
