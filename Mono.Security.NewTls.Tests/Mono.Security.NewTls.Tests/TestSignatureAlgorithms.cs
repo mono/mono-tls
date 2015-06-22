@@ -54,6 +54,16 @@ namespace Mono.Security.NewTls.Tests
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
+
+		[AsyncTest]
+		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider (Identifier = "ClientType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType clientType,
+			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
+			[InstrumentationParameters (InstrumentationTestCategory.ServerSignatureAlgorithms)] InstrumentationParameters parameters,
+			[InstrumentationTestRunner (InstrumentationFlags.RequiresMonoServer)] InstrumentationTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
 	}
 }
 

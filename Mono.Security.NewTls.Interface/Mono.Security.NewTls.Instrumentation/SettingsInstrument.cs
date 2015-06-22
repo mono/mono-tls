@@ -48,6 +48,10 @@ namespace Mono.Security.NewTls.Instrumentation
 			}
 		}
 
+		public SignatureAndHashAlgorithm? ServerSignatureAlgorithm {
+			get; set;
+		}
+
 		public SignatureAndHashAlgorithm? ExpectSignatureAlgorithm {
 			get; set;
 		}

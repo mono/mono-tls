@@ -186,7 +186,13 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual SignatureAndHashAlgorithm SelectSignatureAlgorithm ()
 		{
-			return SignatureHelper.SelectSignatureType (HandshakeParameters);
+			SignatureAndHashAlgorithm? requestedAlgorithm = null;
+			#if INSTRUMENTATION
+			if (Config.HasSettingsInstrument)
+				requestedAlgorithm = Config.SettingsInstrument.ServerSignatureAlgorithm;
+			#endif
+
+			return SignatureHelper.SelectSignatureType (HandshakeParameters, requestedAlgorithm);
 		}
 
 		protected virtual TlsServerKeyExchange GenerateServerKeyExchange ()

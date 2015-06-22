@@ -31,6 +31,7 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		SimpleClient,
 		ClientSignatureAlgorithms,
+		ServerSignatureAlgorithms,
 		Renegotiation
 	}
 }

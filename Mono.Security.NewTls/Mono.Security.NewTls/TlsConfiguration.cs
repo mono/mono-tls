@@ -194,6 +194,26 @@ namespace Mono.Security.NewTls
 
 		#if INSTRUMENTATION
 
+		public bool HasInstrumentation {
+			get { return UserSettings != null && UserSettings.Instrumentation != null; }
+		}
+
+		public InstrumentCollection Instrumentation {
+			get {
+				if (!HasInstrumentation)
+					throw new InvalidOperationException ();
+				return UserSettings.Instrumentation;
+			}
+		}
+
+		public bool HasSettingsInstrument {
+			get { return HasInstrumentation && Instrumentation.HasSettings; }
+		}
+
+		public SettingsInstrument SettingsInstrument {
+			get { return Instrumentation.Settings; }
+		}
+
 		public void Apply (SettingsInstrument instrument)
 		{
 			if (instrument.DisableRenegotiation)

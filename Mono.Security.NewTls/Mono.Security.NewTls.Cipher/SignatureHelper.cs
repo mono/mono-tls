@@ -58,10 +58,15 @@ namespace Mono.Security.NewTls.Cipher
 		}
 
 		#if INSIDE_MONO_NEWTLS
-		internal static SignatureAndHashAlgorithm SelectSignatureType (HandshakeParameters handshakeParameters)
+		internal static SignatureAndHashAlgorithm SelectSignatureType (HandshakeParameters handshakeParameters, SignatureAndHashAlgorithm? requestedAlgorithm)
 		{
+			if (requestedAlgorithm != null && !IsAlgorithmSupported (requestedAlgorithm.Value))
+				throw new TlsException (AlertDescription.IlegalParameter);
+
 			if (handshakeParameters.ClientCertificateParameters != null && handshakeParameters.ClientCertificateParameters.HasSignatureParameters)
-				return SelectSignatureType (handshakeParameters.ClientCertificateParameters.SignatureParameters);
+				return SelectSignatureType (handshakeParameters.ClientCertificateParameters.SignatureParameters, requestedAlgorithm);
+			else if (requestedAlgorithm != null)
+				return requestedAlgorithm.Value;
 			else
 				return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
 		}
@@ -84,11 +89,16 @@ namespace Mono.Security.NewTls.Cipher
 			}
 		}
 
-		static SignatureAndHashAlgorithm SelectSignatureType (SignatureParameters parameters)
+		static SignatureAndHashAlgorithm SelectSignatureType (SignatureParameters parameters, SignatureAndHashAlgorithm? requestedAlgorithm)
 		{
 			foreach (var algorithm in parameters.SignatureAndHashAlgorithms) {
-				if (IsAlgorithmSupported (algorithm))
-					return algorithm;
+				if (requestedAlgorithm != null) {
+					if (algorithm.Equals (requestedAlgorithm.Value))
+						return algorithm;
+				} else {
+					if (IsAlgorithmSupported (algorithm))
+						return algorithm;
+				}
 			}
 
 			throw new TlsException (AlertDescription.HandshakeFailure, "Client did not offer any supported signature type.");

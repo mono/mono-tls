@@ -68,7 +68,10 @@ namespace Mono.Security.NewTls.TestFramework
 				return CreateRenegotiation ();
 
 			case InstrumentationTestCategory.ClientSignatureAlgorithms:
-				return CreateSignatureAlgoritms (InstrumentationType.ClientSignatureAlgorithm);
+				return CreateClientSignatureAlgoritms (InstrumentationType.ClientSignatureAlgorithm);
+
+			case InstrumentationTestCategory.ServerSignatureAlgorithms:
+				return CreateServerSignatureAlgoritms (InstrumentationType.ServerSignatureAlgorithm);
 
 			case InstrumentationTestCategory.SimpleClient:
 				return CreateSimpleClient ();
@@ -102,9 +105,14 @@ namespace Mono.Security.NewTls.TestFramework
 			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha512, SignatureAlgorithmType.Rsa);
 		}
 
-		static IEnumerable<InstrumentationParameters> CreateSignatureAlgoritms (InstrumentationType type)
+		static IEnumerable<InstrumentationParameters> CreateClientSignatureAlgoritms (InstrumentationType type)
 		{
-			return GetSignatureAlgorithms ().Select (algorithm => CreateWithSignatureAlgorithm (type, algorithm));
+			return GetSignatureAlgorithms ().Select (algorithm => CreateWithClientSignatureAlgorithm (type, algorithm));
+		}
+
+		static IEnumerable<InstrumentationParameters> CreateServerSignatureAlgoritms (InstrumentationType type)
+		{
+			return GetSignatureAlgorithms ().Select (algorithm => CreateWithServerSignatureAlgorithm (type, algorithm));
 		}
 
 		static IEnumerable<InstrumentationParameters> CreateSimpleClient ()
@@ -112,7 +120,7 @@ namespace Mono.Security.NewTls.TestFramework
 			yield return CreateClient (InstrumentationType.None);
 		}
 
-		static InstrumentationParameters CreateWithSignatureAlgorithm (InstrumentationType type, SignatureAndHashAlgorithm algorithm)
+		static InstrumentationParameters CreateWithClientSignatureAlgorithm (InstrumentationType type, SignatureAndHashAlgorithm algorithm)
 		{
 			var instrument = new InstrumentCollection ();
 			instrument.Settings.ClientSignatureParameters.Add (algorithm);
@@ -122,6 +130,19 @@ namespace Mono.Security.NewTls.TestFramework
 			return new InstrumentationParameters (name, ResourceManager.SelfSignedServerCertificate, type) {
 				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate,
 				ProtocolVersion = ProtocolVersions.Tls12, ClientInstrumentation = instrument
+			};
+		}
+
+		static InstrumentationParameters CreateWithServerSignatureAlgorithm (InstrumentationType type, SignatureAndHashAlgorithm algorithm)
+		{
+			var instrument = new InstrumentCollection ();
+			instrument.Settings.ServerSignatureAlgorithm = algorithm;
+
+			var name = string.Format ("{0}:{1}:{2}", type, algorithm.Hash, algorithm.Signature);
+
+			return new InstrumentationParameters (name, ResourceManager.SelfSignedServerCertificate, type) {
+				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate,
+				ProtocolVersion = ProtocolVersions.Tls12, ServerInstrumentation = instrument
 			};
 		}
 
