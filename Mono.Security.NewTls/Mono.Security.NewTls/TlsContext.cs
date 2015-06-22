@@ -185,16 +185,16 @@ namespace Mono.Security.NewTls
 			if (Configuration.RequestedProtocol == TlsProtocolCode.Tls12) {
 				switch (serverProtocol) {
 				case TlsProtocolCode.Tls11:
-					return (Configuration.SupportedProtocols & TlsProtocols.Tls11Server) != 0;
+					return (Configuration.SupportedProtocols & TlsProtocols.Tls11Client) != 0;
 				case TlsProtocolCode.Tls10:
-					return (Configuration.SupportedProtocols & TlsProtocols.Tls10Server) != 0;
+					return (Configuration.SupportedProtocols & TlsProtocols.Tls10Client) != 0;
 				default:
 					return false;
 				}
 			} else if (Configuration.RequestedProtocol == TlsProtocolCode.Tls11) {
 				switch (serverProtocol) {
 				case TlsProtocolCode.Tls10:
-					return (Configuration.SupportedProtocols & TlsProtocols.Tls10Server) != 0;
+					return (Configuration.SupportedProtocols & TlsProtocols.Tls10Client) != 0;
 				default:
 					return false;
 				}
