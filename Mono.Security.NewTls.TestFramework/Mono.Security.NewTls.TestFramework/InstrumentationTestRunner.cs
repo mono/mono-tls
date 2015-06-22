@@ -95,7 +95,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 		static IEnumerable<SignatureAndHashAlgorithm> GetSignatureAlgorithms ()
 		{
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Md5, SignatureAlgorithmType.Rsa);
 			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa);
 			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha224, SignatureAlgorithmType.Rsa);
 			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
