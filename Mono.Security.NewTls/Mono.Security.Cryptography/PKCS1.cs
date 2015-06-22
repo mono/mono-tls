@@ -201,8 +201,7 @@ namespace Mono.Security.Cryptography {
 
 			byte[] t = null;
 
-			string hashName = HashAlgorithmProvider.GetAlgorithmName (hash.Algorithm);
-			string oid = CryptoConfig.MapNameToOID (hashName);
+			string oid = HashAlgorithmProvider.GetOID (hash.Algorithm);
 			if (oid != null)
 			{
 				ASN1 digestAlgorithm = new ASN1 (0x30);

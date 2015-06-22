@@ -111,6 +111,28 @@ namespace Mono.Security.Cryptography
 				throw new NotSupportedException ();
 			}
 		}
+
+		public static string GetOID (HashAlgorithmType type)
+		{
+			switch (type) {
+			case HashAlgorithmType.Md5Sha1:
+				return null;
+			case HashAlgorithmType.Md5:
+				return "1.2.840.113549.2.5";
+			case HashAlgorithmType.Sha1:
+				return "1.3.14.3.2.26";
+			case HashAlgorithmType.Sha224:
+				return "2.16.840.1.101.3.4.2.4";
+			case HashAlgorithmType.Sha256:
+				return "2.16.840.1.101.3.4.2.1";
+			case HashAlgorithmType.Sha384:
+				return "2.16.840.1.101.3.4.2.2";
+			case HashAlgorithmType.Sha512:
+				return "2.16.840.1.101.3.4.2.3";
+			default:
+				throw new NotSupportedException ();
+			}
+		}
 	}
 }
 
