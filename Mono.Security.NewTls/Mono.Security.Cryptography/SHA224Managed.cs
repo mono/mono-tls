@@ -68,7 +68,7 @@ namespace Mono.Security.Cryptography {
 		}
 
 		HashAlgorithmType IHashAlgorithm.Algorithm {
-			get { return HashAlgorithmType.Sha256; }
+			get { return HashAlgorithmType.Sha224; }
 		}
 
 		void IHashAlgorithm.TransformBlock (byte[] inputBuffer, int inputOffset, int inputCount)
