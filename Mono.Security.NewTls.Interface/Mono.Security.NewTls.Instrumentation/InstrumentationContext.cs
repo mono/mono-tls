@@ -1,5 +1,5 @@
 ﻿//
-// SettingsInstrument.cs
+// InstrumentationContext.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,14 +24,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Threading;
 
 namespace Mono.Security.NewTls.Instrumentation
 {
-	public class SettingsInstrument
+	public interface InstrumentationContext
 	{
-		public bool DisableRenegotiation {
-			get; set;
+		ISignatureProvider DefaultSignatureProvider {
+			get;
+		}
+
+		TlsProtocolCode Protocol {
+			get;
 		}
 	}
 }

@@ -11,11 +11,9 @@ namespace Mono.Security.NewTls
 	using Negotiation;
 	using Extensions;
 	using Cipher;
-	#if INSTRUMENTATION
 	using Instrumentation;
-	#endif
 
-	public class TlsContext
+	public class TlsContext : InstrumentationContext
 	{
 		readonly bool isServer;
 		readonly TlsConfiguration configuration;
@@ -232,6 +230,18 @@ namespace Mono.Security.NewTls
 					"Incorrect protocol version received from client");
 
 			negotiatedProtocol = clientProtocol;
+		}
+
+		#endregion
+
+		#region InstrumentationContext
+
+		ISignatureProvider InstrumentationContext.DefaultSignatureProvider {
+			get { return DefaultSignatureProvider.Instance; }
+		}
+
+		TlsProtocolCode InstrumentationContext.Protocol {
+			get { return NegotiatedProtocol; }
 		}
 
 		#endregion

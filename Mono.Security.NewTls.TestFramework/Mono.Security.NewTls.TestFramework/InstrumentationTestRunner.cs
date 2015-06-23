@@ -123,7 +123,8 @@ namespace Mono.Security.NewTls.TestFramework
 		static InstrumentationParameters CreateWithClientSignatureAlgorithm (InstrumentationType type, SignatureAndHashAlgorithm algorithm)
 		{
 			var instrument = new InstrumentCollection ();
-			instrument.Settings.ClientSignatureParameters.Add (algorithm);
+			instrument.SignatureInstrument.ClientSignatureParameters = new SignatureParameters ();
+			instrument.SignatureInstrument.ClientSignatureParameters.Add (algorithm);
 
 			var name = string.Format ("{0}:{1}:{2}", type, algorithm.Hash, algorithm.Signature);
 
@@ -136,7 +137,7 @@ namespace Mono.Security.NewTls.TestFramework
 		static InstrumentationParameters CreateWithServerSignatureAlgorithm (InstrumentationType type, SignatureAndHashAlgorithm algorithm)
 		{
 			var instrument = new InstrumentCollection ();
-			instrument.Settings.ServerSignatureAlgorithm = algorithm;
+			instrument.SignatureInstrument.ServerSignatureAlgorithm = algorithm;
 
 			var name = string.Format ("{0}:{1}:{2}", type, algorithm.Hash, algorithm.Signature);
 

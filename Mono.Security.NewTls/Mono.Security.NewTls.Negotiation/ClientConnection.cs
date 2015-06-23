@@ -64,8 +64,25 @@ namespace Mono.Security.NewTls.Negotiation
 		protected virtual TlsClientHello GenerateClientHello ()
 		{
 			var clientUnixTime = HandshakeParameters.GetUnixTime ();
-			HandshakeParameters.ClientRandom = Context.Session.GetSecureRandomBytes (32);
 			TlsBuffer.WriteInt32 (HandshakeParameters.ClientRandom.Buffer, 0, clientUnixTime);
+
+			if (ServerNameExtension.IsLegalHostName (Config.TargetHost))
+				HandshakeParameters.RequestedExtensions.Add (new ServerNameExtension (Config.TargetHost));
+			if (Config.EnableSecureRenegotiation && (Session.SecureRenegotiation || ((Config.RenegotiationFlags & RenegotiationFlags.SendClientHelloExtension) != 0)))
+				HandshakeParameters.RequestedExtensions.Add (RenegotiationExtension.CreateClient (Context));
+			if (UserSettings.HasSignatureParameters) {
+				SignatureHelper.VerifySignatureParameters (UserSettings.SignatureParameters);
+				HandshakeParameters.RequestedExtensions.Add (new SignatureAlgorithmsExtension (UserSettings.SignatureParameters));
+			}
+
+			return new TlsClientHello (
+				Config.RequestedProtocol, HandshakeParameters.ClientRandom, HandshakeParameters.SessionId,
+				HandshakeParameters.SupportedCiphers.ToArray (), HandshakeParameters.RequestedExtensions);
+		}
+
+		protected virtual void Resolve ()
+		{
+			HandshakeParameters.ClientRandom = Context.Session.GetSecureRandomBytes (32);
 
 			var requestedUserCiphers = Config.UserSettings != null ? Config.UserSettings.RequestedCiphers : null;
 			CipherSuiteCollection requestedCiphers;
@@ -84,23 +101,18 @@ namespace Mono.Security.NewTls.Negotiation
 			if (Config.EnableSecureRenegotiation && !Session.SecureRenegotiation && ((Config.RenegotiationFlags & RenegotiationFlags.SendCipherSpecCode) != 0))
 				HandshakeParameters.SupportedCiphers.AddSCSV ();
 
-			if (ServerNameExtension.IsLegalHostName (Config.TargetHost))
-				HandshakeParameters.RequestedExtensions.Add (new ServerNameExtension (Config.TargetHost));
-			if (Config.EnableSecureRenegotiation && (Session.SecureRenegotiation || ((Config.RenegotiationFlags & RenegotiationFlags.SendClientHelloExtension) != 0)))
-				HandshakeParameters.RequestedExtensions.Add (RenegotiationExtension.CreateClient (Context));
-			if (UserSettings.HasSignatureParameters) {
-				SignatureHelper.VerifySignatureParameters (UserSettings.SignatureParameters);
-				HandshakeParameters.RequestedExtensions.Add (new SignatureAlgorithmsExtension (UserSettings.SignatureParameters));
-			}
-
-			return new TlsClientHello (
-				Config.RequestedProtocol, HandshakeParameters.ClientRandom, HandshakeParameters.SessionId,
-				HandshakeParameters.SupportedCiphers.ToArray (), HandshakeParameters.RequestedExtensions);
+			Context.Session.SignatureProvider = SignatureHelper.GetSignatureProvider (Context);
+			Context.Session.SignatureParameters = Context.Session.SignatureProvider.GetClientSignatureParameters (Context);
+			if (Context.Session.SignatureParameters != null)
+				Context.Session.SignatureProvider.VerifySignatureParameters (Context, Context.Session.SignatureParameters);
 		}
 
 		protected override NegotiationHandler GenerateOutput (TlsMultiBuffer outgoing)
 		{
 			StartHandshake ();
+
+			Resolve ();
+
 			outgoing.Add (Context.EncodeHandshakeRecord (GenerateClientHello ()));
 			return Context.CreateNegotiationHandler (NegotiationState.ServerHello);
 		}

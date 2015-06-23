@@ -257,27 +257,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual SignatureAndHashAlgorithm SelectSignatureType ()
 		{
-			SignatureParameters signatureParameters;
-			if (HandshakeParameters.ClientCertificateParameters != null && HandshakeParameters.ClientCertificateParameters.HasSignatureParameters)
-				signatureParameters = HandshakeParameters.ClientCertificateParameters.SignatureParameters;
-			else if (HandshakeParameters.SignatureParameters != null)
-				signatureParameters = HandshakeParameters.SignatureParameters;
-			else
-				signatureParameters = SignatureParameters.GetDefaultParameters ();
-
-			foreach (var sigType in signatureParameters.SignatureAndHashAlgorithms) {
-				if (sigType.Signature != SignatureAlgorithmType.Rsa)
-					continue;
-				switch (sigType.Hash) {
-				case HashAlgorithmType.Sha256:
-					return sigType;
-
-				case HashAlgorithmType.Sha1:
-					return sigType;
-				}
-			}
-
-			throw new TlsException (AlertDescription.HandshakeFailure, "Client did not offer any supported signature type.");
+			return Session.SignatureProvider.SelectClientSignatureAlgorithm (Context);
 		}
 
 		protected virtual TlsFinished GenerateFinished ()

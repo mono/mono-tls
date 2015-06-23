@@ -88,10 +88,6 @@ namespace Mono.Security.NewTls
 			get; set;
 		}
 
-		internal SignatureParameters SignatureParameters {
-			get; set;
-		}
-
 		protected override void Clear ()
 		{
 			base.Clear ();

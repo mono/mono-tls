@@ -84,9 +84,6 @@ namespace Mono.Security.NewTls.Negotiation
 			var startPosition = incoming.Position - 4;
 			var message = CreateMessage (type, incoming);
 			incoming.Position = startPosition;
-			#if FIXME
-			incoming.Offset = incoming.Position;
-			#endif
 
 			#if DEBUG_FULL
 			if (Context.EnableDebugging)

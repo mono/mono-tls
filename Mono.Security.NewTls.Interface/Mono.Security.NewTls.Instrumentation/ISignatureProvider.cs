@@ -1,5 +1,5 @@
 ﻿//
-// SettingsInstrument.cs
+// ISignatureProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,15 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Threading;
 
 namespace Mono.Security.NewTls.Instrumentation
 {
-	public class SettingsInstrument
+	public interface ISignatureProvider
 	{
-		public bool DisableRenegotiation {
-			get; set;
-		}
+		SignatureParameters GetClientSignatureParameters (InstrumentationContext ctx);
+
+		SignatureParameters GetServerSignatureParameters (InstrumentationContext ctx);
+
+		void VerifySignatureAlgorithm (InstrumentationContext ctx, SignatureAndHashAlgorithm algorithm);
+
+		void VerifySignatureParameters (InstrumentationContext ctx, SignatureParameters parameters);
+
+		SignatureAndHashAlgorithm SelectSignatureAlgorithm (InstrumentationContext ctx, SignatureParameters parameters);
+
+		SignatureAndHashAlgorithm SelectServerSignatureAlgorithm (InstrumentationContext ctx);
+
+		SignatureAndHashAlgorithm SelectClientSignatureAlgorithm (InstrumentationContext ctx);
+
+		void AssertProtocol (InstrumentationContext ctx, TlsProtocolCode protocol);
+
+		void AssertSignatureAlgorithm (InstrumentationContext ctx, SignatureAndHashAlgorithm algorithm);
 	}
 }
 

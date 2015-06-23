@@ -6,6 +6,7 @@ namespace Mono.Security.NewTls
 {
 	using Cipher;
 	using Extensions;
+	using Instrumentation;
 	using X509;
 
 	internal class Session : DisposeContext
@@ -61,6 +62,14 @@ namespace Mono.Security.NewTls
 			set { serverVerifyData = Add (value); }
 		}
 
+		internal ISignatureProvider SignatureProvider {
+			get; set;
+		}
+
+		internal SignatureParameters SignatureParameters {
+			get; set;
+		}
+
 		internal RandomNumberGenerator RandomNumberGenerator {
 			get { return rng; }
 			set {
@@ -89,6 +98,8 @@ namespace Mono.Security.NewTls
 			base.Clear ();
 			PendingRead = false;
 			PendingWrite = false;
+			SignatureProvider = null;
+			SignatureParameters = null;
 		}
 	}
 }

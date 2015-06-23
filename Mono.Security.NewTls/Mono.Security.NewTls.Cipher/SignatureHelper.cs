@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using MSC = Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	public static class SignatureHelper
+	using Instrumentation;
+
+	internal static class SignatureHelper
 	{
 		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, SecureBuffer data, AsymmetricAlgorithm key)
 		{
@@ -22,14 +25,10 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			if (type.Hash != hash.Algorithm)
 				throw new TlsException (AlertDescription.IlegalParameter);
-			#if INSIDE_MONO_NEWTLS
 			if (type.Signature == SignatureAlgorithmType.Rsa)
 				return new SecureBuffer (MSC.PKCS1.Sign_v15 ((RSA)key, hash, hashData.Buffer));
 			else
 				throw new NotSupportedException ();
-			#else
-			throw new NotSupportedException ();
-			#endif
 		}
 
 		public static bool VerifySignature (SignatureAndHashAlgorithm type, SecureBuffer data, AsymmetricAlgorithm key, SecureBuffer signature)
@@ -47,30 +46,11 @@ namespace Mono.Security.NewTls.Cipher
 		{
 			if (type.Hash != hash.Algorithm)
 				throw new TlsException (AlertDescription.IlegalParameter);
-			#if INSIDE_MONO_NEWTLS
 			if (type.Signature == SignatureAlgorithmType.Rsa)
 				return MSC.PKCS1.Verify_v15 ((RSA)key, hash, hashData.Buffer, signature.Buffer);
 			else
 				throw new NotSupportedException ();
-			#else
-			throw new NotSupportedException ();
-			#endif
 		}
-
-		#if INSIDE_MONO_NEWTLS
-		internal static SignatureAndHashAlgorithm SelectSignatureType (HandshakeParameters handshakeParameters, SignatureAndHashAlgorithm? requestedAlgorithm)
-		{
-			if (requestedAlgorithm != null && !IsAlgorithmSupported (requestedAlgorithm.Value))
-				throw new TlsException (AlertDescription.IlegalParameter);
-
-			if (handshakeParameters.ClientCertificateParameters != null && handshakeParameters.ClientCertificateParameters.HasSignatureParameters)
-				return SelectSignatureType (handshakeParameters.ClientCertificateParameters.SignatureParameters, requestedAlgorithm);
-			else if (requestedAlgorithm != null)
-				return requestedAlgorithm.Value;
-			else
-				return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
-		}
-		#endif
 
 		public static bool IsAlgorithmSupported (SignatureAndHashAlgorithm algorithm)
 		{
@@ -89,19 +69,10 @@ namespace Mono.Security.NewTls.Cipher
 			}
 		}
 
-		static SignatureAndHashAlgorithm SelectSignatureType (SignatureParameters parameters, SignatureAndHashAlgorithm? requestedAlgorithm)
+		public static void VerifySignatureAlgorithm (SignatureAndHashAlgorithm algorithm)
 		{
-			foreach (var algorithm in parameters.SignatureAndHashAlgorithms) {
-				if (requestedAlgorithm != null) {
-					if (algorithm.Equals (requestedAlgorithm.Value))
-						return algorithm;
-				} else {
-					if (IsAlgorithmSupported (algorithm))
-						return algorithm;
-				}
-			}
-
-			throw new TlsException (AlertDescription.HandshakeFailure, "Client did not offer any supported signature type.");
+			if (!IsAlgorithmSupported (algorithm))
+				throw new TlsException (AlertDescription.IlegalParameter);
 		}
 
 		public static void VerifySignatureParameters (SignatureParameters parameters)
@@ -110,6 +81,16 @@ namespace Mono.Security.NewTls.Cipher
 				if (!IsAlgorithmSupported (algorithm))
 					throw new TlsException (AlertDescription.IlegalParameter);
 			}
+		}
+
+		public static ISignatureProvider GetSignatureProvider (TlsContext ctx)
+		{
+			#if INSTRUMENTATION
+			if (ctx.Configuration.HasInstrumentation && ctx.Configuration.Instrumentation.HasSignatureInstrument)
+				return ctx.Configuration.Instrumentation.SignatureInstrument;
+			#endif
+
+			return DefaultSignatureProvider.Instance;
 		}
 	}
 }

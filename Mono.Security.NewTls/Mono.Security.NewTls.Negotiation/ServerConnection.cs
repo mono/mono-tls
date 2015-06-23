@@ -186,13 +186,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual SignatureAndHashAlgorithm SelectSignatureAlgorithm ()
 		{
-			SignatureAndHashAlgorithm? requestedAlgorithm = null;
-			#if INSTRUMENTATION
-			if (Config.HasSettingsInstrument)
-				requestedAlgorithm = Config.SettingsInstrument.ServerSignatureAlgorithm;
-			#endif
-
-			return SignatureHelper.SelectSignatureType (HandshakeParameters, requestedAlgorithm);
+			return Session.SignatureProvider.SelectServerSignatureAlgorithm (Context);
 		}
 
 		protected virtual TlsServerKeyExchange GenerateServerKeyExchange ()
@@ -220,8 +214,17 @@ namespace Mono.Security.NewTls.Negotiation
 			return new TlsCertificateRequest (Context.NegotiatedProtocol, parameters);
 		}
 
+		protected virtual void Resolve ()
+		{
+			Context.Session.SignatureProvider = SignatureHelper.GetSignatureProvider (Context);
+			if (Context.Session.SignatureParameters == null)
+				Context.Session.SignatureParameters = Context.Session.SignatureProvider.GetServerSignatureParameters (Context);
+		}
+
 		protected override NegotiationHandler GenerateOutput (TlsMultiBuffer outgoing)
 		{
+			Resolve ();
+
 			outgoing.Add (Context.EncodeHandshakeRecord (GenerateServerHello ()));
 
 			ServerCertificate = GenerateServerCertificate ();

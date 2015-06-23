@@ -32,6 +32,7 @@ namespace Mono.Security.NewTls.Instrumentation
 	public class InstrumentCollection
 	{
 		SettingsInstrument settings;
+		SignatureInstrument signatureInstrument;
 		HashSet<HandshakeInstrumentType> handshakeInstruments = new HashSet<HandshakeInstrumentType> ();
 
 		public bool HasSettings {
@@ -43,6 +44,18 @@ namespace Mono.Security.NewTls.Instrumentation
 				if (settings == null)
 					Interlocked.CompareExchange<SettingsInstrument> (ref settings, new SettingsInstrument (), null);
 				return settings;
+			}
+		}
+
+		public bool HasSignatureInstrument {
+			get { return signatureInstrument != null; }
+		}
+
+		public SignatureInstrument SignatureInstrument {
+			get {
+				if (signatureInstrument == null)
+					Interlocked.CompareExchange<SignatureInstrument> (ref signatureInstrument, new SignatureInstrument (), null);
+				return signatureInstrument;
 			}
 		}
 

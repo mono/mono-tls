@@ -64,6 +64,10 @@
     <Compile Include="Mono.Security.NewTls\TlsProtocols.cs" />
     <Compile Include="Mono.Security.NewTls\SignatureParameters.cs" />
     <Compile Include="Mono.Security.NewTls\IHashAlgorithm.cs" />
+    <Compile Include="Mono.Security.NewTls.Instrumentation\SignatureInstrument.cs" />
+    <Compile Include="Mono.Security.NewTls.Instrumentation\InstrumentationContext.cs" />
+    <Compile Include="Mono.Security.NewTls.Instrumentation\ISignatureProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.Instrumentation\InstrumentException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

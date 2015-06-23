@@ -1,5 +1,5 @@
 ﻿//
-// SettingsInstrument.cs
+// InstrumentException.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,14 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Threading;
 
 namespace Mono.Security.NewTls.Instrumentation
 {
-	public class SettingsInstrument
+	public class InstrumentException : Exception
 	{
-		public bool DisableRenegotiation {
-			get; set;
+		public InstrumentException (string message, params object[] args)
+			: base (string.Format (message, args))
+		{
 		}
 	}
 }

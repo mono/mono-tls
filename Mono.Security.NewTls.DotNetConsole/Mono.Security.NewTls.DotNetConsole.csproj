@@ -81,9 +81,6 @@
     <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\PseudoRandomFunctionTls12.cs">
       <Link>Mono.Security.NewTls.Cipher\PseudoRandomFunctionTls12.cs</Link>
     </Compile>
-    <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\SignatureHelper.cs">
-      <Link>Mono.Security.NewTls.Cipher\SignatureHelper.cs</Link>
-    </Compile>
     <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\TlsCipherSuite10.cs">
       <Link>Mono.Security.NewTls.Cipher\TlsCipherSuite10.cs</Link>
     </Compile>

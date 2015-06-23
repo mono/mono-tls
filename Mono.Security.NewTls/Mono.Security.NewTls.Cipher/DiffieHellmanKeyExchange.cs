@@ -94,7 +94,13 @@ namespace Mono.Security.NewTls.Cipher
 
 		void AssertSignatureAlgorithm (TlsContext ctx)
 		{
-			#if INSTRUMENTATION
+			ctx.Session.SignatureProvider.AssertProtocol (ctx, protocol);
+			if (protocol == TlsProtocolCode.Tls12) {
+				var signature12 = (SignatureTls12)Signature;
+				ctx.Session.SignatureProvider.AssertSignatureAlgorithm (ctx, signature12.SignatureAlgorithm);
+			}
+
+			#if FIXME && INSTRUMENTATION
 			if (!ctx.HasSettingsInstrument || ctx.Instrumentation.Settings.ExpectSignatureAlgorithm == null)
 				return;
 
