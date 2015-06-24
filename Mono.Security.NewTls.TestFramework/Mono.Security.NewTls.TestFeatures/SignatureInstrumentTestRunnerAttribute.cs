@@ -1,5 +1,5 @@
 ﻿//
-// ISignatureProvider.cs
+// SignatureInstrumentTestRunnerAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,28 +24,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
+using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.TestRunners;
+using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.Instrumentation
+namespace Mono.Security.NewTls.TestFeatures
 {
-	public interface ISignatureProvider
+	using TestFramework;
+
+	public class SignatureInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<SignatureInstrumentTestRunner>
 	{
-		SignatureParameters GetClientSignatureParameters (InstrumentationContext ctx);
+		public SignatureInstrumentTestRunnerAttribute (MonoConnectionFlags flags = MonoConnectionFlags.Default)
+			: base (typeof (SignatureInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		{
+			ConnectionFlags = flags;
+		}
 
-		SignatureParameters GetServerSignatureParameters (InstrumentationContext ctx);
+		public MonoConnectionFlags ConnectionFlags {
+			get;
+			private set;
+		}
 
-		void VerifySignatureAlgorithm (InstrumentationContext ctx, SignatureAndHashAlgorithm algorithm);
-
-		void VerifySignatureParameters (InstrumentationContext ctx, SignatureParameters parameters);
-
-		SignatureAndHashAlgorithm SelectSignatureAlgorithm (InstrumentationContext ctx, SignatureParameters parameters);
-
-		SignatureAndHashAlgorithm SelectServerSignatureAlgorithm (InstrumentationContext ctx);
-
-		SignatureAndHashAlgorithm SelectClientSignatureAlgorithm (InstrumentationContext ctx);
-
-		void AssertProtocol (InstrumentationContext ctx, TlsProtocolCode protocol);
-
-		void AssertSignatureAlgorithm (InstrumentationContext ctx, SignatureAndHashAlgorithm algorithm);
+		public SignatureInstrumentTestRunner CreateInstance (TestContext ctx)
+		{
+			return MonoTestFeatures.CreateTestRunner<SignatureInstrumentParameters,SignatureInstrumentTestRunner> (
+				ctx, ConnectionFlags, (s, c, p, f) => new SignatureInstrumentTestRunner (s, c, p, f));
+		}
 	}
 }
 

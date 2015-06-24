@@ -45,7 +45,6 @@
     <Compile Include="NewTlsTestFeatures.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestPuppy.cs" />
-    <Compile Include="Mono.Security.NewTls.Tests\TestRenegotiation.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\MartinTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestSignatureAlgorithms.cs" />
   </ItemGroup>

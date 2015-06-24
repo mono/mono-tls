@@ -36,6 +36,12 @@ namespace Mono.Security.NewTls.TestFramework
 			return (flags & ConnectionProviderFlags.SupportsMonoExtensions) != 0;
 		}
 
+		public bool IsInstrumentationSupported (ConnectionProviderType type)
+		{
+			var flags = GetProviderFlags (type);
+			return (flags & ConnectionProviderFlags.SupportsInstrumentation) != 0;
+		}
+
 		public MonoConnectionProvider GetMonoProvider (ConnectionProviderType type)
 		{
 			var flags = GetProviderFlags (type);

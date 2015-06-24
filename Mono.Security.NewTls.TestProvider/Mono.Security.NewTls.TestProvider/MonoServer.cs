@@ -65,10 +65,8 @@ namespace Mono.Security.NewTls.TestProvider
 			else if ((Parameters.Flags & ServerFlags.AskForClientCertificate) != 0)
 				settings.AskForClientCertificate = true;
 
-			if (MonoParameters != null) {
+			if (MonoParameters != null)
 				settings.RequestedCiphers = MonoParameters.ServerCiphers;
-				settings.Instrumentation = MonoParameters.Instrumentation;
-			}
 
 			return settings;
 		}

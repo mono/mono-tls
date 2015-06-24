@@ -13,10 +13,12 @@ namespace Mono.Security.NewTls
 	using Cipher;
 	using Instrumentation;
 
-	public class TlsContext : InstrumentationContext
+	public class TlsContext : ITlsContext
 	{
 		readonly bool isServer;
 		readonly TlsConfiguration configuration;
+		readonly IConfigurationProvider configurationProvider;
+		readonly SignatureProvider signatureProvider;
 
 		Session session;
 		HandshakeParameters handshakeParameters;
@@ -38,6 +40,14 @@ namespace Mono.Security.NewTls
 
 		public TlsConfiguration Configuration {
 			get { return configuration; }
+		}
+
+		public IConfigurationProvider ConfigurationProvider {
+			get { return configurationProvider; }
+		}
+
+		public SignatureProvider SignatureProvider {
+			get { return signatureProvider; }
 		}
 
 		internal Session Session {
@@ -69,9 +79,16 @@ namespace Mono.Security.NewTls
 			this.configuration = configuration;
 			this.isServer = isServer;
 
+			configurationProvider = new DefaultConfigurationProvider (this);
+
 			#if INSTRUMENTATION
 			SetupInstrumentation ();
+			if (configuration.HasInstrumentation && configuration.Instrumentation.HasSignatureInstrument)
+				signatureProvider = configuration.Instrumentation.SignatureInstrument;
 			#endif
+
+			if (signatureProvider == null)
+				signatureProvider = new SignatureProvider ();
 
 			session = new Session (configuration);
 			Session.RandomNumberGenerator = RandomNumberGenerator.Create ();
@@ -234,14 +251,30 @@ namespace Mono.Security.NewTls
 
 		#endregion
 
-		#region InstrumentationContext
+		#region ITlsContext
 
-		ISignatureProvider InstrumentationContext.DefaultSignatureProvider {
-			get { return DefaultSignatureProvider.Instance; }
+		public bool IsAlgorithmSupported (SignatureAndHashAlgorithm algorithm)
+		{
+			if (HasNegotiatedProtocol && NegotiatedProtocol != TlsProtocolCode.Tls12)
+				throw new TlsException (AlertDescription.IlegalParameter);
+
+			return SignatureHelper.IsAlgorithmSupported (algorithm);
 		}
 
-		TlsProtocolCode InstrumentationContext.Protocol {
-			get { return NegotiatedProtocol; }
+		public bool HasCurrentSignatureParameters {
+			get { return session != null && session.HasSignatureParameters; }
+		}
+
+		public SignatureParameters CurrentSignatureParameters {
+			get { return Session.SignatureParameters; }
+		}
+
+		public bool HasClientCertificateParameters {
+			get { return handshakeParameters != null && handshakeParameters.ClientCertificateParameters != null; }
+		}
+
+		public ClientCertificateParameters ClientCertificateParameters {
+			get { return HandshakeParameters.ClientCertificateParameters; }
 		}
 
 		#endregion

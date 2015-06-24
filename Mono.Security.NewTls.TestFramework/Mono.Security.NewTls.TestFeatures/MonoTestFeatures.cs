@@ -30,6 +30,7 @@ using Xamarin.AsyncTests.Constraints;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.TestRunners;
 
 namespace Mono.Security.NewTls.TestFeatures
 {
@@ -41,6 +42,7 @@ namespace Mono.Security.NewTls.TestFeatures
 		static readonly MonoConnectionProviderFactory MonoFactory;
 		static readonly Constraint isProviderSupported;
 		static readonly Constraint isMonoProviderSupported;
+		static readonly Constraint isInstrumentationSupported;
 
 		static MonoTestFeatures ()
 		{
@@ -50,6 +52,7 @@ namespace Mono.Security.NewTls.TestFeatures
 				Factory = DependencyInjector.Get<ConnectionProviderFactory> ();
 			isProviderSupported = new IsSupportedConstraint<ConnectionProviderType> (f => Factory.IsSupported (f));
 			isMonoProviderSupported = new IsSupportedConstraint<ConnectionProviderType> (f => MonoFactory != null && MonoFactory.IsMonoSupported (f));
+			isInstrumentationSupported = new IsSupportedConstraint<ConnectionProviderType> (f => MonoFactory != null && MonoFactory.IsInstrumentationSupported (f));
 		}
 
 		static void RequireMono ()
@@ -64,6 +67,10 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public static Constraint IsMonoProviderSupported {
 			get { return isMonoProviderSupported; }
+		}
+
+		public static Constraint IsInstrumentationSupported {
+			get { return isInstrumentationSupported; }
 		}
 
 		public static ClientParameters GetClientParameters (TestContext ctx, bool requireMonoExtensions)
@@ -296,12 +303,18 @@ namespace Mono.Security.NewTls.TestFeatures
 			return new MonoClientAndServerTestRunner (server, client, (MonoClientAndServerParameters)clientAndServerParameters);
 		}
 
-		public static InstrumentationTestRunner CreateInstrumentationTestRunner (TestContext ctx, InstrumentationFlags flags)
+		public static R CreateTestRunner<P,R> (TestContext ctx, MonoConnectionFlags flags, Func<IServer,IClient,P,MonoConnectionFlags,R> constructor)
+			where P : ClientAndServerParameters
+			where R : ClientAndServerTestRunner
 		{
 			var clientProviderType = GetClientType (ctx);
 			MonoConnectionProvider monoClientProvider;
 			ConnectionProvider clientProvider;
-			if ((flags & InstrumentationFlags.RequiresMonoClient) != 0) {
+
+			if ((flags & MonoConnectionFlags.ClientInstrumentation) != 0) {
+				ctx.Assert (clientProviderType, IsInstrumentationSupported);
+				clientProvider = monoClientProvider = MonoFactory.GetMonoProvider (clientProviderType);
+			} else if ((flags & MonoConnectionFlags.RequiresMonoClient) != 0) {
 				ctx.Assert (clientProviderType, IsMonoProviderSupported);
 				clientProvider = monoClientProvider = MonoFactory.GetMonoProvider (clientProviderType);
 			} else {
@@ -312,7 +325,11 @@ namespace Mono.Security.NewTls.TestFeatures
 			var serverProviderType = GetServerType (ctx);
 			MonoConnectionProvider monoServerProvider;
 			ConnectionProvider serverProvider;
-			if ((flags & InstrumentationFlags.RequiresMonoServer) != 0) {
+
+			if ((flags & MonoConnectionFlags.ServerInstrumentation) != 0) {
+				ctx.Assert (serverProviderType, IsInstrumentationSupported);
+				serverProvider = monoServerProvider = MonoFactory.GetMonoProvider (serverProviderType);
+			} else if ((flags & MonoConnectionFlags.RequiresMonoServer) != 0) {
 				ctx.Assert (serverProviderType, IsMonoProviderSupported);
 				serverProvider = monoServerProvider = MonoFactory.GetMonoProvider (serverProviderType);
 			} else {
@@ -320,7 +337,7 @@ namespace Mono.Security.NewTls.TestFeatures
 				monoServerProvider = null;
 			}
 
-			var parameters = ctx.GetParameter<InstrumentationParameters> ();
+			var parameters = ctx.GetParameter<P> ();
 
 			ProtocolVersions protocolVersion;
 			if (ctx.TryGetParameter<ProtocolVersions> (out protocolVersion))
@@ -333,7 +350,7 @@ namespace Mono.Security.NewTls.TestFeatures
 
 				var support = DependencyInjector.Get<IPortableEndPointSupport> ();
 				parameters.EndPoint = support.ParseEndpoint (serverAddress, 443, true);
-				flags |= InstrumentationFlags.ManualServer;
+				flags |= MonoConnectionFlags.ManualServer;
 
 				string serverHost;
 				if (ctx.Settings.TryGetValue ("ServerHost", out serverHost))
@@ -362,7 +379,7 @@ namespace Mono.Security.NewTls.TestFeatures
 			else
 				client = clientProvider.CreateClient (parameters.ClientParameters);
 
-			return new InstrumentationTestRunner (server, client, parameters, flags);
+			return constructor (server, client, parameters, flags);
 		}
 	}
 }

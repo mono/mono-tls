@@ -257,7 +257,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual SignatureAndHashAlgorithm SelectSignatureType ()
 		{
-			return Session.SignatureProvider.SelectClientSignatureAlgorithm (Context);
+			return Context.SignatureProvider.SelectClientSignatureAlgorithm (Context);
 		}
 
 		protected virtual TlsFinished GenerateFinished ()

@@ -29,10 +29,9 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public enum InstrumentationTestCategory
 	{
-		SimpleClient,
 		ClientSignatureAlgorithms,
 		ServerSignatureAlgorithms,
-		Renegotiation
+		ServerSignatureAlgorithms2
 	}
 }
 

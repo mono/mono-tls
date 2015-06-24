@@ -94,26 +94,11 @@ namespace Mono.Security.NewTls.Cipher
 
 		void AssertSignatureAlgorithm (TlsContext ctx)
 		{
-			ctx.Session.SignatureProvider.AssertProtocol (ctx, protocol);
+			ctx.SignatureProvider.AssertProtocol (ctx, protocol);
 			if (protocol == TlsProtocolCode.Tls12) {
 				var signature12 = (SignatureTls12)Signature;
-				ctx.Session.SignatureProvider.AssertSignatureAlgorithm (ctx, signature12.SignatureAlgorithm);
+				ctx.SignatureProvider.AssertServerSignatureAlgorithm (ctx, signature12.SignatureAlgorithm);
 			}
-
-			#if FIXME && INSTRUMENTATION
-			if (!ctx.HasSettingsInstrument || ctx.Instrumentation.Settings.ExpectSignatureAlgorithm == null)
-				return;
-
-			var signature12 = Signature as SignatureTls12;
-			if (protocol != TlsProtocolCode.Tls12 || signature12 == null)
-				throw new TlsException (AlertDescription.InternalError, "SignatureParameters may only be used for TLS 1.2.");
-
-			var expectedAlgorithm = ctx.Instrumentation.Settings.ExpectSignatureAlgorithm.Value;
-			if (!signature12.SignatureAlgorithm.Equals (expectedAlgorithm))
-				throw new TlsException (
-					AlertDescription.IlegalParameter, "Assertion failed: expected SignatureAlgoritum '{0}', got '{1}'.",
-					signature12.SignatureAlgorithm, expectedAlgorithm);
-			#endif
 		}
 
 		public override void HandleServer (TlsContext ctx)

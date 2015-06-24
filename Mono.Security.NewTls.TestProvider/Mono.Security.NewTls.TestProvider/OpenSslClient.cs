@@ -16,6 +16,8 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestProvider
 {
+	using TestFramework;
+
 	public class OpenSslClient : OpenSslConnection, IMonoClient
 	{
 		ClientParameters IClient.Parameters {

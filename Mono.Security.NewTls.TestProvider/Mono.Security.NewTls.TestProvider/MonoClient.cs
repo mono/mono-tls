@@ -59,10 +59,8 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var settings = new TlsSettings ();
 
-			if (MonoParameters != null) {
+			if (MonoParameters != null)
 				settings.RequestedCiphers = MonoParameters.ClientCiphers;
-				settings.Instrumentation = MonoParameters.Instrumentation;
-			}
 
 			return settings;
 		}

@@ -42,7 +42,7 @@ using Xamarin.WebTests.Server;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	public abstract class OpenSslConnection : Connection, ICommonConnection
+	public abstract class OpenSslConnection : Connection, ICommonConnection, IMonoCommonConnection
 	{
 		public override bool SupportsCleanShutdown {
 			get { return true; }
@@ -78,6 +78,15 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected abstract bool IsServer {
 			get;
+		}
+
+		bool IMonoCommonConnection.SupportsInstrumentation {
+			get { return false; }
+		}
+
+		InstrumentationProvider IMonoCommonConnection.InstrumentationProvider {
+			get { throw new NotSupportedException (); }
+			set { throw new NotSupportedException (); }
 		}
 
 		public ProtocolVersions ProtocolVersion {

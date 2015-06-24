@@ -68,30 +68,6 @@ namespace Mono.Security.NewTls.Cipher
 				return false;
 			}
 		}
-
-		public static void VerifySignatureAlgorithm (SignatureAndHashAlgorithm algorithm)
-		{
-			if (!IsAlgorithmSupported (algorithm))
-				throw new TlsException (AlertDescription.IlegalParameter);
-		}
-
-		public static void VerifySignatureParameters (SignatureParameters parameters)
-		{
-			foreach (var algorithm in parameters.SignatureAndHashAlgorithms) {
-				if (!IsAlgorithmSupported (algorithm))
-					throw new TlsException (AlertDescription.IlegalParameter);
-			}
-		}
-
-		public static ISignatureProvider GetSignatureProvider (TlsContext ctx)
-		{
-			#if INSTRUMENTATION
-			if (ctx.Configuration.HasInstrumentation && ctx.Configuration.Instrumentation.HasSignatureInstrument)
-				return ctx.Configuration.Instrumentation.SignatureInstrument;
-			#endif
-
-			return DefaultSignatureProvider.Instance;
-		}
 	}
 }
 

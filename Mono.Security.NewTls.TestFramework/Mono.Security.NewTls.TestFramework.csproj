@@ -56,17 +56,21 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationType.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationParametersAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\ClientAndServerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientAndServerTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\MonoClientAndServerTestRunnerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\MonoClientAndServerTestType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\MonoClientAndServerTestTypeAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\ProtocolVersionsAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationTestRunnerAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationFlags.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationTestCategory.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrument.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentTestRunner.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\SignatureInstrumentParametersAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionFlags.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\SignatureInstrumentTestRunnerAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

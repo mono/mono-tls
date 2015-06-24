@@ -59,6 +59,7 @@ namespace Mono.Security.NewTls.TestProvider
 		MSI.MonoTlsSettings settings;
 		MonoConnectionProviderImpl provider;
 		MonoSslStream monoSslStream;
+		InstrumentationProvider instrumentationProvider;
 
 		public MonoConnectionProviderImpl ConnectionProvider {
 			get { return provider; }
@@ -78,6 +79,22 @@ namespace Mono.Security.NewTls.TestProvider
 			return tlsSettings != null ? tlsSettings.ConnectionInfo : null;
 		}
 
+		public bool SupportsInstrumentation {
+			get { return provider.IsNewTls; }
+		}
+
+		public InstrumentationProvider InstrumentationProvider {
+			get {
+				if (!SupportsInstrumentation)
+					throw new NotSupportedException ();
+				return instrumentationProvider;
+			} set {
+				if (!SupportsInstrumentation)
+					throw new NotSupportedException ();
+				instrumentationProvider = value;
+			}
+		}
+
 		protected abstract Task<MonoSslStream> Start (TestContext ctx, Socket socket, MSI.MonoTlsSettings settings, CancellationToken cancellationToken);
 
 		protected abstract TlsSettings GetSettings ();
@@ -86,6 +103,11 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			if (ConnectionProvider.IsNewTls)
 				settings = GetSettings ();
+
+			var tlsSettings = settings as TlsSettings;
+			if (tlsSettings != null && InstrumentationProvider != null)
+				tlsSettings.Instrumentation = InstrumentationProvider.CreateInstrument (ctx);
+
 			monoSslStream = await Start (ctx, socket, settings, cancellationToken);
 			return monoSslStream;
 		}

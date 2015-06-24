@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentException.cs
+// DefaultConfigurationProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,13 +25,32 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.Instrumentation
+namespace Mono.Security.NewTls
 {
-	public class InstrumentException : Exception
+	class DefaultConfigurationProvider : IConfigurationProvider
 	{
-		public InstrumentException (string message, params object[] args)
-			: base (string.Format (message, args))
+		SignatureParameters signatureParameters;
+		ClientCertificateParameters clientCertificateParameters;
+
+		public virtual SignatureParameters ClientSignatureParameters {
+			get { return signatureParameters; }
+		}
+
+		public virtual SignatureParameters ServerSignatureParameters {
+			get { return signatureParameters; }
+		}
+
+		public virtual ClientCertificateParameters ClientCertificateParameters {
+			get { return clientCertificateParameters; }
+		}
+
+		public DefaultConfigurationProvider (TlsContext ctx)
 		{
+			if (ctx.Configuration.UserSettings != null) {
+				if (ctx.Configuration.UserSettings.HasSignatureParameters)
+					signatureParameters = ctx.Configuration.UserSettings.SignatureParameters;
+				clientCertificateParameters = ctx.Configuration.UserSettings.ClientCertificateParameters;
+			}
 		}
 	}
 }

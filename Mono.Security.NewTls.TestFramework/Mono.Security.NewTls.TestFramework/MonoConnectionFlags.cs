@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationProvider.cs
+// MonoConnectionFlags.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,13 +25,21 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.Instrumentation
+namespace Mono.Security.NewTls.TestFramework
 {
-	using Negotiation;
-	using Handshake;
-
-	public class InstrumentationProvider : IInstrumentationProvider
+	[Flags]
+	public enum MonoConnectionFlags
 	{
+		None			= 0,
+		RequiresMonoClient	= 1,
+		RequiresMonoServer	= 2,
+		ClientInstrumentation	= 4,
+		ServerInstrumentation	= 8,
+
+		ManualClient		= 16,
+		ManualServer		= 32,
+
+		Default			= RequiresMonoClient | RequiresMonoServer
 	}
 }
 

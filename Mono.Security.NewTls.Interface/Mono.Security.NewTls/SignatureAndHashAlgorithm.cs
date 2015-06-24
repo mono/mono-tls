@@ -29,6 +29,12 @@
 			Signature = signature;
 		}
 
+		public SignatureAndHashAlgorithm (HashAlgorithmType hash)
+		{
+			Hash = hash;
+			Signature = SignatureAlgorithmType.Rsa;
+		}
+
 		public override int GetHashCode ()
 		{
 			return Hash.GetHashCode ();

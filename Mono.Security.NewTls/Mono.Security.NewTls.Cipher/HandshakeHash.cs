@@ -12,12 +12,13 @@ namespace Mono.Security.NewTls.Cipher
 
 		public HandshakeHash ()
 		{
-			hashes = new IHashAlgorithm [5];
+			hashes = new IHashAlgorithm [6];
 			hashes [0] = new MSC.MD5SHA1 ();
 			hashes [1] = new MSC.SHA1CryptoServiceProvider ();
-			hashes [2] = new MSC.SHA256Managed ();
-			hashes [3] = new MSC.SHA384Managed ();
-			hashes [4] = new MSC.SHA512Managed ();
+			hashes [2] = new MSC.SHA224Managed ();
+			hashes [3] = new MSC.SHA256Managed ();
+			hashes [4] = new MSC.SHA384Managed ();
+			hashes [5] = new MSC.SHA512Managed ();
 		}
 
 		public void Add (HandshakeMessage message, IBufferOffsetSize buffer)
@@ -34,9 +35,9 @@ namespace Mono.Security.NewTls.Cipher
 			case HandshakeHashType.MD5SHA1:
 				return hashes [0];
 			case HandshakeHashType.SHA256:
-				return hashes [2];
-			case HandshakeHashType.SHA384:
 				return hashes [3];
+			case HandshakeHashType.SHA384:
+				return hashes [4];
 			default:
 				throw new InvalidOperationException ();
 			}
@@ -47,12 +48,14 @@ namespace Mono.Security.NewTls.Cipher
 			switch (type) {
 			case HashAlgorithmType.Sha1:
 				return hashes [1];
-			case HashAlgorithmType.Sha256:
+			case HashAlgorithmType.Sha224:
 				return hashes [2];
-			case HashAlgorithmType.Sha384:
+			case HashAlgorithmType.Sha256:
 				return hashes [3];
-			case HashAlgorithmType.Sha512:
+			case HashAlgorithmType.Sha384:
 				return hashes [4];
+			case HashAlgorithmType.Sha512:
+				return hashes [5];
 			default:
 				throw new NotSupportedException ();
 			}

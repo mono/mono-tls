@@ -116,7 +116,6 @@
     <Compile Include="Mono.Security.NewTls.Negotiation\ServerConnection.cs" />
     <Compile Include="Mono.Security.NewTls.Negotiation\ServerFinished.cs" />
     <Compile Include="Mono.Security.NewTls.Negotiation\ServerHello.cs" />
-    <Compile Include="Mono.Security.NewTls.Instrumentation\InstrumentationProvider.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\Signature.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls12.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls10.cs" />
@@ -131,7 +130,7 @@
     <Compile Include="Mono.Security.Cryptography\HashAlgorithmProvider.cs" />
     <Compile Include="Mono.Security.Cryptography\SHA224Managed.cs" />
     <Compile Include="Mono.Security.Cryptography\SHA224.cs" />
-    <Compile Include="Mono.Security.NewTls.Cipher\DefaultSignatureProvider.cs" />
+    <Compile Include="Mono.Security.NewTls\DefaultConfigurationProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">
@@ -145,7 +144,6 @@
     <Folder Include="Mono.Security.NewTls.Cipher\" />
     <Folder Include="Mono.Security.NewTls.Extensions\" />
     <Folder Include="Mono.Security.NewTls.Handshake\" />
-    <Folder Include="Mono.Security.NewTls.Instrumentation\" />
     <Folder Include="Mono.Security.NewTls.Negotiation\" />
   </ItemGroup>
   <ItemGroup>

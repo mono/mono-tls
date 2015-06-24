@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationTestRunnerAttribute.cs
+// ITlsContext.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,32 +24,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Xamarin.AsyncTests;
-using Xamarin.AsyncTests.Portable;
-using Xamarin.AsyncTests.Constraints;
-using Xamarin.WebTests.TestRunners;
-using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestFeatures
+namespace Mono.Security.NewTls
 {
-	using TestFramework;
+	using Instrumentation;
 
-	public class InstrumentationTestRunnerAttribute : TestHostAttribute, ITestHost<InstrumentationTestRunner>
+	public interface ITlsContext
 	{
-		public InstrumentationTestRunnerAttribute (InstrumentationFlags flags = InstrumentationFlags.Default)
-			: base (typeof (InstrumentationTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
-		{
-			InstrumentationFlags = flags;
-		}
-
-		public InstrumentationFlags InstrumentationFlags {
+		bool IsServer {
 			get;
-			private set;
 		}
 
-		public InstrumentationTestRunner CreateInstance (TestContext ctx)
-		{
-			return MonoTestFeatures.CreateInstrumentationTestRunner (ctx, InstrumentationFlags);
+		IConfigurationProvider ConfigurationProvider {
+			get;
+		}
+
+		bool IsAlgorithmSupported (SignatureAndHashAlgorithm algorithm);
+
+		bool HasNegotiatedProtocol {
+			get;
+		}
+
+		TlsProtocolCode NegotiatedProtocol {
+			get;
+		}
+
+		bool HasCurrentSignatureParameters {
+			get;
+		}
+
+		SignatureParameters CurrentSignatureParameters {
+			get;
+		}
+
+		bool HasClientCertificateParameters {
+			get;
+		}
+
+		ClientCertificateParameters ClientCertificateParameters {
+			get;
 		}
 	}
 }

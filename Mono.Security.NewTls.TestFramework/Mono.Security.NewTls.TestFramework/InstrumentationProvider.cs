@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationParametersAttribute.cs
+// InstrumentationProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,35 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Providers;
-using Xamarin.WebTests.Resources;
 
-namespace Mono.Security.NewTls.TestFeatures
+namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFramework;
 	using Instrumentation;
 
-	public class InstrumentationParametersAttribute : TestParameterAttribute, ITestParameterSource<InstrumentationParameters>
+	public interface InstrumentationProvider
 	{
-		public InstrumentationTestCategory Category {
-			get;
-			private set;
-		}
-
-		public InstrumentationParametersAttribute (InstrumentationTestCategory category, string filter = null)
-			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
-		{
-			Category = category;
-		}
-
-		public IEnumerable<InstrumentationParameters> GetParameters (TestContext ctx, string filter)
-		{
-			return InstrumentationTestRunner.GetParameters (ctx, Category, filter);
-		}
+		InstrumentCollection CreateInstrument (TestContext ctx);
 	}
 }
 

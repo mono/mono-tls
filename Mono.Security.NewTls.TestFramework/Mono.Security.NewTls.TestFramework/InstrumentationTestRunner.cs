@@ -41,110 +41,38 @@ using Mono.Security.NewTls.Instrumentation;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class InstrumentationTestRunner : ClientAndServerTestRunner
+	public abstract class InstrumentationTestRunner : ClientAndServerTestRunner, InstrumentationProvider
 	{
 		new public InstrumentationParameters Parameters {
 			get { return (InstrumentationParameters)base.Parameters; }
 		}
 
-		public InstrumentationFlags InstrumentationFlags {
+		public MonoConnectionFlags ConnectionFlags {
 			get;
 			private set;
 		}
 
-		public InstrumentationTestRunner (IServer server, IClient client, InstrumentationParameters parameters, InstrumentationFlags flags)
+		public InstrumentationTestRunner (IServer server, IClient client, InstrumentationParameters parameters, MonoConnectionFlags flags)
 			: base (server, client, parameters)
 		{
-			InstrumentationFlags = flags;
+			ConnectionFlags = flags;
+
+			if ((flags & MonoConnectionFlags.ServerInstrumentation) != 0)
+				((IMonoServer)server).InstrumentationProvider = this;
+			if ((flags & MonoConnectionFlags.ClientInstrumentation) != 0)
+				((IMonoClient)client).InstrumentationProvider = this;
 		}
 
-		public static IEnumerable<InstrumentationParameters> GetParameters (TestContext ctx, InstrumentationTestCategory category, string filter)
-		{
-			if (filter != null)
-				throw new NotImplementedException ();
+		public abstract InstrumentCollection CreateInstrument (TestContext ctx);
 
-			switch (category) {
-			case InstrumentationTestCategory.Renegotiation:
-				return CreateRenegotiation ();
-
-			case InstrumentationTestCategory.ClientSignatureAlgorithms:
-				return CreateClientSignatureAlgoritms (InstrumentationType.ClientSignatureAlgorithm);
-
-			case InstrumentationTestCategory.ServerSignatureAlgorithms:
-				return CreateServerSignatureAlgoritms (InstrumentationType.ServerSignatureAlgorithm);
-
-			case InstrumentationTestCategory.SimpleClient:
-				return CreateSimpleClient ();
-
-			default:
-				throw new NotSupportedException ();
-			}
-		}
-
-		static ICertificateValidator AcceptAnyCertificate {
+		protected static ICertificateValidator AcceptAnyCertificate {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptAll (); }
-		}
-
-		static IEnumerable<InstrumentationParameters> CreateRenegotiation ()
-		{
-			yield break;
 		}
 
 		static IEnumerable<InstrumentationType> GetClientAndServerTypes ()
 		{
 			yield return InstrumentationType.CloseServerConnection;
 			yield return InstrumentationType.DisableRenegotiation;
-		}
-
-		static IEnumerable<SignatureAndHashAlgorithm> GetSignatureAlgorithms ()
-		{
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa);
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha224, SignatureAlgorithmType.Rsa);
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha384, SignatureAlgorithmType.Rsa);
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha512, SignatureAlgorithmType.Rsa);
-		}
-
-		static IEnumerable<InstrumentationParameters> CreateClientSignatureAlgoritms (InstrumentationType type)
-		{
-			return GetSignatureAlgorithms ().Select (algorithm => CreateWithClientSignatureAlgorithm (type, algorithm));
-		}
-
-		static IEnumerable<InstrumentationParameters> CreateServerSignatureAlgoritms (InstrumentationType type)
-		{
-			return GetSignatureAlgorithms ().Select (algorithm => CreateWithServerSignatureAlgorithm (type, algorithm));
-		}
-
-		static IEnumerable<InstrumentationParameters> CreateSimpleClient ()
-		{
-			yield return CreateClient (InstrumentationType.None);
-		}
-
-		static InstrumentationParameters CreateWithClientSignatureAlgorithm (InstrumentationType type, SignatureAndHashAlgorithm algorithm)
-		{
-			var instrument = new InstrumentCollection ();
-			instrument.SignatureInstrument.ClientSignatureParameters = new SignatureParameters ();
-			instrument.SignatureInstrument.ClientSignatureParameters.Add (algorithm);
-
-			var name = string.Format ("{0}:{1}:{2}", type, algorithm.Hash, algorithm.Signature);
-
-			return new InstrumentationParameters (name, ResourceManager.SelfSignedServerCertificate, type) {
-				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate,
-				ProtocolVersion = ProtocolVersions.Tls12, ClientInstrumentation = instrument
-			};
-		}
-
-		static InstrumentationParameters CreateWithServerSignatureAlgorithm (InstrumentationType type, SignatureAndHashAlgorithm algorithm)
-		{
-			var instrument = new InstrumentCollection ();
-			instrument.SignatureInstrument.ServerSignatureAlgorithm = algorithm;
-
-			var name = string.Format ("{0}:{1}:{2}", type, algorithm.Hash, algorithm.Signature);
-
-			return new InstrumentationParameters (name, ResourceManager.SelfSignedServerCertificate, type) {
-				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate,
-				ProtocolVersion = ProtocolVersions.Tls12, ServerInstrumentation = instrument
-			};
 		}
 
 		static InstrumentationParameters CreateClientAndServer (InstrumentationType type)
@@ -195,7 +123,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
-			if ((InstrumentationFlags & InstrumentationFlags.ManualServer) != 0)
+			if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
 				return RunWithManualServer (ctx, cancellationToken);
 
 			return base.MainLoop (ctx, cancellationToken);

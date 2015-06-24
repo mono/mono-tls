@@ -16,6 +16,8 @@ namespace Mono.Security.NewTls
 		CryptoParameters pendingCrypto;
 		SecureBuffer clientVerifyData;
 		SecureBuffer serverVerifyData;
+		bool hasSignatureParameters;
+		SignatureParameters signatureParameters;
 
 		public TlsConfiguration Configuration {
 			get;
@@ -62,12 +64,20 @@ namespace Mono.Security.NewTls
 			set { serverVerifyData = Add (value); }
 		}
 
-		internal ISignatureProvider SignatureProvider {
-			get; set;
+		internal bool HasSignatureParameters {
+			get { return hasSignatureParameters; }
 		}
 
 		internal SignatureParameters SignatureParameters {
-			get; set;
+			get {
+				if (!hasSignatureParameters)
+					throw new InvalidOperationException ();
+				return signatureParameters;
+			}
+			set {
+				signatureParameters = value;
+				hasSignatureParameters = true;
+			}
 		}
 
 		internal RandomNumberGenerator RandomNumberGenerator {
@@ -98,8 +108,8 @@ namespace Mono.Security.NewTls
 			base.Clear ();
 			PendingRead = false;
 			PendingWrite = false;
-			SignatureProvider = null;
-			SignatureParameters = null;
+			signatureParameters = null;
+			hasSignatureParameters = false;
 		}
 	}
 }

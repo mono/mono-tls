@@ -186,7 +186,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual SignatureAndHashAlgorithm SelectSignatureAlgorithm ()
 		{
-			return Session.SignatureProvider.SelectServerSignatureAlgorithm (Context);
+			return Context.SignatureProvider.SelectServerSignatureAlgorithm (Context);
 		}
 
 		protected virtual TlsServerKeyExchange GenerateServerKeyExchange ()
@@ -216,9 +216,10 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void Resolve ()
 		{
-			Context.Session.SignatureProvider = SignatureHelper.GetSignatureProvider (Context);
+			Context.Session.SignatureParameters = Context.SignatureProvider.GetServerSignatureParameters (Context);
 			if (Context.Session.SignatureParameters == null)
-				Context.Session.SignatureParameters = Context.Session.SignatureProvider.GetServerSignatureParameters (Context);
+				Context.Session.SignatureParameters = SignatureParameters.GetDefaultParameters ();
+			Context.SignatureProvider.VerifySignatureParameters (Context, Context.Session.SignatureParameters);
 		}
 
 		protected override NegotiationHandler GenerateOutput (TlsMultiBuffer outgoing)

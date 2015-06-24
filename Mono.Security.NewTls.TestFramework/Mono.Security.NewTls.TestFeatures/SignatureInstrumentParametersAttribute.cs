@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationFlags.cs
+// SignatureInstrumentParametersAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,19 +24,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using Xamarin.AsyncTests;
+using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Resources;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
-	[Flags]
-	public enum InstrumentationFlags
-	{
-		None			= 0,
-		RequiresMonoClient	= 1,
-		RequiresMonoServer	= 2,
-		ManualClient		= 4,
-		ManualServer		= 8,
+	using TestFramework;
+	using Instrumentation;
 
-		Default			= RequiresMonoClient | RequiresMonoServer
+	public class SignatureInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<SignatureInstrumentParameters>
+	{
+		public InstrumentationTestCategory Category {
+			get;
+			private set;
+		}
+
+		public SignatureInstrumentParametersAttribute (InstrumentationTestCategory category, string filter = null)
+			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
+		{
+			Category = category;
+		}
+
+		public IEnumerable<SignatureInstrumentParameters> GetParameters (TestContext ctx, string filter)
+		{
+			if (filter != null)
+				throw new NotImplementedException ();
+
+			return SignatureInstrumentTestRunner.GetParameters (ctx, Category);
+		}
 	}
 }
 

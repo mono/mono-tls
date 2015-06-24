@@ -45,9 +45,22 @@ namespace Mono.Security.NewTls
 			SignatureAndHashAlgorithms.Add (algorithm);
 		}
 
+		public void Add (HashAlgorithmType hash)
+		{
+			SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (hash));
+		}
+
 		public void Add (HashAlgorithmType hash, SignatureAlgorithmType signature)
 		{
 			SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (hash, signature));
+		}
+
+		public static SignatureParameters Create (params HashAlgorithmType[] hashTypes)
+		{
+			var parameters = new SignatureParameters ();
+			foreach (var hash in hashTypes)
+				parameters.Add (hash);
+			return parameters;
 		}
 
 		public static SignatureParameters GetDefaultParameters ()

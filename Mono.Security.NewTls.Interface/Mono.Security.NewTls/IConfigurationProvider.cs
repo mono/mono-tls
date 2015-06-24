@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationContext.cs
+// ITlsConfiguration.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,15 +25,19 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.Instrumentation
+namespace Mono.Security.NewTls
 {
-	public interface InstrumentationContext
+	public interface IConfigurationProvider
 	{
-		ISignatureProvider DefaultSignatureProvider {
+		SignatureParameters ClientSignatureParameters {
 			get;
 		}
 
-		TlsProtocolCode Protocol {
+		SignatureParameters ServerSignatureParameters {
+			get;
+		}
+
+		ClientCertificateParameters ClientCertificateParameters {
 			get;
 		}
 	}
