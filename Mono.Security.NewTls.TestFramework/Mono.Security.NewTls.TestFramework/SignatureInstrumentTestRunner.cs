@@ -117,7 +117,8 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		internal static readonly SignatureInstrumentType[] ClientSignatureParameterTypes = {
-			SignatureInstrumentType.VerifyClientSignatureAlgorithms
+			SignatureInstrumentType.VerifyClientSignatureAlgorithms,
+			SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms
 		};
 
 		internal static readonly SignatureInstrumentType[] ServerSignatureParameterTypes = {

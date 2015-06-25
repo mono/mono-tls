@@ -60,7 +60,17 @@ namespace Mono.Security.NewTls.TestFramework
 			if (parameters == null)
 				return base.GetClientSignatureParameters (ctx);
 
-			VerifySignatureParameters (ctx, parameters);
+			switch (Parameters.Type) {
+			case SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms:
+			case SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms:
+				// Instrumentation override.
+				break;
+
+			default:
+				VerifySignatureParameters (ctx, parameters);
+				break;
+			}
+
 			return parameters;
 		}
 
