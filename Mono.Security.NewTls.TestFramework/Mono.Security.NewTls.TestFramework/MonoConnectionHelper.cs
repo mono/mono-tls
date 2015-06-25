@@ -1,5 +1,5 @@
 ﻿//
-// MonoServerParameters.cs
+// MonoConnectionHelper.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,43 +24,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.ConnectionFramework;
+using System.Threading;
+using System.Threading.Tasks;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Constraints;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class MonoServerParameters : ServerParameters
+	public static class MonoConnectionHelper
 	{
-		public MonoServerParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		public static void ExpectAlert (TestContext ctx, Task t, AlertDescription expectedAlert, string message)
 		{
-		}
-
-		protected MonoServerParameters (MonoServerParameters other)
-			: base (other)
-		{
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			ExpectAlert = other.ExpectAlert;
-		}
-
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoServerParameters (this);
-		}
-
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public AlertDescription? ExpectAlert {
-			get; set;
+			ctx.Assert (t.IsFaulted, Is.True, "#1:" + message);
+			var baseException = t.Exception.GetBaseException ();
+			if (baseException is AggregateException) {
+				var aggregate = baseException as AggregateException;
+				ctx.Assert (aggregate.InnerExceptions.Count, Is.EqualTo (2), "#2a:" + message);
+				var authExcType = aggregate.InnerExceptions [0].GetType ();
+				ctx.Assert (authExcType.FullName, Is.EqualTo ("System.Security.Authentication.AuthenticationException"), "#2b:" + message);
+				baseException = aggregate.InnerExceptions [1];
+			}
+			ctx.Assert (baseException, Is.InstanceOf<TlsException> (), "#2:" + message);
+			var alert = ((TlsException)baseException).Alert;
+			ctx.Assert (alert.Level, Is.EqualTo (AlertLevel.Fatal), "#3:" + message);
+			ctx.Assert (alert.Description, Is.EqualTo (expectedAlert), "#4:" + message);
 		}
 	}
 }

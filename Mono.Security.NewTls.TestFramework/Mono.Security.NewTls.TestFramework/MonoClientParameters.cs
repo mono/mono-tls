@@ -42,6 +42,7 @@ namespace Mono.Security.NewTls.TestFramework
 			if (other.ClientCiphers != null)
 				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
 			ExpectedCipher = other.ExpectedCipher;
+			ExpectAlert = other.ExpectAlert;
 		}
 
 		public override ConnectionParameters DeepClone ()
@@ -54,6 +55,10 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		public CipherSuiteCode? ExpectedCipher {
+			get; set;
+		}
+
+		public AlertDescription? ExpectAlert {
 			get; set;
 		}
 	}

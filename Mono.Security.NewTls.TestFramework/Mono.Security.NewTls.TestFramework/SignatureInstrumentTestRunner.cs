@@ -175,6 +175,10 @@ namespace Mono.Security.NewTls.TestFramework
 
 			switch (type) {
 			case SignatureInstrumentType.VerifyClientSignatureAlgorithms:
+				parameters.ExpectClientAlert = AlertDescription.IlegalParameter;
+				parameters.ServerFlags |= ServerFlags.ClientAbortsHandshake;
+				goto case SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms;
+
 			case SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms:
 				parameters.ClientSignatureParameters = new SignatureParameters ();
 				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Sha1, SignatureAlgorithmType.Dsa);

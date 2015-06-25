@@ -92,6 +92,16 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return MonoServerParameters.ExpectedCipher; }
 			set { MonoServerParameters.ExpectedCipher = value; }
 		}
+
+		public AlertDescription? ExpectClientAlert {
+			get { return MonoClientParameters.ExpectAlert; }
+			set { MonoClientParameters.ExpectAlert = value; }
+		}
+
+		public AlertDescription? ExpectServerAlert {
+			get { return MonoServerParameters.ExpectAlert; }
+			set { MonoServerParameters.ExpectAlert = value; }
+		}
 	}
 }
 
