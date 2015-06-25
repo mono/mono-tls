@@ -31,6 +31,8 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		ClientSignatureAlgorithms,
 		ServerSignatureAlgorithms,
+		ClientSignatureAlgorithms2,
+		ServerSignatureAlgorithms2,
 		SignatureAlgorithms
 	}
 }

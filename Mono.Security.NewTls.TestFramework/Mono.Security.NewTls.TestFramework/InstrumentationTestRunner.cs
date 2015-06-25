@@ -69,8 +69,10 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			switch (category) {
 			case InstrumentationCategory.ClientSignatureAlgorithms:
+			case InstrumentationCategory.ClientSignatureAlgorithms2:
 				return MonoConnectionFlags.ClientInstrumentation;
 			case InstrumentationCategory.ServerSignatureAlgorithms:
+			case InstrumentationCategory.ServerSignatureAlgorithms2:
 				return MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.SignatureAlgorithms:
 				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;

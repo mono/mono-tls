@@ -59,13 +59,16 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			switch (category) {
 			case InstrumentationCategory.ClientSignatureAlgorithms:
-				return CreateClientSignatureAlgorithms (ctx);
-				
-			case InstrumentationCategory.ServerSignatureAlgorithms:
-				return CreateServerSignatureAlgorithms (ctx);
+				return SelectAlgorithmsAndCiphers (SignatureInstrumentType.ClientSignatureAlgorithm).Select (t => Create (ctx, category, t.Item1, t.Item2, t.Item3));
 
-			case InstrumentationCategory.SignatureAlgorithms:
-				return CreateServerSignatureAlgorithms2 (ctx);
+			case InstrumentationCategory.ServerSignatureAlgorithms:
+				return SelectAlgorithmsAndCiphers (SignatureInstrumentType.ServerSignatureAlgorithm).Select (t => Create (ctx, category, t.Item1, t.Item2, t.Item3));
+
+			case InstrumentationCategory.ClientSignatureAlgorithms2:
+				return ClientSignatureAlgorithmTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.ServerSignatureAlgorithms2:
+				return ServerSignatureAlgorithmTypes.Select (t => Create (ctx, category, t));
 
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
@@ -73,60 +76,51 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 		}
 
-		static IEnumerable<SignatureAndHashAlgorithm> GetSignatureAlgorithms ()
-		{
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa);
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha224, SignatureAlgorithmType.Rsa);
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha384, SignatureAlgorithmType.Rsa);
-			yield return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha512, SignatureAlgorithmType.Rsa);
-		}
+		internal static readonly SignatureAndHashAlgorithm[] AllSignatureAlgorithms = {
+			new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa),
+			new SignatureAndHashAlgorithm (HashAlgorithmType.Sha224, SignatureAlgorithmType.Rsa),
+			new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa),
+			new SignatureAndHashAlgorithm (HashAlgorithmType.Sha384, SignatureAlgorithmType.Rsa),
+			new SignatureAndHashAlgorithm (HashAlgorithmType.Sha512, SignatureAlgorithmType.Rsa),
+		};
 
-		static IEnumerable<SignatureInstrumentParameters> CreateClientSignatureAlgorithms (TestContext ctx)
-		{
-			foreach (var algorithm in GetSignatureAlgorithms ()) {
-				foreach (var cipher in GetCipherSuites ()) {
-					yield return CreateWithClientSignatureAlgorithm (ctx, SignatureInstrumentType.ClientSignatureAlgorithm, algorithm, cipher);
-				}
-			}
-		}
-
-		static IEnumerable<SignatureInstrumentParameters> CreateServerSignatureAlgorithms (TestContext ctx)
-		{
-			foreach (var algorithm in GetSignatureAlgorithms ()) {
-				foreach (var cipher in GetCipherSuites ()) {
-					yield return CreateWithServerSignatureAlgorithm (ctx, SignatureInstrumentType.ServerSignatureAlgorithm, algorithm, cipher);
-				}
-			}
-		}
-
-		static IEnumerable<SignatureInstrumentParameters> CreateServerSignatureAlgorithms2 (TestContext ctx)
-		{
-			yield return Create (ctx, InstrumentationCategory.SignatureAlgorithms, SignatureInstrumentType.ServerChoosesSignatureAlgorithm);
-		}
-
-		static IEnumerable<CipherSuiteCode> GetCipherSuites ()
-		{
+		internal static readonly CipherSuiteCode[] AllCipherSuites = {
 			// Galois-Counter Cipher Suites.
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384;
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256;
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
 
 			// Galois-Counter with Legacy RSA Key Exchange.
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256;
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384;
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256,
+			CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384,
 
 			// Diffie-Hellman Cipher Suites
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256;
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256;
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
-			yield return CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
 
 			// Legacy AES Cipher Suites
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256;
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256;
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA;
-			yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA;
+			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256,
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256,
+			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
+		};
+
+		static IEnumerable<Tuple<SignatureAndHashAlgorithm,CipherSuiteCode>> SelectAlgorithmsAndCiphers ()
+		{
+			return Enumerable.Zip (AllSignatureAlgorithms, AllCipherSuites, (a, c) => Tuple.Create (a, c));
 		}
+
+		static IEnumerable<Tuple<SignatureInstrumentType,SignatureAndHashAlgorithm,CipherSuiteCode>> SelectAlgorithmsAndCiphers (params SignatureInstrumentType[] types)
+		{
+			return Enumerable.Zip (types, SelectAlgorithmsAndCiphers (), (first, second) => Tuple.Create (first, second.Item1, second.Item2));
+		}
+
+		internal static readonly SignatureInstrumentType[] ClientSignatureAlgorithmTypes = {
+		};
+
+		internal static readonly SignatureInstrumentType[] ServerSignatureAlgorithmTypes = {
+		};
 
 		static SignatureInstrumentParameters CreateParameters (InstrumentationCategory category, SignatureInstrumentType type, params object[] args)
 		{
@@ -144,9 +138,11 @@ namespace Mono.Security.NewTls.TestFramework
 			};
 		}
 
-		static SignatureInstrumentParameters CreateWithClientSignatureAlgorithm (TestContext ctx, SignatureInstrumentType type, SignatureAndHashAlgorithm algorithm, CipherSuiteCode cipher)
+		static SignatureInstrumentParameters Create (
+			TestContext ctx, InstrumentationCategory category, SignatureInstrumentType type,
+			SignatureAndHashAlgorithm algorithm, CipherSuiteCode cipher)
 		{
-			var parameters = CreateParameters (InstrumentationCategory.ClientSignatureAlgorithms, type, algorithm.Hash, algorithm.Signature, cipher);
+			var parameters = CreateParameters (category, type, algorithm.Hash, algorithm.Signature, cipher);
 
 			var signatureParameters = new SignatureParameters ();
 			signatureParameters.Add (algorithm);
@@ -157,19 +153,6 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ClientCiphers = new CipherSuiteCode[] { cipher };
 				break;
 
-			default:
-				ctx.AssertFail ("Unsupported signature instrument: '{0}'.", type);
-				break;
-			}
-
-			return parameters;
-		}
-
-		static SignatureInstrumentParameters CreateWithServerSignatureAlgorithm (TestContext ctx, SignatureInstrumentType type, SignatureAndHashAlgorithm algorithm, CipherSuiteCode cipher)
-		{
-			var parameters = CreateParameters (InstrumentationCategory.ServerSignatureAlgorithms, type, algorithm.Hash, algorithm.Signature, cipher);
-
-			switch (type) {
 			case SignatureInstrumentType.ServerSignatureAlgorithm:
 				parameters.ServerSignatureAlgorithm = algorithm;
 				parameters.ServerCiphers = new CipherSuiteCode[] { cipher };
@@ -188,9 +171,6 @@ namespace Mono.Security.NewTls.TestFramework
 			var parameters = CreateParameters (category, type);
 
 			switch (type) {
-			case SignatureInstrumentType.ServerChoosesSignatureAlgorithm:
-				break;
-
 			default:
 				ctx.AssertFail ("Unsupported signature instrument: '{0}'.", type);
 				break;
