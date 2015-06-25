@@ -35,19 +35,27 @@ namespace Mono.Security.NewTls.TestFramework
 
 	public abstract class InstrumentationParameters : MonoClientAndServerParameters
 	{
-		public InstrumentationParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
-		{
+		public InstrumentationCategory Category {
+			get;
+			private set;
 		}
 
-		public InstrumentationParameters (ClientParameters clientParameters, ServerParameters serverParameters)
+		public InstrumentationParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
+			: base (identifier, certificate)
+		{
+			Category = category;
+		}
+
+		public InstrumentationParameters (InstrumentationCategory category, ClientParameters clientParameters, ServerParameters serverParameters)
 			: base (clientParameters, serverParameters)
 		{
+			Category = category;
 		}
 
 		protected InstrumentationParameters (InstrumentationParameters other)
 			: base (other)
 		{
+			Category = other.Category;
 			ClientInstrumentation = other.ClientInstrumentation;
 			ServerInstrumentation = other.ServerInstrumentation;
 		}

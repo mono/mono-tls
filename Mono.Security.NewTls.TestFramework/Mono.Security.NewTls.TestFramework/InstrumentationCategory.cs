@@ -1,5 +1,5 @@
 ﻿//
-// SignatureInstrumentTestRunnerAttribute.cs
+// InstrumentationCategory.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,28 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Xamarin.AsyncTests;
-using Xamarin.AsyncTests.Portable;
-using Xamarin.AsyncTests.Constraints;
-using Xamarin.WebTests.TestRunners;
-using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestFeatures
+namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFramework;
-
-	public class SignatureInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<SignatureInstrumentTestRunner>
+	public enum InstrumentationCategory
 	{
-		public SignatureInstrumentTestRunnerAttribute ()
-			: base (typeof (SignatureInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
-		{
-		}
-
-		public SignatureInstrumentTestRunner CreateInstance (TestContext ctx)
-		{
-			return MonoTestFeatures.CreateTestRunner<SignatureInstrumentParameters,SignatureInstrumentTestRunner> (
-				ctx, (s, c, p, f) => new SignatureInstrumentTestRunner (s, c, p, f));
-		}
+		ClientSignatureAlgorithms,
+		ServerSignatureAlgorithms,
+		SignatureAlgorithms
 	}
 }
 

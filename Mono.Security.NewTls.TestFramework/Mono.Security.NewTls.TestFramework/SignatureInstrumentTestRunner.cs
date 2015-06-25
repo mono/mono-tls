@@ -55,21 +55,6 @@ namespace Mono.Security.NewTls.TestFramework
 			return instrumentation;
 		}
 
-		public static MonoConnectionFlags GetConnectionFlags (TestContext ctx, SignatureInstrumentType type)
-		{
-			switch (type) {
-			case SignatureInstrumentType.ClientSignatureAlgorithm:
-				return MonoConnectionFlags.ClientInstrumentation;
-			case SignatureInstrumentType.ServerSignatureAlgorithm:
-				return MonoConnectionFlags.ServerInstrumentation;
-			case SignatureInstrumentType.ServerChoosesSignatureAlgorithm:
-				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;
-			default:
-				ctx.AssertFail ("Unsupported signature instrument: '{0}'.", type);
-				return MonoConnectionFlags.None;
-			}
-		}
-
 		public static IEnumerable<SignatureInstrumentParameters> GetParameters (TestContext ctx, SignatureInstrumentCategory category)
 		{
 			switch (category) {
@@ -117,7 +102,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		static IEnumerable<SignatureInstrumentParameters> CreateServerSignatureAlgorithms2 (TestContext ctx)
 		{
-			yield return Create (ctx, SignatureInstrumentType.ServerChoosesSignatureAlgorithm);
+			yield return Create (ctx, InstrumentationCategory.SignatureAlgorithms, SignatureInstrumentType.ServerChoosesSignatureAlgorithm);
 		}
 
 		static IEnumerable<CipherSuiteCode> GetCipherSuites ()
@@ -143,7 +128,7 @@ namespace Mono.Security.NewTls.TestFramework
 			yield return CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA;
 		}
 
-		static SignatureInstrumentParameters CreateParameters (SignatureInstrumentType type, params object[] args)
+		static SignatureInstrumentParameters CreateParameters (InstrumentationCategory category, SignatureInstrumentType type, params object[] args)
 		{
 			var sb = new StringBuilder ();
 			sb.Append (type);
@@ -152,7 +137,7 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 			var name = sb.ToString ();
 
-			return new SignatureInstrumentParameters (name, ResourceManager.SelfSignedServerCertificate, type) {
+			return new SignatureInstrumentParameters (category, type, name, ResourceManager.SelfSignedServerCertificate) {
 				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate,
 				ClientCertificate = ResourceManager.MonkeyCertificate, ServerFlags = ServerFlags.RequireClientCertificate,
 				ProtocolVersion = ProtocolVersions.Tls12
@@ -161,7 +146,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		static SignatureInstrumentParameters CreateWithClientSignatureAlgorithm (TestContext ctx, SignatureInstrumentType type, SignatureAndHashAlgorithm algorithm, CipherSuiteCode cipher)
 		{
-			var parameters = CreateParameters (type, algorithm.Hash, algorithm.Signature, cipher);
+			var parameters = CreateParameters (InstrumentationCategory.ClientSignatureAlgorithms, type, algorithm.Hash, algorithm.Signature, cipher);
 
 			var signatureParameters = new SignatureParameters ();
 			signatureParameters.Add (algorithm);
@@ -182,7 +167,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		static SignatureInstrumentParameters CreateWithServerSignatureAlgorithm (TestContext ctx, SignatureInstrumentType type, SignatureAndHashAlgorithm algorithm, CipherSuiteCode cipher)
 		{
-			var parameters = CreateParameters (type, algorithm.Hash, algorithm.Signature, cipher);
+			var parameters = CreateParameters (InstrumentationCategory.ServerSignatureAlgorithms, type, algorithm.Hash, algorithm.Signature, cipher);
 
 			switch (type) {
 			case SignatureInstrumentType.ServerSignatureAlgorithm:
@@ -198,9 +183,9 @@ namespace Mono.Security.NewTls.TestFramework
 			return parameters;
 		}
 
-		static SignatureInstrumentParameters Create (TestContext ctx, SignatureInstrumentType type)
+		static SignatureInstrumentParameters Create (TestContext ctx, InstrumentationCategory category, SignatureInstrumentType type)
 		{
-			var parameters = CreateParameters (type);
+			var parameters = CreateParameters (category, type);
 
 			switch (type) {
 			case SignatureInstrumentType.ServerChoosesSignatureAlgorithm:

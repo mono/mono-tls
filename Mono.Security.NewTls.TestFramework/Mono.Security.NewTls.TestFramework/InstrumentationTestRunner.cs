@@ -65,6 +65,21 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public abstract InstrumentCollection CreateInstrument (TestContext ctx);
 
+		public static MonoConnectionFlags GetConnectionFlags (TestContext ctx, InstrumentationCategory category)
+		{
+			switch (category) {
+			case InstrumentationCategory.ClientSignatureAlgorithms:
+				return MonoConnectionFlags.ClientInstrumentation;
+			case InstrumentationCategory.ServerSignatureAlgorithms:
+				return MonoConnectionFlags.ServerInstrumentation;
+			case InstrumentationCategory.SignatureAlgorithms:
+				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;
+			default:
+				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
+				return MonoConnectionFlags.None;
+			}
+		}
+
 		protected static ICertificateValidator AcceptAnyCertificate {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptAll (); }
 		}
