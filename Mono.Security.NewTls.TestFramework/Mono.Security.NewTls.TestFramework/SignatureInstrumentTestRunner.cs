@@ -136,7 +136,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 			return new SignatureInstrumentParameters (category, type, name, ResourceManager.SelfSignedServerCertificate) {
 				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate,
-				ClientCertificate = ResourceManager.MonkeyCertificate, ServerFlags = ServerFlags.RequireClientCertificate,
 				ProtocolVersion = ProtocolVersions.Tls12
 			};
 		}
@@ -146,6 +145,9 @@ namespace Mono.Security.NewTls.TestFramework
 			SignatureAndHashAlgorithm algorithm, CipherSuiteCode cipher)
 		{
 			var parameters = CreateParameters (category, type, algorithm.Hash, algorithm.Signature, cipher);
+
+			parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
+			parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 
 			var signatureParameters = new SignatureParameters ();
 			signatureParameters.Add (algorithm);
