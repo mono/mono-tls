@@ -68,7 +68,7 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		public async Task TestClient2 (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider (Identifier = "ServerType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType serverType,
+			[ConnectionProvider ("OpenSsl", Identifier = "ServerType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType serverType,
 			[SignatureInstrumentParameters (InstrumentationCategory.ClientSignatureParameters)] SignatureInstrumentParameters parameters,
 			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{

@@ -117,8 +117,9 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		internal static readonly SignatureInstrumentType[] ClientSignatureParameterTypes = {
-			SignatureInstrumentType.VerifyClientSignatureAlgorithms,
-			SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms
+			// SignatureInstrumentType.VerifyClientSignatureAlgorithms,
+			// SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms,
+			SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms
 		};
 
 		internal static readonly SignatureInstrumentType[] ServerSignatureParameterTypes = {
@@ -186,6 +187,11 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms:
+				parameters.ClientSignatureParameters = new SignatureParameters ();
+				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Unknown, SignatureAlgorithmType.Dsa);
+				parameters.ExpectServerAlert = AlertDescription.IlegalParameter;
+				parameters.ClientCertificate = null;
+				parameters.ServerFlags = ServerFlags.None;
 				break;
 
 			default:
