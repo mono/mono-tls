@@ -63,6 +63,14 @@ namespace Mono.Security.NewTls
 			return parameters;
 		}
 
+		public static SignatureParameters Create (params SignatureAndHashAlgorithm[] algorithms)
+		{
+			var parameters = new SignatureParameters ();
+			foreach (var algorithm in algorithms)
+				parameters.Add (algorithm);
+			return parameters;
+		}
+
 		public static SignatureParameters GetDefaultParameters ()
 		{
 			var parameters = new SignatureParameters ();

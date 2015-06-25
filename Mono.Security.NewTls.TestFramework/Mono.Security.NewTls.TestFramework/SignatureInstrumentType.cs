@@ -30,7 +30,11 @@ namespace Mono.Security.NewTls.TestFramework
 	public enum SignatureInstrumentType
 	{
 		ClientSignatureAlgorithmAndCipher,
-		ServerSignatureAlgorithmAndCipher
+		ServerSignatureAlgorithmAndCipher,
+
+		VerifyClientSignatureAlgorithms,
+		ClientProvidesSomeUnsupportedSignatureAlgorithms,
+		ClientProvidesNoSupportedSignatureAlgorithms
 	}
 }
 

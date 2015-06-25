@@ -53,10 +53,15 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public override SignatureParameters GetClientSignatureParameters (ITlsContext ctx)
 		{
-			if (Parameters.ClientSignatureParameters != null)
-				return Parameters.ClientSignatureParameters;
-			else
+			if (ctx.IsServer)
+				throw new InvalidOperationException ();
+
+			var parameters = Parameters.ClientSignatureParameters;
+			if (parameters == null)
 				return base.GetClientSignatureParameters (ctx);
+
+			VerifySignatureParameters (ctx, parameters);
+			return parameters;
 		}
 
 		public override SignatureParameters GetServerSignatureParameters (ITlsContext ctx)

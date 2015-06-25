@@ -105,8 +105,6 @@ namespace Mono.Security.NewTls.Negotiation
 				HandshakeParameters.SupportedCiphers.AddSCSV ();
 
 			Context.Session.SignatureParameters = Context.SignatureProvider.GetClientSignatureParameters (Context);
-			if (Context.Session.SignatureParameters != null)
-				Context.SignatureProvider.VerifySignatureParameters (Context, Context.Session.SignatureParameters);
 		}
 
 		protected override NegotiationHandler GenerateOutput (TlsMultiBuffer outgoing)

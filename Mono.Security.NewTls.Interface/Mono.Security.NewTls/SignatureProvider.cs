@@ -36,7 +36,11 @@ namespace Mono.Security.NewTls
 			if (ctx.IsServer)
 				throw new InvalidOperationException ();
 
-			return ctx.ConfigurationProvider.ClientSignatureParameters;
+			var parameters = ctx.ConfigurationProvider.ClientSignatureParameters;
+			if (parameters != null)
+				VerifySignatureParameters (ctx, parameters);
+
+			return parameters;
 		}
 
 		public virtual SignatureParameters GetServerSignatureParameters (ITlsContext ctx)

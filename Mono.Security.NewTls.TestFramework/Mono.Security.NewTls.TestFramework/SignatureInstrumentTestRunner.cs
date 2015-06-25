@@ -117,6 +117,9 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		internal static readonly SignatureInstrumentType[] ClientSignatureParameterTypes = {
+			SignatureInstrumentType.VerifyClientSignatureAlgorithms,
+			SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms,
+			SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms
 		};
 
 		internal static readonly SignatureInstrumentType[] ServerSignatureParameterTypes = {
@@ -171,6 +174,17 @@ namespace Mono.Security.NewTls.TestFramework
 			var parameters = CreateParameters (category, type);
 
 			switch (type) {
+			case SignatureInstrumentType.VerifyClientSignatureAlgorithms:
+			case SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms:
+				parameters.ClientSignatureParameters = new SignatureParameters ();
+				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Sha1, SignatureAlgorithmType.Dsa);
+				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Unknown, SignatureAlgorithmType.Unknown);
+				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
+				break;
+
+			case SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms:
+				break;
+
 			default:
 				ctx.AssertFail ("Unsupported signature instrument: '{0}'.", type);
 				break;
