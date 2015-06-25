@@ -59,16 +59,16 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			switch (category) {
 			case InstrumentationCategory.AllClientSignatureAlgorithms:
-				return SelectAlgorithmsAndCiphers (SignatureInstrumentType.ClientSignatureAlgorithm).Select (t => Create (ctx, category, t.Item1, t.Item2, t.Item3));
+				return SelectAlgorithmsAndCiphers (SignatureInstrumentType.ClientSignatureAlgorithmAndCipher).Select (t => Create (ctx, category, t.Item1, t.Item2, t.Item3));
 
 			case InstrumentationCategory.AllServerSignatureAlgorithms:
-				return SelectAlgorithmsAndCiphers (SignatureInstrumentType.ServerSignatureAlgorithm).Select (t => Create (ctx, category, t.Item1, t.Item2, t.Item3));
+				return SelectAlgorithmsAndCiphers (SignatureInstrumentType.ServerSignatureAlgorithmAndCipher).Select (t => Create (ctx, category, t.Item1, t.Item2, t.Item3));
 
 			case InstrumentationCategory.ClientSignatureParameters:
-				return ClientSignatureAlgorithmTypes.Select (t => Create (ctx, category, t));
+				return ClientSignatureParameterTypes.Select (t => Create (ctx, category, t));
 
 			case InstrumentationCategory.ServerSignatureParameters:
-				return ServerSignatureAlgorithmTypes.Select (t => Create (ctx, category, t));
+				return ServerSignatureParameterTypes.Select (t => Create (ctx, category, t));
 
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
@@ -116,10 +116,10 @@ namespace Mono.Security.NewTls.TestFramework
 			return Enumerable.Zip (types, SelectAlgorithmsAndCiphers (), (first, second) => Tuple.Create (first, second.Item1, second.Item2));
 		}
 
-		internal static readonly SignatureInstrumentType[] ClientSignatureAlgorithmTypes = {
+		internal static readonly SignatureInstrumentType[] ClientSignatureParameterTypes = {
 		};
 
-		internal static readonly SignatureInstrumentType[] ServerSignatureAlgorithmTypes = {
+		internal static readonly SignatureInstrumentType[] ServerSignatureParameterTypes = {
 		};
 
 		static SignatureInstrumentParameters CreateParameters (InstrumentationCategory category, SignatureInstrumentType type, params object[] args)
@@ -148,12 +148,12 @@ namespace Mono.Security.NewTls.TestFramework
 			signatureParameters.Add (algorithm);
 
 			switch (type) {
-			case SignatureInstrumentType.ClientSignatureAlgorithm:
+			case SignatureInstrumentType.ClientSignatureAlgorithmAndCipher:
 				parameters.ClientSignatureParameters = signatureParameters;
 				parameters.ClientCiphers = new CipherSuiteCode[] { cipher };
 				break;
 
-			case SignatureInstrumentType.ServerSignatureAlgorithm:
+			case SignatureInstrumentType.ServerSignatureAlgorithmAndCipher:
 				parameters.ServerSignatureAlgorithm = algorithm;
 				parameters.ServerCiphers = new CipherSuiteCode[] { cipher };
 				break;

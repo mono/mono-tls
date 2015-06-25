@@ -29,8 +29,8 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public enum SignatureInstrumentType
 	{
-		ClientSignatureAlgorithm,
-		ServerSignatureAlgorithm
+		ClientSignatureAlgorithmAndCipher,
+		ServerSignatureAlgorithmAndCipher
 	}
 }
 
