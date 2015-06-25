@@ -49,11 +49,13 @@ namespace Mono.Security.NewTls.TestFramework
 		public SignatureInstrumentParameters (SignatureInstrumentType type, ClientParameters clientParameters, ServerParameters serverParameters)
 			: base (clientParameters, serverParameters)
 		{
+			Type = type;
 		}
 
 		protected SignatureInstrumentParameters (SignatureInstrumentParameters other)
 			: base (other)
 		{
+			Type = other.Type;
 			ClientSignatureParameters = other.ClientSignatureParameters;
 			ServerSignatureParameters = other.ServerSignatureParameters;
 			ClientSignatureAlgorithm = other.ClientSignatureAlgorithm;

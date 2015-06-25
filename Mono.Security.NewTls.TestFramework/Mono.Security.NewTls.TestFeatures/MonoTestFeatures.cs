@@ -307,6 +307,15 @@ namespace Mono.Security.NewTls.TestFeatures
 			where P : ClientAndServerParameters
 			where R : ClientAndServerTestRunner
 		{
+			var parameters = ctx.GetParameter<P> ();
+
+			return CreateTestRunner (ctx, parameters, flags, constructor);
+		}
+
+		public static R CreateTestRunner<P,R> (TestContext ctx, P parameters, MonoConnectionFlags flags, Func<IServer,IClient,P,MonoConnectionFlags,R> constructor)
+			where P : ClientAndServerParameters
+			where R : ClientAndServerTestRunner
+		{
 			var clientProviderType = GetClientType (ctx);
 			MonoConnectionProvider monoClientProvider;
 			ConnectionProvider clientProvider;
@@ -336,8 +345,6 @@ namespace Mono.Security.NewTls.TestFeatures
 				serverProvider = Factory.GetProvider (serverProviderType);
 				monoServerProvider = null;
 			}
-
-			var parameters = ctx.GetParameter<P> ();
 
 			ProtocolVersions protocolVersion;
 			if (ctx.TryGetParameter<ProtocolVersions> (out protocolVersion))

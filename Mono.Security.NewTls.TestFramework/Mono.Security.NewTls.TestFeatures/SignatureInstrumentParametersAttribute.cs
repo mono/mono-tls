@@ -38,12 +38,12 @@ namespace Mono.Security.NewTls.TestFeatures
 
 	public class SignatureInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<SignatureInstrumentParameters>
 	{
-		public InstrumentationTestCategory Category {
+		public SignatureInstrumentCategory Category {
 			get;
 			private set;
 		}
 
-		public SignatureInstrumentParametersAttribute (InstrumentationTestCategory category, string filter = null)
+		public SignatureInstrumentParametersAttribute (SignatureInstrumentCategory category, string filter = null)
 			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
 			Category = category;

@@ -36,21 +36,18 @@ namespace Mono.Security.NewTls.TestFeatures
 
 	public class SignatureInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<SignatureInstrumentTestRunner>
 	{
-		public SignatureInstrumentTestRunnerAttribute (MonoConnectionFlags flags = MonoConnectionFlags.Default)
+		public SignatureInstrumentTestRunnerAttribute ()
 			: base (typeof (SignatureInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
 		{
-			ConnectionFlags = flags;
-		}
-
-		public MonoConnectionFlags ConnectionFlags {
-			get;
-			private set;
 		}
 
 		public SignatureInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return MonoTestFeatures.CreateTestRunner<SignatureInstrumentParameters,SignatureInstrumentTestRunner> (
-				ctx, ConnectionFlags, (s, c, p, f) => new SignatureInstrumentTestRunner (s, c, p, f));
+			var parameters = ctx.GetParameter<SignatureInstrumentParameters> ();
+			var flags = SignatureInstrumentTestRunner.GetConnectionFlags (ctx, parameters.Type);
+
+			return MonoTestFeatures.CreateTestRunner (
+				ctx, parameters, flags, (s, c, p, f) => new SignatureInstrumentTestRunner (s, c, p, f));
 		}
 	}
 }

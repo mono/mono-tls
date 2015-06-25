@@ -55,16 +55,31 @@ namespace Mono.Security.NewTls.TestFramework
 			return instrumentation;
 		}
 
-		public static IEnumerable<SignatureInstrumentParameters> GetParameters (TestContext ctx, InstrumentationTestCategory category)
+		public static MonoConnectionFlags GetConnectionFlags (TestContext ctx, SignatureInstrumentType type)
+		{
+			switch (type) {
+			case SignatureInstrumentType.ClientSignatureAlgorithm:
+				return MonoConnectionFlags.ClientInstrumentation;
+			case SignatureInstrumentType.ServerSignatureAlgorithm:
+				return MonoConnectionFlags.ServerInstrumentation;
+			case SignatureInstrumentType.ServerChoosesSignatureAlgorithm:
+				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;
+			default:
+				ctx.AssertFail ("Unsupported signature instrument: '{0}'.", type);
+				return MonoConnectionFlags.None;
+			}
+		}
+
+		public static IEnumerable<SignatureInstrumentParameters> GetParameters (TestContext ctx, SignatureInstrumentCategory category)
 		{
 			switch (category) {
-			case InstrumentationTestCategory.ClientSignatureAlgorithms:
+			case SignatureInstrumentCategory.ClientSignatureAlgorithms:
 				return CreateClientSignatureAlgorithms (ctx);
 				
-			case InstrumentationTestCategory.ServerSignatureAlgorithms:
+			case SignatureInstrumentCategory.ServerSignatureAlgorithms:
 				return CreateServerSignatureAlgorithms (ctx);
 
-			case InstrumentationTestCategory.ServerSignatureAlgorithms2:
+			case SignatureInstrumentCategory.ServerSignatureAlgorithms2:
 				return CreateServerSignatureAlgorithms2 (ctx);
 
 			default:
