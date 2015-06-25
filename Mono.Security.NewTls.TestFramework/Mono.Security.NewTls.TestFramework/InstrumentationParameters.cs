@@ -56,8 +56,6 @@ namespace Mono.Security.NewTls.TestFramework
 			: base (other)
 		{
 			Category = other.Category;
-			ClientInstrumentation = other.ClientInstrumentation;
-			ServerInstrumentation = other.ServerInstrumentation;
 		}
 	}
 }

@@ -29,8 +29,6 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using Instrumentation;
-
 	public class MonoClientParameters : ClientParameters
 	{
 		public MonoClientParameters (string identifier)
@@ -44,7 +42,6 @@ namespace Mono.Security.NewTls.TestFramework
 			if (other.ClientCiphers != null)
 				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
 			ExpectedCipher = other.ExpectedCipher;
-			Instrumentation = other.Instrumentation;
 		}
 
 		public override ConnectionParameters DeepClone ()
@@ -57,10 +54,6 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public InstrumentCollection Instrumentation {
 			get; set;
 		}
 	}

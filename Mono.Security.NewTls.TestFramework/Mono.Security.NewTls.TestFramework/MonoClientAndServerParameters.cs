@@ -92,16 +92,6 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return MonoServerParameters.ExpectedCipher; }
 			set { MonoServerParameters.ExpectedCipher = value; }
 		}
-
-		public InstrumentCollection ClientInstrumentation {
-			get { return MonoClientParameters.Instrumentation; }
-			set { MonoClientParameters.Instrumentation = value; }
-		}
-
-		public InstrumentCollection ServerInstrumentation {
-			get { return MonoServerParameters.Instrumentation; }
-			set { MonoServerParameters.Instrumentation = value; }
-		}
 	}
 }
 
