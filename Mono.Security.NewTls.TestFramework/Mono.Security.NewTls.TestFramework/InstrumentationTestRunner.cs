@@ -69,6 +69,8 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptAll (); }
 		}
 
+		#if FIXME
+
 		static IEnumerable<InstrumentationType> GetClientAndServerTypes ()
 		{
 			yield return InstrumentationType.CloseServerConnection;
@@ -120,6 +122,8 @@ namespace Mono.Security.NewTls.TestFramework
 
 			return parameters;
 		}
+
+		#endif
 
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{

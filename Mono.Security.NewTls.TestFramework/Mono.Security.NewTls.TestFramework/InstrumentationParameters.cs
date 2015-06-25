@@ -33,36 +33,23 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	using Instrumentation;
 
-	public class InstrumentationParameters : MonoClientAndServerParameters
+	public abstract class InstrumentationParameters : MonoClientAndServerParameters
 	{
-		public InstrumentationType Type {
-			get;
-			private set;
-		}
-
-		public InstrumentationParameters (string identifier, IServerCertificate certificate, InstrumentationType type)
-			: base (identifier, new MonoClientParameters (identifier), new MonoServerParameters (identifier, certificate))
+		public InstrumentationParameters (string identifier, IServerCertificate certificate)
+			: base (identifier, certificate)
 		{
-			Type = type;
 		}
 
-		public InstrumentationParameters (InstrumentationType type, ClientParameters clientParameters, ServerParameters serverParameters)
+		public InstrumentationParameters (ClientParameters clientParameters, ServerParameters serverParameters)
 			: base (clientParameters, serverParameters)
 		{
-			Type = type;
 		}
 
 		protected InstrumentationParameters (InstrumentationParameters other)
 			: base (other)
 		{
-			Type = other.Type;
 			ClientInstrumentation = other.ClientInstrumentation;
 			ServerInstrumentation = other.ServerInstrumentation;
-		}
-
-		public override ConnectionParameters DeepClone ()
-		{
-			return new InstrumentationParameters (this);
 		}
 	}
 }

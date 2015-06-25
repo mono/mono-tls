@@ -35,13 +35,19 @@ namespace Mono.Security.NewTls.TestFramework
 
 	public class SignatureInstrumentParameters : InstrumentationParameters
 	{
-		public SignatureInstrumentParameters (string identifier, IServerCertificate certificate, InstrumentationType type)
-			: base (identifier, certificate, type)
-		{
+		public SignatureInstrumentType Type {
+			get;
+			private set;
 		}
 
-		public SignatureInstrumentParameters (InstrumentationType type, ClientParameters clientParameters, ServerParameters serverParameters)
-			: base (type, clientParameters, serverParameters)
+		public SignatureInstrumentParameters (string identifier, IServerCertificate certificate, SignatureInstrumentType type)
+			: base (identifier, certificate)
+		{
+			Type = type;
+		}
+
+		public SignatureInstrumentParameters (SignatureInstrumentType type, ClientParameters clientParameters, ServerParameters serverParameters)
+			: base (clientParameters, serverParameters)
 		{
 		}
 

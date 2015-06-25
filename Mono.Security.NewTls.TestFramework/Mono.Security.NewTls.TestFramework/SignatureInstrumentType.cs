@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationType.cs
+// SignatureInstrumentType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,11 +27,11 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum InstrumentationType
+	public enum SignatureInstrumentType
 	{
-		None,
-		DisableRenegotiation,
-		CloseServerConnection
+		ClientSignatureAlgorithm,
+		ServerSignatureAlgorithm,
+		ServerChoosesSignatureAlgorithm
 	}
 }
 
