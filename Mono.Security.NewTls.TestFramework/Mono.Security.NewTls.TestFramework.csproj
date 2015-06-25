@@ -71,7 +71,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionFlags.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\SignatureInstrumentTestRunnerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentType.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentCategory.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationCategory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
