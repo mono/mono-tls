@@ -29,10 +29,12 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public enum InstrumentationCategory
 	{
-		ClientSignatureAlgorithms,
-		ServerSignatureAlgorithms,
-		ClientSignatureAlgorithms2,
-		ServerSignatureAlgorithms2,
+		AllClientSignatureAlgorithms,
+		AllServerSignatureAlgorithms,
+
+		ClientSignatureParameters,
+		ServerSignatureParameters,
+
 		SignatureAlgorithms
 	}
 }

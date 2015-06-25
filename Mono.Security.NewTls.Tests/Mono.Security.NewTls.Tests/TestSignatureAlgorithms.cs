@@ -49,7 +49,7 @@ namespace Mono.Security.NewTls.Tests
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider (Identifier = "ServerType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType serverType,
-			[SignatureInstrumentParameters (InstrumentationCategory.ClientSignatureAlgorithms)] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentParameters (InstrumentationCategory.AllClientSignatureAlgorithms)] SignatureInstrumentParameters parameters,
 			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
@@ -59,7 +59,7 @@ namespace Mono.Security.NewTls.Tests
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider (Identifier = "ClientType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType clientType,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[SignatureInstrumentParameters (InstrumentationCategory.ServerSignatureAlgorithms)] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentParameters (InstrumentationCategory.AllServerSignatureAlgorithms)] SignatureInstrumentParameters parameters,
 			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);

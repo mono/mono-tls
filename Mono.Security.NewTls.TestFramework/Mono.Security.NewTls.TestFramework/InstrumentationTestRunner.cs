@@ -68,11 +68,11 @@ namespace Mono.Security.NewTls.TestFramework
 		public static MonoConnectionFlags GetConnectionFlags (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
-			case InstrumentationCategory.ClientSignatureAlgorithms:
-			case InstrumentationCategory.ClientSignatureAlgorithms2:
+			case InstrumentationCategory.AllClientSignatureAlgorithms:
+			case InstrumentationCategory.ClientSignatureParameters:
 				return MonoConnectionFlags.ClientInstrumentation;
-			case InstrumentationCategory.ServerSignatureAlgorithms:
-			case InstrumentationCategory.ServerSignatureAlgorithms2:
+			case InstrumentationCategory.AllServerSignatureAlgorithms:
+			case InstrumentationCategory.ServerSignatureParameters:
 				return MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.SignatureAlgorithms:
 				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;

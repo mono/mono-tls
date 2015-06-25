@@ -58,16 +58,16 @@ namespace Mono.Security.NewTls.TestFramework
 		public static IEnumerable<SignatureInstrumentParameters> GetParameters (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
-			case InstrumentationCategory.ClientSignatureAlgorithms:
+			case InstrumentationCategory.AllClientSignatureAlgorithms:
 				return SelectAlgorithmsAndCiphers (SignatureInstrumentType.ClientSignatureAlgorithm).Select (t => Create (ctx, category, t.Item1, t.Item2, t.Item3));
 
-			case InstrumentationCategory.ServerSignatureAlgorithms:
+			case InstrumentationCategory.AllServerSignatureAlgorithms:
 				return SelectAlgorithmsAndCiphers (SignatureInstrumentType.ServerSignatureAlgorithm).Select (t => Create (ctx, category, t.Item1, t.Item2, t.Item3));
 
-			case InstrumentationCategory.ClientSignatureAlgorithms2:
+			case InstrumentationCategory.ClientSignatureParameters:
 				return ClientSignatureAlgorithmTypes.Select (t => Create (ctx, category, t));
 
-			case InstrumentationCategory.ServerSignatureAlgorithms2:
+			case InstrumentationCategory.ServerSignatureParameters:
 				return ServerSignatureAlgorithmTypes.Select (t => Create (ctx, category, t));
 
 			default:
