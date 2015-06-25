@@ -192,9 +192,8 @@ namespace Mono.Security.NewTls.TestFramework
 			case SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms:
 				parameters.ClientSignatureParameters = new SignatureParameters ();
 				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Unknown, SignatureAlgorithmType.Dsa);
-				parameters.ExpectServerAlert = AlertDescription.IlegalParameter;
-				parameters.ClientCertificate = null;
-				parameters.ServerFlags = ServerFlags.None;
+				parameters.ExpectServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1);
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
 				break;
 
 			default:

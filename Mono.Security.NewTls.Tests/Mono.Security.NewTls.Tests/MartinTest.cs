@@ -99,7 +99,8 @@ namespace Mono.Security.NewTls.Tests
 		public async Task TestPuppy (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider ("Manual", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[SignatureInstrumentParameters (InstrumentationCategory.AllServerSignatureAlgorithms)] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentParameters (InstrumentationCategory.ClientSignatureParameters, SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms)]
+			SignatureInstrumentParameters parameters,
 			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
