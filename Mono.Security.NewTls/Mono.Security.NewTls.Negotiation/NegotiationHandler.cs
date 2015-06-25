@@ -57,6 +57,10 @@ namespace Mono.Security.NewTls.Negotiation
 
 		bool hasPendingOutput;
 
+		public abstract bool CanSendAlert {
+			get;
+		}
+
 		protected abstract bool VerifyMessage (HandshakeType type);
 
 		protected abstract MessageStatus HandleMessage (Message message);

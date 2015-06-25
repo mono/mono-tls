@@ -27,6 +27,10 @@ namespace Mono.Security.NewTls.Negotiation
 		TlsClientHello hello;
 		bool askedForCertificate;
 
+		public override bool CanSendAlert {
+			get { return true; }
+		}
+
 		protected override bool VerifyMessage (HandshakeType type)
 		{
 			switch (type) {

@@ -14,6 +14,10 @@ namespace Mono.Security.NewTls.Negotiation
 		TlsChangeCipherSpec changeCipher;
 		TlsFinished finished;
 
+		public override bool CanSendAlert {
+			get { return true; }
+		}
+
 		protected override bool VerifyMessage (HandshakeType type)
 		{
 			switch (type) {

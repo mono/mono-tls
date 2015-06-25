@@ -288,8 +288,10 @@ namespace Mono.Security.NewTls
 				return _GenerateNextToken (incoming, outgoing);
 			} catch (TlsException ex) {
 				LastError = ex;
-				var alert = CreateAlert (ex.Alert);
-				outgoing.Add (alert);
+				if (negotiationHandler != null && negotiationHandler.CanSendAlert) {
+					var alert = CreateAlert (ex.Alert);
+					outgoing.Add (alert);
+				}
 				Clear ();
 				return SecurityStatus.ContextExpired;
 			} catch {

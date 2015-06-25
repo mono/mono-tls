@@ -14,6 +14,8 @@ namespace Mono.Security.NewTls.Negotiation
 			private set;
 		}
 
+		bool canSendAlert;
+
 		public ClientConnection (TlsContext context, bool renegotiating)
 			: base (context, renegotiating ? NegotiationState.RenegotiatingClientConnection : NegotiationState.InitialClientConnection)
 		{
@@ -23,6 +25,10 @@ namespace Mono.Security.NewTls.Negotiation
 		protected override bool VerifyMessage (HandshakeType type)
 		{
 			return type == HandshakeType.HelloRequest;
+		}
+
+		public override bool CanSendAlert {
+			get { return canSendAlert; }
 		}
 
 		protected override bool HasPendingOutput {
@@ -114,6 +120,8 @@ namespace Mono.Security.NewTls.Negotiation
 			Resolve ();
 
 			outgoing.Add (Context.EncodeHandshakeRecord (GenerateClientHello ()));
+			canSendAlert = true;
+
 			return Context.CreateNegotiationHandler (NegotiationState.ServerHello);
 		}
 	}

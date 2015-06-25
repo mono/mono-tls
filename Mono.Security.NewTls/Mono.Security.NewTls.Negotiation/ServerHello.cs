@@ -23,6 +23,10 @@ namespace Mono.Security.NewTls.Negotiation
 		TlsServerHelloDone done;
 		bool askedForCertificate;
 
+		public override bool CanSendAlert {
+			get { return true; }
+		}
+
 		bool UsingServerKeyExchange {
 			get { return PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.DiffieHellman; }
 		}
