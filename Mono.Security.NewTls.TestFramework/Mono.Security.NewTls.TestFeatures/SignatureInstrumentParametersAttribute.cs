@@ -43,10 +43,21 @@ namespace Mono.Security.NewTls.TestFeatures
 			private set;
 		}
 
+		public SignatureInstrumentType? Type {
+			get; set;
+		}
+
 		public SignatureInstrumentParametersAttribute (InstrumentationCategory category, string filter = null)
 			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
 			Category = category;
+		}
+
+		public SignatureInstrumentParametersAttribute (InstrumentationCategory category, SignatureInstrumentType type)
+			: base (null, TestFlags.Browsable | TestFlags.ContinueOnError)
+		{
+			Category = category;
+			Type = type;
 		}
 
 		public IEnumerable<SignatureInstrumentParameters> GetParameters (TestContext ctx, string filter)
@@ -54,7 +65,11 @@ namespace Mono.Security.NewTls.TestFeatures
 			if (filter != null)
 				throw new NotImplementedException ();
 
-			return SignatureInstrumentTestRunner.GetParameters (ctx, Category);
+			var parameters = SignatureInstrumentTestRunner.GetParameters (ctx, Category);
+			if (Type != null)
+				return parameters.Where (p => p.Type == Type);
+
+			return parameters;
 		}
 	}
 }
