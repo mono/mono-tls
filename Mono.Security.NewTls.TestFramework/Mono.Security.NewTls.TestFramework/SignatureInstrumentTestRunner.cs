@@ -117,6 +117,7 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		internal static readonly SignatureInstrumentType[] ClientSignatureParameterTypes = {
+			SignatureInstrumentType.NoClientSignatureAlgorithms,
 			SignatureInstrumentType.VerifyClientSignatureAlgorithms,
 			SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms,
 			SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms
@@ -176,6 +177,11 @@ namespace Mono.Security.NewTls.TestFramework
 			var parameters = CreateParameters (category, type);
 
 			switch (type) {
+			case SignatureInstrumentType.NoClientSignatureAlgorithms:
+				parameters.ExpectServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1);
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				break;
+
 			case SignatureInstrumentType.VerifyClientSignatureAlgorithms:
 				parameters.ExpectClientAlert = AlertDescription.IlegalParameter;
 				parameters.ServerFlags |= ServerFlags.ClientAbortsHandshake;

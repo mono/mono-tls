@@ -32,6 +32,7 @@ namespace Mono.Security.NewTls.TestFramework
 		ClientSignatureAlgorithmAndCipher,
 		ServerSignatureAlgorithmAndCipher,
 
+		NoClientSignatureAlgorithms,
 		VerifyClientSignatureAlgorithms,
 		ClientProvidesSomeUnsupportedSignatureAlgorithms,
 		ClientProvidesNoSupportedSignatureAlgorithms
