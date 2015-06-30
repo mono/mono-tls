@@ -18,7 +18,9 @@ namespace Mono.Security.NewTls.Cipher
 		SecureBuffer serverWriteKey;
 		SecureBuffer clientWriteIV;
 		SecureBuffer serverWriteIV;
-		SecureBuffer certificateSignature;
+		#if INSIDE_MONO_NEWTLS
+		Signature certificateSignature;
+		#endif
 		ulong writeSequenceNumber;
 		ulong readSequenceNumber;
 		TlsProtocolCode protocol;
@@ -97,14 +99,12 @@ namespace Mono.Security.NewTls.Cipher
 			get; set;
 		}
 
-		public SecureBuffer CertificateSignature {
+		#if INSIDE_MONO_NEWTLS
+		internal Signature CertificateSignature {
 			get { return certificateSignature; }
 			set { certificateSignature = Add (value); }
 		}
-
-		public SignatureAndHashAlgorithm CertificateSignatureType {
-			get; set;
-		}
+		#endif
 
 		void RequireFixedIV ()
 		{

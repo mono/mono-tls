@@ -50,7 +50,7 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var endpoint = GetEndPoint ();
 			if (Parameters.ClientCertificate != null)
-				openssl.SetCertificate (CertificateProvider.GetCertificate (Parameters.ClientCertificate).GetRawCertData ());
+				openssl.SetCertificate (Parameters.ClientCertificate.Data, Parameters.ClientCertificate.Password);
 
 			if (MonoParameters != null) {
 				if (MonoParameters.ClientCiphers != null)

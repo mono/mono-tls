@@ -25,16 +25,62 @@
 // THE SOFTWARE.
 using System;
 using System.Security.Cryptography;
+using Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
 	abstract class Signature : DisposeContext
 	{
+		public abstract TlsProtocolCode Protocol {
+			get;
+		}
+
+		public abstract HashAlgorithmType HashAlgorithm {
+			get;
+		}
+
 		public abstract void Write (TlsStream stream);
 
-		public abstract void Create (SecureBuffer data, AsymmetricAlgorithm key);
+		public void Create (SecureBuffer data, AsymmetricAlgorithm key)
+		{
+			var hash = CreateHash (HashAlgorithm, data);
+			Create (hash, key);
+		}
 
-		public abstract bool Verify (SecureBuffer data, AsymmetricAlgorithm key);
+		public bool Verify (SecureBuffer data, AsymmetricAlgorithm key)
+		{
+			var hash = CreateHash (HashAlgorithm, data);
+			return Verify (hash, key);
+		}
+
+		public abstract void Create (byte[] hash, AsymmetricAlgorithm key);
+
+		public abstract bool Verify (byte[] hash, AsymmetricAlgorithm key);
+
+		static byte[] CreateHash (HashAlgorithmType type, SecureBuffer data)
+		{
+			if (!HashAlgorithmProvider.IsAlgorithmSupported (type))
+				throw new TlsException (AlertDescription.IlegalParameter);
+			using (var d = new DisposeContext ()) {
+				var algorithm = d.Add (HashAlgorithmProvider.CreateAlgorithm (type));
+				algorithm.TransformBlock (data.Buffer, 0, data.Size);
+				return algorithm.GetRunningHash ();
+			}
+		}
+
+		public static Signature Read (TlsProtocolCode protocol, TlsBuffer incoming)
+		{
+			switch (protocol) {
+			case TlsProtocolCode.Tls10:
+				return new SignatureTls10 (incoming);
+			case TlsProtocolCode.Tls11:
+				return new SignatureTls11 (incoming);
+			case TlsProtocolCode.Tls12:
+				return new SignatureTls12 (incoming);
+			default:
+				throw new NotSupportedException ();
+			}
+		}
 	}
 }
 

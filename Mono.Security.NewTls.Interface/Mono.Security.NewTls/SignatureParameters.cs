@@ -71,10 +71,17 @@ namespace Mono.Security.NewTls
 			return parameters;
 		}
 
-		public static SignatureParameters GetDefaultParameters ()
+		public static SignatureParameters GetDefaultClientParameters ()
 		{
 			var parameters = new SignatureParameters ();
 			parameters.EnsureDefaultValues ();
+			return parameters;
+		}
+
+		public static SignatureParameters GetDefaultServerParameters ()
+		{
+			var parameters = new SignatureParameters ();
+			parameters.Add (HashAlgorithmType.Sha1);
 			return parameters;
 		}
 

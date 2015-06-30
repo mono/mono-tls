@@ -41,7 +41,9 @@ namespace Mono.Security.NewTls.TestFeatures
 		SelectCiphersTls11,
 		SelectCiphersTls12,
 
-		RequestClientCertificate
+		RequestClientCertificate,
+		RequireClientCertificateRSA,
+		RequireClientCertificateDHE,
 	}
 }
 

@@ -65,7 +65,7 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		[AsyncTest]
+		// [AsyncTest]
 		public async Task TestClient2 (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider ("OpenSsl", Identifier = "ServerType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType serverType,
@@ -76,10 +76,20 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		// [AsyncTest]
-		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+		public async Task TestClient3 (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
+			[ConnectionProvider (Identifier = "ServerType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType serverType,
+			[SignatureInstrumentParameters (InstrumentationCategory.ClientSignatureParameters)] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		public async Task TestServer2 (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("OpenSsl", Identifier = "ClientType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType clientType,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[SignatureInstrumentParameters (InstrumentationCategory.AllServerSignatureAlgorithms)] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentParameters (InstrumentationCategory.ServerSignatureParameters)] SignatureInstrumentParameters parameters,
 			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
@@ -97,9 +107,9 @@ namespace Mono.Security.NewTls.Tests
 
 		// [AsyncTest]
 		public async Task TestPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider ("Manual", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[SignatureInstrumentParameters (InstrumentationCategory.ClientSignatureParameters, SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms)]
+			[ConnectionProvider ("Manual", Identifier = "ClientType")] ConnectionProviderType clientType,
+			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
+			[SignatureInstrumentParameters (InstrumentationCategory.ServerSignatureParameters, SignatureInstrumentType.ServerRequiresCertificate)]
 			SignatureInstrumentParameters parameters,
 			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{

@@ -18,6 +18,7 @@ namespace Mono.Security.NewTls
 		SecureBuffer serverVerifyData;
 		bool hasSignatureParameters;
 		SignatureParameters signatureParameters;
+		SignatureAndHashAlgorithm? serverSignatureAlgorithm;
 
 		public TlsConfiguration Configuration {
 			get;
@@ -80,6 +81,19 @@ namespace Mono.Security.NewTls
 			}
 		}
 
+		internal SignatureAndHashAlgorithm ServerSignatureAlgorithm {
+			get {
+				if (!hasSignatureParameters || serverSignatureAlgorithm == null)
+					throw new InvalidOperationException ();
+				return serverSignatureAlgorithm.Value;
+			}
+			set {
+				if (!hasSignatureParameters)
+					throw new InvalidOperationException ();
+				serverSignatureAlgorithm = value;
+			}
+		}
+
 		internal RandomNumberGenerator RandomNumberGenerator {
 			get { return rng; }
 			set {
@@ -110,6 +124,7 @@ namespace Mono.Security.NewTls
 			PendingWrite = false;
 			signatureParameters = null;
 			hasSignatureParameters = false;
+			serverSignatureAlgorithm = null;
 		}
 	}
 }

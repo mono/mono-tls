@@ -47,25 +47,13 @@ namespace Mono.Security.NewTls
 		}
 
 		public ClientCertificateParameters ClientCertificateParameters {
-			get {
-				if (clientCertParams == null)
-					clientCertParams = new ClientCertificateParameters ();
-				return clientCertParams;
-			}
-			set {
-				clientCertParams = value;
-			}
+			get { return clientCertParams; }
+			set { clientCertParams = value; }
 		}
 
 		public SignatureParameters SignatureParameters {
-			get {
-				if (signatureParameters == null)
-					signatureParameters = new SignatureParameters ();
-				return signatureParameters;
-			}
-			set {
-				signatureParameters = value;
-			}
+			get { return signatureParameters; }
+			set { signatureParameters = value; }
 		}
 
 		public bool MartinHack_TriggerRenegotiationOnFinish {

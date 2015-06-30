@@ -45,6 +45,7 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class TestSignatureAlgorithms
 	{
+		#if FIXME
 		[AsyncTest]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
@@ -64,6 +65,39 @@ namespace Mono.Security.NewTls.Tests
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
+		#endif
+
+		[AsyncTest]
+		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
+			[ConnectionProvider ("OpenSsl", Identifier = "ServerType")] ConnectionProviderType serverType,
+			[SignatureInstrumentParameters (InstrumentationCategory.AllClientSignatureAlgorithms)] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		public async Task TestClient2 (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
+			[ConnectionProvider ("OpenSsl", Identifier = "ServerType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType serverType,
+			[SignatureInstrumentParameters (InstrumentationCategory.ClientSignatureParameters)] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
+			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
+			[SignatureInstrumentParameters (InstrumentationCategory.AllServerSignatureAlgorithms)] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+
 	}
 }
 

@@ -54,7 +54,7 @@ namespace Mono.Security.NewTls.Handshake
 			case HandshakeType.CertificateRequest:
 				return new TlsCertificateRequest (context.NegotiatedProtocol, incoming);
 			case HandshakeType.CertificateVerify:
-				return new TlsCertificateVerify (incoming);
+				return new TlsCertificateVerify (context.NegotiatedProtocol, incoming);
 			case HandshakeType.ServerKeyExchange:
 				return new TlsServerKeyExchange (context, incoming);
 			default:

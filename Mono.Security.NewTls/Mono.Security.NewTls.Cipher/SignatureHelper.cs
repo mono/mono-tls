@@ -10,46 +10,28 @@ namespace Mono.Security.NewTls.Cipher
 
 	internal static class SignatureHelper
 	{
-		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, SecureBuffer data, AsymmetricAlgorithm key)
+		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, byte[] hash, AsymmetricAlgorithm key)
 		{
-			if (!IsAlgorithmSupported (type))
+			if (type.Signature != SignatureAlgorithmType.Rsa)
 				throw new TlsException (AlertDescription.IlegalParameter);
-			using (var d = new DisposeContext ()) {
-				var algorithm = d.Add (MSC.HashAlgorithmProvider.CreateAlgorithm (type.Hash));
-				algorithm.TransformBlock (data.Buffer, 0, data.Size);
-				return CreateSignature (type, algorithm, d.Add (algorithm.GetRunningHash ()), key);
-			}
+			return CreateSignature (type.Hash, hash, key);
 		}
 
-		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, IHashAlgorithm hash, SecureBuffer hashData, AsymmetricAlgorithm key)
+		public static SecureBuffer CreateSignature (HashAlgorithmType type, byte[] hash, AsymmetricAlgorithm key)
 		{
-			if (type.Hash != hash.Algorithm)
-				throw new TlsException (AlertDescription.IlegalParameter);
-			if (type.Signature == SignatureAlgorithmType.Rsa)
-				return new SecureBuffer (MSC.PKCS1.Sign_v15 ((RSA)key, hash, hashData.Buffer));
-			else
-				throw new NotSupportedException ();
+			return new SecureBuffer (MSC.PKCS1.Sign_v15 ((RSA)key, type, hash));
 		}
 
-		public static bool VerifySignature (SignatureAndHashAlgorithm type, SecureBuffer data, AsymmetricAlgorithm key, SecureBuffer signature)
+		public static bool VerifySignature (SignatureAndHashAlgorithm type, byte[] hash, AsymmetricAlgorithm key, SecureBuffer signature)
 		{
-			if (!IsAlgorithmSupported (type))
+			if (type.Signature != SignatureAlgorithmType.Rsa)
 				throw new TlsException (AlertDescription.IlegalParameter);
-			using (var d = new DisposeContext ()) {
-				var algorithm = d.Add (MSC.HashAlgorithmProvider.CreateAlgorithm (type.Hash));
-				algorithm.TransformBlock (data.Buffer, 0, data.Size);
-				return VerifySignature (type, algorithm, d.Add (algorithm.GetRunningHash ()), key, signature);
-			}
-		}
+			return VerifySignature (type.Hash, hash, key, signature);
+ 		}
 
-		public static bool VerifySignature (SignatureAndHashAlgorithm type, IHashAlgorithm hash, SecureBuffer hashData, AsymmetricAlgorithm key, SecureBuffer signature)
+		public static bool VerifySignature (HashAlgorithmType type, byte[] hash, AsymmetricAlgorithm key, SecureBuffer signature)
 		{
-			if (type.Hash != hash.Algorithm)
-				throw new TlsException (AlertDescription.IlegalParameter);
-			if (type.Signature == SignatureAlgorithmType.Rsa)
-				return MSC.PKCS1.Verify_v15 ((RSA)key, hash, hashData.Buffer, signature.Buffer);
-			else
-				throw new NotSupportedException ();
+			return MSC.PKCS1.Verify_v15 ((RSA)key, type, hash, signature.Buffer);
 		}
 
 		public static bool IsAlgorithmSupported (SignatureAndHashAlgorithm algorithm)

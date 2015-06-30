@@ -363,6 +363,10 @@ namespace Mono.Security.NewTls.TestFeatures
 					parameters.ClientParameters.TargetHost = serverHost;
 			}
 
+			if (clientProviderType == ConnectionProviderType.Manual) {
+				flags |= MonoConnectionFlags.ManualClient;
+			}
+
 			if (parameters.EndPoint != null) {
 				if (parameters.ClientParameters.EndPoint == null)
 					parameters.ClientParameters.EndPoint = parameters.EndPoint;

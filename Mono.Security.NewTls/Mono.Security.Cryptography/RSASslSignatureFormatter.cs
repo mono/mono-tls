@@ -68,7 +68,7 @@ namespace Mono.Security.Cryptography
 			}
 
 			#pragma warning disable 436
-			return PKCS1.Sign_v15(key, hash, rgbHash);
+			return PKCS1.Sign_v15(key, hash.Algorithm, rgbHash);
 			#pragma warning restore 436
 		}
 

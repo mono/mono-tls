@@ -166,6 +166,8 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
 				return RunWithManualServer (ctx, cancellationToken);
+			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
+				return RunWithManualClient (ctx, cancellationToken);
 
 			return base.MainLoop (ctx, cancellationToken);
 		}
@@ -195,6 +197,11 @@ namespace Mono.Security.NewTls.TestFramework
 
 			ctx.LogMessage ("GOT RESPONSE: {0} {1}", protocol, status);
 
+			await Shutdown (ctx, SupportsCleanShutdown, true, cancellationToken);
+		}
+
+		async Task RunWithManualClient (TestContext ctx, CancellationToken cancellationToken)
+		{
 			await Shutdown (ctx, SupportsCleanShutdown, true, cancellationToken);
 		}
 	}

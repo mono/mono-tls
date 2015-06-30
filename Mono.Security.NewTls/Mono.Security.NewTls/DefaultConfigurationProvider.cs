@@ -49,7 +49,8 @@ namespace Mono.Security.NewTls
 			if (ctx.Configuration.UserSettings != null) {
 				if (ctx.Configuration.UserSettings.HasSignatureParameters)
 					signatureParameters = ctx.Configuration.UserSettings.SignatureParameters;
-				clientCertificateParameters = ctx.Configuration.UserSettings.ClientCertificateParameters;
+				if (ctx.Configuration.UserSettings.HasClientCertificateParameters)
+					clientCertificateParameters = ctx.Configuration.UserSettings.ClientCertificateParameters;
 			}
 		}
 	}

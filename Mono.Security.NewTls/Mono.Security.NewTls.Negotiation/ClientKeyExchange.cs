@@ -87,11 +87,10 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void HandleCertificateVerify (TlsCertificateVerify message)
 		{
-			PendingCrypto.CertificateSignatureType = message.Algorithm;
 			PendingCrypto.CertificateSignature = message.Signature;
 
 			var certificate = PendingCrypto.ClientCertificates [0];
-			if (!HandshakeParameters.HandshakeMessages.VerifySignature (PendingCrypto.CertificateSignatureType, certificate.RSA, PendingCrypto.CertificateSignature))
+			if (!HandshakeParameters.HandshakeMessages.VerifySignature (PendingCrypto.CertificateSignature, certificate.RSA))
 				throw new TlsException (AlertDescription.HandshakeFailure);
 		}
 

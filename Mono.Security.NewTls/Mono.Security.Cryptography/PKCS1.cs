@@ -139,10 +139,10 @@ namespace Mono.Security.Cryptography {
 
 		// PKCS #1 v.2.1, Section 8.2.1
 		// RSASSA-PKCS1-V1_5-SIGN (K, M)
-		public static byte[] Sign_v15 (RSA rsa, IHashAlgorithm hash, byte[] hashValue)
+		public static byte[] Sign_v15 (RSA rsa, HashAlgorithmType algorithm, byte[] hashValue)
 		{
 			int size = (rsa.KeySize >> 3); // div 8
-			byte[] EM = Encode_v15 (hash, hashValue, size);
+			byte[] EM = Encode_v15 (algorithm, hashValue, size);
 			byte[] m = OS2IP (EM);
 			byte[] s = RSASP1 (rsa, m);
 			byte[] S = I2OSP (s, size);
@@ -151,19 +151,19 @@ namespace Mono.Security.Cryptography {
 
 		// PKCS #1 v.2.1, Section 8.2.2
 		// RSASSA-PKCS1-V1_5-VERIFY ((n, e), M, S)
-		public static bool Verify_v15 (RSA rsa, IHashAlgorithm hash, byte[] hashValue, byte[] signature)
+		public static bool Verify_v15 (RSA rsa, HashAlgorithmType algorithm, byte[] hashValue, byte[] signature)
 		{
-			return Verify_v15 (rsa, hash, hashValue, signature, false);
+			return Verify_v15 (rsa, algorithm, hashValue, signature, false);
 		}
 
 		// DO NOT USE WITHOUT A VERY GOOD REASON
-		public static bool Verify_v15 (RSA rsa, IHashAlgorithm hash, byte[] hashValue, byte[] signature, bool tryNonStandardEncoding)
+		public static bool Verify_v15 (RSA rsa, HashAlgorithmType algorithm, byte[] hashValue, byte[] signature, bool tryNonStandardEncoding)
 		{
 			int size = (rsa.KeySize >> 3); // div 8
 			byte[] s = OS2IP (signature);
 			byte[] m = RSAVP1 (rsa, s);
 			byte[] EM2 = I2OSP (m, size);
-			byte[] EM = Encode_v15 (hash, hashValue, size);
+			byte[] EM = Encode_v15 (algorithm, hashValue, size);
 			bool result = Compare (EM, EM2);
 			if (result || !tryNonStandardEncoding)
 				return result;
@@ -189,10 +189,11 @@ namespace Mono.Security.Cryptography {
 
 		// PKCS #1 v.2.1, Section 9.2
 		// EMSA-PKCS1-v1_5-Encode
-		public static byte[] Encode_v15 (IHashAlgorithm hash, byte[] hashValue, int emLength)
+		static byte[] Encode_v15 (HashAlgorithmType algorithm, byte[] hashValue, int emLength)
 		{
-			if (hashValue.Length != (hash.HashSize >> 3))
-				throw new CryptographicException ("bad hash length for " + hash.ToString ());
+			var hashSize = HashAlgorithmProvider.GetHashSize (algorithm);
+			if (hashValue.Length != (hashSize >> 3))
+				throw new CryptographicException ("bad hash length for " + algorithm.ToString ());
 
 			// DigestInfo ::= SEQUENCE {
 			//	digestAlgorithm AlgorithmIdentifier,
@@ -201,7 +202,7 @@ namespace Mono.Security.Cryptography {
 
 			byte[] t = null;
 
-			string oid = HashAlgorithmProvider.GetOID (hash.Algorithm);
+			string oid = HashAlgorithmProvider.GetOID (algorithm);
 			if (oid != null)
 			{
 				ASN1 digestAlgorithm = new ASN1 (0x30);

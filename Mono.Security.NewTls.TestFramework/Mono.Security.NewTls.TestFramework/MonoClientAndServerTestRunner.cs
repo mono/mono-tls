@@ -131,6 +131,28 @@ namespace Mono.Security.NewTls.TestFramework
 					ServerFlags = ServerFlags.AskForClientCertificate, ServerCertificateValidator = acceptFromCA
 				};
 
+			case MonoClientAndServerTestType.RequireClientCertificateRSA:
+				/*
+				 * Require client certificate.
+				 *
+				 */
+				return new MonoClientAndServerParameters (name, ResourceManager.SelfSignedServerCertificate) {
+					ClientCertificate = ResourceManager.MonkeyCertificate, ClientCertificateValidator = acceptSelfSigned,
+					ServerFlags = ServerFlags.RequireClientCertificate, ServerCertificateValidator = acceptFromCA,
+					ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA }
+				};
+
+			case MonoClientAndServerTestType.RequireClientCertificateDHE:
+				/*
+				 * Require client certificate.
+				 *
+				 */
+				return new MonoClientAndServerParameters (name, ResourceManager.SelfSignedServerCertificate) {
+					ClientCertificate = ResourceManager.MonkeyCertificate, ClientCertificateValidator = acceptSelfSigned,
+					ServerFlags = ServerFlags.RequireClientCertificate, ServerCertificateValidator = acceptFromCA,
+					ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA }
+				};
+
 			default:
 				throw new InvalidOperationException ();
 			}
@@ -154,6 +176,11 @@ namespace Mono.Security.NewTls.TestFramework
 			if (Parameters.ProtocolVersion != null) {
 				ctx.Expect (Client.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "client protocol version");
 				ctx.Expect (Server.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "server protocol version");
+			}
+
+			if (Server.Provider.SupportsSslStreams && (Parameters.ServerFlags & ServerFlags.RequireClientCertificate) != 0) {
+				ctx.Expect (Server.SslStream.HasRemoteCertificate, "has remote certificate");
+				ctx.Expect (Server.SslStream.IsMutuallyAuthenticated, "is mutually authenticated");
 			}
 
 			base.OnRun (ctx, cancellationToken);

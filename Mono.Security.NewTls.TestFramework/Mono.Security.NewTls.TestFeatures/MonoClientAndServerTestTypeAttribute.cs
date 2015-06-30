@@ -68,6 +68,8 @@ namespace Mono.Security.NewTls.TestFeatures
 				yield return MonoClientAndServerTestType.Simple;
 				yield return MonoClientAndServerTestType.ValidateCertificate;
 				yield return MonoClientAndServerTestType.RequestClientCertificate;
+				yield return MonoClientAndServerTestType.RequireClientCertificateRSA;
+				yield return MonoClientAndServerTestType.RequireClientCertificateDHE;
 				yield break;
 			}
 

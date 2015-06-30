@@ -55,7 +55,7 @@ namespace Mono.Security.NewTls
 			if (parameters != null)
 				return parameters;
 
-			return SignatureParameters.GetDefaultParameters ();
+			return SignatureParameters.GetDefaultServerParameters ();
 		}
 
 		public void AssertProtocol (ITlsContext ctx, TlsProtocolCode protocol)
@@ -80,9 +80,6 @@ namespace Mono.Security.NewTls
 
 		public SignatureAndHashAlgorithm SelectSignatureAlgorithm (ITlsContext ctx, SignatureParameters parameters)
 		{
-			if (parameters == null)
-				parameters = SignatureParameters.GetDefaultParameters ();
-
 			foreach (var algorithm in parameters.SignatureAndHashAlgorithms) {
 				if (ctx.IsAlgorithmSupported (algorithm))
 					return algorithm;
@@ -103,6 +100,9 @@ namespace Mono.Security.NewTls
 				parameters = ctx.CurrentSignatureParameters;
 			else
 				parameters = GetClientSignatureParameters (ctx);
+
+			if (parameters == null)
+				parameters = SignatureParameters.GetDefaultServerParameters ();
 
 			return SelectSignatureAlgorithm (ctx, parameters);
 		}

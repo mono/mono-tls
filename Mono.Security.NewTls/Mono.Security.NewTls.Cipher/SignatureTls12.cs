@@ -30,6 +30,14 @@ namespace Mono.Security.NewTls.Cipher
 {
 	class SignatureTls12 : Signature
 	{
+		public override TlsProtocolCode Protocol {
+			get { return TlsProtocolCode.Tls12; }
+		}
+
+		public override HashAlgorithmType HashAlgorithm {
+			get { return SignatureAlgorithm.Hash; }
+		}
+
 		public SignatureAndHashAlgorithm SignatureAlgorithm {
 			get;
 			private set;
@@ -58,14 +66,14 @@ namespace Mono.Security.NewTls.Cipher
 			stream.Write (Signature.Buffer);
 		}
 
-		public override void Create (SecureBuffer data, AsymmetricAlgorithm key)
+		public override void Create (byte[] hash, AsymmetricAlgorithm key)
 		{
-			Signature = SignatureHelper.CreateSignature (SignatureAlgorithm, data, key);
+			Signature = SignatureHelper.CreateSignature (SignatureAlgorithm, hash, key);
 		}
 
-		public override bool Verify (SecureBuffer data, AsymmetricAlgorithm key)
+		public override bool Verify (byte[] hash, AsymmetricAlgorithm key)
 		{
-			return SignatureHelper.VerifySignature (SignatureAlgorithm, data, key, Signature);
+			return SignatureHelper.VerifySignature (SignatureAlgorithm, hash, key, Signature);
 		}
 	}
 }

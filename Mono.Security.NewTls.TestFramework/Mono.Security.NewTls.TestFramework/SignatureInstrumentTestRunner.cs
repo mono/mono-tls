@@ -30,6 +30,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Resources;
 
@@ -41,6 +42,10 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		new public SignatureInstrumentParameters Parameters {
 			get { return (SignatureInstrumentParameters)base.Parameters; }
+		}
+
+		public SignatureInstrumentType Type {
+			get { return Parameters.Type; }
 		}
 
 		public SignatureInstrumentTestRunner (IServer server, IClient client, SignatureInstrumentParameters parameters, MonoConnectionFlags flags)
@@ -106,14 +111,22 @@ namespace Mono.Security.NewTls.TestFramework
 			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
 		};
 
+		public static IEnumerable<R> Join<T,U,R> (IEnumerable<T> first, IEnumerable<U> second, Func<T, U, R> resultSelector) {
+			foreach (var e1 in first) {
+				foreach (var e2 in second) {
+					yield return resultSelector (e1, e2);
+				}
+			}
+		}
+
 		static IEnumerable<Tuple<SignatureAndHashAlgorithm,CipherSuiteCode>> SelectAlgorithmsAndCiphers ()
 		{
-			return Enumerable.Zip (AllSignatureAlgorithms, AllCipherSuites, (a, c) => Tuple.Create (a, c));
+			return Join (AllSignatureAlgorithms, AllCipherSuites, (a, c) => Tuple.Create (a, c));
 		}
 
 		static IEnumerable<Tuple<SignatureInstrumentType,SignatureAndHashAlgorithm,CipherSuiteCode>> SelectAlgorithmsAndCiphers (params SignatureInstrumentType[] types)
 		{
-			return Enumerable.Zip (types, SelectAlgorithmsAndCiphers (), (first, second) => Tuple.Create (first, second.Item1, second.Item2));
+			return Join (types, SelectAlgorithmsAndCiphers (), (first, second) => Tuple.Create (first, second.Item1, second.Item2));
 		}
 
 		internal static readonly SignatureInstrumentType[] ClientSignatureParameterTypes = {
@@ -124,6 +137,7 @@ namespace Mono.Security.NewTls.TestFramework
 		};
 
 		internal static readonly SignatureInstrumentType[] ServerSignatureParameterTypes = {
+			SignatureInstrumentType.ServerRequiresCertificate
 		};
 
 		static SignatureInstrumentParameters CreateParameters (InstrumentationCategory category, SignatureInstrumentType type, params object[] args)
@@ -200,6 +214,15 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Unknown, SignatureAlgorithmType.Dsa);
 				parameters.ExpectServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1);
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ExpectServerAlert = AlertDescription.HandshakeFailure;
+				break;
+
+			case SignatureInstrumentType.ServerRequiresCertificate:
+				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1);
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
 				break;
 
 			default:
@@ -208,6 +231,35 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 
 			return parameters;
+		}
+
+		protected override void OnWaitForServerConnectionCompleted (TestContext ctx, Task task)
+		{
+			if (Type == SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms) {
+				// FIXME: we allow both successful completion with the default signature algorithm of {SHA-1,RSA} and
+				//        a fatal HandshakeFailure alert.
+				if (task.IsFaulted) {
+					MonoConnectionHelper.ExpectAlert (ctx, task, Parameters.ExpectServerAlert.Value, "expect server alert");
+					throw new ConnectionFinishedException ();
+				} else {
+					ctx.Assert (task.Status, Is.EqualTo (TaskStatus.RanToCompletion), "successful completion");
+					return;
+				}
+			}
+
+			base.OnWaitForServerConnectionCompleted (ctx, task);
+		}
+
+		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			switch (Type) {
+			case SignatureInstrumentType.ServerRequiresCertificate:
+				ctx.Expect (Server.SslStream.HasRemoteCertificate, "has remote certificate");
+				ctx.Expect (Server.SslStream.IsMutuallyAuthenticated, "is mutually authenticated");
+				break;
+			}
+
+			base.OnRun (ctx, cancellationToken);
 		}
 	}
 }

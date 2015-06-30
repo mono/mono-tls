@@ -45,10 +45,12 @@ namespace Mono.Security.NewTls
 					throw new TlsException (AlertDescription.CertificateUnknown);
 			}
 
-			var certParams = config.UserSettings.ClientCertificateParameters;
-			if (certParams.CertificateAuthorities.Count > 0) {
-				if (!certParams.CertificateAuthorities.Contains (certificates [0].IssuerName))
-					throw new TlsException (AlertDescription.BadCertificate);
+			if (config.UserSettings.HasClientCertificateParameters) {
+				var certParams = config.UserSettings.ClientCertificateParameters;
+				if (certParams.CertificateAuthorities.Count > 0) {
+					if (!certParams.CertificateAuthorities.Contains (certificates [0].IssuerName))
+						throw new TlsException (AlertDescription.BadCertificate);
+				}
 			}
 
 			var helper = config.CertificateValidator;

@@ -27,17 +27,7 @@ namespace Mono.Security.NewTls.Cipher
 			G = incoming.ReadBytes (incoming.ReadInt16 ());
 			Y = incoming.ReadBytes (incoming.ReadInt16 ());
 
-			switch (protocol) {
-			case TlsProtocolCode.Tls10:
-			case TlsProtocolCode.Tls11:
-				Signature = new SignatureTls10 (incoming);
-				break;
-			case TlsProtocolCode.Tls12:
-				Signature = new SignatureTls12 (incoming);
-				break;
-			default:
-				throw new NotSupportedException ();
-			}
+			Signature = Signature.Read (protocol, incoming);
 		}
 
 		public override void ReadClient (TlsBuffer incoming)
@@ -66,17 +56,19 @@ namespace Mono.Security.NewTls.Cipher
 			this.protocol = protocol;
 		}
 
-		public DiffieHellmanKeyExchange (TlsContext ctx, SignatureAndHashAlgorithm algorithm)
+		public DiffieHellmanKeyExchange (TlsContext ctx)
 		{
 			this.protocol = ctx.NegotiatedProtocol;
 
 			switch (protocol) {
 			case TlsProtocolCode.Tls12:
-				Signature = new SignatureTls12 (algorithm);
+				Signature = new SignatureTls12 (ctx.Session.ServerSignatureAlgorithm);
 				break;
 			case TlsProtocolCode.Tls10:
-			case TlsProtocolCode.Tls11:
 				Signature = new SignatureTls10 ();
+				break;
+			case TlsProtocolCode.Tls11:
+				Signature = new SignatureTls11 ();
 				break;
 			default:
 				throw new NotSupportedException ();

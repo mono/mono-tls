@@ -1,5 +1,5 @@
 ﻿//
-// SignatureInstrumentType.cs
+// SignatureTls11.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,19 +25,22 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.Cipher
 {
-	public enum SignatureInstrumentType
+	class SignatureTls11 : SignatureTls10
 	{
-		ClientSignatureAlgorithmAndCipher,
-		ServerSignatureAlgorithmAndCipher,
+		public override TlsProtocolCode Protocol {
+			get { return TlsProtocolCode.Tls11; }
+		}
 
-		NoClientSignatureAlgorithms,
-		VerifyClientSignatureAlgorithms,
-		ClientProvidesSomeUnsupportedSignatureAlgorithms,
-		ClientProvidesNoSupportedSignatureAlgorithms,
+		public SignatureTls11 (TlsBuffer incoming)
+			: base (incoming)
+		{
+		}
 
-		ServerRequiresCertificate
+		public SignatureTls11 ()
+		{
+		}
 	}
 }
 

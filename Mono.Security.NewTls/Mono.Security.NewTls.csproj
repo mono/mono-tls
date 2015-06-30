@@ -131,6 +131,7 @@
     <Compile Include="Mono.Security.Cryptography\SHA224Managed.cs" />
     <Compile Include="Mono.Security.Cryptography\SHA224.cs" />
     <Compile Include="Mono.Security.NewTls\DefaultConfigurationProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls11.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">

@@ -133,6 +133,28 @@ namespace Mono.Security.Cryptography
 				throw new NotSupportedException ();
 			}
 		}
+
+		public static int GetHashSize (HashAlgorithmType type)
+		{
+			switch (type) {
+			case HashAlgorithmType.Md5Sha1:
+				return 288;
+			case HashAlgorithmType.Md5:
+				return 128;
+			case HashAlgorithmType.Sha1:
+				return 160;
+			case HashAlgorithmType.Sha224:
+				return 224;
+			case HashAlgorithmType.Sha256:
+				return 256;
+			case HashAlgorithmType.Sha384:
+				return 384;
+			case HashAlgorithmType.Sha512:
+				return 512;
+			default:
+				throw new NotSupportedException ();
+			}
+		}
 	}
 }
 

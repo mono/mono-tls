@@ -238,15 +238,28 @@ namespace Mono.Security.NewTls.Negotiation
 			if (ClientCertificate == null || PendingCrypto.ClientCertificates.Count == 0)
 				return null;
 
-			PendingCrypto.CertificateSignatureType = SelectSignatureType ();
-			PendingCrypto.CertificateSignature = HandshakeParameters.HandshakeMessages.CreateSignature (PendingCrypto.CertificateSignatureType, Config.PrivateKey);
+			switch (Context.NegotiatedProtocol) {
+			case TlsProtocolCode.Tls10:
+				PendingCrypto.CertificateSignature = new SignatureTls10 ();
+				break;
+			case TlsProtocolCode.Tls11:
+				PendingCrypto.CertificateSignature = new SignatureTls11 ();
+				break;
+			case TlsProtocolCode.Tls12:
+				PendingCrypto.CertificateSignature = new SignatureTls12 (SelectSignatureType ());
+				break;
+			default:
+				throw new NotSupportedException ();
+			}
+
+			HandshakeParameters.HandshakeMessages.CreateSignature (PendingCrypto.CertificateSignature, Config.PrivateKey);
 
 			#if DEBUG_FULL
 			if (Context.EnableDebugging)
 				DebugHelper.WriteLine ("Generate CertificateVerify: {0} {1}", PendingCrypto.CertificateSignatureType, Config.Certificate.SubjectName);
 			#endif
 
-			return new TlsCertificateVerify (PendingCrypto.CertificateSignatureType, PendingCrypto.CertificateSignature);
+			return new TlsCertificateVerify (PendingCrypto.CertificateSignature);
 		}
 
 		protected virtual TlsClientKeyExchange GenerateClientKeyExchange ()

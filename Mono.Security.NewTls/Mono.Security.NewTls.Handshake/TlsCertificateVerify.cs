@@ -6,40 +6,37 @@ namespace Mono.Security.NewTls.Handshake
 
 	class TlsCertificateVerify : HandshakeMessage
 	{
-		public TlsCertificateVerify (SignatureAndHashAlgorithm algorithm, SecureBuffer signature)
+		public TlsCertificateVerify (Signature signature)
 			: base (HandshakeType.CertificateVerify)
 		{
-			Algorithm = algorithm;
 			Signature = signature;
 		}
 
-		public TlsCertificateVerify (TlsBuffer incoming)
+		public TlsCertificateVerify (TlsProtocolCode protocol, TlsBuffer incoming)
 			: base (HandshakeType.CertificateVerify)
 		{
+			Protocol = protocol;
 			Read (incoming);
 		}
 
-		public SignatureAndHashAlgorithm Algorithm {
+		public TlsProtocolCode Protocol {
 			get;
 			private set;
 		}
 
-		public SecureBuffer Signature {
+		public Signature Signature {
 			get;
 			private set;
 		}
 
 		protected override void Read (TlsBuffer incoming)
 		{
-			Algorithm = new SignatureAndHashAlgorithm (incoming);
-			Signature = incoming.ReadSecureBuffer (incoming.ReadInt16 ());
+			Signature = Signature.Read (Protocol, incoming);
 		}
 
 		protected override void Encode (TlsStream stream)
 		{
-			Algorithm.Encode (stream);
-			stream.Write ((short)Signature.Size);
-			stream.Write (Signature.Buffer);
+			Signature.Write (stream);
 		}
 	}
 }

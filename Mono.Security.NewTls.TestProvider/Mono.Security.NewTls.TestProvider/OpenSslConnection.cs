@@ -60,6 +60,10 @@ namespace Mono.Security.NewTls.TestProvider
 		TlsConnectionInfo connectionInfo;
 		TaskCompletionSource<object> createTcs;
 
+		public ConnectionProvider Provider {
+			get { return provider; }
+		}
+
 		public override ProtocolVersions SupportedProtocols {
 			get { return provider.SupportedProtocols; }
 		}

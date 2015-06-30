@@ -188,11 +188,6 @@ namespace Mono.Security.NewTls.Negotiation
 			return new TlsCertificate (PendingCrypto.ServerCertificates);
 		}
 
-		protected virtual SignatureAndHashAlgorithm SelectSignatureAlgorithm ()
-		{
-			return Context.SignatureProvider.SelectServerSignatureAlgorithm (Context);
-		}
-
 		protected virtual TlsServerKeyExchange GenerateServerKeyExchange ()
 		{
 			if (PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.RsaSign) {
@@ -202,8 +197,7 @@ namespace Mono.Security.NewTls.Negotiation
 				throw new InvalidOperationException ();
 			}
 
-			var signatureType = SelectSignatureAlgorithm ();
-			var dh = new DiffieHellmanKeyExchange (Context, signatureType);
+			var dh = new DiffieHellmanKeyExchange (Context);
 			HandshakeParameters.KeyExchange = dh;
 
 			return new TlsServerKeyExchange (dh);
@@ -220,10 +214,10 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void Resolve ()
 		{
-			Context.Session.SignatureParameters = Context.SignatureProvider.GetServerSignatureParameters (Context);
-			if (Context.Session.SignatureParameters == null)
-				Context.Session.SignatureParameters = SignatureParameters.GetDefaultParameters ();
-			Context.SignatureProvider.VerifySignatureParameters (Context, Context.Session.SignatureParameters);
+			if (Context.NegotiatedProtocol == TlsProtocolCode.Tls12) {
+				Session.SignatureParameters = Context.SignatureProvider.GetServerSignatureParameters (Context);
+				Session.ServerSignatureAlgorithm = Context.SignatureProvider.SelectSignatureAlgorithm (Context, Session.SignatureParameters);
+			}
 		}
 
 		protected override NegotiationHandler GenerateOutput (TlsMultiBuffer outgoing)

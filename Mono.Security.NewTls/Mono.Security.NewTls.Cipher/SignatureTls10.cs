@@ -31,9 +31,12 @@ namespace Mono.Security.NewTls.Cipher
 {
 	class SignatureTls10 : Signature
 	{
-		public SignatureAndHashAlgorithm SignatureAlgorithm {
-			get;
-			private set;
+		public override TlsProtocolCode Protocol {
+			get { return TlsProtocolCode.Tls10; }
+		}
+
+		public override HashAlgorithmType HashAlgorithm {
+			get { return HashAlgorithmType.Md5Sha1; }
 		}
 
 		public SecureBuffer Signature {
@@ -43,7 +46,6 @@ namespace Mono.Security.NewTls.Cipher
 
 		public SignatureTls10 (TlsBuffer incoming)
 		{
-			SignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa);
 			Signature = Add (incoming.ReadSecureBuffer (incoming.ReadInt16 ()));
 		}
 
@@ -57,22 +59,14 @@ namespace Mono.Security.NewTls.Cipher
 			stream.Write (Signature.Buffer);
 		}
 
-		public override void Create (SecureBuffer data, AsymmetricAlgorithm key)
+		public override void Create (byte[] hash, AsymmetricAlgorithm key)
 		{
-			using (var d = new DisposeContext ()) {
-				var alg = d.Add (new MD5SHA1 ());
-				alg.TransformFinalBlock (data.Buffer, 0, data.Size);
-				Signature = new SecureBuffer (PKCS1.Sign_v15 ((RSA)key, alg, alg.Hash));
-			}
+			Signature = SignatureHelper.CreateSignature (HashAlgorithmType.Md5Sha1, hash, key);
 		}
 
-		public override bool Verify (SecureBuffer data, AsymmetricAlgorithm key)
+		public override bool Verify (byte[] hash, AsymmetricAlgorithm key)
 		{
-			using (var d = new DisposeContext ()) {
-				var alg = d.Add (new MD5SHA1 ());
-				alg.TransformFinalBlock (data.Buffer, 0, data.Size);
-				return PKCS1.Verify_v15 ((RSA)key, alg, alg.Hash, Signature.Buffer);
-			}
+			return SignatureHelper.VerifySignature (HashAlgorithmType.Md5Sha1, hash, key, Signature);
 		}
 	}
 }

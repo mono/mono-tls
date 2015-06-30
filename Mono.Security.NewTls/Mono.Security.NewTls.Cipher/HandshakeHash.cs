@@ -46,6 +46,8 @@ namespace Mono.Security.NewTls.Cipher
 		IHashAlgorithm GetAlgorithm (HashAlgorithmType type)
 		{
 			switch (type) {
+			case HashAlgorithmType.Md5Sha1:
+				return hashes [0];
 			case HashAlgorithmType.Sha1:
 				return hashes [1];
 			case HashAlgorithmType.Sha224:
@@ -66,18 +68,16 @@ namespace Mono.Security.NewTls.Cipher
 			return new SecureBuffer (GetAlgorithm (type).GetRunningHash ());
 		}
 
-		public SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, AsymmetricAlgorithm key)
+		public void CreateSignature (Signature signature, AsymmetricAlgorithm key)
 		{
-			var algorithm = GetAlgorithm (type.Hash);
-			using (var hash = new SecureBuffer (algorithm.GetRunningHash ()))
-				return SignatureHelper.CreateSignature (type, algorithm, hash, key);
+			var algorithm = GetAlgorithm (signature.HashAlgorithm);
+			signature.Create (algorithm.GetRunningHash (), key);
 		}
 
-		public bool VerifySignature (SignatureAndHashAlgorithm type, AsymmetricAlgorithm key, SecureBuffer signature)
+		public bool VerifySignature (Signature signature, AsymmetricAlgorithm key)
 		{
-			var algorithm = GetAlgorithm (type.Hash);
-			using (var hash = new SecureBuffer (algorithm.GetRunningHash ()))
-				return SignatureHelper.VerifySignature (type, algorithm, hash, key, signature);
+			var algorithm = GetAlgorithm (signature.HashAlgorithm);
+			return signature.Verify (algorithm.GetRunningHash (), key);
 		}
 
 		protected override void Clear ()
