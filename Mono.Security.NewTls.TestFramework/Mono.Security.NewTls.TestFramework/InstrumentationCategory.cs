@@ -35,7 +35,9 @@ namespace Mono.Security.NewTls.TestFramework
 		ClientSignatureParameters,
 		ServerSignatureParameters,
 
-		SignatureAlgorithms
+		SignatureAlgorithms,
+
+		MartinTest
 	}
 }
 

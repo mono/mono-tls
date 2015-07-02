@@ -36,8 +36,20 @@ namespace Mono.Security.NewTls.TestFramework
 		VerifyClientSignatureAlgorithms,
 		ClientProvidesSomeUnsupportedSignatureAlgorithms,
 		ClientProvidesNoSupportedSignatureAlgorithms,
+		Tls10WithRsaExchange,
+		Tls10WithDheExchange,
 
-		ServerRequiresCertificate
+		ServerUsesUnsupportedSignatureAlgorithm,
+		ServerUsesUnsupportedSignatureAlgorithm2,
+
+		ServerSendsCertificateParametersWithoutAlgorithms,
+		ServerSendsCertificateParametersWithSomeUnsupportedAlgorithms,
+		ServerSendsCertificateParametersWithNoSupportedAlgorithms,
+		ClientSendsCertificateVerifyWithUnrequestedAlgorithm,
+		CertificateVerifySignatureAlgorithmSelectionOrder,
+		CertificateVerifySignatureAlgorithmSelectionOrder2,
+
+		MartinTest
 	}
 }
 

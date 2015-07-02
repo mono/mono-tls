@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 namespace Mono.Security.NewTls.Negotiation
 {
 	using Handshake;
+	using Cipher;
 
 	class ClientKeyExchange : NegotiationHandler
 	{
@@ -87,6 +88,12 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void HandleCertificateVerify (TlsCertificateVerify message)
 		{
+			Context.SignatureProvider.AssertProtocol (Context, message.Signature.Protocol);
+			if (Context.NegotiatedProtocol == TlsProtocolCode.Tls12) {
+				var signature12 = (SignatureTls12)message.Signature;
+				Context.SignatureProvider.AssertCertificateVerifySignatureAlgorithm (Context, signature12.SignatureAlgorithm);
+			}
+
 			PendingCrypto.CertificateSignature = message.Signature;
 
 			var certificate = PendingCrypto.ClientCertificates [0];

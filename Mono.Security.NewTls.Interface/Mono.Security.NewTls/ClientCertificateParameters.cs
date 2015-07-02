@@ -51,7 +51,7 @@ namespace Mono.Security.NewTls
 		}
 
 		public bool HasSignatureParameters {
-			get { return signatureParameters != null; }
+			get { return signatureParameters != null && !signatureParameters.IsEmpty; }
 		}
 
 		public SignatureParameters SignatureParameters {

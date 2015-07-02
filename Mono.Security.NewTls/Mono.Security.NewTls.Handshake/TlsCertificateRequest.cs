@@ -40,8 +40,9 @@ namespace Mono.Security.NewTls.Handshake
 				stream.Write ((byte)Parameters.CertificateTypes [i]);
 
 			if (Protocol == TlsProtocolCode.Tls12) {
-				stream.Write ((short)(Parameters.SignatureParameters.SignatureAndHashAlgorithms.Count * 2));
-				for (int i = 0; i < Parameters.SignatureParameters.SignatureAndHashAlgorithms.Count; i++)
+				var count = Parameters.HasSignatureParameters ? Parameters.SignatureParameters.SignatureAndHashAlgorithms.Count : 0;
+				stream.Write ((short)(count * 2));
+				for (int i = 0; i < count; i++)
 					Parameters.SignatureParameters.SignatureAndHashAlgorithms [i].Encode (stream);
 			}
 

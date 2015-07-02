@@ -56,7 +56,7 @@ namespace Mono.Security.NewTls.TestFramework
 		public override InstrumentCollection CreateInstrument (TestContext ctx)
 		{
 			var instrumentation = new InstrumentCollection ();
-				instrumentation.SignatureInstrument = new SignatureInstrument (ctx, this);
+			instrumentation.SignatureInstrument = new SignatureInstrument (ctx, this);
 			return instrumentation;
 		}
 
@@ -74,6 +74,12 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case InstrumentationCategory.ServerSignatureParameters:
 				return ServerSignatureParameterTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.SignatureAlgorithms:
+				return SignatureParameterTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.MartinTest:
+				return MartinTestTypes.Select (t => Create (ctx, category, t));
 
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
@@ -133,11 +139,31 @@ namespace Mono.Security.NewTls.TestFramework
 			SignatureInstrumentType.NoClientSignatureAlgorithms,
 			SignatureInstrumentType.VerifyClientSignatureAlgorithms,
 			SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms,
-			SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms
+			SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms,
+			SignatureInstrumentType.Tls10WithRsaExchange,
+			SignatureInstrumentType.Tls10WithDheExchange
 		};
 
 		internal static readonly SignatureInstrumentType[] ServerSignatureParameterTypes = {
-			SignatureInstrumentType.ServerRequiresCertificate
+			SignatureInstrumentType.Tls10WithRsaExchange,
+			SignatureInstrumentType.Tls10WithDheExchange,
+			SignatureInstrumentType.ServerSendsCertificateParametersWithoutAlgorithms,
+			SignatureInstrumentType.ServerSendsCertificateParametersWithSomeUnsupportedAlgorithms,
+			SignatureInstrumentType.ServerSendsCertificateParametersWithNoSupportedAlgorithms
+		};
+
+		internal static readonly SignatureInstrumentType[] SignatureParameterTypes = {
+			SignatureInstrumentType.Tls10WithRsaExchange,
+			SignatureInstrumentType.Tls10WithDheExchange,
+			SignatureInstrumentType.ServerUsesUnsupportedSignatureAlgorithm,
+			SignatureInstrumentType.ServerUsesUnsupportedSignatureAlgorithm2,
+			SignatureInstrumentType.ClientSendsCertificateVerifyWithUnrequestedAlgorithm,
+			SignatureInstrumentType.CertificateVerifySignatureAlgorithmSelectionOrder,
+			SignatureInstrumentType.CertificateVerifySignatureAlgorithmSelectionOrder2
+		};
+
+		internal static readonly SignatureInstrumentType[] MartinTestTypes = {
+			SignatureInstrumentType.MartinTest
 		};
 
 		static SignatureInstrumentParameters CreateParameters (InstrumentationCategory category, SignatureInstrumentType type, params object[] args)
@@ -190,6 +216,9 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			var parameters = CreateParameters (category, type);
 
+			parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
+			parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+
 			switch (type) {
 			case SignatureInstrumentType.NoClientSignatureAlgorithms:
 				parameters.ExpectServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1);
@@ -217,12 +246,87 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ExpectServerAlert = AlertDescription.HandshakeFailure;
 				break;
 
-			case SignatureInstrumentType.ServerRequiresCertificate:
-				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
-				parameters.ServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1);
-				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
-				parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
+			case SignatureInstrumentType.Tls10WithRsaExchange:
+				parameters.ClientCiphers = parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA };
+				parameters.ProtocolVersion = ProtocolVersions.Tls10;
+				break;
+
+			case SignatureInstrumentType.Tls10WithDheExchange:
+				parameters.ClientCiphers = parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ProtocolVersion = ProtocolVersions.Tls10;
+				break;
+
+			case SignatureInstrumentType.ServerUsesUnsupportedSignatureAlgorithm:
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientSignatureParameters = new SignatureParameters ();
+				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Sha384);
+				parameters.ServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha512);
+				parameters.ExpectClientAlert = AlertDescription.IlegalParameter;
+				parameters.ServerFlags |= ServerFlags.ClientAbortsHandshake;
+				break;
+
+			case SignatureInstrumentType.ServerUsesUnsupportedSignatureAlgorithm2:
+				// MD5SHA1 is never allowed for TLS 1.2.
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientSignatureParameters = new SignatureParameters ();
+				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Sha1);
+				// we'd normally not be allowed to request this from user settings, but there's an instrumentation override
+				// in place for this test.
+				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Md5Sha1);
+				// Instrumentation override lets us force set this.
+				parameters.ServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Md5Sha1);
+				parameters.ExpectClientAlert = AlertDescription.IlegalParameter;
+				parameters.ServerFlags |= ServerFlags.ClientAbortsHandshake;
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				break;
+
+			case SignatureInstrumentType.ServerSendsCertificateParametersWithoutAlgorithms:
+				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
+				parameters.ExpectCertificateVerifySignatureAlgorithm = SignatureParameters.DefaultAlgorithm;
+				break;
+
+			case SignatureInstrumentType.ServerSendsCertificateParametersWithSomeUnsupportedAlgorithms:
+				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Unknown);
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha384);
+				parameters.ExpectCertificateVerifySignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha384);
+				break;
+
+			case SignatureInstrumentType.ServerSendsCertificateParametersWithNoSupportedAlgorithms:
+				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Unknown);
+				parameters.ExpectCertificateVerifySignatureAlgorithm = SignatureParameters.DefaultAlgorithm;
+				parameters.ExpectClientAlert = AlertDescription.HandshakeFailure;
+				break;
+
+			case SignatureInstrumentType.ClientSendsCertificateVerifyWithUnrequestedAlgorithm:
+				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha384);
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha512);
+				parameters.ClientSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256);
+				parameters.ExpectServerAlert = AlertDescription.IlegalParameter;
+				break;
+
+			case SignatureInstrumentType.CertificateVerifySignatureAlgorithmSelectionOrder:
+				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha384);
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha512);
+				parameters.ExpectCertificateVerifySignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha384);
+				break;
+
+			case SignatureInstrumentType.CertificateVerifySignatureAlgorithmSelectionOrder2:
+				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha512);
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha384);
+				parameters.ExpectCertificateVerifySignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha512);
+				break;
+
+			case SignatureInstrumentType.MartinTest:
+				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha384);
+				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha512);
+				parameters.ClientSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256);
+				parameters.ExpectServerAlert = AlertDescription.IlegalParameter;
 				break;
 
 			default:
@@ -245,17 +349,35 @@ namespace Mono.Security.NewTls.TestFramework
 					ctx.Assert (task.Status, Is.EqualTo (TaskStatus.RanToCompletion), "successful completion");
 					return;
 				}
+			} else if (Type == SignatureInstrumentType.ServerSendsCertificateParametersWithNoSupportedAlgorithms) {
+				if (task.IsFaulted)
+					throw new ConnectionFinishedException ();
 			}
 
 			base.OnWaitForServerConnectionCompleted (ctx, task);
 		}
 
+		protected override void OnWaitForClientConnectionCompleted (TestContext ctx, Task task)
+		{
+			if (Type == SignatureInstrumentType.ServerSendsCertificateParametersWithNoSupportedAlgorithms) {
+				// FIXME: we allow both successful completion with the default signature algorithm of {SHA-1,RSA} and
+				//        a fatal HandshakeFailure alert.
+				if (task.IsFaulted) {
+					MonoConnectionHelper.ExpectAlert (ctx, task, Parameters.ExpectClientAlert.Value, "expect client alert");
+					throw new ConnectionFinishedException ();
+				} else {
+					ctx.Assert (task.Status, Is.EqualTo (TaskStatus.RanToCompletion), "successful completion");
+					return;
+				}
+			}
+
+			base.OnWaitForClientConnectionCompleted (ctx, task);
+		}
+
 		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
 		{
 			switch (Type) {
-			case SignatureInstrumentType.ServerRequiresCertificate:
-				ctx.Expect (Server.SslStream.HasRemoteCertificate, "has remote certificate");
-				ctx.Expect (Server.SslStream.IsMutuallyAuthenticated, "is mutually authenticated");
+			case SignatureInstrumentType.MartinTest:
 				break;
 			}
 

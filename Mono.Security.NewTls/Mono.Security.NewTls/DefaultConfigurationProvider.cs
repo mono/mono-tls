@@ -29,14 +29,20 @@ namespace Mono.Security.NewTls
 {
 	class DefaultConfigurationProvider : IConfigurationProvider
 	{
+		bool hasSignatureParameters;
+		bool hasClientCertificateParameters;
 		SignatureParameters signatureParameters;
 		ClientCertificateParameters clientCertificateParameters;
 
-		public virtual SignatureParameters ClientSignatureParameters {
-			get { return signatureParameters; }
+		public virtual bool HasClientSignatureParameters {
+			get { return hasSignatureParameters; }
 		}
 
-		public virtual SignatureParameters ServerSignatureParameters {
+		public virtual bool HasClientCertificateParameters {
+			get { return hasClientCertificateParameters; }
+		}
+
+		public virtual SignatureParameters ClientSignatureParameters {
 			get { return signatureParameters; }
 		}
 
@@ -47,9 +53,11 @@ namespace Mono.Security.NewTls
 		public DefaultConfigurationProvider (TlsContext ctx)
 		{
 			if (ctx.Configuration.UserSettings != null) {
-				if (ctx.Configuration.UserSettings.HasSignatureParameters)
+				hasSignatureParameters = ctx.Configuration.UserSettings.HasSignatureParameters;
+				if (hasSignatureParameters)
 					signatureParameters = ctx.Configuration.UserSettings.SignatureParameters;
-				if (ctx.Configuration.UserSettings.HasClientCertificateParameters)
+				hasClientCertificateParameters = ctx.Configuration.UserSettings.HasClientCertificateParameters;
+				if (hasClientCertificateParameters)
 					clientCertificateParameters = ctx.Configuration.UserSettings.ClientCertificateParameters;
 			}
 		}

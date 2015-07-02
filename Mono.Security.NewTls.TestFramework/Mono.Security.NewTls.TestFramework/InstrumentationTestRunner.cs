@@ -76,6 +76,8 @@ namespace Mono.Security.NewTls.TestFramework
 				return MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.SignatureAlgorithms:
 				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;
+			case InstrumentationCategory.MartinTest:
+				return MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.ClientInstrumentation;
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
 				return MonoConnectionFlags.None;
@@ -85,62 +87,6 @@ namespace Mono.Security.NewTls.TestFramework
 		protected static ICertificateValidator AcceptAnyCertificate {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptAll (); }
 		}
-
-		#if FIXME
-
-		static IEnumerable<InstrumentationType> GetClientAndServerTypes ()
-		{
-			yield return InstrumentationType.CloseServerConnection;
-			yield return InstrumentationType.DisableRenegotiation;
-		}
-
-		static InstrumentationParameters CreateClientAndServer (InstrumentationType type)
-		{
-			var instrument = new InstrumentCollection ();
-			var parameters = new InstrumentationParameters (type.ToString (), ResourceManager.SelfSignedServerCertificate, type);
-			parameters.ClientCertificateValidator = DependencyInjector.Get<ICertificateProvider> ().AcceptAll ();
-			parameters.ServerInstrumentation = instrument;
-
-			switch (type) {
-			case InstrumentationType.None:
-				break;
-
-			case InstrumentationType.DisableRenegotiation:
-				instrument.Settings.DisableRenegotiation = true;
-				break;
-
-			case InstrumentationType.CloseServerConnection:
-				instrument.Install (HandshakeInstrumentType.CloseServerConnection);
-				parameters.ServerFlags = ServerFlags.ExpectServerException;
-				parameters.ClientFlags = ClientFlags.ExpectWebException;
-				break;
-
-			default:
-				throw new NotSupportedException ();
-			}
-
-			return parameters;
-		}
-
-		static InstrumentationParameters CreateClient (InstrumentationType type)
-		{
-			var instrument = new InstrumentCollection ();
-			var parameters = new InstrumentationParameters (type.ToString (), ResourceManager.SelfSignedServerCertificate, type);
-			parameters.ClientCertificateValidator = DependencyInjector.Get<ICertificateProvider> ().AcceptAll ();
-			parameters.ServerInstrumentation = instrument;
-
-			switch (type) {
-			case InstrumentationType.None:
-				break;
-
-			default:
-				throw new NotSupportedException ();
-			}
-
-			return parameters;
-		}
-
-		#endif
 
 		protected override void OnWaitForClientConnectionCompleted (TestContext ctx, Task task)
 		{

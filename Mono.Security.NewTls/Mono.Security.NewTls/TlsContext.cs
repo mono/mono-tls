@@ -270,11 +270,11 @@ namespace Mono.Security.NewTls
 		}
 
 		public bool HasClientCertificateParameters {
-			get { return handshakeParameters != null && handshakeParameters.ClientCertificateParameters != null; }
+			get { return session != null && session.HasCertificateParameters; }
 		}
 
 		public ClientCertificateParameters ClientCertificateParameters {
-			get { return HandshakeParameters.ClientCertificateParameters; }
+			get { return Session.ClientCertificateParameters; }
 		}
 
 		#endregion

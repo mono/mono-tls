@@ -40,6 +40,10 @@ namespace Mono.Security.NewTls
 			}
 		}
 
+		public bool IsEmpty {
+			get { return signatureTypes == null || signatureTypes.Count == 0; }
+		}
+
 		public void Add (SignatureAndHashAlgorithm algorithm)
 		{
 			SignatureAndHashAlgorithms.Add (algorithm);
@@ -85,12 +89,17 @@ namespace Mono.Security.NewTls
 			return parameters;
 		}
 
+		public static SignatureAndHashAlgorithm DefaultAlgorithm {
+			get { return new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1); }
+		}
+
 		internal void EnsureDefaultValues ()
 		{
 			if (SignatureAndHashAlgorithms.Count == 0) {
 				Add (HashAlgorithmType.Sha512, SignatureAlgorithmType.Rsa);
 				Add (HashAlgorithmType.Sha384, SignatureAlgorithmType.Rsa);
 				Add (HashAlgorithmType.Sha256, SignatureAlgorithmType.Rsa);
+				Add (HashAlgorithmType.Sha224, SignatureAlgorithmType.Rsa);
 				Add (HashAlgorithmType.Sha1, SignatureAlgorithmType.Rsa);
 			}
 		}

@@ -44,6 +44,9 @@ namespace Mono.Security.NewTls.TestFramework
 				ctx.Assert (authExcType.FullName, Is.EqualTo ("System.Security.Authentication.AuthenticationException"), "#2b:" + message);
 				baseException = aggregate.InnerExceptions [1];
 			}
+			// OpenSsl can't report TlsException's like Mono.
+			if (baseException.GetType ().FullName.Equals ("Mono.Security.NewTls.TestProvider.NativeOpenSslException"))
+				return;
 			ctx.Assert (baseException, Is.InstanceOf<TlsException> (), "#2:" + message);
 			var alert = ((TlsException)baseException).Alert;
 			ctx.Assert (alert.Level, Is.EqualTo (AlertLevel.Fatal), "#3:" + message);

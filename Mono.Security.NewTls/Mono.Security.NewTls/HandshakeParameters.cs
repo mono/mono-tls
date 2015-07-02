@@ -84,15 +84,10 @@ namespace Mono.Security.NewTls
 			get; set;
 		}
 
-		internal ClientCertificateParameters ClientCertificateParameters {
-			get; set;
-		}
-
 		protected override void Clear ()
 		{
 			base.Clear ();
 			requestedExtensions = null;
-			ClientCertificateParameters = null;
 		}
 	}
 }

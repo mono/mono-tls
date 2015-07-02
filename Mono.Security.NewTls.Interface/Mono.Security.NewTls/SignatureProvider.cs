@@ -36,7 +36,12 @@ namespace Mono.Security.NewTls
 			if (ctx.IsServer)
 				throw new InvalidOperationException ();
 
-			var parameters = ctx.ConfigurationProvider.ClientSignatureParameters;
+			SignatureParameters parameters;
+			if (ctx.ConfigurationProvider.HasClientSignatureParameters)
+				parameters = ctx.ConfigurationProvider.ClientSignatureParameters;
+			else
+				parameters = SignatureParameters.GetDefaultClientParameters ();
+
 			if (parameters != null)
 				VerifySignatureParameters (ctx, parameters);
 
@@ -48,14 +53,27 @@ namespace Mono.Security.NewTls
 			if (!ctx.IsServer)
 				throw new InvalidOperationException ();
 
+			AssertTls12 (ctx);
+
 			if (ctx.HasCurrentSignatureParameters)
 				return ctx.CurrentSignatureParameters;
 
-			var parameters = ctx.ConfigurationProvider.ServerSignatureParameters;
+			return SignatureParameters.GetDefaultServerParameters ();
+		}
+
+		public virtual ClientCertificateParameters GetServerCertificateParameters (ITlsContext ctx)
+		{
+			if (!ctx.IsServer)
+				throw new InvalidOperationException ();
+
+			if (ctx.HasClientCertificateParameters)
+				return ctx.ClientCertificateParameters;
+
+			var parameters = ctx.ConfigurationProvider.ClientCertificateParameters;
 			if (parameters != null)
 				return parameters;
 
-			return SignatureParameters.GetDefaultServerParameters ();
+			return ClientCertificateParameters.GetDefaultParameters ();
 		}
 
 		public void AssertProtocol (ITlsContext ctx, TlsProtocolCode protocol)
@@ -64,8 +82,16 @@ namespace Mono.Security.NewTls
 				throw new TlsException (AlertDescription.ProtocolVersion);
 		}
 
+		public virtual void AssertTls12 (ITlsContext ctx)
+		{
+			if (!ctx.HasNegotiatedProtocol || ctx.NegotiatedProtocol != TlsProtocolCode.Tls12)
+				throw new TlsException (AlertDescription.ProtocolVersion);
+		}
+
 		public void VerifySignatureAlgorithm (ITlsContext ctx, SignatureAndHashAlgorithm algorithm)
 		{
+			AssertTls12 (ctx);
+
 			if (!ctx.IsAlgorithmSupported (algorithm))
 				throw new TlsException (AlertDescription.IlegalParameter);
 		}
@@ -80,6 +106,8 @@ namespace Mono.Security.NewTls
 
 		public SignatureAndHashAlgorithm SelectSignatureAlgorithm (ITlsContext ctx, SignatureParameters parameters)
 		{
+			AssertTls12 (ctx);
+
 			foreach (var algorithm in parameters.SignatureAndHashAlgorithms) {
 				if (ctx.IsAlgorithmSupported (algorithm))
 					return algorithm;
@@ -93,15 +121,17 @@ namespace Mono.Security.NewTls
 			if (ctx.IsServer)
 				throw new InvalidOperationException ();
 
+			AssertTls12 (ctx);
+
 			SignatureParameters parameters;
-			if (ctx.HasClientCertificateParameters && ctx.ClientCertificateParameters.HasSignatureParameters)
+			if (ctx.HasClientCertificateParameters)
 				parameters = ctx.ClientCertificateParameters.SignatureParameters;
 			else if (ctx.HasCurrentSignatureParameters)
 				parameters = ctx.CurrentSignatureParameters;
 			else
 				parameters = GetClientSignatureParameters (ctx);
 
-			if (parameters == null)
+			if (parameters == null || parameters.IsEmpty)
 				parameters = SignatureParameters.GetDefaultServerParameters ();
 
 			return SelectSignatureAlgorithm (ctx, parameters);
@@ -112,6 +142,8 @@ namespace Mono.Security.NewTls
 			if (!ctx.IsServer)
 				throw new InvalidOperationException ();
 
+			AssertTls12 (ctx);
+
 			var parameters = GetServerSignatureParameters (ctx);
 			return SelectSignatureAlgorithm (ctx, parameters);
 		}
@@ -121,6 +153,8 @@ namespace Mono.Security.NewTls
 			if (!ctx.IsServer)
 				throw new InvalidOperationException ();
 
+			AssertTls12 (ctx);
+
 			VerifySignatureAlgorithm (ctx, algorithm);
 		}
 
@@ -129,7 +163,39 @@ namespace Mono.Security.NewTls
 			if (ctx.IsServer)
 				throw new InvalidOperationException ();
 
+			AssertTls12 (ctx);
+
 			VerifySignatureAlgorithm (ctx, algorithm);
+
+			if (ctx.HasCurrentSignatureParameters && ctx.CurrentSignatureParameters != null) {
+				if (!ctx.CurrentSignatureParameters.SignatureAndHashAlgorithms.Contains (algorithm))
+					throw new TlsException (AlertDescription.IlegalParameter);
+			} else if (!algorithm.Equals (SignatureParameters.DefaultAlgorithm)) {
+				throw new TlsException (AlertDescription.IlegalParameter);
+			}
+		}
+
+		public virtual void AssertCertificateVerifySignatureAlgorithm (ITlsContext ctx, SignatureAndHashAlgorithm algorithm)
+		{
+			if (!ctx.IsServer)
+				throw new InvalidOperationException ();
+
+			AssertTls12 (ctx);
+
+			VerifySignatureAlgorithm (ctx, algorithm);
+
+			ClientCertificateParameters parameters;
+			if (ctx.HasClientCertificateParameters && ctx.ClientCertificateParameters != null)
+				parameters = ctx.ClientCertificateParameters;
+			else
+				parameters = null;
+
+			if (parameters != null && parameters.HasSignatureParameters && parameters.SignatureParameters != null) {
+				if (!parameters.SignatureParameters.SignatureAndHashAlgorithms.Contains (algorithm))
+					throw new TlsException (AlertDescription.IlegalParameter);
+			} else if (!algorithm.Equals (SignatureParameters.DefaultAlgorithm)) {
+				throw new TlsException (AlertDescription.IlegalParameter);
+			}
 		}
 	}
 }

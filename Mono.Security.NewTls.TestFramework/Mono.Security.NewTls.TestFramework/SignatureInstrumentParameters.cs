@@ -62,6 +62,9 @@ namespace Mono.Security.NewTls.TestFramework
 			ServerSignatureAlgorithm = other.ServerSignatureAlgorithm;
 			ExpectClientSignatureAlgorithm = other.ExpectClientSignatureAlgorithm;
 			ExpectServerSignatureAlgorithm = other.ExpectServerSignatureAlgorithm;
+			ServerCertificateParameters = other.ServerCertificateParameters;
+			CertificateVerifySignatureAlgorithm = other.CertificateVerifySignatureAlgorithm;
+			ExpectCertificateVerifySignatureAlgorithm = other.ExpectCertificateVerifySignatureAlgorithm;
 		}
 
 		public override ConnectionParameters DeepClone ()
@@ -90,6 +93,18 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		public SignatureAndHashAlgorithm? ExpectServerSignatureAlgorithm {
+			get; set;
+		}
+
+		public ClientCertificateParameters ServerCertificateParameters {
+			get; set;
+		}
+
+		public SignatureAndHashAlgorithm? CertificateVerifySignatureAlgorithm {
+			get; set;
+		}
+
+		public SignatureAndHashAlgorithm? ExpectCertificateVerifySignatureAlgorithm {
 			get; set;
 		}
 	}

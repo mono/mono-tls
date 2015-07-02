@@ -158,7 +158,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void HandleCertificateRequest (TlsCertificateRequest message)
 		{
-			HandshakeParameters.ClientCertificateParameters = message.Parameters;
+			Session.ClientCertificateParameters = message.Parameters;
 		}
 
 		protected virtual void HandleServerKeyExchange (TlsServerKeyExchange message)

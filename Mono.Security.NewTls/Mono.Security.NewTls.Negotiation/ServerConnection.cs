@@ -208,15 +208,15 @@ namespace Mono.Security.NewTls.Negotiation
 			if (!UserSettings.AskForClientCertificate)
 				return null;
 
-			var parameters = UserSettings.HasClientCertificateParameters ? UserSettings.ClientCertificateParameters : ClientCertificateParameters.GetDefaultParameters ();
-			return new TlsCertificateRequest (Context.NegotiatedProtocol, parameters);
+			Session.ClientCertificateParameters = Context.SignatureProvider.GetServerCertificateParameters (Context);
+			return new TlsCertificateRequest (Context.NegotiatedProtocol, Session.ClientCertificateParameters);
 		}
 
 		protected virtual void Resolve ()
 		{
 			if (Context.NegotiatedProtocol == TlsProtocolCode.Tls12) {
 				Session.SignatureParameters = Context.SignatureProvider.GetServerSignatureParameters (Context);
-				Session.ServerSignatureAlgorithm = Context.SignatureProvider.SelectSignatureAlgorithm (Context, Session.SignatureParameters);
+				Session.ServerSignatureAlgorithm = Context.SignatureProvider.SelectServerSignatureAlgorithm (Context);
 			}
 		}
 

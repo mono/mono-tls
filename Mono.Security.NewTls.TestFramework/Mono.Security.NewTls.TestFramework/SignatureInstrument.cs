@@ -56,6 +56,9 @@ namespace Mono.Security.NewTls.TestFramework
 			if (ctx.IsServer)
 				throw new InvalidOperationException ();
 
+			if (Parameters.Type == SignatureInstrumentType.NoClientSignatureAlgorithms)
+				return null;
+
 			var parameters = Parameters.ClientSignatureParameters;
 			if (parameters == null)
 				return base.GetClientSignatureParameters (ctx);
@@ -63,6 +66,7 @@ namespace Mono.Security.NewTls.TestFramework
 			switch (Parameters.Type) {
 			case SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms:
 			case SignatureInstrumentType.ClientProvidesNoSupportedSignatureAlgorithms:
+			case SignatureInstrumentType.ServerUsesUnsupportedSignatureAlgorithm2:
 				// Instrumentation override.
 				break;
 
@@ -80,6 +84,14 @@ namespace Mono.Security.NewTls.TestFramework
 				return Parameters.ServerSignatureParameters;
 			else
 				return base.GetServerSignatureParameters (ctx);
+		}
+
+		public override ClientCertificateParameters GetServerCertificateParameters (ITlsContext ctx)
+		{
+			if (Parameters.ServerCertificateParameters != null)
+				return Parameters.ServerCertificateParameters;
+			else
+				return base.GetServerCertificateParameters (ctx);
 		}
 
 		public override SignatureAndHashAlgorithm SelectClientSignatureAlgorithm (ITlsContext ctx)
@@ -102,7 +114,7 @@ namespace Mono.Security.NewTls.TestFramework
 				return base.SelectServerSignatureAlgorithm (ctx);
 		}
 
-		void AssertTls12 (ITlsContext ctx)
+		public override void AssertTls12 (ITlsContext ctx)
 		{
 			Context.Assert (ctx.HasNegotiatedProtocol, "Has negotiated protocol");
 			Context.Assert (ctx.NegotiatedProtocol, Is.EqualTo (TlsProtocolCode.Tls12), "Is TLS 1.2");
@@ -112,8 +124,6 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			AssertTls12 (ctx);
 
-			base.AssertClientSignatureAlgorithm (ctx, algorithm);
-
 			VerifySignatureAlgorithm (ctx, algorithm);
 
 			if (Parameters.ExpectClientSignatureAlgorithm != null)
@@ -122,14 +132,47 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public override void AssertServerSignatureAlgorithm (ITlsContext ctx, SignatureAndHashAlgorithm algorithm)
 		{
-			AssertTls12 (ctx);
+			Context.Assert (ctx.IsServer, Is.False, "is client");
 
-			base.AssertServerSignatureAlgorithm (ctx, algorithm);
+			AssertTls12 (ctx);
 
 			VerifySignatureAlgorithm (ctx, algorithm);
 
 			if (Parameters.ExpectServerSignatureAlgorithm != null)
 				Context.Expect (algorithm, Is.EqualTo (Parameters.ExpectServerSignatureAlgorithm.Value), "server signature algorithm");
+			else if (ctx.HasCurrentSignatureParameters && ctx.CurrentSignatureParameters != null) {
+				if (!ctx.CurrentSignatureParameters.SignatureAndHashAlgorithms.Contains (algorithm))
+					throw new TlsException (AlertDescription.IlegalParameter);
+			} else if (!algorithm.Equals (SignatureParameters.DefaultAlgorithm)) {
+				throw new TlsException (AlertDescription.IlegalParameter);
+			}
+		}
+
+		public override void AssertCertificateVerifySignatureAlgorithm (ITlsContext ctx, SignatureAndHashAlgorithm algorithm)
+		{
+			Context.Assert (ctx.IsServer, Is.True, "is server");
+
+			AssertTls12 (ctx);
+
+			VerifySignatureAlgorithm (ctx, algorithm);
+
+			if (Parameters.ExpectCertificateVerifySignatureAlgorithm != null) {
+				Context.Expect (algorithm, Is.EqualTo (Parameters.ExpectCertificateVerifySignatureAlgorithm.Value), "certificate validate signature algorithm");
+				return;
+			}
+
+			ClientCertificateParameters parameters;
+			if (ctx.HasClientCertificateParameters && ctx.ClientCertificateParameters != null)
+				parameters = ctx.ClientCertificateParameters;
+			else
+				parameters = null;
+
+			if (parameters != null && parameters.HasSignatureParameters && parameters.SignatureParameters != null) {
+				if (!parameters.SignatureParameters.SignatureAndHashAlgorithms.Contains (algorithm))
+					throw new TlsException (AlertDescription.IlegalParameter);
+			} else if (!algorithm.Equals (SignatureParameters.DefaultAlgorithm)) {
+				throw new TlsException (AlertDescription.IlegalParameter);
+			}
 		}
 	}
 }

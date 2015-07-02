@@ -29,11 +29,15 @@ namespace Mono.Security.NewTls
 {
 	public interface IConfigurationProvider
 	{
+		bool HasClientSignatureParameters {
+			get;
+		}
+
 		SignatureParameters ClientSignatureParameters {
 			get;
 		}
 
-		SignatureParameters ServerSignatureParameters {
+		bool HasClientCertificateParameters {
 			get;
 		}
 

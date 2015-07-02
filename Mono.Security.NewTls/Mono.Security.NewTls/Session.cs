@@ -19,6 +19,8 @@ namespace Mono.Security.NewTls
 		bool hasSignatureParameters;
 		SignatureParameters signatureParameters;
 		SignatureAndHashAlgorithm? serverSignatureAlgorithm;
+		bool hasCertificateParameters;
+		ClientCertificateParameters certificateParameters;
 
 		public TlsConfiguration Configuration {
 			get;
@@ -91,6 +93,22 @@ namespace Mono.Security.NewTls
 				if (!hasSignatureParameters)
 					throw new InvalidOperationException ();
 				serverSignatureAlgorithm = value;
+			}
+		}
+
+		internal bool HasCertificateParameters {
+			get { return hasCertificateParameters; }
+		}
+
+		internal ClientCertificateParameters ClientCertificateParameters {
+			get {
+				if (!hasCertificateParameters)
+					throw new InvalidOperationException ();
+				return certificateParameters;
+			}
+			set {
+				certificateParameters = value;
+				hasCertificateParameters = true;
 			}
 		}
 
