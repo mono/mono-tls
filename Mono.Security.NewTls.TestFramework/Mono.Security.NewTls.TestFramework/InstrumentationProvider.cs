@@ -28,11 +28,9 @@ using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using Instrumentation;
-
 	public interface InstrumentationProvider
 	{
-		InstrumentCollection CreateInstrument (TestContext ctx);
+		Instrumentation CreateInstrument (TestContext ctx);
 	}
 }
 

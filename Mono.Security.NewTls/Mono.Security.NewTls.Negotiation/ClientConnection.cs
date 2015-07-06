@@ -89,19 +89,15 @@ namespace Mono.Security.NewTls.Negotiation
 		{
 			HandshakeParameters.ClientRandom = Context.Session.GetSecureRandomBytes (32);
 
-			var requestedUserCiphers = Config.UserSettings != null ? Config.UserSettings.RequestedCiphers : null;
 			CipherSuiteCollection requestedCiphers;
-			if (requestedUserCiphers != null)
-				requestedCiphers = new CipherSuiteCollection (Config.RequestedProtocol, requestedUserCiphers);
+			if (Settings.RequestedCiphers != null)
+				requestedCiphers = new CipherSuiteCollection (Config.RequestedProtocol, Settings.RequestedCiphers);
 			else
 				requestedCiphers = CipherSuiteFactory.GetDefaultCiphers (Config.RequestedProtocol);
 			if (requestedCiphers.Protocol != Config.RequestedProtocol)
 				throw new TlsException (AlertDescription.ProtocolVersion);
 
 			HandshakeParameters.SupportedCiphers = requestedCiphers.Clone ();
-
-			if (Config.RequestedProtocol == TlsProtocolCode.Tls12 && !UserSettings.HasClientCertificateParameters)
-				UserSettings.ClientCertificateParameters = ClientCertificateParameters.GetDefaultParameters ();
 
 			if (Config.EnableSecureRenegotiation && !Session.SecureRenegotiation && ((Config.RenegotiationFlags & RenegotiationFlags.SendCipherSpecCode) != 0))
 				HandshakeParameters.SupportedCiphers.AddSCSV ();

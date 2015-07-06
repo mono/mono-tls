@@ -55,12 +55,12 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return false; }
 		}
 
-		protected override TlsSettings GetSettings ()
+		protected override TlsSettings GetSettings (UserSettings userSettings)
 		{
-			var settings = new TlsSettings ();
+			var settings = new TlsSettings (userSettings);
 
 			if (MonoParameters != null)
-				settings.RequestedCiphers = MonoParameters.ClientCiphers;
+				settings.UserSettings.RequestedCiphers = MonoParameters.ClientCiphers;
 
 			return settings;
 		}

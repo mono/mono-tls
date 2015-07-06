@@ -392,13 +392,14 @@ namespace Mono.Security.NewTls.TestFeatures
 			return constructor (server, client, parameters, flags);
 		}
 
-		public static R CreateTestRunner<P,R> (TestContext ctx, Func<IServer,IClient,P,MonoConnectionFlags,R> constructor)
+		public static R CreateTestRunner<P,R> (TestContext ctx, Func<IServer,IClient,P,MonoConnectionFlags,R> constructor, MonoConnectionFlags? flags = null)
 			where P : InstrumentationParameters
 			where R : InstrumentationTestRunner
 		{
 			var parameters = ctx.GetParameter<P> ();
-			var flags = InstrumentationTestRunner.GetConnectionFlags (ctx, parameters.Category);
-			return CreateTestRunner (ctx, parameters, flags, constructor);
+			if (flags == null)
+				flags = InstrumentationTestRunner.GetConnectionFlags (ctx, parameters.Category);
+			return CreateTestRunner (ctx, parameters, flags.Value, constructor);
 		}
 	}
 }

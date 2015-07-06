@@ -34,7 +34,6 @@ using Xamarin.WebTests.Resources;
 namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
-	using Instrumentation;
 
 	public class SignatureInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<SignatureInstrumentParameters>
 	{

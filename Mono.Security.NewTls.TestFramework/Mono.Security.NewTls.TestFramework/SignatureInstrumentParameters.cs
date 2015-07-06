@@ -31,8 +31,6 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using Instrumentation;
-
 	public class SignatureInstrumentParameters : InstrumentationParameters
 	{
 		public SignatureInstrumentType Type {

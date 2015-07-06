@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationType.cs
+// ConnectionInstrument.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,14 +24,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Xamarin.AsyncTests;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum InstrumentationType
+	public class ConnectionInstrument : SettingsProvider
 	{
-		None,
-		DisableRenegotiation,
-		CloseServerConnection
+		public TestContext Context {
+			get;
+			private set;
+		}
+
+		public ConnectionInstrumentTestRunner TestRunner {
+			get;
+			private set;
+		}
+
+		public ConnectionInstrumentParameters Parameters {
+			get { return TestRunner.Parameters; }
+		}
+
+		public ConnectionInstrument (UserSettings settings, TestContext ctx, ConnectionInstrumentTestRunner runner)
+			: base (settings)
+		{
+			Context = ctx;
+			TestRunner = runner;
+		}
+
+		public override bool? EnableDebugging {
+			get { return Parameters.EnableDebugging; }
+		}
+
+		public override RenegotiationFlags? ClientRenegotiationFlags {
+			get { return Parameters.ClientRenegotiationFlags; }
+		}
+
+		public override RenegotiationFlags? ServerRenegotiationFlags {
+			get { return Parameters.ServerRenegotiationFlags; }
+		}
+
+		public override bool? RequestRenegotiation {
+			get { return Parameters.RequestRenegotiation; }
+		}
 	}
 }
 

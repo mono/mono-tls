@@ -47,9 +47,7 @@ namespace Mono.Security.NewTls.TestFramework
 		ServerSendsCertificateParametersWithNoSupportedAlgorithms,
 		ClientSendsCertificateVerifyWithUnrequestedAlgorithm,
 		CertificateVerifySignatureAlgorithmSelectionOrder,
-		CertificateVerifySignatureAlgorithmSelectionOrder2,
-
-		MartinTest
+		CertificateVerifySignatureAlgorithmSelectionOrder2
 	}
 }
 

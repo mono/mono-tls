@@ -7,10 +7,6 @@ namespace Mono.Security.NewTls.Negotiation
 	using Cipher;
 	using X509;
 
-	#if INSTRUMENTATION
-	using Instrumentation;
-	#endif
-
 	class ServerConnection : NegotiationHandler
 	{
 		public bool Renegotiating {
@@ -114,10 +110,9 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void SelectCipher (TlsClientHello message)
 		{
-			var userCiphers = Config.UserSettings != null ? Config.UserSettings.RequestedCiphers : null;
 			CipherSuiteCollection supportedCiphers;
-			if (userCiphers != null)
-				supportedCiphers = new CipherSuiteCollection (Context.NegotiatedProtocol, userCiphers);
+			if (Settings.RequestedCiphers != null)
+				supportedCiphers = new CipherSuiteCollection (Context.NegotiatedProtocol, Settings.RequestedCiphers);
 			else
 				supportedCiphers = CipherSuiteFactory.GetDefaultCiphers (Context.NegotiatedProtocol);
 
@@ -205,7 +200,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual TlsCertificateRequest GenerateCertificateRequest ()
 		{
-			if (!UserSettings.AskForClientCertificate)
+			if (!Settings.AskForClientCertificate)
 				return null;
 
 			Session.ClientCertificateParameters = Context.SignatureProvider.GetServerCertificateParameters (Context);

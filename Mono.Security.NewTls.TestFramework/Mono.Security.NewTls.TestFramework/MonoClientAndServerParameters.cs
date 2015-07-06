@@ -31,8 +31,6 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using Instrumentation;
-
 	public class MonoClientAndServerParameters : ClientAndServerParameters
 	{
 		public MonoClientAndServerParameters (string identifier, IServerCertificate certificate)

@@ -57,18 +57,15 @@
     <Compile Include="Mono.Security.NewTls\TlsStream.cs" />
     <Compile Include="Mono.Security.NewTls\IBufferOffsetSize.cs" />
     <Compile Include="Mono.Security.NewTls\CipherSuiteCode.cs" />
-    <Compile Include="Mono.Security.NewTls.Instrumentation\HandshakeInstrumentType.cs" />
-    <Compile Include="Mono.Security.NewTls.Instrumentation\SettingsInstrument.cs" />
-    <Compile Include="Mono.Security.NewTls.Instrumentation\InstrumentCollection.cs" />
     <Compile Include="Mono.Security.NewTls\TlsProtocols.cs" />
     <Compile Include="Mono.Security.NewTls\SignatureParameters.cs" />
     <Compile Include="Mono.Security.NewTls\IHashAlgorithm.cs" />
     <Compile Include="Mono.Security.NewTls\SignatureProvider.cs" />
     <Compile Include="Mono.Security.NewTls\ITlsContext.cs" />
-    <Compile Include="Mono.Security.NewTls\IConfigurationProvider.cs" />
+    <Compile Include="Mono.Security.NewTls\UserSettings.cs" />
+    <Compile Include="Mono.Security.NewTls\SettingsProvider.cs" />
+    <Compile Include="Mono.Security.NewTls\Instrumentation.cs" />
+    <Compile Include="Mono.Security.NewTls\InstrumentationFlags.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Mono.Security.NewTls.Instrumentation\" />
-  </ItemGroup>
 </Project>

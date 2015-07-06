@@ -64,6 +64,7 @@ namespace Mono.Security.NewTls.Negotiation
 			switch (message.Type) {
 			case HandshakeType.ServerHello:
 				hello = (TlsServerHello)message;
+				HandleExtensions (hello);
 				CheckSecureRenegotiation ();
 				HandleServerHello (hello);
 				return MessageStatus.ContinueNeeded;
@@ -256,7 +257,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 			#if DEBUG_FULL
 			if (Context.EnableDebugging)
-				DebugHelper.WriteLine ("Generate CertificateVerify: {0} {1}", PendingCrypto.CertificateSignatureType, Config.Certificate.SubjectName);
+				DebugHelper.WriteLine ("Generate CertificateVerify: {0} {1}", PendingCrypto.CertificateSignature, Config.Certificate.SubjectName);
 			#endif
 
 			return new TlsCertificateVerify (PendingCrypto.CertificateSignature);

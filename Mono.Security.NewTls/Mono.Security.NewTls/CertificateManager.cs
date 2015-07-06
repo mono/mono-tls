@@ -16,7 +16,7 @@ namespace Mono.Security.NewTls
 
 			var helper = config.CertificateValidator;
 			if (helper == null)
-				helper = CertificateValidationHelper.CreateDefaultValidator (config.UserSettings);
+				helper = CertificateValidationHelper.CreateDefaultValidator (config.TlsSettings);
 
 			var result = helper.ValidateChain (config.TargetHost, certificates);
 			if (result != null && result.Trusted && !result.UserDenied)
@@ -36,26 +36,26 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		internal static bool CheckClientCertificate (TlsConfiguration config, MX.X509CertificateCollection certificates)
+		internal static bool CheckClientCertificate (TlsContext context, MX.X509CertificateCollection certificates)
 		{
 			if (certificates == null || certificates.Count < 1) {
-				if (!config.UserSettings.AskForClientCertificate)
+				if (!context.SettingsProvider.AskForClientCertificate)
 					return false;
-				if (config.UserSettings.RequireClientCertificate)
+				if (context.SettingsProvider.RequireClientCertificate)
 					throw new TlsException (AlertDescription.CertificateUnknown);
 			}
 
-			if (config.UserSettings.HasClientCertificateParameters) {
-				var certParams = config.UserSettings.ClientCertificateParameters;
+			if (context.SettingsProvider.HasClientCertificateParameters) {
+				var certParams = context.SettingsProvider.ClientCertificateParameters;
 				if (certParams.CertificateAuthorities.Count > 0) {
 					if (!certParams.CertificateAuthorities.Contains (certificates [0].IssuerName))
 						throw new TlsException (AlertDescription.BadCertificate);
 				}
 			}
 
-			var helper = config.CertificateValidator;
+			var helper = context.Configuration.CertificateValidator;
 			if (helper == null)
-				helper = CertificateValidationHelper.CreateDefaultValidator (config.UserSettings);
+				helper = CertificateValidationHelper.CreateDefaultValidator (context.Configuration.TlsSettings);
 
 			var result = helper.ValidateClientCertificate (certificates);
 			if (result != null && result.Trusted && !result.UserDenied)

@@ -45,21 +45,21 @@ namespace Mono.Security.NewTls.Negotiation
 		{
 			switch (message.Type) {
 			case HandshakeType.Certificate:
-				if (!UserSettings.AskForClientCertificate)
+				if (!Settings.AskForClientCertificate)
 					throw new TlsException (AlertDescription.UnexpectedMessage);
 				certificate = (TlsCertificate)message;
 				HandleCertificate (certificate);
 				return MessageStatus.ContinueNeeded;
 
 			case HandshakeType.ClientKeyExchange:
-				if (UserSettings.RequireClientCertificate && certificate == null)
+				if (Settings.RequireClientCertificate && certificate == null)
 					throw new TlsException (AlertDescription.UnexpectedMessage, "Peer did not respond with a certificate.");
 				keyExchange = (TlsClientKeyExchange)message;
 				HandleClientKeyExchange (keyExchange);
 				return MessageStatus.ContinueNeeded;
 
 			case HandshakeType.ChanceCipherSpec:
-				if (UserSettings.RequireClientCertificate && certificateVerify == null)
+				if (Settings.RequireClientCertificate && certificateVerify == null)
 					throw new TlsException (AlertDescription.UnexpectedMessage, "Missing CertificateVerify message.");
 				cipherSpec = (TlsChangeCipherSpec)message;
 				HandleChangeCipherSpec (cipherSpec);
@@ -82,7 +82,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void HandleCertificate (TlsCertificate message)
 		{
-			if (CertificateManager.CheckClientCertificate (Config, message.Certificates))
+			if (CertificateManager.CheckClientCertificate (Context, message.Certificates))
 				PendingCrypto.ClientCertificates = message.Certificates;
 		}
 
@@ -144,11 +144,13 @@ namespace Mono.Security.NewTls.Negotiation
 
 			FinishHandshake ();
 
-			if (UserSettings.MartinHack_TriggerRenegotiationOnFinish) {
+			#if INSTRUMENTATION
+			if (!Session.IsRenegotiated && (Settings.RequestRenegotiation ?? false)) {
 				// FIXME: HACK to force renegotiation!
-				Config.UserSettings.MartinHack_TriggerRenegotiationOnFinish = false;
+				Session.IsRenegotiated = true;
 				outgoing.Add (Context.EncodeHandshakeRecord (new TlsHelloRequest ()));
 			}
+			#endif
 
 			return Context.CreateNegotiationHandler (NegotiationState.RenegotiatingServerConnection);
 		}

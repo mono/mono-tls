@@ -1,5 +1,5 @@
 ﻿//
-// ITlsConfiguration.cs
+// Instrumentation.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,25 +24,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace Mono.Security.NewTls
 {
-	public interface IConfigurationProvider
+	public class Instrumentation
 	{
-		bool HasClientSignatureParameters {
-			get;
+		public bool HasSettingsInstrument {
+			get { return SettingsInstrument != null; }
 		}
 
-		SignatureParameters ClientSignatureParameters {
-			get;
+		public SettingsProvider SettingsInstrument {
+			get; set;
 		}
 
-		bool HasClientCertificateParameters {
-			get;
+		public bool HasSignatureInstrument {
+			get { return SignatureInstrument != null; }
 		}
 
-		ClientCertificateParameters ClientCertificateParameters {
-			get;
+		public SignatureProvider SignatureInstrument {
+			get; set;
+		}
+
+		public InstrumentationFlags InstrumentationFlags {
+			get; set;
 		}
 	}
 }

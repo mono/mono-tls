@@ -37,7 +37,6 @@ using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 using Xamarin.WebTests.TestRunners;
-using Mono.Security.NewTls.Instrumentation;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -63,7 +62,7 @@ namespace Mono.Security.NewTls.TestFramework
 				((IMonoClient)client).InstrumentationProvider = this;
 		}
 
-		public abstract InstrumentCollection CreateInstrument (TestContext ctx);
+		public abstract Instrumentation CreateInstrument (TestContext ctx);
 
 		public static MonoConnectionFlags GetConnectionFlags (TestContext ctx, InstrumentationCategory category)
 		{
@@ -148,6 +147,16 @@ namespace Mono.Security.NewTls.TestFramework
 
 		async Task RunWithManualClient (TestContext ctx, CancellationToken cancellationToken)
 		{
+			ctx.LogMessage ("MANUAL CLIENT");
+
+			var serverStream = new StreamWrapper (Server.Stream);
+			await serverStream.WriteLineAsync ("Hello World!");
+
+			ctx.LogMessage ("WAITING FOR CLIENT INPUT");
+
+			var line = await serverStream.ReadLineAsync ();
+			ctx.LogMessage ("GOT CLIENT MESSAGE: {0}", line);
+
 			await Shutdown (ctx, SupportsCleanShutdown, true, cancellationToken);
 		}
 	}

@@ -27,19 +27,21 @@ using System;
 
 namespace Mono.Security.NewTls
 {
-	using Instrumentation;
-
 	public interface ITlsContext
 	{
 		bool IsServer {
 			get;
 		}
 
-		IConfigurationProvider ConfigurationProvider {
+		SettingsProvider SettingsProvider {
 			get;
 		}
 
 		bool IsAlgorithmSupported (SignatureAndHashAlgorithm algorithm);
+
+		bool? AskForClientCertificate {
+			get;
+		}
 
 		bool HasNegotiatedProtocol {
 			get;

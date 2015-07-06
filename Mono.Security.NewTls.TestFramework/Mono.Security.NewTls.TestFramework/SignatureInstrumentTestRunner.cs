@@ -36,8 +36,6 @@ using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using Instrumentation;
-
 	public class SignatureInstrumentTestRunner : InstrumentationTestRunner
 	{
 		new public SignatureInstrumentParameters Parameters {
@@ -53,9 +51,9 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
-		public override InstrumentCollection CreateInstrument (TestContext ctx)
+		public override Instrumentation CreateInstrument (TestContext ctx)
 		{
-			var instrumentation = new InstrumentCollection ();
+			var instrumentation = new Instrumentation ();
 			instrumentation.SignatureInstrument = new SignatureInstrument (ctx, this);
 			return instrumentation;
 		}
@@ -77,9 +75,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case InstrumentationCategory.SignatureAlgorithms:
 				return SignatureParameterTypes.Select (t => Create (ctx, category, t));
-
-			case InstrumentationCategory.MartinTest:
-				return MartinTestTypes.Select (t => Create (ctx, category, t));
 
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
@@ -160,10 +155,6 @@ namespace Mono.Security.NewTls.TestFramework
 			SignatureInstrumentType.ClientSendsCertificateVerifyWithUnrequestedAlgorithm,
 			SignatureInstrumentType.CertificateVerifySignatureAlgorithmSelectionOrder,
 			SignatureInstrumentType.CertificateVerifySignatureAlgorithmSelectionOrder2
-		};
-
-		internal static readonly SignatureInstrumentType[] MartinTestTypes = {
-			SignatureInstrumentType.MartinTest
 		};
 
 		static SignatureInstrumentParameters CreateParameters (InstrumentationCategory category, SignatureInstrumentType type, params object[] args)
@@ -321,14 +312,6 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ExpectCertificateVerifySignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha512);
 				break;
 
-			case SignatureInstrumentType.MartinTest:
-				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
-				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha384);
-				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Sha512);
-				parameters.ClientSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha256);
-				parameters.ExpectServerAlert = AlertDescription.IlegalParameter;
-				break;
-
 			default:
 				ctx.AssertFail ("Unsupported signature instrument: '{0}'.", type);
 				break;
@@ -372,16 +355,6 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 
 			base.OnWaitForClientConnectionCompleted (ctx, task);
-		}
-
-		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
-		{
-			switch (Type) {
-			case SignatureInstrumentType.MartinTest:
-				break;
-			}
-
-			base.OnRun (ctx, cancellationToken);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿//
-// SettingsInstrument.cs
+// ConnectionInstrumentTestRunnerAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,14 +24,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Threading;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
+using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.TestRunners;
+using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.Instrumentation
+namespace Mono.Security.NewTls.TestFeatures
 {
-	public class SettingsInstrument
+	using TestFramework;
+
+	public class ConnectionInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<ConnectionInstrumentTestRunner>
 	{
-		public bool DisableRenegotiation {
-			get; set;
+		public ConnectionInstrumentTestRunnerAttribute ()
+			: base (typeof (ConnectionInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		{
+		}
+
+		public ConnectionInstrumentTestRunnerAttribute (MonoConnectionFlags flags)
+			: base (typeof (ConnectionInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		{
+			ConnectionFlags = flags;
+		}
+
+		public MonoConnectionFlags? ConnectionFlags {
+			get;
+			private set;
+		}
+
+		public ConnectionInstrumentTestRunner CreateInstance (TestContext ctx)
+		{
+			return MonoTestFeatures.CreateTestRunner<ConnectionInstrumentParameters,ConnectionInstrumentTestRunner> (
+				ctx, (s, c, p, f) => new ConnectionInstrumentTestRunner (s, c, p, f), ConnectionFlags);
 		}
 	}
 }

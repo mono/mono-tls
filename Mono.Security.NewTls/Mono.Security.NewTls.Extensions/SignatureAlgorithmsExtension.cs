@@ -52,7 +52,7 @@ namespace Mono.Security.NewTls.Extensions
 		public override TlsExtension ProcessServer (TlsContext context)
 		{
 			context.Session.SignatureParameters = SignatureParameters;
-			return this;
+			return null;
 		}
 	}
 }

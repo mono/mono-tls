@@ -42,7 +42,6 @@ using Xamarin.AsyncTests.Console;
 namespace Mono.Security.NewTls.DotNetConsole
 {
 	using TestFramework;
-	using Instrumentation;
 	using Tests;
 
 	public class DotNetDependencyProvider : IDependencyProvider

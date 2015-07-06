@@ -7,10 +7,6 @@ using SSCX = System.Security.Cryptography.X509Certificates;
 
 namespace Mono.Security.NewTls
 {
-	#if INSTRUMENTATION
-	using Instrumentation;
-	#endif
-
 	public delegate bool RemoteCertValidationCallback (string host, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);
 	public delegate bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);
 	public delegate SSCX.X509Certificate LocalCertSelectionCallback (string targetHost, SSCX.X509CertificateCollection localCertificates, SSCX.X509Certificate remoteCertificate, string[] acceptableIssuers);
@@ -28,7 +24,7 @@ namespace Mono.Security.NewTls
 			get { return requestedProtocol; }
 		}
 
-		public TlsSettings UserSettings {
+		public TlsSettings TlsSettings {
 			get;
 			private set;
 		}
@@ -36,6 +32,10 @@ namespace Mono.Security.NewTls
 		internal RenegotiationFlags RenegotiationFlags {
 			get;
 			private set;
+		}
+
+		public bool? AskForClientCertificate {
+			get; set;
 		}
 
 		internal void ForceDisableRenegotiation ()
@@ -56,7 +56,7 @@ namespace Mono.Security.NewTls
 		{
 			supportedProtocols = protocols;
 			requestedProtocol = CheckProtocol (ref supportedProtocols, false);
-			UserSettings = settings ?? new TlsSettings ();
+			TlsSettings = settings ?? new TlsSettings ();
 			TargetHost = targetHost;
 
 			RenegotiationFlags = DefaultRenegotiationFlags;
@@ -66,7 +66,7 @@ namespace Mono.Security.NewTls
 		{
 			supportedProtocols = protocols;
 			requestedProtocol = CheckProtocol (ref supportedProtocols, true);
-			UserSettings = settings ?? new TlsSettings ();
+			TlsSettings = settings ?? new TlsSettings ();
 			Certificate = certificate;
 			PrivateKey = privateKey;
 
@@ -195,29 +195,15 @@ namespace Mono.Security.NewTls
 		#if INSTRUMENTATION
 
 		public bool HasInstrumentation {
-			get { return UserSettings != null && UserSettings.Instrumentation != null; }
+			get { return TlsSettings != null && TlsSettings.Instrumentation != null; }
 		}
 
-		public InstrumentCollection Instrumentation {
+		public Instrumentation Instrumentation {
 			get {
 				if (!HasInstrumentation)
 					throw new InvalidOperationException ();
-				return UserSettings.Instrumentation;
+				return TlsSettings.Instrumentation;
 			}
-		}
-
-		public bool HasSettingsInstrument {
-			get { return HasInstrumentation && Instrumentation.HasSettings; }
-		}
-
-		public SettingsInstrument SettingsInstrument {
-			get { return Instrumentation.Settings; }
-		}
-
-		public void Apply (SettingsInstrument instrument)
-		{
-			if (instrument.DisableRenegotiation)
-				RenegotiationFlags = RenegotiationFlags.DisallowRenegotiation;
 		}
 
 		#endif

@@ -88,7 +88,7 @@ namespace Mono.Security.Providers.NewTls
 				var monoCert = new MX.X509Certificate (cert.RawData);
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, monoCert, cert.PrivateKey);
 				if (remoteCertRequired)
-					config.UserSettings.AskForClientCertificate = true;
+					config.AskForClientCertificate = true;
 			} else {
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, hostname);
 			}

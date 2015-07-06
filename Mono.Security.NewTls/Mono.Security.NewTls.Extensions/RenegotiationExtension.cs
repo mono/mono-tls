@@ -57,7 +57,7 @@ namespace Mono.Security.NewTls.Extensions
 
 			if (!context.Session.SecureRenegotiation) {
 				// Initial handshake
-				if (Data != null)
+				if (Data != null && Data.Size > 0)
 					throw new TlsException (AlertDescription.HandshakeFailure);
 				context.HandshakeParameters.SecureNegotiationSupported = true;
 				return true;
@@ -65,9 +65,13 @@ namespace Mono.Security.NewTls.Extensions
 
 			var clientData = context.Session.ClientVerifyData;
 			var serverData =  context.Session.ServerVerifyData;
-			DebugHelper.WriteLine ("CHECKING CLIENT DATA", clientData);
-			DebugHelper.WriteLine ("CHECKING SERVER DATA", serverData);
-			DebugHelper.WriteLine ("CHECKING WHAT WE GOT", Data);
+			#if DEBUG_FULL
+			if (context.EnableDebugging) {
+				DebugHelper.WriteLine ("CHECKING CLIENT DATA", clientData);
+				DebugHelper.WriteLine ("CHECKING SERVER DATA", serverData);
+				DebugHelper.WriteLine ("CHECKING WHAT WE GOT", Data);
+			}
+			#endif
 			var expectedLength = clientData.Size + serverData.Size;
 			if (Data.Size != expectedLength)
 				throw new TlsException (AlertDescription.DecodeError);
@@ -100,8 +104,12 @@ namespace Mono.Security.NewTls.Extensions
 
 			var clientData = context.Session.ClientVerifyData;
 			var serverData =  context.Session.ServerVerifyData;
-			DebugHelper.WriteLine ("WRITING CLIENT DATA", clientData);
-			DebugHelper.WriteLine ("WRITING SERVER DATA", serverData);
+			#if DEBUG_FULL
+			if (context.EnableDebugging) {
+				DebugHelper.WriteLine ("WRITING CLIENT DATA", clientData);
+				DebugHelper.WriteLine ("WRITING SERVER DATA", serverData);
+			}
+			#endif
 			var data = new SecureBuffer (clientData.Size + serverData.Size);
 			Buffer.BlockCopy (clientData.Buffer, 0, data.Buffer, 0, clientData.Size);
 			Buffer.BlockCopy (serverData.Buffer, 0, data.Buffer, clientData.Size, serverData.Size);

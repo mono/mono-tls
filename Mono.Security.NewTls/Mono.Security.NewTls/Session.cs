@@ -6,7 +6,6 @@ namespace Mono.Security.NewTls
 {
 	using Cipher;
 	using Extensions;
-	using Instrumentation;
 	using X509;
 
 	internal class Session : DisposeContext
@@ -35,6 +34,10 @@ namespace Mono.Security.NewTls
 		internal CryptoParameters PendingCrypto {
 			get { return pendingCrypto; }
 			set { pendingCrypto = Add (value); }
+		}
+
+		internal bool IsRenegotiated {
+			get; set;
 		}
 
 		internal bool PendingRead {

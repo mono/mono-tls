@@ -48,6 +48,8 @@ using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {
+	using TestFramework;
+
 	abstract class MonoConnection : DotNetConnection
 	{
 		public MonoConnection (MonoConnectionProviderImpl provider, ConnectionParameters parameters)
@@ -97,16 +99,23 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected abstract Task<MonoSslStream> Start (TestContext ctx, Socket socket, MSI.MonoTlsSettings settings, CancellationToken cancellationToken);
 
-		protected abstract TlsSettings GetSettings ();
+		protected abstract TlsSettings GetSettings (UserSettings userSettings);
 
 		protected sealed override async Task<ISslStream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
 		{
-			if (ConnectionProvider.IsNewTls)
-				settings = GetSettings ();
+			UserSettings userSettings = null;
+			Instrumentation instrumentation = null;
+			if (SupportsInstrumentation && InstrumentationProvider != null) {
+				instrumentation = InstrumentationProvider.CreateInstrument (ctx);
+				if (instrumentation != null && instrumentation.HasSettingsInstrument)
+					userSettings = instrumentation.SettingsInstrument.UserSettings;
+			}
 
-			var tlsSettings = settings as TlsSettings;
-			if (tlsSettings != null && InstrumentationProvider != null)
-				tlsSettings.Instrumentation = InstrumentationProvider.CreateInstrument (ctx);
+			if (ConnectionProvider.IsNewTls)
+				settings = GetSettings (userSettings);
+
+			if (instrumentation != null)
+				((TlsSettings)settings).Instrumentation = instrumentation;
 
 			monoSslStream = await Start (ctx, socket, settings, cancellationToken);
 			return monoSslStream;

@@ -27,8 +27,6 @@ using System;
 
 namespace Mono.Security.NewTls
 {
-	using Instrumentation;
-
 	public class SignatureProvider
 	{
 		public virtual SignatureParameters GetClientSignatureParameters (ITlsContext ctx)
@@ -36,14 +34,14 @@ namespace Mono.Security.NewTls
 			if (ctx.IsServer)
 				throw new InvalidOperationException ();
 
-			SignatureParameters parameters;
-			if (ctx.ConfigurationProvider.HasClientSignatureParameters)
-				parameters = ctx.ConfigurationProvider.ClientSignatureParameters;
-			else
+			SignatureParameters parameters = null;
+			if (ctx.SettingsProvider.HasClientSignatureParameters)
+				parameters = ctx.SettingsProvider.ClientSignatureParameters;
+
+			if (parameters == null || parameters.IsEmpty)
 				parameters = SignatureParameters.GetDefaultClientParameters ();
 
-			if (parameters != null)
-				VerifySignatureParameters (ctx, parameters);
+			VerifySignatureParameters (ctx, parameters);
 
 			return parameters;
 		}
@@ -69,9 +67,11 @@ namespace Mono.Security.NewTls
 			if (ctx.HasClientCertificateParameters)
 				return ctx.ClientCertificateParameters;
 
-			var parameters = ctx.ConfigurationProvider.ClientCertificateParameters;
-			if (parameters != null)
-				return parameters;
+			if (ctx.SettingsProvider.HasClientCertificateParameters) {
+				var parameters = ctx.SettingsProvider.ClientCertificateParameters;
+				if (parameters != null)
+					return parameters;
+			}
 
 			return ClientCertificateParameters.GetDefaultParameters ();
 		}

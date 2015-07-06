@@ -1,5 +1,5 @@
 ﻿//
-// HandshakeInstrumentType.cs
+// ConnectionInstrumentType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,12 +25,11 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls.Instrumentation
+namespace Mono.Security.NewTls.TestFramework
 {
-	public enum HandshakeInstrumentType
+	public enum ConnectionInstrumentType
 	{
-		None,
-		CloseServerConnection
+		MartinTest
 	}
 }
 

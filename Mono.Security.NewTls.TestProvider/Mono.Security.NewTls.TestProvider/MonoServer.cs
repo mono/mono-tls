@@ -57,16 +57,16 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return true; }
 		}
 
-		protected override TlsSettings GetSettings ()
+		protected override TlsSettings GetSettings (UserSettings userSettings)
 		{
-			var settings = new TlsSettings ();
+			var settings = new TlsSettings (userSettings);
 			if ((Parameters.Flags & ServerFlags.RequireClientCertificate) != 0)
-				settings.RequireClientCertificate = settings.AskForClientCertificate = true;
+				settings.UserSettings.RequireClientCertificate = settings.UserSettings.AskForClientCertificate = true;
 			else if ((Parameters.Flags & ServerFlags.AskForClientCertificate) != 0)
-				settings.AskForClientCertificate = true;
+				settings.UserSettings.AskForClientCertificate = true;
 
 			if (MonoParameters != null)
-				settings.RequestedCiphers = MonoParameters.ServerCiphers;
+				settings.UserSettings.RequestedCiphers = MonoParameters.ServerCiphers;
 
 			return settings;
 		}

@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentCollection.cs
+// InstrumentationFlags.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,45 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Threading;
-using System.Collections.Generic;
 
-namespace Mono.Security.NewTls.Instrumentation
+namespace Mono.Security.NewTls
 {
-	public class InstrumentCollection
+	[Flags]
+	public enum InstrumentationFlags
 	{
-		SettingsInstrument settings;
-		HashSet<HandshakeInstrumentType> handshakeInstruments = new HashSet<HandshakeInstrumentType> ();
-
-		public bool HasSettings {
-			get { return settings != null; }
-		}
-
-		public SettingsInstrument Settings {
-			get {
-				if (settings == null)
-					Interlocked.CompareExchange<SettingsInstrument> (ref settings, new SettingsInstrument (), null);
-				return settings;
-			}
-		}
-
-		public bool HasSignatureInstrument {
-			get { return SignatureInstrument != null; }
-		}
-
-		public SignatureProvider SignatureInstrument {
-			get; set;
-		}
-
-		public void Install (HandshakeInstrumentType type)
-		{
-			handshakeInstruments.Add (type);
-		}
-
-		public bool HasInstrument (HandshakeInstrumentType type)
-		{
-			return handshakeInstruments.Contains (type);
-		}
+		None					= 0,
+		CloseServerConnection			= 1
 	}
 }
 

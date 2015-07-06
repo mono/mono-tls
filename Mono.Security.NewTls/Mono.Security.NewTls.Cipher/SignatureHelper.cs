@@ -6,8 +6,6 @@ using MSC = Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher
 {
-	using Instrumentation;
-
 	internal static class SignatureHelper
 	{
 		public static SecureBuffer CreateSignature (SignatureAndHashAlgorithm type, byte[] hash, AsymmetricAlgorithm key)

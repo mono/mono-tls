@@ -55,7 +55,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionProviderFactory.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationTestRunner.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\ClientAndServerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientAndServerTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\MonoClientAndServerTestRunnerAttribute.cs" />
@@ -73,6 +72,12 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationCategory.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionHelper.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrument.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentTestRunner.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentType.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\ConnectionInstrumentParametersAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\ConnectionInstrumentTestRunnerAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

@@ -4,9 +4,6 @@ namespace Mono.Security.NewTls.Negotiation
 {
 	using Cipher;
 	using Handshake;
-	#if INSTRUMENTATION
-	using Instrumentation;
-	#endif
 
 	abstract class NegotiationHandler
 	{
@@ -32,8 +29,8 @@ namespace Mono.Security.NewTls.Negotiation
 			get { return Context.Configuration; }
 		}
 
-		protected TlsSettings UserSettings {
-			get { return Config.UserSettings; }
+		protected SettingsProvider Settings {
+			get { return Context.SettingsProvider; }
 		}
 
 		protected HandshakeParameters HandshakeParameters {
@@ -95,7 +92,7 @@ namespace Mono.Security.NewTls.Negotiation
 			#endif
 
 			#if INSTRUMENTATION
-			if (State == NegotiationState.InitialServerConnection && Context.HasInstrument (HandshakeInstrumentType.CloseServerConnection)) {
+			if (State == NegotiationState.InitialServerConnection && ((Context.InstrumentationFlags & InstrumentationFlags.CloseServerConnection) != 0)) {
 				DebugHelper.WriteLine ("Instrumentation requested to close server connection.");
 				status = SecurityStatus.InvalidHandle;
 				return true;

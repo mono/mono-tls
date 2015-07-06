@@ -11,13 +11,12 @@ namespace Mono.Security.NewTls
 	using Negotiation;
 	using Extensions;
 	using Cipher;
-	using Instrumentation;
 
 	public class TlsContext : ITlsContext
 	{
 		readonly bool isServer;
 		readonly TlsConfiguration configuration;
-		readonly IConfigurationProvider configurationProvider;
+		readonly SettingsProvider settingsProvider;
 		readonly SignatureProvider signatureProvider;
 
 		Session session;
@@ -42,8 +41,8 @@ namespace Mono.Security.NewTls
 			get { return configuration; }
 		}
 
-		public IConfigurationProvider ConfigurationProvider {
-			get { return configurationProvider; }
+		public SettingsProvider SettingsProvider {
+			get { return settingsProvider; }
 		}
 
 		public SignatureProvider SignatureProvider {
@@ -79,16 +78,22 @@ namespace Mono.Security.NewTls
 			this.configuration = configuration;
 			this.isServer = isServer;
 
-			configurationProvider = new DefaultConfigurationProvider (this);
-
 			#if INSTRUMENTATION
-			SetupInstrumentation ();
-			if (configuration.HasInstrumentation && configuration.Instrumentation.HasSignatureInstrument)
-				signatureProvider = configuration.Instrumentation.SignatureInstrument;
+			if (configuration.HasInstrumentation) {
+				if (configuration.Instrumentation.HasSignatureInstrument)
+					signatureProvider = configuration.Instrumentation.SignatureInstrument;
+				if (configuration.Instrumentation.HasSettingsInstrument)
+					settingsProvider = configuration.Instrumentation.SettingsInstrument;
+				InstrumentationFlags = configuration.Instrumentation.InstrumentationFlags;
+			} else {
+				InstrumentationFlags = InstrumentationFlags.None;
+			}
 			#endif
 
 			if (signatureProvider == null)
 				signatureProvider = new SignatureProvider ();
+			if (settingsProvider == null)
+				settingsProvider = new SettingsProvider (configuration.TlsSettings.UserSettings);
 
 			session = new Session (configuration);
 			Session.RandomNumberGenerator = RandomNumberGenerator.Create ();
@@ -98,34 +103,18 @@ namespace Mono.Security.NewTls
 			else
 				negotiationHandler = CreateNegotiationHandler (NegotiationState.InitialClientConnection);
 
-			if (Configuration.UserSettings != null && Configuration.UserSettings.EnableDebugging)
+			if (Configuration.TlsSettings != null && Configuration.TlsSettings.EnableDebugging)
 				EnableDebugging = true;
+			else if (settingsProvider.EnableDebugging ?? false)
+				EnableDebugging = true;
+
+			settingsProvider.Initialize (this);
 		}
 
 		#if INSTRUMENTATION
 
-		internal InstrumentCollection Instrumentation {
-			get;
-			private set;
-		}
-
-		internal bool HasSettingsInstrument {
-			get { return Instrumentation != null && Instrumentation.HasSettings; }
-		}
-
-		internal bool HasInstrument (HandshakeInstrumentType type)
-		{
-			return Instrumentation != null ? Instrumentation.HasInstrument (type) : false;
-		}
-		
-		void SetupInstrumentation ()
-		{
-			if (configuration.UserSettings == null || configuration.UserSettings.Instrumentation == null)
-				return;
-
-			Instrumentation = configuration.UserSettings.Instrumentation;
-			if (Instrumentation.HasSettings)
-				configuration.Apply (Instrumentation.Settings);
+		internal InstrumentationFlags InstrumentationFlags {
+			get; set;
 		}
 
 		#endif
@@ -147,7 +136,7 @@ namespace Mono.Security.NewTls
 				return true;
 
 			if (IsServer) {
-				CertificateManager.CheckClientCertificate (Configuration, Session.CurrentCrypto.ClientCertificates);
+				CertificateManager.CheckClientCertificate (this, Session.CurrentCrypto.ClientCertificates);
 			} else {
 				CertificateManager.CheckRemoteCertificate (Configuration, Session.CurrentCrypto.ServerCertificates);
 			}
@@ -259,6 +248,10 @@ namespace Mono.Security.NewTls
 				throw new TlsException (AlertDescription.IlegalParameter);
 
 			return SignatureHelper.IsAlgorithmSupported (algorithm);
+		}
+
+		bool? ITlsContext.AskForClientCertificate {
+			get { return configuration.AskForClientCertificate; }
 		}
 
 		public bool HasCurrentSignatureParameters {
@@ -494,8 +487,8 @@ namespace Mono.Security.NewTls
 				CipherCode = Session.CurrentCrypto.Cipher.Code, ProtocolVersion = protocol
 			};
 
-			if (configuration.UserSettings != null)
-				configuration.UserSettings.ConnectionInfo = connectionInfo;
+			if (configuration.TlsSettings != null)
+				configuration.TlsSettings.ConnectionInfo = connectionInfo;
 		}
 
 		public TlsConnectionInfo ConnectionInfo {

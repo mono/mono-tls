@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationParameters.cs
+// ConnectionInstrumentParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -31,30 +31,56 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public abstract class InstrumentationParameters : MonoClientAndServerParameters
+	public class ConnectionInstrumentParameters : InstrumentationParameters
 	{
-		public InstrumentationCategory Category {
+		public ConnectionInstrumentType Type {
 			get;
 			private set;
 		}
 
-		public InstrumentationParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		public ConnectionInstrumentParameters (InstrumentationCategory category, ConnectionInstrumentType type, string identifier, IServerCertificate certificate)
+			: base (category, identifier, certificate)
 		{
-			Category = category;
+			Type = type;
 		}
 
-		public InstrumentationParameters (InstrumentationCategory category, ClientParameters clientParameters, ServerParameters serverParameters)
-			: base (clientParameters, serverParameters)
+		public ConnectionInstrumentParameters (InstrumentationCategory category, ConnectionInstrumentType type, ClientParameters clientParameters, ServerParameters serverParameters)
+			: base (category, clientParameters, serverParameters)
 		{
-			Category = category;
+			Type = type;
 		}
 
-		protected InstrumentationParameters (InstrumentationParameters other)
+		protected ConnectionInstrumentParameters (ConnectionInstrumentParameters other)
 			: base (other)
 		{
-			Category = other.Category;
+			Type = other.Type;
+			EnableDebugging = other.EnableDebugging;
+			ClientRenegotiationFlags = other.ClientRenegotiationFlags;
+			ServerRenegotiationFlags = other.ServerRenegotiationFlags;
+			RequestRenegotiation = other.RequestRenegotiation;
+		}
+
+		public override ConnectionParameters DeepClone ()
+		{
+			return new ConnectionInstrumentParameters (this);
+		}
+
+		public bool EnableDebugging {
+			get; set;
+		}
+
+		public RenegotiationFlags? ClientRenegotiationFlags {
+			get; set;
+		}
+
+		public RenegotiationFlags? ServerRenegotiationFlags {
+			get; set;
+		}
+
+		public bool? RequestRenegotiation {
+			get; set;
 		}
 	}
+
 }
 

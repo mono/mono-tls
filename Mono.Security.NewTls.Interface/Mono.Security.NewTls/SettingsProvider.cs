@@ -1,5 +1,5 @@
 ﻿//
-// DefaultConfigurationProvider.cs
+// SettingsProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,42 +24,76 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
 
 namespace Mono.Security.NewTls
 {
-	class DefaultConfigurationProvider : IConfigurationProvider
+	public class SettingsProvider
 	{
-		bool hasSignatureParameters;
-		bool hasClientCertificateParameters;
-		SignatureParameters signatureParameters;
-		ClientCertificateParameters clientCertificateParameters;
+		readonly UserSettings settings;
+		bool? askForClientCertificate;
+
+		public virtual UserSettings UserSettings {
+			get { return settings; }
+		}
+
+		public virtual bool AskForClientCertificate {
+			get { return askForClientCertificate ?? settings.AskForClientCertificate; }
+		}
+
+		public virtual bool RequireClientCertificate {
+			get { return settings.RequireClientCertificate; }
+		}
+
+		protected internal virtual void Initialize (ITlsContext ctx)
+		{
+			if (ctx.AskForClientCertificate != null)
+				askForClientCertificate = ctx.AskForClientCertificate.Value;
+		}
+
+		public virtual ICollection<CipherSuiteCode> RequestedCiphers {
+			get { return settings.RequestedCiphers; }
+		}
 
 		public virtual bool HasClientSignatureParameters {
-			get { return hasSignatureParameters; }
+			get { return settings.HasSignatureParameters; }
 		}
 
 		public virtual bool HasClientCertificateParameters {
-			get { return hasClientCertificateParameters; }
+			get { return settings.HasClientCertificateParameters; }
 		}
 
 		public virtual SignatureParameters ClientSignatureParameters {
-			get { return signatureParameters; }
+			get { return settings.SignatureParameters; }
 		}
 
 		public virtual ClientCertificateParameters ClientCertificateParameters {
-			get { return clientCertificateParameters; }
+			get { return settings.ClientCertificateParameters; }
 		}
 
-		public DefaultConfigurationProvider (TlsContext ctx)
+		#region Instrumentation override only
+
+		public virtual bool? EnableDebugging {
+			get;
+		}
+
+		public virtual RenegotiationFlags? ClientRenegotiationFlags {
+			get { return null; }
+		}
+
+		public virtual RenegotiationFlags? ServerRenegotiationFlags {
+			get { return null; }
+		}
+
+		public virtual bool? RequestRenegotiation {
+			get { return null; }
+		}
+
+		#endregion
+
+		public SettingsProvider (UserSettings settings)
 		{
-			if (ctx.Configuration.UserSettings != null) {
-				hasSignatureParameters = ctx.Configuration.UserSettings.HasSignatureParameters;
-				if (hasSignatureParameters)
-					signatureParameters = ctx.Configuration.UserSettings.SignatureParameters;
-				hasClientCertificateParameters = ctx.Configuration.UserSettings.HasClientCertificateParameters;
-				if (hasClientCertificateParameters)
-					clientCertificateParameters = ctx.Configuration.UserSettings.ClientCertificateParameters;
-			}
+			this.settings = settings;
 		}
 	}
 }

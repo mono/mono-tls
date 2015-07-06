@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationParameters.cs
+// ConnectionInstrumentParametersAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,36 +24,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Resources;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
-	public abstract class InstrumentationParameters : MonoClientAndServerParameters
+	using TestFramework;
+
+	public class ConnectionInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<ConnectionInstrumentParameters>
 	{
 		public InstrumentationCategory Category {
 			get;
 			private set;
 		}
 
-		public InstrumentationParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		public ConnectionInstrumentType? Type {
+			get; set;
+		}
+
+		public ConnectionInstrumentParametersAttribute (InstrumentationCategory category, string filter = null)
+			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
 			Category = category;
 		}
 
-		public InstrumentationParameters (InstrumentationCategory category, ClientParameters clientParameters, ServerParameters serverParameters)
-			: base (clientParameters, serverParameters)
+		public ConnectionInstrumentParametersAttribute (InstrumentationCategory category, ConnectionInstrumentType type)
+			: base (null, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
 			Category = category;
+			Type = type;
 		}
 
-		protected InstrumentationParameters (InstrumentationParameters other)
-			: base (other)
+		public IEnumerable<ConnectionInstrumentParameters> GetParameters (TestContext ctx, string filter)
 		{
-			Category = other.Category;
+			if (filter != null)
+				throw new NotImplementedException ();
+
+			var parameters = ConnectionInstrumentTestRunner.GetParameters (ctx, Category);
+			if (Type != null)
+				return parameters.Where (p => p.Type == Type);
+
+			return parameters;
 		}
 	}
 }

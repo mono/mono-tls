@@ -39,9 +39,7 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 	using TestFeatures;
-	using Instrumentation;
 
-	[Work]
 	[AsyncTestFixture]
 	public class TestSignatureAlgorithms
 	{
