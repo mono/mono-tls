@@ -30,7 +30,8 @@ namespace Mono.Security.NewTls
 	public enum HandshakeInstrumentType
 	{
 		CloseServerConnection,
-		FragmentHandshakeMessages
+		FragmentHandshakeMessages,
+		SendBlobAfterReceivingFinish
 	}
 }
 
