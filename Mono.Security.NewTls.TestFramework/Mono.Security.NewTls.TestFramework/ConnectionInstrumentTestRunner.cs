@@ -66,6 +66,15 @@ namespace Mono.Security.NewTls.TestFramework
 		public static IEnumerable<ConnectionInstrumentParameters> GetParameters (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
+			case InstrumentationCategory.ClientConnection:
+				return ClientConnectionTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.ServerConnection:
+				return ServerConnectionTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.Connection:
+				return ConnectionTypes.Select (t => Create (ctx, category, t));
+
 			case InstrumentationCategory.MartinTest:
 				return MartinTestTypes.Select (t => Create (ctx, category, t));
 
@@ -74,6 +83,15 @@ namespace Mono.Security.NewTls.TestFramework
 				return null;
 			}
 		}
+
+		internal static readonly ConnectionInstrumentType[] ClientConnectionTypes = {
+		};
+
+		internal static readonly ConnectionInstrumentType[] ServerConnectionTypes = {
+		};
+
+		internal static readonly ConnectionInstrumentType[] ConnectionTypes = {
+		};
 
 		internal static readonly ConnectionInstrumentType[] MartinTestTypes = {
 			ConnectionInstrumentType.MartinTest

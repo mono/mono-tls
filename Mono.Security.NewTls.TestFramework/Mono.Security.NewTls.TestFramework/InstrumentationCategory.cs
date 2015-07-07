@@ -37,6 +37,10 @@ namespace Mono.Security.NewTls.TestFramework
 
 		SignatureAlgorithms,
 
+		ClientConnection,
+		ServerConnection,
+		Connection,
+
 		MartinTest
 	}
 }
