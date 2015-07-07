@@ -325,7 +325,7 @@ namespace Mono.Security.NewTls
 				if (contentType != ContentType.Handshake)
 					throw new TlsException (AlertDescription.DecodeError);
 				decrypted = ReadStandardBuffer (ContentType.Handshake, ref incoming);
-				cachedFragment.Write (incoming.Buffer, incoming.Position, incoming.Position + incoming.Remaining);
+				cachedFragment.Write (incoming.Buffer, incoming.Position, incoming.Remaining);
 				if (cachedFragment.Remaining > 0)
 					return SecurityStatus.ContinueNeeded;
 				incoming.Dispose ();
@@ -427,7 +427,7 @@ namespace Mono.Security.NewTls
 				cachedFragment = new TlsBuffer (length + 4);
 				cachedFragment.Position = incoming.Remaining + 4;
 				Buffer.BlockCopy (incoming.Buffer, incoming.Position - 4, cachedFragment.Buffer, 0, cachedFragment.Position);
-				incoming.Dispose ();
+				incoming.Position += incoming.Remaining;
 				status = SecurityStatus.ContinueNeeded;
 				return false;
 			}
