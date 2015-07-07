@@ -70,6 +70,13 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected override NegotiationHandler GenerateOutput (TlsMultiBuffer outgoing)
 		{
+			#if INSTRUMENTATION
+			if (Context.HasInstrument (HandshakeInstrumentType.SendBlobAfterReceivingFinish)) {
+				var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.SendBlobAfterReceivingFinish);
+				outgoing.Add (Context.EncodeRecord (ContentType.ApplicationData, blob));
+			}
+			#endif
+
 			return Context.CreateNegotiationHandler (NegotiationState.RenegotiatingClientConnection);
 		}
 	}

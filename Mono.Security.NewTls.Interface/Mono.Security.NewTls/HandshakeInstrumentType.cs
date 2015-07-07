@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationFlags.cs
+// HandshakeInstrumentType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,11 +27,11 @@ using System;
 
 namespace Mono.Security.NewTls
 {
-	[Flags]
-	public enum InstrumentationFlags
+	public enum HandshakeInstrumentType
 	{
-		None					= 0,
-		CloseServerConnection			= 1
+		CloseServerConnection,
+		FragmentHandshakeMessages,
+		SendBlobAfterReceivingFinish
 	}
 }
 

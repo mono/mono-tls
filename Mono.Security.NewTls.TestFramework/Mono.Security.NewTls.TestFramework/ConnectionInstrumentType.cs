@@ -29,6 +29,8 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public enum ConnectionInstrumentType
 	{
+		FragmentHandshakeMessages,
+		SendBlobAfterReceivingFinish,
 		MartinTest
 	}
 }

@@ -29,14 +29,6 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		#region Server Configuration
-
-		public bool EnableDebugging {
-			get; set;
-		}
-
-		#endregion
-
 		#region Provided by the server
 
 		[CLSCompliant (false)]

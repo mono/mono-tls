@@ -30,34 +30,15 @@ namespace Mono.Security.NewTls
 {
 	public class DebugHelper
 	{
-		private static bool isInitialized;
-
-		[Conditional ("DEBUG")]
-		public static void Initialize ()
-		{
-			if (!isInitialized) {
-#if !PCL
-				Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
-				// Debug.Listeners.Add(new TextWriterTraceListener(@"c:\ssl.log"));
-				Debug.AutoFlush = true;
-				Debug.Indent();
-#endif
-
-				isInitialized = true;
-			}
-		}
-
 		[Conditional ("DEBUG")]
 		public static void WriteLine (string format, params object[] args)
 		{
-			Initialize ();
 			Debug.WriteLine (String.Format (format, args));
 		}
 
 		[Conditional ("DEBUG")]
 		public static void WriteLine (string message)
 		{
-			Initialize ();
 			Debug.WriteLine (message);
 		}
 
@@ -76,7 +57,6 @@ namespace Mono.Security.NewTls
 		[Conditional ("DEBUG")]
 		public static void WriteBuffer (string message, byte[] buffer, int index, int length)
 		{
-			Initialize ();
 			DebugHelper.WriteLine (String.Format ("{0} (0x{1:x4} bytes)", message, length));
 
 			for (int i = index; i < index + length; i += 16) {
@@ -111,7 +91,6 @@ namespace Mono.Security.NewTls
 		[Conditional ("DEBUG")]
 		public static void WriteBuffer (string message, bool full, TlsBuffer buffer)
 		{
-			Initialize ();
 			var offset = full ? buffer.Offset : buffer.Position;
 			var size = full ? buffer.Size : buffer.Remaining;
 			DebugHelper.WriteBuffer (message, buffer.Buffer, offset, size);

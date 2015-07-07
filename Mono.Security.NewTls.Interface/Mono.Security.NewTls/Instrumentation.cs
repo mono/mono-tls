@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 
@@ -31,6 +32,8 @@ namespace Mono.Security.NewTls
 {
 	public class Instrumentation
 	{
+		HashSet<HandshakeInstrumentType> handshakeInstruments;
+
 		public bool HasSettingsInstrument {
 			get { return SettingsInstrument != null; }
 		}
@@ -47,8 +50,26 @@ namespace Mono.Security.NewTls
 			get; set;
 		}
 
-		public InstrumentationFlags InstrumentationFlags {
-			get; set;
+		public ISet<HandshakeInstrumentType> HandshakeInstruments {
+			get {
+				if (handshakeInstruments == null)
+					Interlocked.CompareExchange<HashSet<HandshakeInstrumentType>> (ref handshakeInstruments, new HashSet<HandshakeInstrumentType> (), null);
+				return handshakeInstruments;
+			}
+		}
+
+		public const string TheQuickBrownFox = "The quick brown fox jumps over the lazy dog";
+		public static readonly byte[] TheQuickBrownFoxBuffer = new byte[] {
+			0x54, 0x68, 0x65, 0x20, 0x71, 0x75, 0x69, 0x63, 0x6b, 0x20, 0x62, 0x72, 0x6f, 0x77, 0x6e, 0x20,
+			0x66, 0x6f, 0x78, 0x20, 0x6a, 0x75, 0x6d, 0x70, 0x73, 0x20, 0x6f, 0x76, 0x65, 0x72, 0x20, 0x74,
+			0x68, 0x65, 0x20, 0x6c, 0x61, 0x7a, 0x79, 0x20, 0x64, 0x6f, 0x67
+		};
+
+		public static BufferOffsetSize GetTextBuffer (HandshakeInstrumentType type)
+		{
+			var text = string.Format ("@{0}:{1}", type, TheQuickBrownFox);
+			var buffer = Encoding.UTF8.GetBytes (text);
+			return new BufferOffsetSize (buffer);
 		}
 	}
 }

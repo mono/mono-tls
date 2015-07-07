@@ -7,7 +7,7 @@ namespace Mono.Security.NewTls
 	using MX = Mono.Security.X509;
 	using SSCX = System.Security.Cryptography.X509Certificates;
 
-	public static class CertificateManager
+	internal static class CertificateManager
 	{
 		internal static void CheckRemoteCertificate (TlsConfiguration config, MX.X509CertificateCollection certificates)
 		{

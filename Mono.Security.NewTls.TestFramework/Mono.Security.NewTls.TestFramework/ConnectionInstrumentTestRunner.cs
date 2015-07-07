@@ -58,12 +58,23 @@ namespace Mono.Security.NewTls.TestFramework
 			var settings = new UserSettings ();
 
 			instrumentation.SettingsInstrument = new ConnectionInstrument (settings, ctx, this);
+			if (Parameters.HandshakeInstruments != null)
+				instrumentation.HandshakeInstruments.UnionWith (Parameters.HandshakeInstruments);
 			return instrumentation;
 		}
 
 		public static IEnumerable<ConnectionInstrumentParameters> GetParameters (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
+			case InstrumentationCategory.ClientConnection:
+				return ClientConnectionTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.ServerConnection:
+				return ServerConnectionTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.Connection:
+				return ConnectionTypes.Select (t => Create (ctx, category, t));
+
 			case InstrumentationCategory.MartinTest:
 				return MartinTestTypes.Select (t => Create (ctx, category, t));
 
@@ -72,6 +83,19 @@ namespace Mono.Security.NewTls.TestFramework
 				return null;
 			}
 		}
+
+		internal static readonly ConnectionInstrumentType[] ClientConnectionTypes = {
+			ConnectionInstrumentType.FragmentHandshakeMessages,
+			ConnectionInstrumentType.SendBlobAfterReceivingFinish
+		};
+
+		internal static readonly ConnectionInstrumentType[] ServerConnectionTypes = {
+			ConnectionInstrumentType.FragmentHandshakeMessages
+		};
+
+		internal static readonly ConnectionInstrumentType[] ConnectionTypes = {
+			ConnectionInstrumentType.FragmentHandshakeMessages
+		};
 
 		internal static readonly ConnectionInstrumentType[] MartinTestTypes = {
 			ConnectionInstrumentType.MartinTest
@@ -96,10 +120,15 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			var parameters = CreateParameters (category, type);
 
-			// parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
-			// parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
-
 			switch (type) {
+			case ConnectionInstrumentType.FragmentHandshakeMessages:
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.FragmentHandshakeMessages };
+				break;
+
+			case ConnectionInstrumentType.SendBlobAfterReceivingFinish:
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.SendBlobAfterReceivingFinish };
+				break;
+
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
 				parameters.EnableDebugging = true;
@@ -111,6 +140,34 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 
 			return parameters;
+		}
+
+		public bool HasInstrument (HandshakeInstrumentType type)
+		{
+			return Parameters.HandshakeInstruments != null && Parameters.HandshakeInstruments.Contains (type);
+		}
+
+		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
+		{
+			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterReceivingFinish))
+				return RunMainLoopBlob (ctx, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
+
+			return base.MainLoop (ctx, cancellationToken);
+		}
+
+		async Task RunMainLoopBlob (TestContext ctx, HandshakeInstrumentType type, CancellationToken cancellationToken)
+		{
+			var expected = Instrumentation.GetTextBuffer (type).GetBuffer ();
+
+			var buffer = new byte [4096];
+			int ret = await Server.Stream.ReadAsync (buffer, 0, buffer.Length);
+			ctx.Assert (ret, Is.EqualTo (expected.Length));
+
+			buffer = new BufferOffsetSize (buffer, 0, ret).GetBuffer ();
+
+			ctx.Assert (buffer, Is.EqualTo (expected), "blob");
+
+			await Shutdown (ctx, SupportsCleanShutdown, true, cancellationToken);
 		}
 	}
 }
