@@ -59,11 +59,11 @@ namespace Mono.Security.Providers.NewTls
 			get { return context != null && context.IsValid; }
 		}
 
-		public void Initialize ()
+		public void Initialize (MSI.IMonoTlsEventSink eventSink)
 		{
 			if (context != null)
 				throw new InvalidOperationException ();
-			context = new TlsContext (config, serverMode);
+			context = new TlsContext (config, serverMode, eventSink);
 		}
 
 		protected override void Clear ()

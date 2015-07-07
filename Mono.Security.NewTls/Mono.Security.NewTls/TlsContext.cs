@@ -19,6 +19,7 @@ namespace Mono.Security.NewTls
 		readonly SettingsProvider settingsProvider;
 		readonly SignatureProvider signatureProvider;
 		readonly ISet<HandshakeInstrumentType> handshakeInstruments;
+		readonly IMonoTlsEventSink eventSink;
 
 		Session session;
 		HandshakeParameters handshakeParameters;
@@ -74,10 +75,18 @@ namespace Mono.Security.NewTls
 			private set;
 		}
 
-		public TlsContext (TlsConfiguration configuration, bool isServer)
+		void OnError (TlsException error)
+		{
+			LastError = error;
+			if (eventSink != null)
+				eventSink.Error (error);
+		}
+
+		public TlsContext (TlsConfiguration configuration, bool isServer, IMonoTlsEventSink eventSink)
 		{
 			this.configuration = configuration;
 			this.isServer = isServer;
+			this.eventSink = eventSink;
 
 			#if INSTRUMENTATION
 			if (configuration.HasInstrumentation) {
@@ -280,7 +289,7 @@ namespace Mono.Security.NewTls
 				CheckValid ();
 				return _GenerateNextToken (incoming, outgoing);
 			} catch (TlsException ex) {
-				LastError = ex;
+				OnError (ex);
 				if (negotiationHandler != null && negotiationHandler.CanSendAlert) {
 					var alert = CreateAlert (ex.Alert);
 					outgoing.Add (alert);
@@ -401,6 +410,8 @@ namespace Mono.Security.NewTls
 			if (level == AlertLevel.Warning) {
 				if (description == AlertDescription.CloseNotify) {
 					ReceivedCloseNotify = true;
+					if (eventSink != null)
+						eventSink.ReceivedCloseNotify ();
 					return SecurityStatus.ContextExpired;
 				}
 
@@ -505,7 +516,7 @@ namespace Mono.Security.NewTls
 				CheckValid ();
 				return _DecryptMessage (ref incoming);
 			} catch (TlsException ex) {
-				LastError = ex;
+				OnError (ex);
 				var alert = CreateAlert (ex.Alert);
 				incoming = new TlsBuffer (alert);
 				Clear ();
@@ -558,7 +569,7 @@ namespace Mono.Security.NewTls
 				CheckValid ();
 				return _EncryptMessage (ref incoming);
 			} catch (TlsException ex) {
-				LastError = ex;
+				OnError (ex);
 				var alert = CreateAlert (ex.Alert);
 				incoming = new TlsBuffer (alert);
 				Clear ();
