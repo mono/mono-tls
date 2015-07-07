@@ -543,6 +543,8 @@ namespace Mono.Security.NewTls
 				var description = (AlertDescription)incoming.ReadByte ();
 				if (level == AlertLevel.Warning && description == AlertDescription.CloseNotify) {
 					ReceivedCloseNotify = true;
+					if (eventSink != null)
+						eventSink.ReceivedCloseNotify ();
 					return SecurityStatus.ContextExpired;
 				}
 				DebugHelper.WriteLine ("ALERT: {0} {1}", level, description);

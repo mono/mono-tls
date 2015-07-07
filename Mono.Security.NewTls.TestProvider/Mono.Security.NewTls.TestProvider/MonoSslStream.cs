@@ -85,11 +85,11 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 		}
 
-		public async Task<bool> TryCleanShutdown (bool waitForReply)
+		public async Task<bool> TryCleanShutdown ()
 		{
 			if (monoNewTlsStream == null)
 				return false;
-			await monoNewTlsStream.Shutdown (waitForReply);
+			await monoNewTlsStream.Shutdown ();
 			return true;
 		}
 	}

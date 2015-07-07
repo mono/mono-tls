@@ -69,9 +69,9 @@ namespace Mono.Security.Providers.NewTls
 			get { return (TlsException)base.LastError; }
 		}
 
-		public Task Shutdown (bool waitForReply)
+		public Task Shutdown ()
 		{
-			return Task.Factory.FromAsync ((state, result) => BeginShutdown (waitForReply, state, result), EndShutdown, null);
+			return Task.Factory.FromAsync ((state, result) => BeginShutdown (state, result), EndShutdown, null);
 		}
 	}
 }

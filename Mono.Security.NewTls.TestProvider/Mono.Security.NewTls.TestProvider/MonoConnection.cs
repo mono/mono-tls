@@ -123,7 +123,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected override Task<bool> TryCleanShutdown (bool waitForReply)
 		{
-			return monoSslStream.TryCleanShutdown (waitForReply);
+			return monoSslStream.TryCleanShutdown ();
 		}
 
 		public override string ToString ()

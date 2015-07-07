@@ -181,12 +181,19 @@ namespace Mono.Security.NewTls.TestFramework
 			ctx.LogMessage ("MAIN LOOP MARTIN");
 
 			var buffer = new byte [4096];
-			int ret = await Server.Stream.ReadAsync (buffer, 0, 16);
+			int ret = await Server.Stream.ReadAsync (buffer, 0, buffer.Length);
 			ctx.LogMessage ("MAIN LOOP MARTIN #1: {0}", ret);
 			DebugHelper.WriteBuffer ("READ", buffer, 0, ret);
 
-			await Server.Shutdown (ctx, true, true, cancellationToken);
-			ctx.LogMessage ("MAIN LOOP MARTIN #2");
+			// await Server.Shutdown (ctx, true, true, cancellationToken);
+			// ctx.LogMessage ("MAIN LOOP MARTIN #2");
+
+			var secondRead = Server.Stream.ReadAsync (buffer, 0, buffer.Length);
+			await Task.Delay (1500);
+			await Client.Shutdown (ctx, true, false, cancellationToken);
+
+			ret = await secondRead;
+			ctx.LogMessage ("MAIN LOOP MARTIN #2: {0}", ret);
 		}
 	}
 }
