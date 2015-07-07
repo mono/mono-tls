@@ -44,7 +44,7 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class MartinTest
 	{
-		// [AsyncTest]
+		[AsyncTest]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
@@ -64,7 +64,7 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		[AsyncTest]
+		// [AsyncTest]
 		public async Task TestServerPuppy (TestContext ctx, CancellationToken cancellationToken,
 			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
 			[ConnectionProvider ("Manual", Identifier = "ServerType")] ConnectionProviderType serverType,

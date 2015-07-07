@@ -130,7 +130,7 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case ConnectionInstrumentType.MartinTest:
-				parameters.RequestRenegotiation = true;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.SendBlobAfterReceivingFinish };
 				parameters.EnableDebugging = true;
 				break;
 
@@ -149,10 +149,16 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
-			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterReceivingFinish))
+			switch (Parameters.Type) {
+			case ConnectionInstrumentType.SendBlobAfterReceivingFinish:
 				return RunMainLoopBlob (ctx, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
 
-			return base.MainLoop (ctx, cancellationToken);
+			case ConnectionInstrumentType.MartinTest:
+				return RunMainLoopMartin (ctx, cancellationToken);
+
+			default:
+				return base.MainLoop (ctx, cancellationToken);
+			}
 		}
 
 		async Task RunMainLoopBlob (TestContext ctx, HandshakeInstrumentType type, CancellationToken cancellationToken)
@@ -168,6 +174,19 @@ namespace Mono.Security.NewTls.TestFramework
 			ctx.Assert (buffer, Is.EqualTo (expected), "blob");
 
 			await Shutdown (ctx, SupportsCleanShutdown, true, cancellationToken);
+		}
+
+		async Task RunMainLoopMartin (TestContext ctx, CancellationToken cancellationToken)
+		{
+			ctx.LogMessage ("MAIN LOOP MARTIN");
+
+			var buffer = new byte [4096];
+			int ret = await Server.Stream.ReadAsync (buffer, 0, 16);
+			ctx.LogMessage ("MAIN LOOP MARTIN #1: {0}", ret);
+			DebugHelper.WriteBuffer ("READ", buffer, 0, ret);
+
+			await Server.Shutdown (ctx, true, true, cancellationToken);
+			ctx.LogMessage ("MAIN LOOP MARTIN #2");
 		}
 	}
 }
