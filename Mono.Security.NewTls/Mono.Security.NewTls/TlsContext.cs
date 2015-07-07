@@ -571,7 +571,18 @@ namespace Mono.Security.NewTls
 
 		SecurityStatus _EncryptMessage (ref TlsBuffer incoming)
 		{
+			#if DEBUG_FULL
+			if (EnableDebugging)
+			DebugHelper.WriteRemaining ("EncryptMessage", incoming);
+			#endif
+
 			var buffer = EncodeRecord (ContentType.ApplicationData, incoming.GetRemaining ());
+
+			#if DEBUG_FULL
+			if (EnableDebugging)
+				DebugHelper.WriteBuffer ("EncryptMessage done", buffer);
+			#endif
+
 			incoming = new TlsBuffer (buffer);
 			return SecurityStatus.OK;
 		}

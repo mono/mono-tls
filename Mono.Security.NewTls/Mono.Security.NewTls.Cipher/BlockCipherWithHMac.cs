@@ -170,7 +170,7 @@ namespace Mono.Security.NewTls.Cipher
 			#if DEBUG_FULL
 			if (Cipher.EnableDebugging) {
 				DebugHelper.WriteLine ("DECRYPT: {0} {1} {2}", input.Size, plen, padlen);
-				DebugHelper.WriteBuffer (output.Buffer, output.Offset, plen);
+				DebugHelper.WriteBuffer ("DECRYPTED", output.Buffer, output.Offset, plen);
 			}
 			#endif
 

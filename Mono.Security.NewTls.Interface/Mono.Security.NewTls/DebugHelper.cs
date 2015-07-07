@@ -32,11 +32,10 @@ namespace Mono.Security.NewTls
 	{
 		private static bool isInitialized;
 
-		[Conditional("DEBUG")]
-		public static void Initialize()
+		[Conditional ("DEBUG")]
+		public static void Initialize ()
 		{
-			if (!isInitialized)
-			{
+			if (!isInitialized) {
 #if !PCL
 				Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
 				// Debug.Listeners.Add(new TextWriterTraceListener(@"c:\ssl.log"));
@@ -48,145 +47,106 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		[Conditional("DEBUG")]
-		public static void WriteLine(string format, params object[] args)
+		[Conditional ("DEBUG")]
+		public static void WriteLine (string format, params object[] args)
 		{
-			Initialize();
-			Debug.WriteLine(String.Format(format, args));
+			Initialize ();
+			Debug.WriteLine (String.Format (format, args));
 		}
 
-		[Conditional("DEBUG")]
-		public static void WriteLine(string message)
+		[Conditional ("DEBUG")]
+		public static void WriteLine (string message)
 		{
-			Initialize();
-			Debug.WriteLine(message);
+			Initialize ();
+			Debug.WriteLine (message);
 		}
 
-		[Conditional("DEBUG")]
-		public static void WriteLine(string message, byte[] buffer)
+		[Conditional ("DEBUG")]
+		public static void WriteLine (string message, byte[] buffer)
 		{
-			Initialize();
-			DebugHelper.WriteLine(String.Format("{0} ({1} bytes)", message, buffer.Length));
-			DebugHelper.WriteBuffer(buffer);
+			DebugHelper.WriteBuffer (message, buffer);
 		}
 
-		[Conditional("DEBUG")]
-		public static void WriteLine(string message, SecureBuffer buffer)
+		[Conditional ("DEBUG")]
+		public static void WriteLine (string message, SecureBuffer buffer)
 		{
-			Initialize();
-			DebugHelper.WriteLine(String.Format("{0} ({1} bytes)", message, buffer.Size));
-			DebugHelper.WriteBuffer(buffer.Buffer);
+			DebugHelper.WriteBuffer (message, buffer);
 		}
 
-		[Conditional("DEBUG")]
-		public static void WriteBuffer(byte[] buffer)
+		[Conditional ("DEBUG")]
+		public static void WriteBuffer (string message, byte[] buffer, int index, int length)
 		{
-			Initialize();
-			DebugHelper.WriteBuffer(buffer, 0, buffer.Length);
-		}
+			Initialize ();
+			DebugHelper.WriteLine (String.Format ("{0} (0x{1:x4} bytes)", message, length));
 
-		[Conditional("DEBUG")]
-		public static void WriteBuffer(byte[] buffer, int index, int length)
-		{
-			Initialize();
-			for (int i = index; i < index+length; i += 16)
-			{
+			for (int i = index; i < index + length; i += 16) {
 				int count = (index + length - i) >= 16 ? 16 : (index + length - i);
-				string buf = "";
-				for (int j = 0; j < count; j++)
-				{
-					buf += buffer[i + j].ToString("x2") + " ";
+				string buf = string.Empty;
+				string text = string.Empty;
+				for (int j = 0; j < count; j++) {
+					if (j == 8)
+						buf += " - ";
+					else if (j > 0)
+						buf += " ";
+					byte ch = buffer [i + j];
+					buf += ch.ToString ("x2");
+					text += ch >= 32 && ch < 127 ? (char)ch : '.';
 				}
-				Debug.WriteLine(buf);
+				Debug.WriteLine ("    {0:x4}  {1}  {2}", i, buf, text);
 			}
 		}
 
-		[Obsolete]
 		[Conditional ("DEBUG")]
-		public static void WriteBuffer(TlsBuffer buffer)
+		public static void WriteBuffer (string message, byte[] buffer)
 		{
-			WriteBuffer(buffer.Buffer, buffer.Position, buffer.Remaining);
+			DebugHelper.WriteBuffer (message, buffer, 0, buffer.Length);
 		}
 
 		[Conditional ("DEBUG")]
-		public static void WriteBuffer(IBufferOffsetSize buffer)
+		public static void WriteBuffer (string message, IBufferOffsetSize buffer)
 		{
-			WriteBuffer(buffer.Buffer, buffer.Offset, buffer.Size);
-		}
-
-		[Obsolete]
-		[Conditional ("DEBUG")]
-		public static void WriteLine(string message, TlsBuffer buffer)
-		{
-			Initialize ();
-			DebugHelper.WriteLine(String.Format("{0} ({1} bytes)", message, buffer.Remaining));
-			DebugHelper.WriteBuffer (buffer);
+			DebugHelper.WriteBuffer (message, buffer.Buffer, buffer.Offset, buffer.Size);
 		}
 
 		[Conditional ("DEBUG")]
-		public static void WriteLine(string message, IBufferOffsetSize buffer)
-		{
-			Initialize ();
-			DebugHelper.WriteLine(String.Format("{0} ({1} bytes)", message, buffer.Size));
-			DebugHelper.WriteBuffer (buffer);
-		}
-
-		[Conditional ("DEBUG")]
-		public static void WriteBuffer(string message, byte[] buffer)
-		{
-			Initialize ();
-			DebugHelper.WriteLine (String.Format ("{0} ({1} bytes)", message, buffer.Length));
-			DebugHelper.WriteBuffer (buffer);
-		}
-
-		[Conditional ("DEBUG")]
-		public static void WriteBuffer(string message, IBufferOffsetSize buffer)
-		{
-			Initialize ();
-			DebugHelper.WriteLine (String.Format ("{0} ({1} bytes)", message, buffer.Size));
-			DebugHelper.WriteBuffer (buffer);
-		}
-
-		[Conditional ("DEBUG")]
-		public static void WriteBuffer(string message, bool full, TlsBuffer buffer)
+		public static void WriteBuffer (string message, bool full, TlsBuffer buffer)
 		{
 			Initialize ();
 			var offset = full ? buffer.Offset : buffer.Position;
 			var size = full ? buffer.Size : buffer.Remaining;
-			DebugHelper.WriteLine ("{0} ({1} bytes)", message, size);
-			DebugHelper.WriteBuffer (buffer.Buffer, offset, size);
+			DebugHelper.WriteBuffer (message, buffer.Buffer, offset, size);
 		}
 
 		[Conditional ("DEBUG")]
-		public static void WriteRemaining(string message, TlsBuffer buffer)
+		public static void WriteRemaining (string message, TlsBuffer buffer)
 		{
 			WriteBuffer (message, false, buffer);
 		}
 
 		[Conditional ("DEBUG")]
-		public static void WriteFull(string message, TlsBuffer buffer)
+		public static void WriteFull (string message, TlsBuffer buffer)
 		{
 			WriteBuffer (message, true, buffer);
 		}
 
 		[Conditional ("DEBUG")]
-		public static void WriteCSharp(string name, string value)
+		public static void WriteCSharp (string name, string value)
 		{
 			WriteLine ("const string {0} = \"{1}\";\n", name, value);
 		}
 
 		[Conditional ("DEBUG")]
-		public static void WriteCSharp(string name, byte[] buffer)
+		public static void WriteCSharp (string name, byte[] buffer)
 		{
 			WriteLine (GenerateCSharp (name, string.Empty, buffer));
 		}
 
-		public static string GenerateCSharp(string name, string indent, byte[] buffer)
+		public static string GenerateCSharp (string name, string indent, byte[] buffer)
 		{
 			return GenerateCSharp (name, indent, buffer, 0, buffer.Length);
 		}
 
-		public static string GenerateCSharp(string name, string indent, byte[] buffer, int offset, int size)
+		public static string GenerateCSharp (string name, string indent, byte[] buffer, int offset, int size)
 		{
 			var sb = new StringBuilder ();
 			sb.AppendFormat ("{0}internal static readonly byte[] {1} = new byte[] {{\n", indent, name);
