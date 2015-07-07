@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationCategory.cs
+// SimpleConnectionType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,25 +27,8 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum InstrumentationCategory
+	public enum SimpleConnectionType
 	{
-		AllClientSignatureAlgorithms,
-		AllServerSignatureAlgorithms,
-
-		ClientSignatureParameters,
-		ServerSignatureParameters,
-
-		SignatureAlgorithms,
-
-		ClientConnection,
-		ServerConnection,
-		Connection,
-
-		SimpleClient,
-		SimpleServer,
-		SimpleConnection,
-
-		MartinTest
 	}
 }
 

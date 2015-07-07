@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationCategory.cs
+// SimpleConnectionTestRunnerAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,28 +24,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
+using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.TestRunners;
+using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
-	public enum InstrumentationCategory
+	using TestFramework;
+
+	public class SimpleConnectionTestRunnerAttribute : TestHostAttribute, ITestHost<SimpleConnectionTestRunner>
 	{
-		AllClientSignatureAlgorithms,
-		AllServerSignatureAlgorithms,
+		public SimpleConnectionTestRunnerAttribute ()
+			: base (typeof (SimpleConnectionTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		{
+		}
 
-		ClientSignatureParameters,
-		ServerSignatureParameters,
+		public SimpleConnectionTestRunnerAttribute (MonoConnectionFlags flags)
+			: base (typeof (SimpleConnectionTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		{
+			ConnectionFlags = flags;
+		}
 
-		SignatureAlgorithms,
+		public MonoConnectionFlags? ConnectionFlags {
+			get;
+			private set;
+		}
 
-		ClientConnection,
-		ServerConnection,
-		Connection,
-
-		SimpleClient,
-		SimpleServer,
-		SimpleConnection,
-
-		MartinTest
+		public SimpleConnectionTestRunner CreateInstance (TestContext ctx)
+		{
+			return MonoTestFeatures.CreateTestRunner<SimpleConnectionParameters,SimpleConnectionTestRunner> (
+				ctx, (s, c, p, f) => new SimpleConnectionTestRunner (s, c, p, f), ConnectionFlags);
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationCategory.cs
+// SimpleConnectionParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,28 +24,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using Xamarin.AsyncTests;
+using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum InstrumentationCategory
+	public class SimpleConnectionParameters : InstrumentationParameters
 	{
-		AllClientSignatureAlgorithms,
-		AllServerSignatureAlgorithms,
+		public SimpleConnectionType Type {
+			get;
+			private set;
+		}
 
-		ClientSignatureParameters,
-		ServerSignatureParameters,
+		public SimpleConnectionParameters (InstrumentationCategory category, SimpleConnectionType type, string identifier, IServerCertificate certificate)
+			: base (category, identifier, certificate)
+		{
+			Type = type;
+		}
 
-		SignatureAlgorithms,
+		public SimpleConnectionParameters (InstrumentationCategory category, SimpleConnectionType type, ClientParameters clientParameters, ServerParameters serverParameters)
+			: base (category, clientParameters, serverParameters)
+		{
+			Type = type;
+		}
 
-		ClientConnection,
-		ServerConnection,
-		Connection,
+		protected SimpleConnectionParameters (SimpleConnectionParameters other)
+			: base (other)
+		{
+			Type = other.Type;
+		}
 
-		SimpleClient,
-		SimpleServer,
-		SimpleConnection,
-
-		MartinTest
+		public override ConnectionParameters DeepClone ()
+		{
+			return new SimpleConnectionParameters (this);
+		}
 	}
 }
 
