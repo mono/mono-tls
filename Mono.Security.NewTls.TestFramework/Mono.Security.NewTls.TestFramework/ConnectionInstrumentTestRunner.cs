@@ -105,6 +105,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
 				parameters.EnableDebugging = true;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.FragmentHandshakeMessages };
 				break;
 
 			default:

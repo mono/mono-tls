@@ -621,8 +621,14 @@ namespace Mono.Security.NewTls
 			CheckValid ();
 			var protocol = HasNegotiatedProtocol ? NegotiatedProtocol : Configuration.RequestedProtocol;
 
+			int fragmentSize = MAX_FRAGMENT_SIZE;
+			#if INSTRUMENTATION
+			if (HasInstrument (HandshakeInstrumentType.FragmentHandshakeMessages))
+				fragmentSize = 512;
+			#endif
+
 			var output = new TlsStream ();
-			EncodeRecord (protocol, contentType, Session != null ? Session.Write : null, buffer, output);
+			EncodeRecord_internal (protocol, contentType, Session != null ? Session.Write : null, buffer, output, fragmentSize);
 			output.Finish ();
 
 			var result = new byte [output.Size];
@@ -632,19 +638,29 @@ namespace Mono.Security.NewTls
 
 		public static void EncodeRecord (TlsProtocolCode protocol, ContentType contentType, CryptoParameters crypto, IBufferOffsetSize buffer, TlsStream output)
 		{
+			EncodeRecord_internal (protocol, contentType, crypto, buffer, output);
+		}
+
+		static void EncodeRecord_internal (TlsProtocolCode protocol, ContentType contentType, CryptoParameters crypto, IBufferOffsetSize buffer, TlsStream output,
+			int fragmentSize = MAX_FRAGMENT_SIZE)
+		{
 			var maxExtraBytes = crypto != null ? crypto.MaxExtraEncryptedBytes : 0;
 
 			var offset = buffer.Offset;
 			var remaining = buffer.Size;
 
+			#if !INSTRUMENTATION
+			fragmentSize = MAX_FRAGMENT_SIZE;
+			#endif
+
 			do {
 				BufferOffsetSize fragment;
 
 				var encryptedSize = crypto != null ? crypto.GetEncryptedSize (remaining) : remaining;
-				if (encryptedSize <= MAX_FRAGMENT_SIZE)
+				if (encryptedSize <= fragmentSize)
 					fragment = new BufferOffsetSize (buffer.Buffer, offset, remaining);
 				else {
-					fragment = new BufferOffsetSize (buffer.Buffer, offset, MAX_FRAGMENT_SIZE - maxExtraBytes);
+					fragment = new BufferOffsetSize (buffer.Buffer, offset, fragmentSize - maxExtraBytes);
 					encryptedSize = crypto != null ? crypto.GetEncryptedSize (fragment.Size) : fragment.Size;
 				}
 
