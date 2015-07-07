@@ -92,7 +92,7 @@ namespace Mono.Security.NewTls.Negotiation
 			#endif
 
 			#if INSTRUMENTATION
-			if (State == NegotiationState.InitialServerConnection && Context.HasInstrument (ConnectionInstrumentType.CloseServerConnection)) {
+			if (State == NegotiationState.InitialServerConnection && Context.HasInstrument (HandshakeInstrumentType.CloseServerConnection)) {
 				DebugHelper.WriteLine ("Instrumentation requested to close server connection.");
 				status = SecurityStatus.InvalidHandle;
 				return true;

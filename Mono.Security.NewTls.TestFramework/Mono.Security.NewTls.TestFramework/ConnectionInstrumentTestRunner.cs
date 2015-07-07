@@ -58,6 +58,8 @@ namespace Mono.Security.NewTls.TestFramework
 			var settings = new UserSettings ();
 
 			instrumentation.SettingsInstrument = new ConnectionInstrument (settings, ctx, this);
+			if (Parameters.HandshakeInstruments != null)
+				instrumentation.HandshakeInstruments.UnionWith (Parameters.HandshakeInstruments);
 			return instrumentation;
 		}
 

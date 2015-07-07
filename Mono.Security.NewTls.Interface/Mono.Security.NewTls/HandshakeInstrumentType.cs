@@ -1,5 +1,5 @@
 ﻿//
-// ConnectionInstrumentType.cs
+// HandshakeInstrumentType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,9 +27,10 @@ using System;
 
 namespace Mono.Security.NewTls
 {
-	public enum ConnectionInstrumentType
+	public enum HandshakeInstrumentType
 	{
-		CloseServerConnection
+		CloseServerConnection,
+		FragmentHandshakeMessages
 	}
 }
 
