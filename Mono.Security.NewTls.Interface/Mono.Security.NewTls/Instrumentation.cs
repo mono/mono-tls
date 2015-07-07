@@ -31,6 +31,8 @@ namespace Mono.Security.NewTls
 {
 	public class Instrumentation
 	{
+		HashSet<ConnectionInstrumentType> connectionInstruments;
+
 		public bool HasSettingsInstrument {
 			get { return SettingsInstrument != null; }
 		}
@@ -47,8 +49,12 @@ namespace Mono.Security.NewTls
 			get; set;
 		}
 
-		public InstrumentationFlags InstrumentationFlags {
-			get; set;
+		public ISet<ConnectionInstrumentType> ConnectionInstruments {
+			get {
+				if (connectionInstruments == null)
+					connectionInstruments = Interlocked.CompareExchange<HashSet<ConnectionInstrumentType>> (ref connectionInstruments, new HashSet<ConnectionInstrumentType> (), null);
+				return connectionInstruments;
+			}
 		}
 	}
 }

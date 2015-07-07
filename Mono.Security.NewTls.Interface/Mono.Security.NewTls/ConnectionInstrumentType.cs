@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationFlags.cs
+// ConnectionInstrumentType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,11 +27,9 @@ using System;
 
 namespace Mono.Security.NewTls
 {
-	[Flags]
-	public enum InstrumentationFlags
+	public enum ConnectionInstrumentType
 	{
-		None					= 0,
-		CloseServerConnection			= 1
+		CloseServerConnection
 	}
 }
 

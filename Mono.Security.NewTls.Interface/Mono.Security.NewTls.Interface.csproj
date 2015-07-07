@@ -65,7 +65,7 @@
     <Compile Include="Mono.Security.NewTls\UserSettings.cs" />
     <Compile Include="Mono.Security.NewTls\SettingsProvider.cs" />
     <Compile Include="Mono.Security.NewTls\Instrumentation.cs" />
-    <Compile Include="Mono.Security.NewTls\InstrumentationFlags.cs" />
+    <Compile Include="Mono.Security.NewTls\ConnectionInstrumentType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

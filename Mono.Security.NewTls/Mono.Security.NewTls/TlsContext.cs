@@ -18,6 +18,7 @@ namespace Mono.Security.NewTls
 		readonly TlsConfiguration configuration;
 		readonly SettingsProvider settingsProvider;
 		readonly SignatureProvider signatureProvider;
+		readonly ISet<ConnectionInstrumentType> connectionInstruments;
 
 		Session session;
 		HandshakeParameters handshakeParameters;
@@ -84,9 +85,7 @@ namespace Mono.Security.NewTls
 					signatureProvider = configuration.Instrumentation.SignatureInstrument;
 				if (configuration.Instrumentation.HasSettingsInstrument)
 					settingsProvider = configuration.Instrumentation.SettingsInstrument;
-				InstrumentationFlags = configuration.Instrumentation.InstrumentationFlags;
-			} else {
-				InstrumentationFlags = InstrumentationFlags.None;
+				connectionInstruments = configuration.Instrumentation.ConnectionInstruments;
 			}
 			#endif
 
@@ -113,8 +112,9 @@ namespace Mono.Security.NewTls
 
 		#if INSTRUMENTATION
 
-		internal InstrumentationFlags InstrumentationFlags {
-			get; set;
+		internal bool HasInstrument (ConnectionInstrumentType type)
+		{
+			return connectionInstruments != null ? connectionInstruments.Contains (type) : false;
 		}
 
 		#endif
