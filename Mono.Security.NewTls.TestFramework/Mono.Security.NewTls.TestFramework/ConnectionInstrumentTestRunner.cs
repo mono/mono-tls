@@ -85,12 +85,15 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		internal static readonly ConnectionInstrumentType[] ClientConnectionTypes = {
+			ConnectionInstrumentType.FragmentHandshakeMessages
 		};
 
 		internal static readonly ConnectionInstrumentType[] ServerConnectionTypes = {
+			ConnectionInstrumentType.FragmentHandshakeMessages
 		};
 
 		internal static readonly ConnectionInstrumentType[] ConnectionTypes = {
+			ConnectionInstrumentType.FragmentHandshakeMessages
 		};
 
 		internal static readonly ConnectionInstrumentType[] MartinTestTypes = {
@@ -116,14 +119,14 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			var parameters = CreateParameters (category, type);
 
-			// parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
-			// parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
-
 			switch (type) {
+			case ConnectionInstrumentType.FragmentHandshakeMessages:
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.FragmentHandshakeMessages };
+				break;
+
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
 				parameters.EnableDebugging = true;
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.FragmentHandshakeMessages };
 				break;
 
 			default:
