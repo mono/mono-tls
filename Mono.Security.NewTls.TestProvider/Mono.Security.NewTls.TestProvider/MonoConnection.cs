@@ -121,7 +121,7 @@ namespace Mono.Security.NewTls.TestProvider
 			return monoSslStream;
 		}
 
-		protected override Task<bool> TryCleanShutdown (bool waitForReply)
+		protected override Task<bool> TryCleanShutdown ()
 		{
 			return monoSslStream.TryCleanShutdown ();
 		}

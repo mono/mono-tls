@@ -205,11 +205,11 @@ namespace Mono.Security.NewTls.TestProvider
 			return createTcs.Task;
 		}
 
-		public sealed override Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, bool waitForReply, CancellationToken cancellationToken)
+		public sealed override Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, CancellationToken cancellationToken)
 		{
 			return Task.Run (() => {
-				ctx.LogMessage ("{0} shutdown: {1} {2}", this, attemptCleanShutdown, waitForReply);
-				return openssl.Shutdown (attemptCleanShutdown && waitForReply);
+				ctx.LogMessage ("{0} shutdown: {1}", this, attemptCleanShutdown);
+				return openssl.Shutdown (attemptCleanShutdown);
 			});
 		}
 

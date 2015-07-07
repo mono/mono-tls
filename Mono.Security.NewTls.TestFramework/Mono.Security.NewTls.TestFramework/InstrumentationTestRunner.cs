@@ -145,7 +145,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			ctx.LogMessage ("GOT RESPONSE: {0} {1}", protocol, status);
 
-			await Shutdown (ctx, SupportsCleanShutdown, true, cancellationToken);
+			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 
 		async Task RunWithManualClient (TestContext ctx, CancellationToken cancellationToken)
@@ -160,7 +160,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var line = await serverStream.ReadLineAsync ();
 			ctx.LogMessage ("GOT CLIENT MESSAGE: {0}", line);
 
-			await Shutdown (ctx, SupportsCleanShutdown, true, cancellationToken);
+			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 	}
 }

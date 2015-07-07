@@ -173,7 +173,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			ctx.Assert (buffer, Is.EqualTo (expected), "blob");
 
-			await Shutdown (ctx, SupportsCleanShutdown, true, cancellationToken);
+			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 
 		async Task RunMainLoopMartin (TestContext ctx, CancellationToken cancellationToken)
@@ -190,7 +190,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			var secondRead = Server.Stream.ReadAsync (buffer, 0, buffer.Length);
 			await Task.Delay (1500);
-			await Client.Shutdown (ctx, true, false, cancellationToken);
+			await Client.Shutdown (ctx, true, cancellationToken);
 
 			ret = await secondRead;
 			ctx.LogMessage ("MAIN LOOP MARTIN #2: {0}", ret);
