@@ -44,12 +44,22 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class MartinTest
 	{
-		[AsyncTest]
+		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
+		public async Task TestMartinClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.SimpleMonoClient)]
+		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

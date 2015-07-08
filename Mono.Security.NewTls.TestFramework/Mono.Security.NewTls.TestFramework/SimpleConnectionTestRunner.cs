@@ -62,13 +62,13 @@ namespace Mono.Security.NewTls.TestFramework
 		public static IEnumerable<SimpleConnectionParameters> GetParameters (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
-			case InstrumentationCategory.SimpleClient:
+			case InstrumentationCategory.SimpleMonoClient:
 				return ClientConnectionTypes.Select (t => Create (ctx, category, t));
 
-			case InstrumentationCategory.SimpleServer:
+			case InstrumentationCategory.SimpleMonoServer:
 				return ServerConnectionTypes.Select (t => Create (ctx, category, t));
 
-			case InstrumentationCategory.SimpleConnection:
+			case InstrumentationCategory.SimpleMonoConnection:
 				return ConnectionTypes.Select (t => Create (ctx, category, t));
 
 			case InstrumentationCategory.MartinTest:
@@ -81,7 +81,10 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		internal static readonly SimpleConnectionType[] ClientConnectionTypes = {
-			SimpleConnectionType.MartinTest
+			SimpleConnectionType.CheckDefaultCipher,
+			SimpleConnectionType.SimpleTls10,
+			SimpleConnectionType.SimpleTls11,
+			SimpleConnectionType.SimpleTls12
 		};
 
 		internal static readonly SimpleConnectionType[] ServerConnectionTypes = {

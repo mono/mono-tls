@@ -67,10 +67,12 @@ namespace Mono.Security.NewTls.TestFramework
 		public static MonoConnectionFlags GetConnectionFlags (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
-			case InstrumentationCategory.SimpleClient:
-			case InstrumentationCategory.SimpleServer:
-			case InstrumentationCategory.SimpleConnection:
-				return MonoConnectionFlags.None;
+			case InstrumentationCategory.SimpleMonoClient:
+				return MonoConnectionFlags.RequireMonoClient;
+			case InstrumentationCategory.SimpleMonoServer:
+				return MonoConnectionFlags.RequireMonoServer;
+			case InstrumentationCategory.SimpleMonoConnection:
+				return MonoConnectionFlags.RequireMonoClient | MonoConnectionFlags.RequireMonoServer;
 			case InstrumentationCategory.AllClientSignatureAlgorithms:
 			case InstrumentationCategory.ClientSignatureParameters:
 			case InstrumentationCategory.ClientConnection:

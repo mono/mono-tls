@@ -45,8 +45,8 @@ namespace Mono.Security.NewTls.Tests
 	public class SimpleConnectionTests
 	{
 		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.SimpleClient)]
-		public async Task TestMartin (TestContext ctx, CancellationToken cancellationToken,
+		[InstrumentationCategory (InstrumentationCategory.SimpleMonoClient)]
+		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
 			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
 			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
@@ -55,7 +55,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.SimpleServer)]
+		[InstrumentationCategory (InstrumentationCategory.SimpleMonoServer)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
 			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
@@ -65,7 +65,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.SimpleConnection)]
+		[InstrumentationCategory (InstrumentationCategory.SimpleMonoConnection)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
 			[SimpleConnectionParameters] SimpleConnectionParameters parameters,

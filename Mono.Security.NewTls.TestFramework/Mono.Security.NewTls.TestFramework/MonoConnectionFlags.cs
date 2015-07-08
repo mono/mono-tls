@@ -31,15 +31,15 @@ namespace Mono.Security.NewTls.TestFramework
 	public enum MonoConnectionFlags
 	{
 		None			= 0,
-		RequiresMonoClient	= 1,
-		RequiresMonoServer	= 2,
+		RequireMonoClient	= 1,
+		RequireMonoServer	= 2,
 		ClientInstrumentation	= 4,
 		ServerInstrumentation	= 8,
 
 		ManualClient		= 16,
 		ManualServer		= 32,
 
-		Default			= RequiresMonoClient | RequiresMonoServer
+		Default			= RequireMonoClient | RequireMonoServer
 	}
 }
 

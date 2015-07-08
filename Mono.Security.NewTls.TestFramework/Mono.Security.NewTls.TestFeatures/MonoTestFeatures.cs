@@ -332,7 +332,7 @@ namespace Mono.Security.NewTls.TestFeatures
 			if ((flags & MonoConnectionFlags.ClientInstrumentation) != 0) {
 				ctx.Assert (clientProviderType, IsInstrumentationSupported);
 				clientProvider = monoClientProvider = MonoFactory.GetMonoProvider (clientProviderType);
-			} else if ((flags & MonoConnectionFlags.RequiresMonoClient) != 0) {
+			} else if ((flags & MonoConnectionFlags.RequireMonoClient) != 0) {
 				ctx.Assert (clientProviderType, IsMonoProviderSupported);
 				clientProvider = monoClientProvider = MonoFactory.GetMonoProvider (clientProviderType);
 			} else {
@@ -346,7 +346,7 @@ namespace Mono.Security.NewTls.TestFeatures
 			if ((flags & MonoConnectionFlags.ServerInstrumentation) != 0) {
 				ctx.Assert (serverProviderType, IsInstrumentationSupported);
 				serverProvider = monoServerProvider = MonoFactory.GetMonoProvider (serverProviderType);
-			} else if ((flags & MonoConnectionFlags.RequiresMonoServer) != 0) {
+			} else if ((flags & MonoConnectionFlags.RequireMonoServer) != 0) {
 				ctx.Assert (serverProviderType, IsMonoProviderSupported);
 				serverProvider = monoServerProvider = MonoFactory.GetMonoProvider (serverProviderType);
 			} else {
