@@ -48,7 +48,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoClient.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\MonoTestFeatures.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\IsSupportedConstraint.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientAndServer.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\MonoServerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\MonoClientAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionProviderFactory.cs" />
