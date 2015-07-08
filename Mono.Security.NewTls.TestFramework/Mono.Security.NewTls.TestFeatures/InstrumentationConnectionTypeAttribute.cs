@@ -43,28 +43,6 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
-		bool MatchesFilter (InstrumentationConnectionType type, string filter)
-		{
-			if (filter == null)
-				return true;
-
-			string clientFilter, serverFilter;
-			int pos = filter.IndexOf (':');
-			if (pos < 0)
-				clientFilter = serverFilter = filter;
-			else {
-				clientFilter = filter.Substring (0, pos);
-				serverFilter = filter.Substring (pos + 1);
-			}
-
-			if (!MatchesFilter (type.ClientType, clientFilter))
-				return false;
-			if (!MatchesFilter (type.ServerType, serverFilter))
-				return false;
-
-			return true;
-		}
-
 		bool MatchesFilter (ConnectionProviderType type, string filter)
 		{
 			if (filter == null)
@@ -82,7 +60,38 @@ namespace Mono.Security.NewTls.TestFeatures
 		public IEnumerable<InstrumentationConnectionType> GetParameters (TestContext ctx, string filter)
 		{
 			var category = ctx.GetParameter<InstrumentationCategory> ();
-			return InstrumentationTestRunner.GetConnectionTypes (ctx, category).Where (t => MatchesFilter (t, filter));
+
+			string clientFilter, serverFilter;
+			if (filter == null)
+				clientFilter = serverFilter = null;
+			else {
+				int pos = filter.IndexOf (':');
+				if (pos < 0)
+					clientFilter = serverFilter = filter;
+				else {
+					clientFilter = filter.Substring (0, pos);
+					serverFilter = filter.Substring (pos + 1);
+				}
+			}
+
+			var factory = DependencyInjector.Get<ConnectionProviderFactory> ();
+			var supportedProviders = factory.GetSupportedProviders ();
+
+			var supportedClientProviders = supportedProviders.Where (p => {
+				if (!string.IsNullOrEmpty (clientFilter))
+					return MatchesFilter (p, clientFilter);
+				else
+					return InstrumentationTestRunner.IsClientSupported (ctx, category, p);
+			});
+
+			var supportedServerProviders = supportedProviders.Where (p => {
+				if (!string.IsNullOrEmpty (serverFilter))
+					return MatchesFilter (p, serverFilter);
+				else
+					return InstrumentationTestRunner.IsServerSupported (ctx, category, p);
+			});
+
+			return InstrumentationTestRunner.Join (supportedClientProviders, supportedServerProviders, (c, s) => new InstrumentationConnectionType (category, c, s));
 		}
 	}
 }
