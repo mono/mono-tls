@@ -31,7 +31,7 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		SelectClientCipher,
 		SelectServerCipher,
-		SelectCipher
+		InvalidCipher
 	}
 }
 

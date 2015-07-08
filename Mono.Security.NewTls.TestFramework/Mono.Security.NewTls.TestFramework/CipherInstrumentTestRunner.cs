@@ -87,6 +87,7 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		internal static readonly CipherInstrumentType[] ConnectionTypes = {
+			CipherInstrumentType.InvalidCipher
 		};
 
 		internal static readonly CipherSuiteCode[] CiphersTls10 = {
@@ -147,6 +148,13 @@ namespace Mono.Security.NewTls.TestFramework
 			var parameters = CreateParameters (category, type);
 
 			switch (type) {
+			case CipherInstrumentType.InvalidCipher:
+				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256 };
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ExpectServerAlert = AlertDescription.HandshakeFailure;
+				break;
+
 			default:
 				ctx.AssertFail ("Unsupported cipher instrument: '{0}'.", type);
 				break;
