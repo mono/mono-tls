@@ -97,6 +97,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var connectionFlags = GetConnectionFlags (ctx, category);
 			switch (type) {
 			case ConnectionProviderType.NewTLS:
+				return (connectionFlags & (MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.RequireMonoClient)) == 0;
 			case ConnectionProviderType.OpenSsl:
 				return (connectionFlags & (MonoConnectionFlags.ClientInstrumentation)) == 0;
 			case ConnectionProviderType.MonoWithNewTLS:
@@ -111,6 +112,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var connectionFlags = GetConnectionFlags (ctx, category);
 			switch (type) {
 			case ConnectionProviderType.NewTLS:
+				return (connectionFlags & (MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.RequireMonoServer)) == 0;
 			case ConnectionProviderType.OpenSsl:
 				return (connectionFlags & (MonoConnectionFlags.ServerInstrumentation)) == 0;
 			case ConnectionProviderType.MonoWithNewTLS:

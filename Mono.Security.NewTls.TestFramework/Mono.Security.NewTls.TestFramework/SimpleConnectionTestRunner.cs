@@ -209,24 +209,30 @@ namespace Mono.Security.NewTls.TestFramework
 			return parameters;
 		}
 
+		void CheckCipher (TestContext ctx, IMonoCommonConnection connection, CipherSuiteCode cipher)
+		{
+			ctx.Assert (connection.SupportsConnectionInfo, "supports connection info");
+			var connectionInfo = connection.GetConnectionInfo ();
+
+			if (ctx.Expect (connectionInfo, Is.Not.Null, "connection info"))
+				ctx.Expect (connectionInfo.CipherCode, Is.EqualTo (cipher), "expected cipher");
+		}
+
 		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
 		{
-			if (Parameters.ExpectedCipher != null) {
-				var monoClient = Client as IMonoClient;
-				var monoServer = Server as IMonoServer;
+			var monoClient = Client as IMonoClient;
+			var monoServer = Server as IMonoServer;
 
-				ctx.Assert (monoClient, Is.Not.Null, "mono client");
-				ctx.Assert (monoServer, Is.Not.Null, "mono server");
-				ctx.Assert (monoClient.SupportsConnectionInfo, "client supports connection info");
-				ctx.Assert (monoServer.SupportsConnectionInfo, "server supports connection info");
+			if (monoClient != null) {
+				var expectedCipher = Parameters.ExpectedClientCipher ?? Parameters.ExpectedCipher;
+				if (expectedCipher != null)
+					CheckCipher (ctx, monoClient, expectedCipher.Value);
+			}
 
-				var clientInfo = monoServer.GetConnectionInfo ();
-				var serverInfo = monoServer.GetConnectionInfo ();
-
-				if (ctx.Expect (clientInfo, Is.Not.Null, "client connection info"))
-					ctx.Expect (clientInfo.CipherCode, Is.EqualTo (Parameters.ExpectedCipher.Value), "client cipher");
-				if (ctx.Expect (serverInfo, Is.Not.Null, "server connection info"))
-					ctx.Expect (serverInfo.CipherCode, Is.EqualTo (Parameters.ExpectedCipher.Value), "server cipher");
+			if (monoServer != null) {
+				var expectedCipher = Parameters.ExpectedServerCipher ?? Parameters.ExpectedCipher;
+				if (expectedCipher != null)
+					CheckCipher (ctx, monoServer, expectedCipher.Value);
 			}
 
 			if (Parameters.ProtocolVersion != null) {
