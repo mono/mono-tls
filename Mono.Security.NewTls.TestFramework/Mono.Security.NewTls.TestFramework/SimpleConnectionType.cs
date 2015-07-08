@@ -29,6 +29,22 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public enum SimpleConnectionType
 	{
+		Simple,
+		ValidateCertificate,
+		CheckDefaultCipher,
+
+		SimpleTls10,
+		SimpleTls11,
+		SimpleTls12,
+
+		SelectCiphersTls10,
+		SelectCiphersTls11,
+		SelectCiphersTls12,
+
+		RequestClientCertificate,
+		RequireClientCertificateRSA,
+		RequireClientCertificateDHE,
+
 		MartinTest
 	}
 }

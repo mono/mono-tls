@@ -106,8 +106,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var name = sb.ToString ();
 
 			return new SimpleConnectionParameters (category, type, name, ResourceManager.SelfSignedServerCertificate) {
-				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate,
-				ProtocolVersion = ProtocolVersions.Tls12
+				ClientCertificateValidator = AcceptAnyCertificate
 			};
 		}
 
@@ -115,7 +114,87 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			var parameters = CreateParameters (category, type);
 
+			var provider = DependencyInjector.Get<ICertificateProvider> ();
+			var acceptSelfSigned = provider.AcceptThisCertificate (ResourceManager.SelfSignedServerCertificate);
+			var acceptFromCA = provider.AcceptFromCA (ResourceManager.LocalCACertificate);
+
 			switch (type) {
+			case SimpleConnectionType.Simple:
+				break;
+
+			case SimpleConnectionType.ValidateCertificate:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateFromCA;
+				parameters.ClientCertificateValidator = acceptFromCA;
+				break;
+
+			case SimpleConnectionType.CheckDefaultCipher:
+				parameters.ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384;
+				break;
+
+			case SimpleConnectionType.SimpleTls10:
+				parameters.ProtocolVersion = ProtocolVersions.Tls10;
+				parameters.ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
+				break;
+
+			case SimpleConnectionType.SimpleTls11:
+				parameters.ProtocolVersion = ProtocolVersions.Tls11;
+				parameters.ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
+				break;
+
+			case SimpleConnectionType.SimpleTls12:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384;
+				break;
+
+			case SimpleConnectionType.SelectCiphersTls10:
+				parameters.ProtocolVersion = ProtocolVersions.Tls10;
+				break;
+
+			case SimpleConnectionType.SelectCiphersTls11:
+				parameters.ProtocolVersion = ProtocolVersions.Tls11;
+				break;
+
+			case SimpleConnectionType.SelectCiphersTls12:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				break;
+
+			case SimpleConnectionType.RequestClientCertificate:
+				/*
+				 * Request client certificate, but do not require it.
+				 *
+				 * FIXME:
+				 * SslStream with Mono's old implementation fails here.
+				 */
+				parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
+				parameters.ClientCertificateValidator = acceptSelfSigned;
+				parameters.ServerFlags = ServerFlags.AskForClientCertificate;
+				parameters.ServerCertificateValidator = acceptFromCA;
+				break;
+
+			case SimpleConnectionType.RequireClientCertificateRSA:
+				/*
+				 * Require client certificate.
+				 *
+				 */
+				parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
+				parameters.ClientCertificateValidator = acceptSelfSigned;
+				parameters.ServerFlags = ServerFlags.RequireClientCertificate;
+				parameters.ServerCertificateValidator = acceptFromCA;
+				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
+				break;
+
+			case SimpleConnectionType.RequireClientCertificateDHE:
+				/*
+				 * Require client certificate.
+				 *
+				 */
+				parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
+				parameters.ClientCertificateValidator = acceptSelfSigned;
+				parameters.ServerFlags = ServerFlags.RequireClientCertificate;
+				parameters.ServerCertificateValidator = acceptFromCA;
+				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA };
+				break;
+
 			case SimpleConnectionType.MartinTest:
 				break;
 
@@ -125,6 +204,50 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 
 			return parameters;
+		}
+
+		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			if (Parameters.ExpectedCipher != null) {
+				var monoClient = Client as IMonoClient;
+				var monoServer = Server as IMonoServer;
+
+				ctx.Assert (monoClient, Is.Not.Null, "mono client");
+				ctx.Assert (monoServer, Is.Not.Null, "mono server");
+				ctx.Assert (monoClient.SupportsConnectionInfo, "client supports connection info");
+				ctx.Assert (monoServer.SupportsConnectionInfo, "server supports connection info");
+
+				var clientInfo = monoServer.GetConnectionInfo ();
+				var serverInfo = monoServer.GetConnectionInfo ();
+
+				if (ctx.Expect (clientInfo, Is.Not.Null, "client connection info"))
+					ctx.Expect (clientInfo.CipherCode, Is.EqualTo (Parameters.ExpectedCipher.Value), "client cipher");
+				if (ctx.Expect (serverInfo, Is.Not.Null, "server connection info"))
+					ctx.Expect (serverInfo.CipherCode, Is.EqualTo (Parameters.ExpectedCipher.Value), "server cipher");
+			}
+
+			if (Parameters.ProtocolVersion != null) {
+				ctx.Expect (Client.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "client protocol version");
+				ctx.Expect (Server.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "server protocol version");
+			}
+
+			if (Server.Provider.SupportsSslStreams && (Parameters.ServerFlags & ServerFlags.RequireClientCertificate) != 0) {
+				ctx.Expect (Server.SslStream.HasRemoteCertificate, "has remote certificate");
+				ctx.Expect (Server.SslStream.IsMutuallyAuthenticated, "is mutually authenticated");
+			}
+
+			base.OnRun (ctx, cancellationToken);
+		}
+
+		public async Task ExpectAlert (TestContext ctx, AlertDescription alert, CancellationToken cancellationToken)
+		{
+			var serverTask = Server.WaitForConnection (ctx, cancellationToken);
+			var clientTask = Client.WaitForConnection (ctx, cancellationToken);
+
+			var t1 = clientTask.ContinueWith (t => MonoConnectionHelper.ExpectAlert (ctx, t, alert, "client"));
+			var t2 = serverTask.ContinueWith (t => MonoConnectionHelper.ExpectAlert (ctx, t, alert, "server"));
+
+			await Task.WhenAll (t1, t2);
 		}
 	}
 }
