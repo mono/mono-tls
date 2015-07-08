@@ -72,7 +72,7 @@ namespace Mono.Security.NewTls.TestFramework
 				return ConnectionTypes.Select (t => Create (ctx, category, t));
 
 			case InstrumentationCategory.MonoProtocolVersions:
-				return Join (AllProtocols, AllVersionTypes, (protocol, type) => Create (ctx, category, type, protocol));
+				return AllVersionTypes.Select (t => Create (ctx, category, t));
 
 			case InstrumentationCategory.MartinTest:
 				return MartinTestTypes.Select (t => Create (ctx, category, t));
@@ -116,12 +116,6 @@ namespace Mono.Security.NewTls.TestFramework
 			SimpleConnectionType.MartinTest
 		};
 
-		internal static readonly ProtocolVersions[] AllProtocols = {
-			ProtocolVersions.Tls10,
-			ProtocolVersions.Tls11,
-			ProtocolVersions.Tls12
-		};
-
 		static SimpleConnectionParameters CreateParameters (InstrumentationCategory category, SimpleConnectionType type, params object[] args)
 		{
 			var sb = new StringBuilder ();
@@ -136,14 +130,9 @@ namespace Mono.Security.NewTls.TestFramework
 			};
 		}
 
-		static SimpleConnectionParameters Create (TestContext ctx, InstrumentationCategory category, SimpleConnectionType type, ProtocolVersions? protocol = null)
+		static SimpleConnectionParameters Create (TestContext ctx, InstrumentationCategory category, SimpleConnectionType type)
 		{
-			SimpleConnectionParameters parameters;
-			if (protocol != null) {
-				parameters = CreateParameters (category, type, protocol.Value);
-				parameters.ProtocolVersion = protocol.Value;
-			} else
-				parameters = CreateParameters (category, type);
+			var parameters = CreateParameters (category, type);
 
 			var provider = DependencyInjector.Get<ICertificateProvider> ();
 			var acceptSelfSigned = provider.AcceptThisCertificate (ResourceManager.SelfSignedServerCertificate);

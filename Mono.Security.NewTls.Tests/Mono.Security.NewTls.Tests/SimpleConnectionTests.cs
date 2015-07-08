@@ -79,6 +79,7 @@ namespace Mono.Security.NewTls.Tests
 		public Task TestAllVersions (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
 			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[ProtocolVersions] ProtocolVersions protocolVersion,
 			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
