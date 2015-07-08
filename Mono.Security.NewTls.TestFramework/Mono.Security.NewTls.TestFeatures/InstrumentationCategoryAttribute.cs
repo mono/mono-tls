@@ -51,10 +51,10 @@ namespace Mono.Security.NewTls.TestFeatures
 		readonly string identifier;
 		readonly InstrumentationCategory category;
 
-		public InstrumentationCategoryAttribute (InstrumentationCategory category, string identifier = null)
+		public InstrumentationCategoryAttribute (InstrumentationCategory category)
 		{
 			this.category = category;
-			this.identifier = identifier;
+			this.identifier = Type.Name;
 		}
 	}
 }
