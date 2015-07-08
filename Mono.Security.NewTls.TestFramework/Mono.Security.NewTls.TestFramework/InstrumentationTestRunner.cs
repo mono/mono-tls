@@ -68,11 +68,14 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			switch (category) {
 			case InstrumentationCategory.SimpleMonoClient:
+			case InstrumentationCategory.SelectClientCipher:
 				return MonoConnectionFlags.RequireMonoClient;
 			case InstrumentationCategory.SimpleMonoServer:
+			case InstrumentationCategory.SelectServerCipher:
 				return MonoConnectionFlags.RequireMonoServer;
 			case InstrumentationCategory.SimpleMonoConnection:
 			case InstrumentationCategory.MonoProtocolVersions:
+			case InstrumentationCategory.SelectCipher:
 				return MonoConnectionFlags.RequireMonoClient | MonoConnectionFlags.RequireMonoServer;
 			case InstrumentationCategory.AllClientSignatureAlgorithms:
 			case InstrumentationCategory.ClientSignatureParameters:

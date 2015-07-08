@@ -108,7 +108,7 @@ namespace Mono.Security.NewTls.Tests
 	}
 
 	[AsyncTestFixture]
-	public class SelectCiphersTest
+	public class OldSelectCiphersTest
 	{
 		[ConnectionProvider (ProviderFlags = ConnectionProviderFlags.CanSelectCiphers)]
 		public ConnectionProviderType ServerType {

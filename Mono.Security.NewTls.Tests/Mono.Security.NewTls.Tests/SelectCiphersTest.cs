@@ -1,5 +1,5 @@
 ﻿//
-// MartinTest.cs
+// SelectCiphersTests.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -42,34 +42,34 @@ namespace Mono.Security.NewTls.Tests
 
 	[Martin]
 	[AsyncTestFixture]
-	public class MartinTest
+	public class SelectCiphersTests
 	{
-		// [AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task TestMartinClient (TestContext ctx, CancellationToken cancellationToken,
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.SelectClientCipher)]
+		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+			[CipherInstrumentParameters] CipherInstrumentParameters parameters,
+			[CipherInstrumentTestRunner] CipherInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		// [AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task TestClientPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType ("Manual:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ServerInstrumentation)] ConnectionInstrumentTestRunner runner)
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.SelectServerCipher)]
+		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[CipherInstrumentParameters] CipherInstrumentParameters parameters,
+			[CipherInstrumentTestRunner] CipherInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		// [AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task TestServerPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType ("MonoWithNewTLS:Manual")] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ClientInstrumentation)] ConnectionInstrumentTestRunner runner)
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.SelectCipher)]
+		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[CipherInstrumentParameters] CipherInstrumentParameters parameters,
+			[CipherInstrumentTestRunner] CipherInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

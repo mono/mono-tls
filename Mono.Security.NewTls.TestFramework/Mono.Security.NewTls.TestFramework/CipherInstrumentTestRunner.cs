@@ -59,6 +59,15 @@ namespace Mono.Security.NewTls.TestFramework
 		public static IEnumerable<CipherInstrumentParameters> GetParameters (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
+			case InstrumentationCategory.SelectClientCipher:
+				return ClientConnectionTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.SelectServerCipher:
+				return ServerConnectionTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.SelectCipher:
+				return ConnectionTypes.Select (t => Create (ctx, category, t));
+
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
 				return null;
