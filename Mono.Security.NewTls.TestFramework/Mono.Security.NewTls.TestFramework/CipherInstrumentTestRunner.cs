@@ -60,10 +60,22 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			switch (category) {
 			case InstrumentationCategory.SelectClientCipher:
-				return ClientConnectionTypes.Select (t => Create (ctx, category, t));
+				return SelectAllCiphers ((protocol, cipher) => {
+					var parameters = CreateParameters (category, CipherInstrumentType.SelectClientCipher, protocol, cipher);
+					parameters.ProtocolVersion = protocol;
+					parameters.ClientCiphers = new CipherSuiteCode[] { cipher };
+					parameters.ExpectedClientCipher = cipher;
+					return parameters;
+				});
 
 			case InstrumentationCategory.SelectServerCipher:
-				return ServerConnectionTypes.Select (t => Create (ctx, category, t));
+				return SelectAllCiphers ((protocol, cipher) => {
+					var parameters = CreateParameters (category, CipherInstrumentType.SelectServerCipher, protocol, cipher);
+					parameters.ProtocolVersion = protocol;
+					parameters.ServerCiphers = new CipherSuiteCode[] { cipher };
+					parameters.ExpectedServerCipher = cipher;
+					return parameters;
+				});
 
 			case InstrumentationCategory.SelectCipher:
 				return ConnectionTypes.Select (t => Create (ctx, category, t));
@@ -74,17 +86,47 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 		}
 
-		internal static readonly CipherInstrumentType[] ClientConnectionTypes = {
-		};
-
-		internal static readonly CipherInstrumentType[] ServerConnectionTypes = {
-		};
-
 		internal static readonly CipherInstrumentType[] ConnectionTypes = {
 		};
 
-		internal static readonly CipherInstrumentType[] MartinTestTypes = {
+		internal static readonly CipherSuiteCode[] CiphersTls10 = {
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
 		};
+
+		internal static readonly CipherSuiteCode[] CiphersTls12 = {
+			// Galois-Counter Cipher Suites.
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
+
+			// Galois-Counter with Legacy RSA Key Exchange.
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256,
+			CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384,
+
+			// Diffie-Hellman Cipher Suites
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+
+			// Legacy AES Cipher Suites
+			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256,
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256,
+			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
+		};
+
+		static IEnumerable<CipherInstrumentParameters> SelectAllCiphers (Func<ProtocolVersions,CipherSuiteCode,CipherInstrumentParameters> func)
+		{
+			foreach (var cipher in CiphersTls10)
+				yield return func (ProtocolVersions.Tls10, cipher);
+			foreach (var cipher in CiphersTls10)
+				yield return func (ProtocolVersions.Tls11, cipher);
+			foreach (var cipher in CiphersTls12)
+				yield return func (ProtocolVersions.Tls12, cipher);
+		}
 
 		static CipherInstrumentParameters CreateParameters (InstrumentationCategory category, CipherInstrumentType type, params object[] args)
 		{
@@ -96,8 +138,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var name = sb.ToString ();
 
 			return new CipherInstrumentParameters (category, type, name, ResourceManager.SelfSignedServerCertificate) {
-				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate,
-				ProtocolVersion = ProtocolVersions.Tls12
+				ClientCertificateValidator = AcceptAnyCertificate, ServerCertificateValidator = AcceptAnyCertificate
 			};
 		}
 

@@ -29,6 +29,9 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public enum CipherInstrumentType
 	{
+		SelectClientCipher,
+		SelectServerCipher,
+		SelectCipher
 	}
 }
 
