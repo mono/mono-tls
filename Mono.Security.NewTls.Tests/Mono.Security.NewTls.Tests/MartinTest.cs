@@ -45,30 +45,30 @@ namespace Mono.Security.NewTls.Tests
 	public class MartinTest
 	{
 		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[ConnectionInstrumentParameters (InstrumentationCategory.MartinTest)] ConnectionInstrumentParameters parameters,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		// [AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public async Task TestClientPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider ("Manual", Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[ConnectionInstrumentParameters (InstrumentationCategory.MartinTest)] ConnectionInstrumentParameters parameters,
+			[InstrumentationConnectionType ("Manual:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ServerInstrumentation)] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		// [AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public async Task TestServerPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider ("Manual", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[ConnectionInstrumentParameters (InstrumentationCategory.MartinTest)] ConnectionInstrumentParameters parameters,
+			[InstrumentationConnectionType ("MonoWithNewTLS:Manual")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ClientInstrumentation)] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);

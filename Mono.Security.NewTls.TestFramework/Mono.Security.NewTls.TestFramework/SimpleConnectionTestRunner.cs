@@ -81,15 +81,19 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		internal static readonly SimpleConnectionType[] ClientConnectionTypes = {
+			SimpleConnectionType.MartinTest
 		};
 
 		internal static readonly SimpleConnectionType[] ServerConnectionTypes = {
+			SimpleConnectionType.MartinTest
 		};
 
 		internal static readonly SimpleConnectionType[] ConnectionTypes = {
+			SimpleConnectionType.MartinTest
 		};
 
 		internal static readonly SimpleConnectionType[] MartinTestTypes = {
+			SimpleConnectionType.MartinTest
 		};
 
 		static SimpleConnectionParameters CreateParameters (InstrumentationCategory category, SimpleConnectionType type, params object[] args)
@@ -112,6 +116,9 @@ namespace Mono.Security.NewTls.TestFramework
 			var parameters = CreateParameters (category, type);
 
 			switch (type) {
+			case SimpleConnectionType.MartinTest:
+				break;
+
 			default:
 				ctx.AssertFail ("Unsupported connection type: '{0}'.", type);
 				break;

@@ -315,7 +315,17 @@ namespace Mono.Security.NewTls.TestFeatures
 			where P : ClientAndServerParameters
 			where R : ClientAndServerTestRunner
 		{
-			var clientProviderType = GetClientType (ctx);
+			ConnectionProviderType clientProviderType;
+			ConnectionProviderType serverProviderType;
+			InstrumentationConnectionType connectionType;
+			if (ctx.TryGetParameter<InstrumentationConnectionType> (out connectionType)) {
+				clientProviderType = connectionType.ClientType;
+				serverProviderType = connectionType.ServerType;
+			} else {
+				clientProviderType = GetClientType (ctx);
+				serverProviderType = GetServerType (ctx);
+			}
+
 			MonoConnectionProvider monoClientProvider;
 			ConnectionProvider clientProvider;
 
@@ -330,7 +340,6 @@ namespace Mono.Security.NewTls.TestFeatures
 				monoClientProvider = null;
 			}
 
-			var serverProviderType = GetServerType (ctx);
 			MonoConnectionProvider monoServerProvider;
 			ConnectionProvider serverProvider;
 

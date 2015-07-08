@@ -37,25 +37,18 @@ namespace Mono.Security.NewTls.TestFeatures
 
 	public class ConnectionInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<ConnectionInstrumentParameters>
 	{
-		public InstrumentationCategory Category {
-			get;
-			private set;
-		}
-
 		public ConnectionInstrumentType? Type {
 			get; set;
 		}
 
-		public ConnectionInstrumentParametersAttribute (InstrumentationCategory category, string filter = null)
+		public ConnectionInstrumentParametersAttribute (string filter = null)
 			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
-			Category = category;
 		}
 
-		public ConnectionInstrumentParametersAttribute (InstrumentationCategory category, ConnectionInstrumentType type)
+		public ConnectionInstrumentParametersAttribute (ConnectionInstrumentType type)
 			: base (null, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
-			Category = category;
 			Type = type;
 		}
 
@@ -64,7 +57,9 @@ namespace Mono.Security.NewTls.TestFeatures
 			if (filter != null)
 				throw new NotImplementedException ();
 
-			var parameters = ConnectionInstrumentTestRunner.GetParameters (ctx, Category);
+			var category = ctx.GetParameter<InstrumentationCategory> ();
+
+			var parameters = ConnectionInstrumentTestRunner.GetParameters (ctx, category);
 			if (Type != null)
 				return parameters.Where (p => p.Type == Type);
 

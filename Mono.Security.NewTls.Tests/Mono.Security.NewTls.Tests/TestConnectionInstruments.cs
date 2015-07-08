@@ -45,30 +45,30 @@ namespace Mono.Security.NewTls.Tests
 	public class TestConnectionInstruments
 	{
 		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.ClientConnection)]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider (Identifier = "ServerType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType serverType,
-			[ConnectionInstrumentParameters (InstrumentationCategory.ClientConnection)] ConnectionInstrumentParameters parameters,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.ServerConnection)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider (Identifier = "ClientType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType clientType,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[ConnectionInstrumentParameters (InstrumentationCategory.ServerConnection)] ConnectionInstrumentParameters parameters,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.Connection)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider ("MonoWithNewTLS", Identifier = "ServerType")] ConnectionProviderType serverType,
-			[ConnectionInstrumentParameters (InstrumentationCategory.Connection)] ConnectionInstrumentParameters parameters,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);

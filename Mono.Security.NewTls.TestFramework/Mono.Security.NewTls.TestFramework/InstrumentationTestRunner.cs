@@ -90,9 +90,51 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 		}
 
+		static bool IsClientSupported (TestContext ctx, InstrumentationCategory category, ConnectionProviderType type)
+		{
+			var connectionFlags = GetConnectionFlags (ctx, category);
+			switch (type) {
+			case ConnectionProviderType.NewTLS:
+			case ConnectionProviderType.OpenSsl:
+				return (connectionFlags & (MonoConnectionFlags.ClientInstrumentation)) == 0;
+			case ConnectionProviderType.MonoWithNewTLS:
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		static bool IsServerSupported (TestContext ctx, InstrumentationCategory category, ConnectionProviderType type)
+		{
+			var connectionFlags = GetConnectionFlags (ctx, category);
+			switch (type) {
+			case ConnectionProviderType.NewTLS:
+			case ConnectionProviderType.OpenSsl:
+				return (connectionFlags & (MonoConnectionFlags.ServerInstrumentation)) == 0;
+			case ConnectionProviderType.MonoWithNewTLS:
+				return true;
+			default:
+				return false;
+			}
+		}
+
 		public static IEnumerable<InstrumentationConnectionType> GetConnectionTypes (TestContext ctx, InstrumentationCategory category)
 		{
-			yield break;
+			var factory = DependencyInjector.Get<ConnectionProviderFactory> ();
+			var supportedProviders = factory.GetSupportedProviders ();
+
+			var supportedClientProviders = supportedProviders.Where (p => IsClientSupported (ctx, category, p));
+			var supportedServerProviders = supportedProviders.Where (p => IsServerSupported (ctx, category, p));
+
+			return Join (supportedClientProviders, supportedServerProviders, (c, s) => new InstrumentationConnectionType (category, c, s));
+		}
+
+		public static IEnumerable<R> Join<T,U,R> (IEnumerable<T> first, IEnumerable<U> second, Func<T, U, R> resultSelector) {
+			foreach (var e1 in first) {
+				foreach (var e2 in second) {
+					yield return resultSelector (e1, e2);
+				}
+			}
 		}
 
 		protected static ICertificateValidator AcceptAnyCertificate {
