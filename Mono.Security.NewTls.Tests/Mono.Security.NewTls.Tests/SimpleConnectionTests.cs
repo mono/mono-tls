@@ -73,6 +73,16 @@ namespace Mono.Security.NewTls.Tests
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
+
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MonoProtocolVersions)]
+		public Task TestAllVersions (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
+		{
+			return runner.Run (ctx, cancellationToken);
+		}
 	}
 }
 

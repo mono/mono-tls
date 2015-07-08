@@ -72,6 +72,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.SimpleMonoServer:
 				return MonoConnectionFlags.RequireMonoServer;
 			case InstrumentationCategory.SimpleMonoConnection:
+			case InstrumentationCategory.MonoProtocolVersions:
 				return MonoConnectionFlags.RequireMonoClient | MonoConnectionFlags.RequireMonoServer;
 			case InstrumentationCategory.AllClientSignatureAlgorithms:
 			case InstrumentationCategory.ClientSignatureParameters:

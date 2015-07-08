@@ -44,6 +44,7 @@ namespace Mono.Security.NewTls.TestFramework
 		SimpleMonoClient,
 		SimpleMonoServer,
 		SimpleMonoConnection,
+		MonoProtocolVersions,
 
 		MartinTest
 	}
