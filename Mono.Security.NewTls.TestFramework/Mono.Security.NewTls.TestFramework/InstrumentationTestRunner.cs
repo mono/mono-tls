@@ -31,6 +31,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.HttpFramework;
 using Xamarin.WebTests.Portable;
@@ -158,6 +159,45 @@ namespace Mono.Security.NewTls.TestFramework
 			base.OnWaitForServerConnectionCompleted (ctx, task);
 		}
 
+		protected void CheckCipher (TestContext ctx, IMonoCommonConnection connection, CipherSuiteCode cipher)
+		{
+			ctx.Assert (connection.SupportsConnectionInfo, "supports connection info");
+			var connectionInfo = connection.GetConnectionInfo ();
+
+			if (ctx.Expect (connectionInfo, Is.Not.Null, "connection info"))
+				ctx.Expect (connectionInfo.CipherCode, Is.EqualTo (cipher), "expected cipher");
+		}
+
+		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			var monoClient = Client as IMonoClient;
+			var monoServer = Server as IMonoServer;
+
+			if (monoClient != null) {
+				var expectedCipher = Parameters.ExpectedClientCipher ?? Parameters.ExpectedCipher;
+				if (expectedCipher != null)
+					CheckCipher (ctx, monoClient, expectedCipher.Value);
+			}
+
+			if (monoServer != null) {
+				var expectedCipher = Parameters.ExpectedServerCipher ?? Parameters.ExpectedCipher;
+				if (expectedCipher != null)
+					CheckCipher (ctx, monoServer, expectedCipher.Value);
+			}
+
+			if (Parameters.ProtocolVersion != null) {
+				ctx.Expect (Client.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "client protocol version");
+				ctx.Expect (Server.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "server protocol version");
+			}
+
+			if (Server.Provider.SupportsSslStreams && (Parameters.ServerFlags & ServerFlags.RequireClientCertificate) != 0) {
+				ctx.Expect (Server.SslStream.HasRemoteCertificate, "has remote certificate");
+				ctx.Expect (Server.SslStream.IsMutuallyAuthenticated, "is mutually authenticated");
+			}
+
+			base.OnRun (ctx, cancellationToken);
+		}
+
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
 			if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
@@ -209,6 +249,17 @@ namespace Mono.Security.NewTls.TestFramework
 			ctx.LogMessage ("GOT CLIENT MESSAGE: {0}", line);
 
 			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
+		}
+
+		public async Task ExpectAlert (TestContext ctx, AlertDescription alert, CancellationToken cancellationToken)
+		{
+			var serverTask = Server.WaitForConnection (ctx, cancellationToken);
+			var clientTask = Client.WaitForConnection (ctx, cancellationToken);
+
+			var t1 = clientTask.ContinueWith (t => MonoConnectionHelper.ExpectAlert (ctx, t, alert, "client"));
+			var t2 = serverTask.ContinueWith (t => MonoConnectionHelper.ExpectAlert (ctx, t, alert, "server"));
+
+			await Task.WhenAll (t1, t2);
 		}
 	}
 }
