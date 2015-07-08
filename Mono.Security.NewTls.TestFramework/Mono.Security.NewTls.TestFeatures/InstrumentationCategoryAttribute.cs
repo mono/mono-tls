@@ -1,5 +1,5 @@
 ﻿//
-// SimpleConnectionParametersAttribute.cs
+// InstrumentationCategoryAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,46 +24,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Providers;
-using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
-	public class SimpleConnectionParametersAttribute : TestParameterAttribute, ITestParameterSource<SimpleConnectionParameters>
+	public class InstrumentationCategoryAttribute : FixedTestParameterAttribute
 	{
-		public SimpleConnectionType? Type {
-			get; set;
+		public override Type Type {
+			get { return typeof(InstrumentationCategory); }
 		}
 
-		public SimpleConnectionParametersAttribute (string filter = null)
-			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
-		{
+		public override object Value {
+			get { return Category; }
 		}
 
-		public SimpleConnectionParametersAttribute (SimpleConnectionType type)
-			: base (null, TestFlags.Browsable | TestFlags.ContinueOnError)
-		{
-			Type = type;
+		public override string Identifier {
+			get { return identifier; }
 		}
 
-		public IEnumerable<SimpleConnectionParameters> GetParameters (TestContext ctx, string filter)
+		public InstrumentationCategory Category {
+			get { return category; }
+		}
+
+		readonly string identifier;
+		readonly InstrumentationCategory category;
+
+		public InstrumentationCategoryAttribute (InstrumentationCategory category, string identifier = null)
 		{
-			if (filter != null)
-				throw new NotImplementedException ();
-
-			var category = ctx.GetParameter<InstrumentationCategory> ();
-
-			var parameters = SimpleConnectionTestRunner.GetParameters (ctx, category);
-			if (Type != null)
-				return parameters.Where (p => p.Type == Type);
-
-			return parameters;
+			this.category = category;
+			this.identifier = identifier;
 		}
 	}
 }

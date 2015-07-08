@@ -83,6 +83,9 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\SimpleConnectionType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\SimpleConnectionParametersAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\SImpleConnectionTestRunnerAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionType.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationConnectionTypeAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationCategoryAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

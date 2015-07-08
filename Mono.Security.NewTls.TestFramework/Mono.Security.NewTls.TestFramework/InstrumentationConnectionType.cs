@@ -1,5 +1,5 @@
 ﻿//
-// SimpleConnectionParametersAttribute.cs
+// InstrumentationConnectionType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,46 +24,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
-using Xamarin.WebTests.Resources;
 
-namespace Mono.Security.NewTls.TestFeatures
+namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFramework;
-
-	public class SimpleConnectionParametersAttribute : TestParameterAttribute, ITestParameterSource<SimpleConnectionParameters>
+	public class InstrumentationConnectionType : ITestParameter
 	{
-		public SimpleConnectionType? Type {
-			get; set;
+		public InstrumentationCategory Category {
+			get;
+			private set;
 		}
 
-		public SimpleConnectionParametersAttribute (string filter = null)
-			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
-		{
+		public ConnectionProviderType ClientType {
+			get;
+			private set;
 		}
 
-		public SimpleConnectionParametersAttribute (SimpleConnectionType type)
-			: base (null, TestFlags.Browsable | TestFlags.ContinueOnError)
-		{
-			Type = type;
+		public ConnectionProviderType ServerType {
+			get;
+			private set;
 		}
 
-		public IEnumerable<SimpleConnectionParameters> GetParameters (TestContext ctx, string filter)
+		public string Value {
+			get;
+			private set;
+		}
+
+		public InstrumentationConnectionType (InstrumentationCategory category, ConnectionProviderType clientType, ConnectionProviderType serverType)
 		{
-			if (filter != null)
-				throw new NotImplementedException ();
+			Category = category;
+			ClientType = clientType;
+			ServerType = serverType;
+			Value = string.Format ("{0}:{1}:{2}", category, clientType, serverType);
+		}
 
-			var category = ctx.GetParameter<InstrumentationCategory> ();
-
-			var parameters = SimpleConnectionTestRunner.GetParameters (ctx, category);
-			if (Type != null)
-				return parameters.Where (p => p.Type == Type);
-
-			return parameters;
+		public override string ToString ()
+		{
+			return string.Format ("[InstrumentationConnectionType {0}]", Value);
 		}
 	}
 }

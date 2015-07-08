@@ -90,6 +90,11 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 		}
 
+		public static IEnumerable<InstrumentationConnectionType> GetConnectionTypes (TestContext ctx, InstrumentationCategory category)
+		{
+			yield break;
+		}
+
 		protected static ICertificateValidator AcceptAnyCertificate {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptAll (); }
 		}

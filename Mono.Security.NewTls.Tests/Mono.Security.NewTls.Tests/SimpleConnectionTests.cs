@@ -45,30 +45,30 @@ namespace Mono.Security.NewTls.Tests
 	public class SimpleConnectionTests
 	{
 		[AsyncTest]
-		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider (Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider (Identifier = "ServerType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType serverType,
-			[SimpleConnectionParameters (InstrumentationCategory.SimpleClient)] SimpleConnectionParameters parameters,
+		[InstrumentationCategory (InstrumentationCategory.SimpleClient)]
+		public async Task TestMartin (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
 			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.SimpleServer)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider (Identifier = "ClientType", ProviderFlags = ConnectionProviderFlags.SupportsTls12)] ConnectionProviderType clientType,
-			[ConnectionProvider (Identifier = "ServerType")] ConnectionProviderType serverType,
-			[SimpleConnectionParameters (InstrumentationCategory.SimpleServer)] SimpleConnectionParameters parameters,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
 			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.SimpleConnection)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[ConnectionProvider (Identifier = "ClientType")] ConnectionProviderType clientType,
-			[ConnectionProvider (Identifier = "ServerType")] ConnectionProviderType serverType,
-			[SimpleConnectionParameters (InstrumentationCategory.SimpleConnection)] SimpleConnectionParameters parameters,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
 			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);

@@ -1,5 +1,5 @@
 ﻿//
-// SimpleConnectionParametersAttribute.cs
+// InstrumentationConnectionTypeAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,44 +27,62 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
+using Xamarin.AsyncTests.Framework;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Providers;
-using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
-	public class SimpleConnectionParametersAttribute : TestParameterAttribute, ITestParameterSource<SimpleConnectionParameters>
+	[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
+	public class InstrumentationConnectionTypeAttribute : TestParameterAttribute, ITestParameterSource<InstrumentationConnectionType>
 	{
-		public SimpleConnectionType? Type {
-			get; set;
-		}
-
-		public SimpleConnectionParametersAttribute (string filter = null)
-			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
+		public InstrumentationConnectionTypeAttribute (string filter = null, TestFlags flags = TestFlags.Browsable)
+			: base (filter, flags)
 		{
 		}
 
-		public SimpleConnectionParametersAttribute (SimpleConnectionType type)
-			: base (null, TestFlags.Browsable | TestFlags.ContinueOnError)
+		bool MatchesFilter (InstrumentationConnectionType type, string filter)
 		{
-			Type = type;
+			if (filter == null)
+				return true;
+
+			string clientFilter, serverFilter;
+			int pos = filter.IndexOf (':');
+			if (pos < 0)
+				clientFilter = serverFilter = filter;
+			else {
+				clientFilter = filter.Substring (0, pos);
+				serverFilter = filter.Substring (pos + 1);
+			}
+
+			if (!MatchesFilter (type.ClientType, clientFilter))
+				return false;
+			if (!MatchesFilter (type.ServerType, serverFilter))
+				return false;
+
+			return true;
 		}
 
-		public IEnumerable<SimpleConnectionParameters> GetParameters (TestContext ctx, string filter)
+		bool MatchesFilter (ConnectionProviderType type, string filter)
 		{
-			if (filter != null)
-				throw new NotImplementedException ();
+			if (filter == null)
+				return true;
 
+			var parts = filter.Split (',');
+			foreach (var part in parts) {
+				if (type.ToString ().Equals (part))
+					return true;
+			}
+
+			return false;
+		}
+
+		public IEnumerable<InstrumentationConnectionType> GetParameters (TestContext ctx, string filter)
+		{
 			var category = ctx.GetParameter<InstrumentationCategory> ();
-
-			var parameters = SimpleConnectionTestRunner.GetParameters (ctx, category);
-			if (Type != null)
-				return parameters.Where (p => p.Type == Type);
-
-			return parameters;
+			return InstrumentationTestRunner.GetConnectionTypes (ctx, category).Where (t => MatchesFilter (t, filter));
 		}
 	}
 }
-
