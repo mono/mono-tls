@@ -58,7 +58,6 @@ namespace Mono.Security.NewTls.TestFramework
 			ClientRenegotiationFlags = other.ClientRenegotiationFlags;
 			ServerRenegotiationFlags = other.ServerRenegotiationFlags;
 			RequestRenegotiation = other.RequestRenegotiation;
-			HandshakeInstruments = other.HandshakeInstruments;
 		}
 
 		public override ConnectionParameters DeepClone ()
@@ -79,10 +78,6 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		public bool? RequestRenegotiation {
-			get; set;
-		}
-
-		public HandshakeInstrumentType[] HandshakeInstruments {
 			get; set;
 		}
 	}

@@ -69,14 +69,11 @@ namespace Mono.Security.NewTls.TestFramework
 			switch (category) {
 			case InstrumentationCategory.AllClientSignatureAlgorithms:
 			case InstrumentationCategory.ClientSignatureParameters:
-			case InstrumentationCategory.ClientConnection:
 				return MonoConnectionFlags.ClientInstrumentation;
 			case InstrumentationCategory.AllServerSignatureAlgorithms:
 			case InstrumentationCategory.ServerSignatureParameters:
-			case InstrumentationCategory.ServerConnection:
 				return MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.SignatureAlgorithms:
-			case InstrumentationCategory.Connection:
 				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.MartinTest:
 				return MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.ClientInstrumentation;

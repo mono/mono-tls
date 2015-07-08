@@ -40,13 +40,6 @@ namespace Mono.Security.NewTls
 		{
 		}
 
-		public byte[] GetBuffer ()
-		{
-			var copy = new byte [Size];
-			Array.Copy (Buffer, Offset, copy, 0, Size);
-			return copy;
-		}
-
 		internal void TruncateTo (int newSize)
 		{
 			if (newSize > Size)
