@@ -40,7 +40,6 @@
     <Compile Include="Mono.Security.NewTls.Tests\TestCbcBlockCipher-Generated.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterGipher-Generated.cs" />
-    <Compile Include="Mono.Security.NewTls.Tests\MonoConnectionTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestHttps.cs" />
     <Compile Include="NewTlsTestFeatures.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestSslStream.cs" />
