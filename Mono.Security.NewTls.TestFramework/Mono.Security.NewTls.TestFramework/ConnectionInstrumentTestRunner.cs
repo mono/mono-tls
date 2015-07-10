@@ -201,26 +201,30 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			ctx.LogMessage ("MAIN LOOP MARTIN");
 
+			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.SendBlobAfterReceivingFinish);
+			await Client.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
+			ctx.LogMessage ("MAIN LOOP MARTIN #1");
+
 			var buffer = new byte [4096];
-			int ret = await Server.Stream.ReadAsync (buffer, 0, buffer.Length);
-			ctx.LogMessage ("MAIN LOOP MARTIN #1: {0}", ret);
+			var ret = await Server.Stream.ReadAsync (buffer, 0, buffer.Length);
+			ctx.LogMessage ("MAIN LOOP MARTIN #2: {0}", ret);
 			DebugHelper.WriteBuffer ("READ", buffer, 0, ret);
+			ctx.Assert (ret, Is.EqualTo (blob.Size));
 
 			var clientBuffer = new byte [4096];
 			var clientRead = Client.Stream.ReadAsync (clientBuffer, 0, clientBuffer.Length);
 			var serverRead = Server.Stream.ReadAsync (buffer, 0, buffer.Length);
 
+			var clientDone = clientRead.ContinueWith (t => Client.Shutdown (ctx, true, cancellationToken));
+			var serverDone = serverRead.ContinueWith (t => Server.Shutdown (ctx, true, cancellationToken));
+
 			await Task.WhenAny (clientRead, serverRead);
 
-			ctx.LogMessage ("MAIN LOOP MARTIN #2: {0} {1}", clientRead.Status, serverRead.Status);
+			ctx.LogMessage ("MAIN LOOP MARTIN #3: {0} {1}", clientRead.Status, serverRead.Status);
 
-			ret = await Server.Stream.ReadAsync (buffer, 0, buffer.Length);
-			ctx.LogMessage ("MAIN LOOP MARTIN #3: {0}", ret);
+			await Task.WhenAll (clientDone, serverDone);
 
-			await Task.Delay (1500);
-			await Client.Shutdown (ctx, true, cancellationToken);
-
-			ctx.LogMessage ("MAIN LOOP MARTIN #4");
+			ctx.LogMessage ("MAIN LOOP MARTIN #5");
 		}
 	}
 }
