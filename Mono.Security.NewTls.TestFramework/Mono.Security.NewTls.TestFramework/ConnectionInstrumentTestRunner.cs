@@ -58,8 +58,11 @@ namespace Mono.Security.NewTls.TestFramework
 			var settings = new UserSettings ();
 
 			instrumentation.SettingsInstrument = new ConnectionInstrument (settings, ctx, this);
+			instrumentation.EventSink = new ConnectionEventSink (ctx, this);
+
 			if (Parameters.HandshakeInstruments != null)
 				instrumentation.HandshakeInstruments.UnionWith (Parameters.HandshakeInstruments);
+
 			return instrumentation;
 		}
 
@@ -145,12 +148,17 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.SendBlobAfterReceivingFinish };
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					// HandshakeInstrumentType.SendBlobAfterHelloRequest
+					// HandshakeInstrumentType.SendDuplicateHelloRequest
+					// HandshakeInstrumentType.SendBlobAfterReceivingFinish
+				};
 				parameters.EnableDebugging = true;
 				break;
 
 			case ConnectionInstrumentType.MartinClientPuppy:
 			case ConnectionInstrumentType.MartinServerPuppy:
+				goto case ConnectionInstrumentType.MartinTest;
 				parameters.RequestRenegotiation = true;
 				parameters.EnableDebugging = true;
 				break;
@@ -175,6 +183,8 @@ namespace Mono.Security.NewTls.TestFramework
 				return RunMainLoopBlob (ctx, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
 
 			case ConnectionInstrumentType.MartinTest:
+			case ConnectionInstrumentType.MartinClientPuppy:
+			case ConnectionInstrumentType.MartinServerPuppy:
 				return RunMainLoopMartin (ctx, cancellationToken);
 
 			default:
@@ -201,30 +211,80 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			ctx.LogMessage ("MAIN LOOP MARTIN");
 
-			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.SendBlobAfterReceivingFinish);
-			await Client.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
-			ctx.LogMessage ("MAIN LOOP MARTIN #1");
-
-			var buffer = new byte [4096];
-			var ret = await Server.Stream.ReadAsync (buffer, 0, buffer.Length);
-			ctx.LogMessage ("MAIN LOOP MARTIN #2: {0}", ret);
-			DebugHelper.WriteBuffer ("READ", buffer, 0, ret);
-			ctx.Assert (ret, Is.EqualTo (blob.Size));
-
 			var clientBuffer = new byte [4096];
+			var serverBuffer = new byte [4096];
 			var clientRead = Client.Stream.ReadAsync (clientBuffer, 0, clientBuffer.Length);
-			var serverRead = Server.Stream.ReadAsync (buffer, 0, buffer.Length);
+			var serverRead = Server.Stream.ReadAsync (serverBuffer, 0, serverBuffer.Length);
 
-			var clientDone = clientRead.ContinueWith (t => Client.Shutdown (ctx, true, cancellationToken));
-			var serverDone = serverRead.ContinueWith (t => Server.Shutdown (ctx, true, cancellationToken));
+			var clientDone = clientRead.ContinueWith (async t => {
+				ctx.LogMessage ("CLIENT DONE: {0} {1}", t.IsFaulted, t.IsCanceled);
+				if (!t.IsFaulted && !t.IsCanceled)
+					ctx.LogMessage ("CLIENT DONE #1: {0}", t.Status);
+				await Client.Shutdown (ctx, true, cancellationToken);
+				return t;
+			});
+			var serverDone = serverRead.ContinueWith (async t => {
+				ctx.LogMessage ("SERVER DONE: {0} {1}", t.IsFaulted, t.IsCanceled);
+				if (!t.IsFaulted && !t.IsCanceled)
+					ctx.LogMessage ("SERVER DONE #1: {0}", t.Status);
+				await Server.Shutdown (ctx, true, cancellationToken);
+				return t;
+			});
 
-			await Task.WhenAny (clientRead, serverRead);
+			await Task.WhenAll (renegotiationTcs.Task, clientDone, serverDone);
 
-			ctx.LogMessage ("MAIN LOOP MARTIN #3: {0} {1}", clientRead.Status, serverRead.Status);
+			ctx.LogMessage ("MAIN LOOP MARTIN DONE: {0} {1} {2}", renegotiationTcs.Task.Status, clientDone.Status, serverDone.Status);
+		}
 
-			await Task.WhenAll (clientDone, serverDone);
+		TaskCompletionSource<bool> renegotiationTcs;
 
-			ctx.LogMessage ("MAIN LOOP MARTIN #5");
+		public override Task Start (TestContext ctx, CancellationToken cancellationToken)
+		{
+			renegotiationTcs = new TaskCompletionSource<bool> ();
+			return base.Start (ctx, cancellationToken);
+		}
+
+		public override Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, CancellationToken cancellationToken)
+		{
+			renegotiationTcs.TrySetCanceled ();
+			return base.Shutdown (ctx, attemptCleanShutdown, cancellationToken);
+		}
+
+		void OnRenegotiationCompleted (TestContext ctx)
+		{
+			ctx.LogMessage ("ON RENEGOTIATION COMPLETED");
+			renegotiationTcs.SetResult (true);
+		}
+
+		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			ctx.LogMessage ("ON RUN!");
+
+			base.OnRun (ctx, cancellationToken);
+		}
+
+		class ConnectionEventSink : InstrumentationEventSink
+		{
+			public TestContext Context {
+				get;
+				private set;
+			}
+
+			public ConnectionInstrumentTestRunner Runner {
+				get;
+				private set;
+			}
+
+			public ConnectionEventSink (TestContext ctx, ConnectionInstrumentTestRunner runner)
+			{
+				Context = ctx;
+				Runner = runner;
+			}
+
+			public void RenegotiationCompleted ()
+			{
+				Runner.OnRenegotiationCompleted (Context);
+			}
 		}
 	}
 }
