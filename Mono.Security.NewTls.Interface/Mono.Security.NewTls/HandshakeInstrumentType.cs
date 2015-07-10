@@ -31,7 +31,8 @@ namespace Mono.Security.NewTls
 	{
 		CloseServerConnection,
 		FragmentHandshakeMessages,
-		SendBlobAfterReceivingFinish
+		SendBlobAfterReceivingFinish,
+		SendBlobAfterHelloRequest
 	}
 }
 
