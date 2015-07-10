@@ -40,7 +40,6 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
-	[Martin]
 	[AsyncTestFixture]
 	public class SelectCiphersTests
 	{

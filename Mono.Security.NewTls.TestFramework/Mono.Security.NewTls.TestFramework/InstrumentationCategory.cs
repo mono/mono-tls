@@ -50,7 +50,9 @@ namespace Mono.Security.NewTls.TestFramework
 		SelectServerCipher,
 		SelectCipher,
 
-		MartinTest
+		MartinTest,
+		ManualClient,
+		ManualServer
 	}
 }
 

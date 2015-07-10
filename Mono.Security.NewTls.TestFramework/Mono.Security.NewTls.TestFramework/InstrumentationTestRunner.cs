@@ -47,6 +47,10 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return (InstrumentationParameters)base.Parameters; }
 		}
 
+		public InstrumentationCategory Category {
+			get { return Parameters.Category; }
+		}
+
 		public MonoConnectionFlags ConnectionFlags {
 			get;
 			private set;
@@ -91,6 +95,10 @@ namespace Mono.Security.NewTls.TestFramework
 				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.MartinTest:
 				return MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.ClientInstrumentation;
+			case InstrumentationCategory.ManualClient:
+				return MonoConnectionFlags.ServerInstrumentation;
+			case InstrumentationCategory.ManualServer:
+				return MonoConnectionFlags.ClientInstrumentation;
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
 				return MonoConnectionFlags.None;
@@ -124,6 +132,14 @@ namespace Mono.Security.NewTls.TestFramework
 				return true;
 			default:
 				return false;
+			}
+		}
+
+		public bool IsManualConnection {
+			get {
+				if (Category == InstrumentationCategory.ManualClient || Category == InstrumentationCategory.ManualServer)
+					return true;
+				return (ConnectionFlags & (MonoConnectionFlags.ManualClient | MonoConnectionFlags.ManualServer)) != 0;
 			}
 		}
 
@@ -185,7 +201,7 @@ namespace Mono.Security.NewTls.TestFramework
 					CheckCipher (ctx, monoServer, expectedCipher.Value);
 			}
 
-			if (Parameters.ProtocolVersion != null) {
+			if (!IsManualConnection && Parameters.ProtocolVersion != null) {
 				ctx.Expect (Client.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "client protocol version");
 				ctx.Expect (Server.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "server protocol version");
 			}

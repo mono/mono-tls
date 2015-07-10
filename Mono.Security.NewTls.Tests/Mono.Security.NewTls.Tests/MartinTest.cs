@@ -54,22 +54,32 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		// [AsyncTest]
+		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task TestClientPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType ("Manual:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+		public async Task TestMartinServer (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ServerInstrumentation)] ConnectionInstrumentTestRunner runner)
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
 		// [AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
+		[InstrumentationCategory (InstrumentationCategory.ManualClient)]
+		public async Task TestClientPuppy (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("Manual:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		// [AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.ManualServer)]
 		public async Task TestServerPuppy (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("MonoWithNewTLS:Manual")] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ClientInstrumentation)] ConnectionInstrumentTestRunner runner)
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

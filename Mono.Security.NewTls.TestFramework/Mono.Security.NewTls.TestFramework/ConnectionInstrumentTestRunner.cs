@@ -78,6 +78,12 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.MartinTest:
 				return MartinTestTypes.Select (t => Create (ctx, category, t));
 
+			case InstrumentationCategory.ManualClient:
+				return ManualClientTestTypes.Select (t => Create (ctx, category, t));
+
+			case InstrumentationCategory.ManualServer:
+				return ManualServerTestTypes.Select (t => Create (ctx, category, t));
+
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
 				return null;
@@ -99,6 +105,14 @@ namespace Mono.Security.NewTls.TestFramework
 
 		internal static readonly ConnectionInstrumentType[] MartinTestTypes = {
 			ConnectionInstrumentType.MartinTest
+		};
+
+		internal static readonly ConnectionInstrumentType[] ManualClientTestTypes = {
+			ConnectionInstrumentType.MartinClientPuppy
+		};
+
+		internal static readonly ConnectionInstrumentType[] ManualServerTestTypes = {
+			ConnectionInstrumentType.MartinServerPuppy
 		};
 
 		static ConnectionInstrumentParameters CreateParameters (InstrumentationCategory category, ConnectionInstrumentType type, params object[] args)
@@ -130,7 +144,14 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case ConnectionInstrumentType.MartinTest:
+				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.SendBlobAfterReceivingFinish };
+				parameters.EnableDebugging = true;
+				break;
+
+			case ConnectionInstrumentType.MartinClientPuppy:
+			case ConnectionInstrumentType.MartinServerPuppy:
+				parameters.RequestRenegotiation = true;
 				parameters.EnableDebugging = true;
 				break;
 
@@ -185,15 +206,21 @@ namespace Mono.Security.NewTls.TestFramework
 			ctx.LogMessage ("MAIN LOOP MARTIN #1: {0}", ret);
 			DebugHelper.WriteBuffer ("READ", buffer, 0, ret);
 
-			// await Server.Shutdown (ctx, true, true, cancellationToken);
-			// ctx.LogMessage ("MAIN LOOP MARTIN #2");
+			var clientBuffer = new byte [4096];
+			var clientRead = Client.Stream.ReadAsync (clientBuffer, 0, clientBuffer.Length);
+			var serverRead = Server.Stream.ReadAsync (buffer, 0, buffer.Length);
 
-			var secondRead = Server.Stream.ReadAsync (buffer, 0, buffer.Length);
+			await Task.WhenAny (clientRead, serverRead);
+
+			ctx.LogMessage ("MAIN LOOP MARTIN #2: {0} {1}", clientRead.Status, serverRead.Status);
+
+			ret = await Server.Stream.ReadAsync (buffer, 0, buffer.Length);
+			ctx.LogMessage ("MAIN LOOP MARTIN #3: {0}", ret);
+
 			await Task.Delay (1500);
 			await Client.Shutdown (ctx, true, cancellationToken);
 
-			ret = await secondRead;
-			ctx.LogMessage ("MAIN LOOP MARTIN #2: {0}", ret);
+			ctx.LogMessage ("MAIN LOOP MARTIN #4");
 		}
 	}
 }
