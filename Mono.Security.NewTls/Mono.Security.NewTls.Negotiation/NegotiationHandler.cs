@@ -121,7 +121,7 @@ namespace Mono.Security.NewTls.Negotiation
 				hasPendingOutput = true;
 				if (message.Type != HandshakeType.HelloRequest)
 					Context.HandshakeParameters.HandshakeMessages.Add (message, incomingBuffer);
-				status = SecurityStatus.Renegotiate;
+				status = SecurityStatus.ContinueNeeded;
 				return true;
 
 			case MessageStatus.GenerateOutput:

@@ -548,6 +548,11 @@ namespace Mono.Security.NewTls
 				DebugHelper.WriteLine ("DecryptMessage: {0}", contentType);
 			#endif
 
+			if (contentType == ContentType.Handshake) {
+				incoming.Position--;
+				return SecurityStatus.Renegotiate;
+			}
+
 			ReadStandardBuffer (contentType, ref incoming);
 
 			if (contentType == ContentType.Alert) {
