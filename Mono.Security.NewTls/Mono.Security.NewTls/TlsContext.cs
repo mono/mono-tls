@@ -608,7 +608,15 @@ namespace Mono.Security.NewTls
 		{
 			var buffer = message.EncodeMessage ();
 
-			var encoded = EncodeRecord (ContentType.Handshake, buffer);
+			int fragmentSize = MAX_FRAGMENT_SIZE;
+			#if INSTRUMENTATION
+			if (message.Type == HandshakeType.ServerHello && HasInstrument (HandshakeInstrumentType.FragmentServerHello))
+				fragmentSize = 30;
+			else if (HasInstrument (HandshakeInstrumentType.FragmentHandshakeMessages))
+				fragmentSize = 512;
+			#endif
+
+			var encoded = EncodeRecord_internal (ContentType.Handshake, buffer, fragmentSize);
 			if (message.Type != HandshakeType.HelloRequest)
 				HandshakeParameters.HandshakeMessages.Add (message, buffer);
 			#if DEBUG_FULL
@@ -631,14 +639,19 @@ namespace Mono.Security.NewTls
 
 		internal byte[] EncodeRecord (ContentType contentType, IBufferOffsetSize buffer)
 		{
-			CheckValid ();
-			var protocol = HasNegotiatedProtocol ? NegotiatedProtocol : Configuration.RequestedProtocol;
-
 			int fragmentSize = MAX_FRAGMENT_SIZE;
 			#if INSTRUMENTATION
 			if (HasInstrument (HandshakeInstrumentType.FragmentHandshakeMessages))
 				fragmentSize = 512;
 			#endif
+
+			return EncodeRecord_internal (contentType, buffer, fragmentSize);
+		}
+
+		byte[] EncodeRecord_internal (ContentType contentType, IBufferOffsetSize buffer, int fragmentSize = MAX_FRAGMENT_SIZE)
+		{
+			CheckValid ();
+			var protocol = HasNegotiatedProtocol ? NegotiatedProtocol : Configuration.RequestedProtocol;
 
 			var output = new TlsStream ();
 			EncodeRecord_internal (protocol, contentType, Session != null ? Session.Write : null, buffer, output, fragmentSize);
