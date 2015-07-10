@@ -458,6 +458,8 @@ native_openssl_create_context (NativeOpenSsl *ptr, short client_p)
 			SSL_CTX_set_tmp_dh(ptr->ctx, dh);
 	}
 
+	SSL_CTX_set_mode(ptr->ctx, SSL_MODE_AUTO_RETRY);
+
 	return 0;
 
 }
