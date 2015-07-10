@@ -150,6 +150,12 @@ namespace Mono.Security.NewTls.Negotiation
 			} else if (!Session.IsRenegotiated && (Settings.RequestRenegotiation ?? false)) {
 				// FIXME: HACK to force renegotiation!
 				Session.IsRenegotiated = true;
+
+				if (Context.HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest)) {
+					var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.SendBlobBeforeHelloRequest);
+					outgoing.Add (Context.EncodeRecord (ContentType.ApplicationData, blob));
+				}
+
 				outgoing.Add (Context.EncodeHandshakeRecord (new TlsHelloRequest ()));
 
 				if (Context.HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest)) {
