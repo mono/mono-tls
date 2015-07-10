@@ -149,7 +149,8 @@ namespace Mono.Security.NewTls.TestFramework
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					// HandshakeInstrumentType.SendBlobAfterHelloRequest
+					// HandshakeInstrumentType.SendBlobBeforeHelloRequest,
+					// HandshakeInstrumentType.SendBlobAfterHelloRequest,
 					// HandshakeInstrumentType.SendDuplicateHelloRequest
 					// HandshakeInstrumentType.SendBlobAfterReceivingFinish
 				};
@@ -158,7 +159,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case ConnectionInstrumentType.MartinClientPuppy:
 			case ConnectionInstrumentType.MartinServerPuppy:
-				goto case ConnectionInstrumentType.MartinTest;
+				// goto case ConnectionInstrumentType.MartinTest;
 				parameters.RequestRenegotiation = true;
 				parameters.EnableDebugging = true;
 				break;
@@ -207,22 +208,58 @@ namespace Mono.Security.NewTls.TestFramework
 			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 
+		int clientReadStatus;
+
+		async Task ExpectClientBlob (TestContext ctx, IBufferOffsetSize blob, CancellationToken cancellationToken)
+		{
+			var buffer = new byte [4096];
+			var read = Client.Stream.ReadAsync (buffer, 0, buffer.Length, cancellationToken);
+
+			var ret = await read;
+			ctx.LogMessage ("EXPECT CLIENT BLOB: {0} {1}", blob.Size, ret);
+			ctx.Assert (ret, Is.GreaterThan (0), "read success");
+			var result = new BufferOffsetSize (buffer, 0, ret);
+
+			DebugHelper.WriteBuffer ("CLIENT BLOB", result);
+
+			ctx.Expect (result, new IsEqualBlob (blob), "client blob");
+
+			await HandleClientRead (ctx, read, cancellationToken);
+		}
+
+		Task HandleClientRead (TestContext ctx, Task<int> task, CancellationToken cancellationToken)
+		{
+			ctx.LogMessage ("HANDLE CLIENT READ: {0}", task != null ? task.Status.ToString () : "<null>");
+
+			if (task != null) {
+				var failed = task.IsFaulted || task.IsCanceled;
+				ctx.LogMessage ("CLIENT READ DONE: {0} {1} {2}", task.Status, !failed, failed ? -1 : task.Result);
+				if (failed)
+					return task;
+			} else {
+				var blob = new BufferOffsetSize (Instrumentation.TheQuickBrownFoxBuffer);
+				return ExpectClientBlob (ctx, blob, cancellationToken);
+			}
+
+			if (Interlocked.CompareExchange (ref clientReadStatus, 1, 0) == 0) {
+				if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest)) {
+					var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.SendBlobAfterHelloRequest);
+					return ExpectClientBlob (ctx, blob, cancellationToken);
+				}
+			}
+
+			return Client.Shutdown (ctx, true, cancellationToken);
+		}
+
 		async Task RunMainLoopMartin (TestContext ctx, CancellationToken cancellationToken)
 		{
 			ctx.LogMessage ("MAIN LOOP MARTIN");
 
-			var clientBuffer = new byte [4096];
+			var clientRead = HandleClientRead (ctx, null, cancellationToken);
+
 			var serverBuffer = new byte [4096];
-			var clientRead = Client.Stream.ReadAsync (clientBuffer, 0, clientBuffer.Length);
 			var serverRead = Server.Stream.ReadAsync (serverBuffer, 0, serverBuffer.Length);
 
-			var clientDone = clientRead.ContinueWith (async t => {
-				ctx.LogMessage ("CLIENT DONE: {0} {1}", t.IsFaulted, t.IsCanceled);
-				if (!t.IsFaulted && !t.IsCanceled)
-					ctx.LogMessage ("CLIENT DONE #1: {0}", t.Status);
-				await Client.Shutdown (ctx, true, cancellationToken);
-				return t;
-			});
 			var serverDone = serverRead.ContinueWith (async t => {
 				ctx.LogMessage ("SERVER DONE: {0} {1}", t.IsFaulted, t.IsCanceled);
 				if (!t.IsFaulted && !t.IsCanceled)
@@ -231,9 +268,14 @@ namespace Mono.Security.NewTls.TestFramework
 				return t;
 			});
 
-			await Task.WhenAll (renegotiationTcs.Task, clientDone, serverDone);
+			await renegotiationTcs.Task;
 
-			ctx.LogMessage ("MAIN LOOP MARTIN DONE: {0} {1} {2}", renegotiationTcs.Task.Status, clientDone.Status, serverDone.Status);
+			var blob = Instrumentation.TheQuickBrownFoxBuffer;
+			await Server.Stream.WriteAsync (blob, 0, blob.Length);
+
+			await Task.WhenAll (renegotiationTcs.Task, clientRead, serverDone);
+
+			ctx.LogMessage ("MAIN LOOP MARTIN DONE: {0} {1} {2}", renegotiationTcs.Task.Status, clientRead.Status, serverDone.Status);
 		}
 
 		TaskCompletionSource<bool> renegotiationTcs;
