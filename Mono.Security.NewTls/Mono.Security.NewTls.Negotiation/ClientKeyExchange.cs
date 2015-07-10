@@ -145,7 +145,9 @@ namespace Mono.Security.NewTls.Negotiation
 			FinishHandshake ();
 
 			#if INSTRUMENTATION
-			if (!Session.IsRenegotiated && (Settings.RequestRenegotiation ?? false)) {
+			if (Session.IsRenegotiated && Context.HasInstrumentationEventSink) {
+				Context.InstrumentationEventSink.RenegotiationCompleted ();
+			} else if (!Session.IsRenegotiated && (Settings.RequestRenegotiation ?? false)) {
 				// FIXME: HACK to force renegotiation!
 				Session.IsRenegotiated = true;
 				outgoing.Add (Context.EncodeHandshakeRecord (new TlsHelloRequest ()));

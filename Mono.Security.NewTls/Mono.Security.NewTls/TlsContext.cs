@@ -18,7 +18,10 @@ namespace Mono.Security.NewTls
 		readonly TlsConfiguration configuration;
 		readonly SettingsProvider settingsProvider;
 		readonly SignatureProvider signatureProvider;
+		#if INSTRUMENTATION
+		readonly InstrumentationEventSink instrumentationEventSink;
 		readonly ISet<HandshakeInstrumentType> handshakeInstruments;
+		#endif
 		readonly IMonoTlsEventSink eventSink;
 
 		Session session;
@@ -95,6 +98,7 @@ namespace Mono.Security.NewTls
 				if (configuration.Instrumentation.HasSettingsInstrument)
 					settingsProvider = configuration.Instrumentation.SettingsInstrument;
 				handshakeInstruments = configuration.Instrumentation.HandshakeInstruments;
+				instrumentationEventSink = configuration.Instrumentation.EventSink;
 			}
 			#endif
 
@@ -124,6 +128,14 @@ namespace Mono.Security.NewTls
 		internal bool HasInstrument (HandshakeInstrumentType type)
 		{
 			return handshakeInstruments != null ? handshakeInstruments.Contains (type) : false;
+		}
+
+		internal bool HasInstrumentationEventSink {
+			get { return instrumentationEventSink != null; }
+		}
+
+		internal InstrumentationEventSink InstrumentationEventSink {
+			get { return instrumentationEventSink; }
 		}
 
 		#endif

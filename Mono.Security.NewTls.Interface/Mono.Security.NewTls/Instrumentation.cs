@@ -34,6 +34,14 @@ namespace Mono.Security.NewTls
 	{
 		HashSet<HandshakeInstrumentType> handshakeInstruments;
 
+		public bool HasEventSink {
+			get { return EventSink != null; }
+		}
+
+		public InstrumentationEventSink EventSink {
+			get; set;
+		}
+
 		public bool HasSettingsInstrument {
 			get { return SettingsInstrument != null; }
 		}
