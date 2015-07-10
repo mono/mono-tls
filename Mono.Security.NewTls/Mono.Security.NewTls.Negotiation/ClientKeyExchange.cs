@@ -154,6 +154,9 @@ namespace Mono.Security.NewTls.Negotiation
 					var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.SendBlobAfterHelloRequest);
 					outgoing.Add (Context.EncodeRecord (ContentType.ApplicationData, blob));
 				}
+
+				if (Context.HasInstrument (HandshakeInstrumentType.SendDuplicateHelloRequest))
+					outgoing.Add (Context.EncodeHandshakeRecord (new TlsHelloRequest ()));
 			}
 			#endif
 
