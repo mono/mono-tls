@@ -29,6 +29,7 @@ namespace Mono.Security.NewTls
 {
 	public enum HandshakeInstrumentType
 	{
+		TestCompleted,
 		CloseServerConnection,
 		FragmentHandshakeMessages,
 		SendBlobAfterReceivingFinish,

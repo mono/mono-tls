@@ -33,6 +33,7 @@ namespace Mono.Security.NewTls.TestFramework
 		SendBlobAfterReceivingFinish,
 
 		RequestRenegotiation,
+		SendBlobBeforeHelloRequest,
 
 		MartinTest,
 		MartinClientPuppy,

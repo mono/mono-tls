@@ -106,7 +106,8 @@ namespace Mono.Security.NewTls.TestFramework
 		};
 
 		internal static readonly ConnectionInstrumentType[] ServerRenegotiationTypes = {
-			ConnectionInstrumentType.RequestRenegotiation
+			ConnectionInstrumentType.RequestRenegotiation,
+			ConnectionInstrumentType.SendBlobBeforeHelloRequest
 		};
 
 		internal static readonly ConnectionInstrumentType[] ConnectionTypes = {
@@ -114,8 +115,7 @@ namespace Mono.Security.NewTls.TestFramework
 		};
 
 		internal static readonly ConnectionInstrumentType[] MartinTestTypes = {
-			ConnectionInstrumentType.MartinTest,
-			ConnectionInstrumentType.RequestRenegotiation
+			ConnectionInstrumentType.MartinTest
 		};
 
 		internal static readonly ConnectionInstrumentType[] ManualClientTestTypes = {
@@ -158,10 +158,17 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.RequestRenegotiation = true;
 				break;
 
+			case ConnectionInstrumentType.SendBlobBeforeHelloRequest:
+				parameters.RequestRenegotiation = true;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.SendBlobBeforeHelloRequest
+				};
+				break;
+
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					// HandshakeInstrumentType.SendBlobBeforeHelloRequest,
+					HandshakeInstrumentType.SendBlobBeforeHelloRequest,
 					// HandshakeInstrumentType.SendBlobAfterHelloRequest,
 					// HandshakeInstrumentType.SendDuplicateHelloRequest
 					// HandshakeInstrumentType.SendBlobAfterReceivingFinish
@@ -191,12 +198,12 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
+			if (Category == InstrumentationCategory.ServerRenegotiation)
+				return RunMainLoopMartin (ctx, cancellationToken);
+
 			switch (Parameters.Type) {
 			case ConnectionInstrumentType.SendBlobAfterReceivingFinish:
 				return RunMainLoopBlob (ctx, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
-
-			case ConnectionInstrumentType.RequestRenegotiation:
-				return RunMainLoopMartin (ctx, cancellationToken);
 
 			case ConnectionInstrumentType.MartinTest:
 			case ConnectionInstrumentType.MartinClientPuppy:
@@ -225,13 +232,15 @@ namespace Mono.Security.NewTls.TestFramework
 
 		int clientReadStatus;
 
-		async Task ExpectClientBlob (TestContext ctx, IBufferOffsetSize blob, CancellationToken cancellationToken)
+		async Task ExpectClientBlob (TestContext ctx, HandshakeInstrumentType type, CancellationToken cancellationToken)
 		{
 			var buffer = new byte [4096];
 			var read = Client.Stream.ReadAsync (buffer, 0, buffer.Length, cancellationToken);
 
+			var blob = Instrumentation.GetTextBuffer (type);
+
 			var ret = await read;
-			ctx.LogMessage ("EXPECT CLIENT BLOB: {0} {1}", blob.Size, ret);
+			ctx.LogMessage ("EXPECT CLIENT BLOB: {0} {1} {2}", type, blob.Size, ret);
 			ctx.Assert (ret, Is.GreaterThan (0), "read success");
 			var result = new BufferOffsetSize (buffer, 0, ret);
 
@@ -246,22 +255,27 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			ctx.LogMessage ("HANDLE CLIENT READ: {0}", task != null ? task.Status.ToString () : "<null>");
 
+			cancellationToken.ThrowIfCancellationRequested ();
+
 			if (task != null) {
 				var failed = task.IsFaulted || task.IsCanceled;
 				ctx.LogMessage ("CLIENT READ DONE: {0} {1} {2}", task.Status, !failed, failed ? -1 : task.Result);
 				if (failed)
 					return task;
-			} else {
-				var blob = new BufferOffsetSize (Instrumentation.TheQuickBrownFoxBuffer);
-				return ExpectClientBlob (ctx, blob, cancellationToken);
 			}
 
-			if (Interlocked.CompareExchange (ref clientReadStatus, 1, 0) == 0) {
-				if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest)) {
-					var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.SendBlobAfterHelloRequest);
-					return ExpectClientBlob (ctx, blob, cancellationToken);
-				}
+			var readStatus = Interlocked.Increment (ref clientReadStatus);
+			ctx.LogMessage ("HANDLE CLIENT READ #1: {0}", readStatus);
+
+			var expectServerRead = 1;
+			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest)) {
+				expectServerRead++;
+				if (readStatus == 1)
+					return ExpectClientBlob (ctx, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
 			}
+
+			if (readStatus == expectServerRead)
+				return ExpectClientBlob (ctx, HandshakeInstrumentType.TestCompleted, cancellationToken);
 
 			return Client.Shutdown (ctx, true, cancellationToken);
 		}
@@ -273,7 +287,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var clientRead = HandleClientRead (ctx, null, cancellationToken);
 
 			var serverBuffer = new byte [4096];
-			var serverRead = Server.Stream.ReadAsync (serverBuffer, 0, serverBuffer.Length);
+			var serverRead = Server.Stream.ReadAsync (serverBuffer, 0, serverBuffer.Length, cancellationToken);
 
 			var serverDone = serverRead.ContinueWith (async t => {
 				ctx.LogMessage ("SERVER DONE: {0} {1}", t.IsFaulted, t.IsCanceled);
@@ -285,8 +299,8 @@ namespace Mono.Security.NewTls.TestFramework
 
 			await renegotiationTcs.Task;
 
-			var blob = Instrumentation.TheQuickBrownFoxBuffer;
-			await Server.Stream.WriteAsync (blob, 0, blob.Length);
+			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
+			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
 			await Task.WhenAll (renegotiationTcs.Task, clientRead, serverDone);
 
