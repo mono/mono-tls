@@ -107,7 +107,9 @@ namespace Mono.Security.NewTls.TestFramework
 
 		internal static readonly ConnectionInstrumentType[] ServerRenegotiationTypes = {
 			ConnectionInstrumentType.RequestRenegotiation,
-			ConnectionInstrumentType.SendBlobBeforeHelloRequest
+			ConnectionInstrumentType.SendBlobBeforeHelloRequest,
+			ConnectionInstrumentType.SendBlobAfterHelloRequest,
+			ConnectionInstrumentType.SendBlobBeforeAndAfterHelloRequest
 		};
 
 		internal static readonly ConnectionInstrumentType[] ConnectionTypes = {
@@ -165,10 +167,25 @@ namespace Mono.Security.NewTls.TestFramework
 				};
 				break;
 
-			case ConnectionInstrumentType.MartinTest:
+			case ConnectionInstrumentType.SendBlobAfterHelloRequest:
+				parameters.RequestRenegotiation = true;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.SendBlobAfterHelloRequest
+				};
+				break;
+
+			case ConnectionInstrumentType.SendBlobBeforeAndAfterHelloRequest:
 				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
 					HandshakeInstrumentType.SendBlobBeforeHelloRequest,
+					HandshakeInstrumentType.SendBlobAfterHelloRequest
+				};
+				break;
+
+			case ConnectionInstrumentType.MartinTest:
+				parameters.RequestRenegotiation = true;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.SendBlobAfterHelloRequest,
 					// HandshakeInstrumentType.SendBlobAfterHelloRequest,
 					// HandshakeInstrumentType.SendDuplicateHelloRequest
 					// HandshakeInstrumentType.SendBlobAfterReceivingFinish
@@ -272,6 +289,10 @@ namespace Mono.Security.NewTls.TestFramework
 				expectServerRead++;
 				if (readStatus == 1)
 					return ExpectClientBlob (ctx, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
+			}
+			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest)) {
+				if (readStatus == expectServerRead++)
+					return ExpectClientBlob (ctx, HandshakeInstrumentType.SendBlobAfterHelloRequest, cancellationToken);
 			}
 
 			if (readStatus == expectServerRead)
