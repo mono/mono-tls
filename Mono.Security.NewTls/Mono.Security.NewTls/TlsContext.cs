@@ -566,20 +566,11 @@ namespace Mono.Security.NewTls
 				}
 				DebugHelper.WriteLine ("ALERT: {0} {1}", level, description);
 				throw new TlsException (level, description);
-			} else if (contentType == ContentType.ApplicationData)
+			} else if (contentType == ContentType.ApplicationData) {
 				return SecurityStatus.OK;
-			else if (contentType != ContentType.Handshake)
-				throw new TlsException (AlertDescription.UnexpectedMessage, "Unknown content type {0}", contentType);
-
-			try {
-				SecurityStatus status;
-				var finished = ProcessHandshakeMessage (incoming, out status);
-				DebugHelper.WriteLine ("RENEGOTIATION REQUEST: {0} {1}", finished, status);
-				return status;
-			} finally {
-				incoming.Dispose ();
-				incoming = null;
 			}
+
+			throw new TlsException (AlertDescription.UnexpectedMessage, "Unknown content type {0}", contentType);
 		}
 
 		public SecurityStatus EncryptMessage (ref TlsBuffer incoming)
