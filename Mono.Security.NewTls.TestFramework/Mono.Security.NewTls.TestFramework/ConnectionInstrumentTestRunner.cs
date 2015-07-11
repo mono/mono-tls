@@ -109,7 +109,8 @@ namespace Mono.Security.NewTls.TestFramework
 			ConnectionInstrumentType.RequestRenegotiation,
 			ConnectionInstrumentType.SendBlobBeforeHelloRequest,
 			ConnectionInstrumentType.SendBlobAfterHelloRequest,
-			ConnectionInstrumentType.SendBlobBeforeAndAfterHelloRequest
+			ConnectionInstrumentType.SendBlobBeforeAndAfterHelloRequest,
+			ConnectionInstrumentType.SendDuplicateHelloRequest
 		};
 
 		internal static readonly ConnectionInstrumentType[] ConnectionTypes = {
@@ -182,10 +183,19 @@ namespace Mono.Security.NewTls.TestFramework
 				};
 				break;
 
+			case ConnectionInstrumentType.SendDuplicateHelloRequest:
+				parameters.RequestRenegotiation = true;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.SendDuplicateHelloRequest
+				};
+				break;
+
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.SendBlobAfterHelloRequest,
+					HandshakeInstrumentType.SendDuplicateHelloRequest,
+					HandshakeInstrumentType.SendBlobBeforeHelloRequest,
+					HandshakeInstrumentType.SendBlobAfterHelloRequest
 					// HandshakeInstrumentType.SendBlobAfterHelloRequest,
 					// HandshakeInstrumentType.SendDuplicateHelloRequest
 					// HandshakeInstrumentType.SendBlobAfterReceivingFinish
