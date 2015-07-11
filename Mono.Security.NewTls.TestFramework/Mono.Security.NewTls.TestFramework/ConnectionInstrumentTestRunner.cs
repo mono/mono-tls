@@ -315,7 +315,11 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			ctx.LogMessage ("MAIN LOOP MARTIN");
 
-			var clientRead = HandleClientRead (ctx, null, cancellationToken);
+			Task clientRead;
+			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) == 0)
+				clientRead = HandleClientRead (ctx, null, cancellationToken);
+			else
+				clientRead = Task.FromResult (0);
 
 			var serverBuffer = new byte [4096];
 			var serverRead = Server.Stream.ReadAsync (serverBuffer, 0, serverBuffer.Length, cancellationToken);
@@ -333,7 +337,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
-			await Task.WhenAll (renegotiationTcs.Task, clientRead, serverDone);
+			await Task.WhenAll (clientRead, serverDone);
 
 			ctx.LogMessage ("MAIN LOOP MARTIN DONE: {0} {1} {2}", renegotiationTcs.Task.Status, clientRead.Status, serverDone.Status);
 		}
