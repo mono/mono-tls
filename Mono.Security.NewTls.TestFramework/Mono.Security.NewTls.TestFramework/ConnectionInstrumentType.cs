@@ -32,6 +32,8 @@ namespace Mono.Security.NewTls.TestFramework
 		FragmentHandshakeMessages,
 		SendBlobAfterReceivingFinish,
 
+		RequestRenegotiation,
+
 		MartinTest,
 		MartinClientPuppy,
 		MartinServerPuppy

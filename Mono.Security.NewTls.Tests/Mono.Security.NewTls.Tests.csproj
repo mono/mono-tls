@@ -48,6 +48,7 @@
     <Compile Include="Mono.Security.NewTls.Tests\TestConnectionInstruments.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\SimpleConnectionTests.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\SelectCiphersTest.cs" />
+    <Compile Include="Mono.Security.NewTls.Tests\TestRenegotiation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

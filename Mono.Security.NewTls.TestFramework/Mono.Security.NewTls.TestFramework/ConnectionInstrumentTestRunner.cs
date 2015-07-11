@@ -75,6 +75,9 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.ServerConnection:
 				return ServerConnectionTypes.Select (t => Create (ctx, category, t));
 
+			case InstrumentationCategory.ServerRenegotiation:
+				return ServerRenegotiationTypes.Select (t => Create (ctx, category, t));
+
 			case InstrumentationCategory.Connection:
 				return ConnectionTypes.Select (t => Create (ctx, category, t));
 
@@ -102,12 +105,17 @@ namespace Mono.Security.NewTls.TestFramework
 			ConnectionInstrumentType.FragmentHandshakeMessages
 		};
 
+		internal static readonly ConnectionInstrumentType[] ServerRenegotiationTypes = {
+			ConnectionInstrumentType.RequestRenegotiation
+		};
+
 		internal static readonly ConnectionInstrumentType[] ConnectionTypes = {
 			ConnectionInstrumentType.FragmentHandshakeMessages
 		};
 
 		internal static readonly ConnectionInstrumentType[] MartinTestTypes = {
-			ConnectionInstrumentType.MartinTest
+			ConnectionInstrumentType.MartinTest,
+			ConnectionInstrumentType.RequestRenegotiation
 		};
 
 		internal static readonly ConnectionInstrumentType[] ManualClientTestTypes = {
@@ -146,6 +154,10 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.SendBlobAfterReceivingFinish };
 				break;
 
+			case ConnectionInstrumentType.RequestRenegotiation:
+				parameters.RequestRenegotiation = true;
+				break;
+
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
@@ -182,6 +194,9 @@ namespace Mono.Security.NewTls.TestFramework
 			switch (Parameters.Type) {
 			case ConnectionInstrumentType.SendBlobAfterReceivingFinish:
 				return RunMainLoopBlob (ctx, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
+
+			case ConnectionInstrumentType.RequestRenegotiation:
+				return RunMainLoopMartin (ctx, cancellationToken);
 
 			case ConnectionInstrumentType.MartinTest:
 			case ConnectionInstrumentType.MartinClientPuppy:

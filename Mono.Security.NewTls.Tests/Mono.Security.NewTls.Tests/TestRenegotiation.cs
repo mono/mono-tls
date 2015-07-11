@@ -1,5 +1,5 @@
 ﻿//
-// TestConnectionInstruments.cs
+// TestRenegotiation.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -40,33 +40,14 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
+	[Work]
 	[AsyncTestFixture]
-	public class TestConnectionInstruments
+	public class TestRenegotiation
 	{
 		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.ClientConnection)]
-		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
-		{
-			await runner.Run (ctx, cancellationToken);
-		}
-
-		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.ServerConnection)]
+		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
-		{
-			await runner.Run (ctx, cancellationToken);
-		}
-
-		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.Connection)]
-		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[InstrumentationConnectionType ("OpenSsl:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
