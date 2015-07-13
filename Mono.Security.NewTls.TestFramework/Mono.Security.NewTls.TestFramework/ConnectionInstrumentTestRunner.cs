@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -205,10 +206,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case ConnectionInstrumentType.MartinClientPuppy:
 			case ConnectionInstrumentType.MartinServerPuppy:
-				// goto case ConnectionInstrumentType.MartinTest;
-				parameters.RequestRenegotiation = true;
-				parameters.EnableDebugging = true;
-				break;
+				goto case ConnectionInstrumentType.MartinTest;
 
 			default:
 				ctx.AssertFail ("Unsupported connection instrument: '{0}'.", type);
@@ -257,89 +255,72 @@ namespace Mono.Security.NewTls.TestFramework
 			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 
-		int clientReadStatus;
-
-		async Task ExpectClientBlob (TestContext ctx, HandshakeInstrumentType type, CancellationToken cancellationToken)
+		static async Task ExpectBlob (TestContext ctx, Stream stream, HandshakeInstrumentType type, CancellationToken cancellationToken)
 		{
+			cancellationToken.ThrowIfCancellationRequested ();
+
 			var buffer = new byte [4096];
-			var read = Client.Stream.ReadAsync (buffer, 0, buffer.Length, cancellationToken);
-
 			var blob = Instrumentation.GetTextBuffer (type);
-
-			var ret = await read;
-			ctx.LogMessage ("EXPECT CLIENT BLOB: {0} {1} {2}", type, blob.Size, ret);
+			var ret = await stream.ReadAsync (buffer, 0, buffer.Length, cancellationToken);
 			ctx.Assert (ret, Is.GreaterThan (0), "read success");
 			var result = new BufferOffsetSize (buffer, 0, ret);
 
-			DebugHelper.WriteBuffer ("CLIENT BLOB", result);
-
-			ctx.Expect (result, new IsEqualBlob (blob), "client blob");
-
-			await HandleClientRead (ctx, read, cancellationToken);
+			ctx.Expect (result, new IsEqualBlob (blob), "blob");
 		}
 
-		Task HandleClientRead (TestContext ctx, Task<int> task, CancellationToken cancellationToken)
+		async Task HandleClient (TestContext ctx, CancellationToken cancellationToken)
 		{
-			ctx.LogMessage ("HANDLE CLIENT READ: {0}", task != null ? task.Status.ToString () : "<null>");
+			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
+				return;
 
 			cancellationToken.ThrowIfCancellationRequested ();
 
-			if (task != null) {
-				var failed = task.IsFaulted || task.IsCanceled;
-				ctx.LogMessage ("CLIENT READ DONE: {0} {1} {2}", task.Status, !failed, failed ? -1 : task.Result);
-				if (failed)
-					return task;
-			}
+			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest))
+				await ExpectBlob (ctx, Client.Stream, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
+			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest))
+				await ExpectBlob (ctx, Client.Stream, HandshakeInstrumentType.SendBlobAfterHelloRequest, cancellationToken);
 
-			var readStatus = Interlocked.Increment (ref clientReadStatus);
-			ctx.LogMessage ("HANDLE CLIENT READ #1: {0}", readStatus);
+			await ExpectBlob (ctx, Client.Stream, HandshakeInstrumentType.TestCompleted, cancellationToken);
 
-			var expectServerRead = 1;
-			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest)) {
-				expectServerRead++;
-				if (readStatus == 1)
-					return ExpectClientBlob (ctx, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
-			}
-			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest)) {
-				if (readStatus == expectServerRead++)
-					return ExpectClientBlob (ctx, HandshakeInstrumentType.SendBlobAfterHelloRequest, cancellationToken);
-			}
+			cancellationToken.ThrowIfCancellationRequested ();
 
-			if (readStatus == expectServerRead)
-				return ExpectClientBlob (ctx, HandshakeInstrumentType.TestCompleted, cancellationToken);
+			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
+			await Client.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
-			return Client.Shutdown (ctx, true, cancellationToken);
+			await Client.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 
-		async Task RunMainLoopMartin (TestContext ctx, CancellationToken cancellationToken)
+		async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
 		{
-			ctx.LogMessage ("MAIN LOOP MARTIN");
+			await ExpectBlob (ctx, Server.Stream, HandshakeInstrumentType.TestCompleted, cancellationToken);
+		}
 
-			Task clientRead;
-			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) == 0)
-				clientRead = HandleClientRead (ctx, null, cancellationToken);
-			else
-				clientRead = Task.FromResult (0);
-
-			var serverBuffer = new byte [4096];
-			var serverRead = Server.Stream.ReadAsync (serverBuffer, 0, serverBuffer.Length, cancellationToken);
-
-			var serverDone = serverRead.ContinueWith (async t => {
-				ctx.LogMessage ("SERVER DONE: {0} {1}", t.IsFaulted, t.IsCanceled);
-				if (!t.IsFaulted && !t.IsCanceled)
-					ctx.LogMessage ("SERVER DONE #1: {0}", t.Status);
-				await Server.Shutdown (ctx, true, cancellationToken);
-				return t;
-			});
-
+		async Task HandleServerWrite (TestContext ctx, CancellationToken cancellationToken)
+		{
 			await renegotiationTcs.Task;
 
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
-			await Task.WhenAll (clientRead, serverDone);
+			await Server.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
+		}
 
-			ctx.LogMessage ("MAIN LOOP MARTIN DONE: {0} {1} {2}", renegotiationTcs.Task.Status, clientRead.Status, serverDone.Status);
+		async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
+		{
+			var readTask = HandleServerRead (ctx, cancellationToken);
+			var writeTask = HandleServerWrite (ctx, cancellationToken);
+
+			await Task.WhenAll (readTask, writeTask);
+		}
+
+		async Task RunMainLoopMartin (TestContext ctx, CancellationToken cancellationToken)
+		{
+			cancellationToken.ThrowIfCancellationRequested ();
+
+			var clientTask = HandleClient (ctx, cancellationToken);
+			var serverTask = HandleServer (ctx, cancellationToken);
+
+			await Task.WhenAll (clientTask, serverTask);
 		}
 
 		TaskCompletionSource<bool> renegotiationTcs;
@@ -360,13 +341,6 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			ctx.LogMessage ("ON RENEGOTIATION COMPLETED");
 			renegotiationTcs.SetResult (true);
-		}
-
-		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
-		{
-			ctx.LogMessage ("ON RUN!");
-
-			base.OnRun (ctx, cancellationToken);
 		}
 
 		class ConnectionEventSink : InstrumentationEventSink

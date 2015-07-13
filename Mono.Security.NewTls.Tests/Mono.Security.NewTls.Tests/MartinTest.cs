@@ -54,9 +54,9 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		[AsyncTest]
+		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task OpenSslMartinServer (TestContext ctx, CancellationToken cancellationToken,
+		public async Task MonoWithOpenSslClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("OpenSsl:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ServerInstrumentation)] ConnectionInstrumentTestRunner runner)
@@ -64,12 +64,12 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		// [AsyncTest]
+		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task MonoMartinServer (TestContext ctx, CancellationToken cancellationToken,
+		public async Task MonoWithMonoClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("MonoWithNewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ServerInstrumentation)] ConnectionInstrumentTestRunner runner)
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

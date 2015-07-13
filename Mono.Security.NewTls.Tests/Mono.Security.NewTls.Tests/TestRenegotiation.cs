@@ -44,15 +44,26 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class TestRenegotiation
 	{
-		[AsyncTest]
+		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
-		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
+		public async Task TestServerWithOpenSslClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("OpenSsl:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
+
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
+		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
 	}
 }
 
