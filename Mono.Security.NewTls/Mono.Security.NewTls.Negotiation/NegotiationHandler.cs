@@ -77,8 +77,13 @@ namespace Mono.Security.NewTls.Negotiation
 		{
 			if (HasPendingOutput && type != HandshakeType.HelloRequest)
 				throw new TlsException (AlertDescription.InternalError);
-			if (!VerifyMessage (type))
+			if (!VerifyMessage (type)) {
+				if (type == HandshakeType.HelloRequest) {
+					status = SecurityStatus.ContinueNeeded;
+					return false;
+				}
 				throw new TlsException (AlertDescription.UnexpectedMessage);
+			}
 
 			var incomingBuffer = new BufferOffsetSize (incoming.Buffer, incoming.Position - 4, incoming.Remaining + 4);
 
