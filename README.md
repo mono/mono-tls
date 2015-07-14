@@ -6,13 +6,15 @@ Dependencies:
 
 * Xamarin.AsyncTests from the [martin-newtls](https://github.com/xamarin/web-tests/tree/martin-newtls) branch.  This is included as a submodule.
   
-* Mono 4.0 must be installed as system-default Mono in `/Library/Frameworks/Mono.framework`.
+* Mono 4.2.0 from the `mono-4.2.0-pre2-branch` must be installed as system-default Mono in `/Library/Frameworks/Mono.framework`.
   
   This is required because some internals in the binary serialization
   format have changed, which Xamarin Studio uses to communicate to the
   external `mdtool` build process when building against a custom runtime.
   
 * Mono from the [work-newtls](https://github.com/mono/mono/tree/work-newtls) branch installed into a custom prefix.
+
+  Minimum required version is commit `466d6df659894eed1a4b2bc9cafa1ce0b9ce670d`.
   
   At the moment, this custom prefix must be `/Workspace/INSTALL` - this is unfortunately hardcoded in the [native Xcode project](https://github.com/mono/mono-tls/blob/master/NativeOpenSsl/NativeOpenSsl.xcodeproj/project.pbxproj) at the moment.
   
@@ -104,5 +106,5 @@ To run the tests on the Console:
 To run the tests on Android, use the `Mono.Security.NewTls.Android` app.  iOS is not done yet, but will come shortly.
 
 
-Last changed March 13, 2015
+Last changed July 14, 2015
 Martin Baulig <martin.baulig@xamarin.com>
