@@ -147,7 +147,7 @@ namespace Mono.Security.NewTls.Negotiation
 			#if INSTRUMENTATION
 			if (Session.IsRenegotiated && Context.HasInstrumentationEventSink) {
 				Context.InstrumentationEventSink.RenegotiationCompleted ();
-			} else if (!Session.IsRenegotiated && (Settings.RequestRenegotiation ?? false)) {
+			} else if (!Session.IsRenegotiated && Settings.RequestRenegotiation) {
 				// FIXME: HACK to force renegotiation!
 				Session.IsRenegotiated = true;
 

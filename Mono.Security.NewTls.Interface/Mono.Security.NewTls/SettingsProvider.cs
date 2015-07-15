@@ -85,8 +85,8 @@ namespace Mono.Security.NewTls
 			get { return null; }
 		}
 
-		public virtual bool? RequestRenegotiation {
-			get { return null; }
+		public virtual bool RequestRenegotiation {
+			get { return false; }
 		}
 
 		#endregion

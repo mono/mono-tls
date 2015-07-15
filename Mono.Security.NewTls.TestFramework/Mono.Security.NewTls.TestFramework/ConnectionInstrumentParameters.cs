@@ -58,6 +58,8 @@ namespace Mono.Security.NewTls.TestFramework
 			ClientRenegotiationFlags = other.ClientRenegotiationFlags;
 			ServerRenegotiationFlags = other.ServerRenegotiationFlags;
 			RequestRenegotiation = other.RequestRenegotiation;
+			UseNewRenegotiationAPI = other.UseNewRenegotiationAPI;
+			QueueServerReadFirst = other.QueueServerReadFirst;
 			HandshakeInstruments = other.HandshakeInstruments;
 		}
 
@@ -78,7 +80,15 @@ namespace Mono.Security.NewTls.TestFramework
 			get; set;
 		}
 
-		public bool? RequestRenegotiation {
+		public bool RequestRenegotiation {
+			get; set;
+		}
+
+		public bool UseNewRenegotiationAPI {
+			get; set;
+		}
+
+		public bool QueueServerReadFirst {
 			get; set;
 		}
 

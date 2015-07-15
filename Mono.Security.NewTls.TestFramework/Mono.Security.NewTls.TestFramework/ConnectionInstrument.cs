@@ -63,8 +63,10 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.ServerRenegotiationFlags; }
 		}
 
-		public override bool? RequestRenegotiation {
-			get { return Parameters.RequestRenegotiation; }
+		public override bool RequestRenegotiation {
+			get {
+				return Parameters.RequestRenegotiation && !Parameters.UseNewRenegotiationAPI;
+			}
 		}
 	}
 }
