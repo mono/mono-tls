@@ -216,18 +216,6 @@ namespace Mono.Security.NewTls.TestFramework
 			return Parameters.HandshakeInstruments != null && Parameters.HandshakeInstruments.Contains (type);
 		}
 
-		protected override async Task OnRun (TestContext ctx, CancellationToken cancellationToken)
-		{
-			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation)) {
-				ctx.LogMessage ("Calling IMonoSslStream.RequestRenegotiation()");
-				var monoSslStream = (IMonoSslStream)Server.SslStream;
-				await monoSslStream.RequestRenegotiation ();
-				ctx.LogMessage ("Done calling IMonoSslStream.RequestRenegotiation()");
-			}
-
-			await base.OnRun (ctx, cancellationToken);
-		}
-
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
 			if (Category == InstrumentationCategory.ServerRenegotiation)
@@ -262,13 +250,18 @@ namespace Mono.Security.NewTls.TestFramework
 			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 
-		static async Task ExpectBlob (TestContext ctx, Stream stream, HandshakeInstrumentType type, CancellationToken cancellationToken)
+		async Task ExpectBlob (TestContext ctx, ICommonConnection connection, HandshakeInstrumentType type, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested ();
 
+			ctx.LogDebug (1, "ExpectBlob: {0} {1}", connection, type);
+
 			var buffer = new byte [4096];
 			var blob = Instrumentation.GetTextBuffer (type);
-			var ret = await stream.ReadAsync (buffer, 0, buffer.Length, cancellationToken);
+			var ret = await connection.Stream.ReadAsync (buffer, 0, buffer.Length, cancellationToken);
+
+			ctx.LogDebug (1, "ExpectBlob #1: {0} {1} {2}", connection, type, ret);
+
 			ctx.Assert (ret, Is.GreaterThan (0), "read success");
 			var result = new BufferOffsetSize (buffer, 0, ret);
 
@@ -282,38 +275,63 @@ namespace Mono.Security.NewTls.TestFramework
 
 			cancellationToken.ThrowIfCancellationRequested ();
 
+			ctx.LogDebug (1, "HandleClient");
 			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest))
-				await ExpectBlob (ctx, Client.Stream, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
-			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest))
-				await ExpectBlob (ctx, Client.Stream, HandshakeInstrumentType.SendBlobAfterHelloRequest, cancellationToken);
+				await ExpectBlob (ctx, Client, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
 
-			await ExpectBlob (ctx, Client.Stream, HandshakeInstrumentType.TestCompleted, cancellationToken);
+			ctx.LogDebug (1, "HandleClient #1");
+			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest))
+				await ExpectBlob (ctx, Client, HandshakeInstrumentType.SendBlobAfterHelloRequest, cancellationToken);
+
+			ctx.LogDebug (1, "HandleClient #2");
+			await ExpectBlob (ctx, Client, HandshakeInstrumentType.TestCompleted, cancellationToken);
 
 			cancellationToken.ThrowIfCancellationRequested ();
 
+			ctx.LogDebug (1, "HandleClient #3");
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Client.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
+			ctx.LogDebug (1, "HandleClient #4");
 			await Client.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
+			ctx.LogDebug (1, "HandleClient #5");
 		}
 
 		async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
 		{
-			await ExpectBlob (ctx, Server.Stream, HandshakeInstrumentType.TestCompleted, cancellationToken);
+			ctx.LogDebug (1, "HandleServerRead");
+			await ExpectBlob (ctx, Server, HandshakeInstrumentType.TestCompleted, cancellationToken);
+			ctx.LogDebug (1, "HandleServerRead #1");
 		}
 
 		async Task HandleServerWrite (TestContext ctx, CancellationToken cancellationToken)
 		{
-			await renegotiationTcs.Task;
+			ctx.LogDebug (1, "HandleServerWrite");
+
+			if (!HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation))
+				await renegotiationTcs.Task;
+
+			ctx.LogDebug (1, "HandleServerWrite #1");
 
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
+			ctx.LogDebug (1, "HandleServerWrite #2");
+
 			await Server.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
+
+			ctx.LogDebug (1, "HandleServerWrite #3");
 		}
 
 		async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
 		{
+			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation)) {
+				ctx.LogDebug (1, "Calling IMonoSslStream.RequestRenegotiation()");
+				var monoSslStream = (IMonoSslStream)Server.SslStream;
+				await monoSslStream.RequestRenegotiation ();
+				ctx.LogDebug (1, "Done calling IMonoSslStream.RequestRenegotiation()");
+			}
+
 			var readTask = HandleServerRead (ctx, cancellationToken);
 			var writeTask = HandleServerWrite (ctx, cancellationToken);
 
