@@ -192,9 +192,9 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case ConnectionInstrumentType.MartinTest:
-				// parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.RequestServerRenegotiation
+					HandshakeInstrumentType.RequestServerRenegotiation,
+					HandshakeInstrumentType.PendingServerRead
 				};
 				parameters.EnableDebugging = true;
 				break;
@@ -325,14 +325,21 @@ namespace Mono.Security.NewTls.TestFramework
 
 		async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
 		{
+			Task readTask = null;
+
 			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation)) {
+				if (HasInstrument (HandshakeInstrumentType.PendingServerRead))
+					readTask = HandleServerRead (ctx, cancellationToken);
+
 				ctx.LogDebug (1, "Calling IMonoSslStream.RequestRenegotiation()");
 				var monoSslStream = (IMonoSslStream)Server.SslStream;
 				await monoSslStream.RequestRenegotiation ();
 				ctx.LogDebug (1, "Done calling IMonoSslStream.RequestRenegotiation()");
 			}
 
-			var readTask = HandleServerRead (ctx, cancellationToken);
+			if (readTask == null)
+				readTask = HandleServerRead (ctx, cancellationToken);
+
 			var writeTask = HandleServerWrite (ctx, cancellationToken);
 
 			await Task.WhenAll (readTask, writeTask);
