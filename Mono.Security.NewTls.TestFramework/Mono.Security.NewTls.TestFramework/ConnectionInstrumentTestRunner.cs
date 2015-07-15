@@ -192,14 +192,9 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case ConnectionInstrumentType.MartinTest:
-				parameters.RequestRenegotiation = true;
+				// parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.SendDuplicateHelloRequest,
-					HandshakeInstrumentType.SendBlobBeforeHelloRequest,
-					HandshakeInstrumentType.SendBlobAfterHelloRequest
-					// HandshakeInstrumentType.SendBlobAfterHelloRequest,
-					// HandshakeInstrumentType.SendDuplicateHelloRequest
-					// HandshakeInstrumentType.SendBlobAfterReceivingFinish
+					HandshakeInstrumentType.RequestServerRenegotiation
 				};
 				parameters.EnableDebugging = true;
 				break;
@@ -221,10 +216,22 @@ namespace Mono.Security.NewTls.TestFramework
 			return Parameters.HandshakeInstruments != null && Parameters.HandshakeInstruments.Contains (type);
 		}
 
+		protected override async Task OnRun (TestContext ctx, CancellationToken cancellationToken)
+		{
+			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation)) {
+				ctx.LogMessage ("Calling IMonoSslStream.RequestRenegotiation()");
+				var monoSslStream = (IMonoSslStream)Server.SslStream;
+				await monoSslStream.RequestRenegotiation ();
+				ctx.LogMessage ("Done calling IMonoSslStream.RequestRenegotiation()");
+			}
+
+			await base.OnRun (ctx, cancellationToken);
+		}
+
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
 			if (Category == InstrumentationCategory.ServerRenegotiation)
-				return RunMainLoopMartin (ctx, cancellationToken);
+				return RunNewMainLoop (ctx, cancellationToken);
 
 			switch (Parameters.Type) {
 			case ConnectionInstrumentType.SendBlobAfterReceivingFinish:
@@ -233,7 +240,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case ConnectionInstrumentType.MartinTest:
 			case ConnectionInstrumentType.MartinClientPuppy:
 			case ConnectionInstrumentType.MartinServerPuppy:
-				return RunMainLoopMartin (ctx, cancellationToken);
+				return RunNewMainLoop (ctx, cancellationToken);
 
 			default:
 				return base.MainLoop (ctx, cancellationToken);
@@ -313,7 +320,7 @@ namespace Mono.Security.NewTls.TestFramework
 			await Task.WhenAll (readTask, writeTask);
 		}
 
-		async Task RunMainLoopMartin (TestContext ctx, CancellationToken cancellationToken)
+		async Task RunNewMainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested ();
 

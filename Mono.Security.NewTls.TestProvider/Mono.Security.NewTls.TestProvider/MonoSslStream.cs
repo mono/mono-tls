@@ -36,7 +36,9 @@ using Mono.Security.Providers.NewTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	class MonoSslStream : ISslStream
+	using TestFramework;
+
+	class MonoSslStream : ISslStream, IMonoSslStream
 	{
 		readonly MSI.MonoSslStream stream;
 		readonly MonoNewTlsStream monoNewTlsStream;
@@ -91,6 +93,11 @@ namespace Mono.Security.NewTls.TestProvider
 				return false;
 			await monoNewTlsStream.Shutdown ();
 			return true;
+		}
+
+		public Task RequestRenegotiation ()
+		{
+			return monoNewTlsStream.RequestRenegotiation ();
 		}
 	}
 }

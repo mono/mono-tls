@@ -185,7 +185,7 @@ namespace Mono.Security.NewTls.TestFramework
 				ctx.Expect (connectionInfo.CipherCode, Is.EqualTo (cipher), "expected cipher");
 		}
 
-		protected override void OnRun (TestContext ctx, CancellationToken cancellationToken)
+		protected override Task OnRun (TestContext ctx, CancellationToken cancellationToken)
 		{
 			var monoClient = Client as IMonoClient;
 			var monoServer = Server as IMonoServer;
@@ -212,7 +212,7 @@ namespace Mono.Security.NewTls.TestFramework
 				ctx.Expect (Server.SslStream.IsMutuallyAuthenticated, "is mutually authenticated");
 			}
 
-			base.OnRun (ctx, cancellationToken);
+			return base.OnRun (ctx, cancellationToken);
 		}
 
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)

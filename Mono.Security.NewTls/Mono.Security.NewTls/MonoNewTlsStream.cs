@@ -73,6 +73,11 @@ namespace Mono.Security.Providers.NewTls
 		{
 			return Task.Factory.FromAsync ((state, result) => BeginShutdown (state, result), EndShutdown, null);
 		}
+
+		public Task RequestRenegotiation ()
+		{
+			return Task.Factory.FromAsync ((state, result) => BeginRenegotiate (state, result), EndRenegotiate, null);
+		}
 	}
 }
 

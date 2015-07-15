@@ -1,5 +1,5 @@
 ﻿//
-// HandshakeInstrumentType.cs
+// IMonoSslStream.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,20 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Mono.Security.NewTls
+namespace Mono.Security.NewTls.TestFramework
 {
-	public enum HandshakeInstrumentType
+	public interface IMonoSslStream
 	{
-		TestCompleted,
-		CloseServerConnection,
-		FragmentHandshakeMessages,
-		SendBlobAfterReceivingFinish,
-		SendBlobBeforeHelloRequest,
-		SendBlobAfterHelloRequest,
-		SendDuplicateHelloRequest,
-		FragmentServerHello,
-		RequestServerRenegotiation
+		Task RequestRenegotiation ();
 	}
 }
 
