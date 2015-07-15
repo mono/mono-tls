@@ -204,16 +204,16 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case ConnectionInstrumentType.RequestServerRenegotiation:
-				parameters.UseNewRenegotiationAPI = true;
+				parameters.RequestServerRenegotiation = true;
 				break;
 
 			case ConnectionInstrumentType.RequestServerRenegotiationWithPendingRead:
-				parameters.UseNewRenegotiationAPI = true;
+				parameters.RequestServerRenegotiation = true;
 				parameters.QueueServerReadFirst = true;
 				break;
 
 			case ConnectionInstrumentType.SendBlobBeforeRenegotiatingHello:
-				parameters.UseNewRenegotiationAPI = true;
+				parameters.RequestServerRenegotiation = true;
 				parameters.QueueServerReadFirst = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
 					HandshakeInstrumentType.RequestServerRenegotiation,
@@ -222,7 +222,7 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case ConnectionInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead:
-				parameters.UseNewRenegotiationAPI = true;
+				parameters.RequestServerRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
 					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
@@ -231,7 +231,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case ConnectionInstrumentType.MartinTest:
 				// parameters.QueueServerReadFirst = true;
-				parameters.UseNewRenegotiationAPI = true;
+				parameters.RequestServerRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
 					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
 				};
@@ -353,7 +353,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			ctx.LogDebug (1, "HandleServerWrite");
 
-			if (!Parameters.UseNewRenegotiationAPI)
+			if (!Parameters.RequestServerRenegotiation)
 				await renegotiationTcs.Task;
 
 			ctx.LogDebug (1, "HandleServerWrite #1");
@@ -375,7 +375,7 @@ namespace Mono.Security.NewTls.TestFramework
 			if (Parameters.QueueServerReadFirst)
 				readTask = HandleServerRead (ctx, cancellationToken);
 
-			if (Parameters.UseNewRenegotiationAPI) {
+			if (Parameters.RequestServerRenegotiation) {
 				ctx.LogDebug (1, "Calling IMonoSslStream.RequestRenegotiation()");
 				var monoSslStream = (IMonoSslStream)Server.SslStream;
 				await monoSslStream.RequestRenegotiation ();
