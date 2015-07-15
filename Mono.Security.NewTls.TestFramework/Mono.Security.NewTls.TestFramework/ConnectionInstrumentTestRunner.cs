@@ -208,6 +208,7 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.QueueServerReadFirst = true;
 				parameters.UseNewRenegotiationAPI = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
 				};
 				parameters.EnableDebugging = true;
 				break;
@@ -313,8 +314,14 @@ namespace Mono.Security.NewTls.TestFramework
 		async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
 		{
 			ctx.LogDebug (1, "HandleServerRead");
-			await ExpectBlob (ctx, Server, HandshakeInstrumentType.TestCompleted, cancellationToken);
+
+			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello))
+				await ExpectBlob (ctx, Server, HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello, cancellationToken);
+
 			ctx.LogDebug (1, "HandleServerRead #1");
+			await ExpectBlob (ctx, Server, HandshakeInstrumentType.TestCompleted, cancellationToken);
+
+			ctx.LogDebug (1, "HandleServerRead #2");
 		}
 
 		async Task HandleServerWrite (TestContext ctx, CancellationToken cancellationToken)

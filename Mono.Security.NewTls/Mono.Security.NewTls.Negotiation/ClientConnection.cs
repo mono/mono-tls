@@ -111,6 +111,13 @@ namespace Mono.Security.NewTls.Negotiation
 
 			Resolve ();
 
+			#if INSTRUMENTATION
+			if (Renegotiating && Context.HasInstrument (HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello)) {
+				var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello);
+				outgoing.Add (Context.EncodeRecord (ContentType.ApplicationData, blob));
+			}
+			#endif
+
 			outgoing.Add (Context.EncodeHandshakeRecord (GenerateClientHello ()));
 			canSendAlert = true;
 

@@ -36,7 +36,8 @@ namespace Mono.Security.NewTls
 		SendBlobBeforeHelloRequest,
 		SendBlobAfterHelloRequest,
 		SendDuplicateHelloRequest,
-		FragmentServerHello
+		FragmentServerHello,
+		SendBlobBeforeRenegotiatingHello
 	}
 }
 
