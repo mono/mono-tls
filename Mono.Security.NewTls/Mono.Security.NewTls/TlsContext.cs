@@ -779,6 +779,25 @@ namespace Mono.Security.NewTls
 			return EncodeRecord (ContentType.Alert, buffer);
 		}
 
+		public byte[] CreateHelloRequest ()
+		{
+			try {
+				CheckValid ();
+				return _CreateHelloRequest ();
+			} catch {
+				Clear ();
+				throw;
+			}
+		}
+
+		byte[] _CreateHelloRequest ()
+		{
+			var message = new TlsHelloRequest ();
+			var buffer = message.EncodeMessage ();
+
+			return EncodeRecord (ContentType.Handshake, buffer);
+		}
+
 		#endregion
 	}
 }

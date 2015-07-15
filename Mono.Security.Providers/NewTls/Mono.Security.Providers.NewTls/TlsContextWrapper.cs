@@ -167,6 +167,11 @@ namespace Mono.Security.Providers.NewTls
 			return Context.CreateAlert (new Alert (AlertLevel.Warning, AlertDescription.CloseNotify));
 		}
 
+		public byte[] CreateHelloRequest ()
+		{
+			return Context.CreateHelloRequest ();
+		}
+
 		public SSCX.X509Certificate GetRemoteCertificate (out PSSCX.X509CertificateCollection remoteCertificateStore)
 		{
 			MX.X509CertificateCollection monoCollection;
