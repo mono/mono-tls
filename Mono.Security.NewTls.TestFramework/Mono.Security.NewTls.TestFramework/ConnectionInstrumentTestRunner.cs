@@ -216,7 +216,6 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.RequestServerRenegotiation = true;
 				parameters.QueueServerReadFirst = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
 				};
 				break;
@@ -224,7 +223,6 @@ namespace Mono.Security.NewTls.TestFramework
 			case ConnectionInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead:
 				parameters.RequestServerRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
 				};
 				break;
@@ -353,7 +351,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			ctx.LogDebug (1, "HandleServerWrite");
 
-			if (!Parameters.RequestServerRenegotiation)
+			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation))
 				await renegotiationTcs.Task;
 
 			ctx.LogDebug (1, "HandleServerWrite #1");
