@@ -93,6 +93,7 @@ namespace Mono.Security.NewTls.TestFramework
 				return MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.SignatureAlgorithms:
 			case InstrumentationCategory.Connection:
+			case InstrumentationCategory.Renegotiation:
 				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.MartinTest:
 				return MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.ClientInstrumentation;

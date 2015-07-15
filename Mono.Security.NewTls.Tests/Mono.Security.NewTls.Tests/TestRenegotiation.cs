@@ -56,6 +56,37 @@ namespace Mono.Security.NewTls.Tests
 
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
+		public async Task TestServerWithMonoClient (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("MonoWithNewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
+		public async Task TestServerWithDotNetClient (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("NewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.Renegotiation)]
+		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,

@@ -51,6 +51,7 @@ namespace Mono.Security.NewTls.TestFramework
 		SelectCipher,
 
 		ServerRenegotiation,
+		Renegotiation,
 
 		MartinTest,
 		ManualClient,

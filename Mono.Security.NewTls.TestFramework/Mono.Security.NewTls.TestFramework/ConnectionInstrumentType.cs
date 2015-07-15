@@ -40,6 +40,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		RequestServerRenegotiation,
 		RequestServerRenegotiationWithPendingRead,
+		SendBlobBeforeRenegotiatingHello,
 
 		MartinTest,
 		MartinClientPuppy,
