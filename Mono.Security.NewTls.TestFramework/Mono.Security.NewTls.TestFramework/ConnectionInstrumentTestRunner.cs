@@ -115,7 +115,7 @@ namespace Mono.Security.NewTls.TestFramework
 			ConnectionInstrumentType.SendBlobAfterHelloRequest,
 			ConnectionInstrumentType.SendBlobBeforeAndAfterHelloRequest,
 			ConnectionInstrumentType.SendDuplicateHelloRequest,
-			ConnectionInstrumentType.RequestRenegotiation,
+			ConnectionInstrumentType.RequestServerRenegotiation,
 			ConnectionInstrumentType.RequestServerRenegotiationWithPendingRead
 		};
 
@@ -124,7 +124,8 @@ namespace Mono.Security.NewTls.TestFramework
 		};
 
 		internal static readonly ConnectionInstrumentType[] RenegotiationTypes = {
-			ConnectionInstrumentType.SendBlobBeforeRenegotiatingHello
+			ConnectionInstrumentType.SendBlobBeforeRenegotiatingHello,
+			ConnectionInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead
 		};
 
 		internal static readonly ConnectionInstrumentType[] MartinTestTypes = {
@@ -220,12 +221,20 @@ namespace Mono.Security.NewTls.TestFramework
 				};
 				break;
 
+			case ConnectionInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead:
+				parameters.RequestRenegotiation = true;
+				parameters.UseNewRenegotiationAPI = true;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
+				};
+				break;
+
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestRenegotiation = true;
 				// parameters.QueueServerReadFirst = true;
 				parameters.UseNewRenegotiationAPI = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					// HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
+					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
 				};
 				parameters.EnableDebugging = true;
 				break;
