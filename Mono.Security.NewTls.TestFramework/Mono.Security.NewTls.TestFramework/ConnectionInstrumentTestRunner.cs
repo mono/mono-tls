@@ -228,10 +228,8 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case ConnectionInstrumentType.MartinTest:
-				// parameters.QueueServerReadFirst = true;
-				parameters.RequestServerRenegotiation = true;
+				parameters.RequestClientRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
 				};
 				parameters.EnableDebugging = true;
 				break;
@@ -311,6 +309,13 @@ namespace Mono.Security.NewTls.TestFramework
 				return;
 
 			cancellationToken.ThrowIfCancellationRequested ();
+
+			if (Parameters.RequestClientRenegotiation) {
+				ctx.LogDebug (1, "Calling IMonoSslStream.RequestRenegotiation()");
+				var monoSslStream = (IMonoSslStream)Client.SslStream;
+				await monoSslStream.RequestRenegotiation ();
+				ctx.LogDebug (1, "Done calling IMonoSslStream.RequestRenegotiation()");
+			}
 
 			ctx.LogDebug (1, "HandleClient");
 			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest))
