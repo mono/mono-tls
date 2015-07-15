@@ -169,68 +169,67 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case ConnectionInstrumentType.RequestRenegotiation:
-				parameters.RequestRenegotiation = true;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.RequestServerRenegotiation
+				};
 				break;
 
 			case ConnectionInstrumentType.SendBlobBeforeHelloRequest:
-				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendBlobBeforeHelloRequest
 				};
 				break;
 
 			case ConnectionInstrumentType.SendBlobAfterHelloRequest:
-				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendBlobAfterHelloRequest
 				};
 				break;
 
 			case ConnectionInstrumentType.SendBlobBeforeAndAfterHelloRequest:
-				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendBlobBeforeHelloRequest,
 					HandshakeInstrumentType.SendBlobAfterHelloRequest
 				};
 				break;
 
 			case ConnectionInstrumentType.SendDuplicateHelloRequest:
-				parameters.RequestRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendDuplicateHelloRequest
 				};
 				break;
 
 			case ConnectionInstrumentType.RequestServerRenegotiation:
-				parameters.RequestRenegotiation = true;
 				parameters.UseNewRenegotiationAPI = true;
 				break;
 
 			case ConnectionInstrumentType.RequestServerRenegotiationWithPendingRead:
-				parameters.RequestRenegotiation = true;
 				parameters.UseNewRenegotiationAPI = true;
 				parameters.QueueServerReadFirst = true;
 				break;
 
 			case ConnectionInstrumentType.SendBlobBeforeRenegotiatingHello:
-				parameters.RequestRenegotiation = true;
 				parameters.UseNewRenegotiationAPI = true;
 				parameters.QueueServerReadFirst = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
 				};
 				break;
 
 			case ConnectionInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead:
-				parameters.RequestRenegotiation = true;
 				parameters.UseNewRenegotiationAPI = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.RequestServerRenegotiation,
 					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
 				};
 				break;
 
 			case ConnectionInstrumentType.MartinTest:
-				parameters.RequestRenegotiation = true;
 				// parameters.QueueServerReadFirst = true;
 				parameters.UseNewRenegotiationAPI = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
@@ -376,7 +375,7 @@ namespace Mono.Security.NewTls.TestFramework
 			if (Parameters.QueueServerReadFirst)
 				readTask = HandleServerRead (ctx, cancellationToken);
 
-			if (Parameters.RequestRenegotiation && Parameters.UseNewRenegotiationAPI) {
+			if (Parameters.UseNewRenegotiationAPI) {
 				ctx.LogDebug (1, "Calling IMonoSslStream.RequestRenegotiation()");
 				var monoSslStream = (IMonoSslStream)Server.SslStream;
 				await monoSslStream.RequestRenegotiation ();
