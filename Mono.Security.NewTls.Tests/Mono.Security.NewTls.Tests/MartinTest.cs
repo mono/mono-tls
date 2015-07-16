@@ -56,7 +56,7 @@ namespace Mono.Security.NewTls.Tests
 
 		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task MonoWithOpenSslClient (TestContext ctx, CancellationToken cancellationToken,
+		public async Task TestWithOpenSslClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("OpenSsl:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ServerInstrumentation)] ConnectionInstrumentTestRunner runner)
@@ -64,9 +64,49 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
+		// [AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
+		public async Task TestWithDotNetClient (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("NewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ServerInstrumentation)] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		// [AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
+		public async Task TestWithMonoClient (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("MonoWithNewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task MonoWithMonoClient (TestContext ctx, CancellationToken cancellationToken,
+		public async Task TestWithOpenSslServer (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("MonoWithNewTLS:OpenSsl")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ClientInstrumentation)] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
+		public async Task TestWithDotNetServer (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("MonoWithNewTLS:NewTLS")] InstrumentationConnectionType connectionType,
+			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
+			[ConnectionInstrumentTestRunner (MonoConnectionFlags.ClientInstrumentation)] ConnectionInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
+		public async Task TestWithMonoServer (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("MonoWithNewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
 			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
