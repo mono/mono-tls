@@ -27,6 +27,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Security;
+using System.Threading;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -265,11 +266,26 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return false; }
 		}
 
+		delegate void WriteHandler (byte[] buffer, int offset, int size);
+		WriteHandler _WriteHandler;
+
 		public override void Write (byte[] buffer, int offset, int size)
 		{
 			var ret = native_openssl_write (handle, buffer, offset, size);
 			if (ret != size)
 				throw new ConnectionException ("Write failed.");
+		}
+
+		public override IAsyncResult BeginWrite (byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+		{
+			if (_WriteHandler == null)
+				Interlocked.CompareExchange (ref _WriteHandler, new WriteHandler (Write), null);
+			return _WriteHandler.BeginInvoke (buffer, offset, count, callback, state);
+		}
+
+		public override void EndWrite (IAsyncResult asyncResult)
+		{
+			_WriteHandler.EndInvoke (asyncResult);
 		}
 
 		public override int Read (byte[] buffer, int offset, int size)
