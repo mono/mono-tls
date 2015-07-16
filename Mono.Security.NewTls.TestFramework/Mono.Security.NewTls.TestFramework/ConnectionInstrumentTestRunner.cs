@@ -69,76 +69,61 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public static IEnumerable<ConnectionInstrumentParameters> GetParameters (TestContext ctx, InstrumentationCategory category)
 		{
+			return GetInstrumentationTypes (ctx, category).Select (t => Create (ctx, category, t));
+		}
+
+		public static IEnumerable<ConnectionInstrumentType> GetInstrumentationTypes (TestContext ctx, InstrumentationCategory category)
+		{
 			switch (category) {
 			case InstrumentationCategory.ClientConnection:
-				return ClientConnectionTypes.Select (t => Create (ctx, category, t));
+				yield return ConnectionInstrumentType.FragmentHandshakeMessages;
+				yield return ConnectionInstrumentType.SendBlobAfterReceivingFinish;
+				break;
 
 			case InstrumentationCategory.ServerConnection:
-				return ServerConnectionTypes.Select (t => Create (ctx, category, t));
-
-			case InstrumentationCategory.ServerRenegotiation:
-				return ServerRenegotiationTypes.Select (t => Create (ctx, category, t));
-
-			case InstrumentationCategory.Renegotiation:
-				return RenegotiationTypes.Select (t => Create (ctx, category, t));
+				yield return ConnectionInstrumentType.FragmentHandshakeMessages;
+				break;
 
 			case InstrumentationCategory.Connection:
-				return ConnectionTypes.Select (t => Create (ctx, category, t));
+				yield return ConnectionInstrumentType.FragmentHandshakeMessages;
+				break;
+
+			case InstrumentationCategory.ClientRenegotiation:
+				yield return ConnectionInstrumentType.RequestClientRenegotiation;
+				break;
+
+			case InstrumentationCategory.ServerRenegotiation:
+				yield return ConnectionInstrumentType.RequestRenegotiation;
+				yield return ConnectionInstrumentType.SendBlobBeforeHelloRequest;
+				yield return ConnectionInstrumentType.SendBlobAfterHelloRequest;
+				yield return ConnectionInstrumentType.SendBlobBeforeAndAfterHelloRequest;
+				yield return ConnectionInstrumentType.SendDuplicateHelloRequest;
+				yield return ConnectionInstrumentType.RequestServerRenegotiation;
+				yield return ConnectionInstrumentType.RequestServerRenegotiationWithPendingRead;
+				break;
+
+			case InstrumentationCategory.Renegotiation:
+				yield return ConnectionInstrumentType.SendBlobBeforeRenegotiatingHello;
+				yield return ConnectionInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead;
+				break;
 
 			case InstrumentationCategory.MartinTest:
-				return MartinTestTypes.Select (t => Create (ctx, category, t));
+				yield return ConnectionInstrumentType.MartinTest;
+				break;
 
 			case InstrumentationCategory.ManualClient:
-				return ManualClientTestTypes.Select (t => Create (ctx, category, t));
+				yield return ConnectionInstrumentType.MartinClientPuppy;
+				break;
 
 			case InstrumentationCategory.ManualServer:
-				return ManualServerTestTypes.Select (t => Create (ctx, category, t));
+				yield return ConnectionInstrumentType.MartinServerPuppy;
+				break;
 
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
-				return null;
+				break;
 			}
 		}
-
-		internal static readonly ConnectionInstrumentType[] ClientConnectionTypes = {
-			ConnectionInstrumentType.FragmentHandshakeMessages,
-			ConnectionInstrumentType.SendBlobAfterReceivingFinish
-		};
-
-		internal static readonly ConnectionInstrumentType[] ServerConnectionTypes = {
-			ConnectionInstrumentType.FragmentHandshakeMessages
-		};
-
-		internal static readonly ConnectionInstrumentType[] ServerRenegotiationTypes = {
-			ConnectionInstrumentType.RequestRenegotiation,
-			ConnectionInstrumentType.SendBlobBeforeHelloRequest,
-			ConnectionInstrumentType.SendBlobAfterHelloRequest,
-			ConnectionInstrumentType.SendBlobBeforeAndAfterHelloRequest,
-			ConnectionInstrumentType.SendDuplicateHelloRequest,
-			ConnectionInstrumentType.RequestServerRenegotiation,
-			ConnectionInstrumentType.RequestServerRenegotiationWithPendingRead
-		};
-
-		internal static readonly ConnectionInstrumentType[] ConnectionTypes = {
-			ConnectionInstrumentType.FragmentHandshakeMessages
-		};
-
-		internal static readonly ConnectionInstrumentType[] RenegotiationTypes = {
-			ConnectionInstrumentType.SendBlobBeforeRenegotiatingHello,
-			ConnectionInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead
-		};
-
-		internal static readonly ConnectionInstrumentType[] MartinTestTypes = {
-			ConnectionInstrumentType.MartinTest
-		};
-
-		internal static readonly ConnectionInstrumentType[] ManualClientTestTypes = {
-			ConnectionInstrumentType.MartinClientPuppy
-		};
-
-		internal static readonly ConnectionInstrumentType[] ManualServerTestTypes = {
-			ConnectionInstrumentType.MartinServerPuppy
-		};
 
 		static ConnectionInstrumentParameters CreateParameters (InstrumentationCategory category, ConnectionInstrumentType type, params object[] args)
 		{
@@ -227,6 +212,10 @@ namespace Mono.Security.NewTls.TestFramework
 				};
 				break;
 
+			case ConnectionInstrumentType.RequestClientRenegotiation:
+				parameters.RequestClientRenegotiation = true;
+				break;
+
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestClientRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
@@ -253,20 +242,20 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
-			if (Category == InstrumentationCategory.ServerRenegotiation)
-				return RunNewMainLoop (ctx, cancellationToken);
-
-			switch (Parameters.Type) {
-			case ConnectionInstrumentType.SendBlobAfterReceivingFinish:
-				return RunMainLoopBlob (ctx, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
-
-			case ConnectionInstrumentType.MartinTest:
-			case ConnectionInstrumentType.MartinClientPuppy:
-			case ConnectionInstrumentType.MartinServerPuppy:
+			switch (Category) {
+			case InstrumentationCategory.ClientRenegotiation:
+			case InstrumentationCategory.ServerRenegotiation:
+			case InstrumentationCategory.Renegotiation:
+			case InstrumentationCategory.MartinTest:
+			case InstrumentationCategory.ManualClient:
+			case InstrumentationCategory.ManualServer:
 				return RunNewMainLoop (ctx, cancellationToken);
 
 			default:
-				return base.MainLoop (ctx, cancellationToken);
+				if (Parameters.Type == ConnectionInstrumentType.SendBlobAfterReceivingFinish)
+					return RunMainLoopBlob (ctx, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
+				else
+					return base.MainLoop (ctx, cancellationToken);
 			}
 		}
 

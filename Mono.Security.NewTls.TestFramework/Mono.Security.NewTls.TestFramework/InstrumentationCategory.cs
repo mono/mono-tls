@@ -50,6 +50,7 @@ namespace Mono.Security.NewTls.TestFramework
 		SelectServerCipher,
 		SelectCipher,
 
+		ClientRenegotiation,
 		ServerRenegotiation,
 		Renegotiation,
 
