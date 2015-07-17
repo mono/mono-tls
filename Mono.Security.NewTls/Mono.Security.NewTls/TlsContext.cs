@@ -12,7 +12,7 @@ namespace Mono.Security.NewTls
 	using Extensions;
 	using Cipher;
 
-	public class TlsContext : ITlsContext
+	public class TlsContext : MartinContext, ITlsContext
 	{
 		readonly bool isServer;
 		readonly TlsConfiguration configuration;
