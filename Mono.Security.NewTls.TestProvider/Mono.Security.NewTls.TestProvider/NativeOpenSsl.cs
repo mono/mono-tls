@@ -119,20 +119,32 @@ namespace Mono.Security.NewTls.TestProvider
 			extern static void native_openssl_free_private_key (IntPtr handle);
 		}
 
+		void Debug (string message, params object[] args)
+		{
+			if (enableDebugging)
+				DebugHelper.WriteLine ("NativeOpenSsl({0}): {1}", isServer ? "server" : "client", string.Format (message, args));
+		}
+
+		void Debug (string message, byte[] buffer)
+		{
+			if (enableDebugging)
+				DebugHelper.WriteBuffer (string.Format ("NativeOpenSsl({0}): {1}", isServer ? "server" : "client", message), buffer);
+		}
+
 		void OnDebugCallback (bool write, byte[] buffer)
 		{
-			DebugHelper.WriteLine (write ? "WRITE" : "READ", buffer);
+			Debug (write ? "WRITE" : "READ", buffer);
 		}
 
 		void OnDebugCallback (int cmd, IntPtr ptr, int size, int ret)
 		{
 			try {
-				DebugHelper.WriteLine ("DEBUG CALLBACK: {0:x} {1:x} {2:x} {3:x}", cmd, ptr.ToInt32 (), size, ret);
+				Debug ("DEBUG CALLBACK: {0:x} {1:x} {2:x} {3:x}", cmd, ptr.ToInt32 (), size, ret);
 				var buffer = new byte [size];
 				Marshal.Copy (ptr, buffer, 0, size);
 				OnDebugCallback ((cmd & 0x0f) == 0x03, buffer);
 			} catch (Exception ex) {
-				DebugHelper.WriteLine ("EXCEPTION IN DEBUG CALLBACK: {0}", ex);
+				Debug ("EXCEPTION IN DEBUG CALLBACK: {0}", ex);
 			}
 		}
 
@@ -140,22 +152,21 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			try {
 				if (enableDebugging)
-					DebugHelper.WriteLine ("MESSAGE CALLBACK: {0} {1:x} {2:x} {3:x} {4:x}",
-						write_p, version, content_type, size, buf.ToInt32 ());
+					Debug ("MESSAGE CALLBACK: {0} {1:x} {2:x} {3:x} {4:x}", write_p, version, content_type, size, buf.ToInt32 ());
 
 				var buffer = new byte [size];
 				Marshal.Copy (buf, buffer, 0, size);
 				if (enableDebugging)
-					DebugHelper.WriteLine ("MESSAGE", buffer);
+					Debug ("MESSAGE", buffer);
 
 				if ((ContentType)content_type == ContentType.Alert) {
 					var alert = new Alert ((AlertLevel)buffer [0], (AlertDescription)buffer [1]);
 					if (enableDebugging || !alert.IsWarning)
-						DebugHelper.WriteLine ("ALERT: {0}", alert);
+						Debug ("ALERT: {0}", alert);
 					lastAlert = new TlsException (alert);
 				}
 			} catch (Exception ex) {
-				DebugHelper.WriteLine ("EXCEPTION IN MESSAGE CALLBACK: {0}", ex);
+				Debug ("EXCEPTION IN MESSAGE CALLBACK: {0}", ex);
 			}
 		}
 
@@ -416,7 +427,7 @@ namespace Mono.Security.NewTls.TestProvider
 				var ret = managed_cert_callback (ok != 0, managedCert);
 				return ret ? 1 : 0;
 			} catch (Exception ex) {
-				DebugHelper.WriteLine ("EXCEPTION IN VERIFY CALLBACK: {0}", ex);
+				Debug ("EXCEPTION IN VERIFY CALLBACK: {0}", ex);
 				return 0;
 			}
 		}
@@ -424,12 +435,11 @@ namespace Mono.Security.NewTls.TestProvider
 		int OnCertificateVerifyCallback (IntPtr store_ctx, IntPtr cert)
 		{
 			try {
-				DebugHelper.WriteLine ("CERT VERIFY CALLBACK: {0:x} {1:x}",
-					store_ctx.ToInt32 (), cert.ToInt32 ());
+				Debug ("CERT VERIFY CALLBACK: {0:x} {1:x}", store_ctx.ToInt32 (), cert.ToInt32 ());
 				var managedCert = ReadNativeCertificate (cert);
-				DebugHelper.WriteLine ("GOT CERTIFICATE: {0} {1}", managedCert, managedCert.Subject);
+				Debug ("GOT CERTIFICATE: {0} {1}", managedCert, managedCert.Subject);
 			} catch (Exception ex) {
-				DebugHelper.WriteLine ("EXCEPTION IN CERT VERIFY CALLBACK: {0}", ex);
+				Debug ("EXCEPTION IN CERT VERIFY CALLBACK: {0}", ex);
 			}
 			return 0;
 		}
