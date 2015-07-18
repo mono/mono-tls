@@ -354,10 +354,6 @@ namespace Mono.Security.NewTls.TestFramework
 			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
 			ctx.LogDebug (1, "HandleServerWrite #2");
-
-			await Server.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
-
-			ctx.LogDebug (1, "HandleServerWrite #3");
 		}
 
 		async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
@@ -379,7 +375,16 @@ namespace Mono.Security.NewTls.TestFramework
 
 			var writeTask = HandleServerWrite (ctx, cancellationToken);
 
+			ctx.LogDebug (1, "HandleServer");
+
 			await Task.WhenAll (readTask, writeTask);
+
+			ctx.LogDebug (1, "HandleServer #1");
+
+			cancellationToken.ThrowIfCancellationRequested ();
+			await Server.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
+
+			ctx.LogDebug (1, "HandleServer #2");
 		}
 
 		async Task RunNewMainLoop (TestContext ctx, CancellationToken cancellationToken)
