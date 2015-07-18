@@ -89,7 +89,7 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case InstrumentationCategory.ClientRenegotiation:
-				yield return ConnectionInstrumentType.RequestClientRenegotiation;
+				// yield return ConnectionInstrumentType.RequestClientRenegotiation;
 				break;
 
 			case InstrumentationCategory.ServerRenegotiation:
