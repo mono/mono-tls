@@ -219,12 +219,22 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
-			if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
-				return RunWithManualServer (ctx, cancellationToken);
-			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
-				return RunWithManualClient (ctx, cancellationToken);
+			var serverStream = new StreamWrapper (Server.Stream);
+			var clientStream = new StreamWrapper (Client.Stream);
 
-			return base.MainLoop (ctx, cancellationToken);
+			return MainLoop (ctx, serverStream, clientStream, cancellationToken);
+		}
+
+		protected async Task MainLoop (TestContext ctx, ILineBasedStream serverStream, ILineBasedStream clientStream, CancellationToken cancellationToken)
+		{
+			await serverStream.WriteLineAsync ("SERVER OK");
+			var line = await clientStream.ReadLineAsync ();
+			if (!line.Equals ("SERVER OK"))
+				throw new ConnectionException ("Got unexpected output from server: '{0}'", line);
+			await clientStream.WriteLineAsync ("CLIENT OK");
+			line = await serverStream.ReadLineAsync ();
+			if (!line.Equals ("CLIENT OK"))
+				throw new ConnectionException ("Got unexpected output from client: '{0}'", line);
 		}
 
 		async Task RunWithManualServer (TestContext ctx, CancellationToken cancellationToken)

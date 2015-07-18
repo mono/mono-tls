@@ -323,9 +323,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Client.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
-			ctx.LogDebug (1, "HandleClient #4");
-			await Client.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
-			ctx.LogDebug (1, "HandleClient #5");
+			ctx.LogDebug (1, "HandleClient done");
 		}
 
 		async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
@@ -338,7 +336,7 @@ namespace Mono.Security.NewTls.TestFramework
 			ctx.LogDebug (1, "HandleServerRead #1");
 			await ExpectBlob (ctx, Server, HandshakeInstrumentType.TestCompleted, cancellationToken);
 
-			ctx.LogDebug (1, "HandleServerRead #2");
+			ctx.LogDebug (1, "HandleServerRead done");
 		}
 
 		async Task HandleServerWrite (TestContext ctx, CancellationToken cancellationToken)
@@ -353,7 +351,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
-			ctx.LogDebug (1, "HandleServerWrite #2");
+			ctx.LogDebug (1, "HandleServerWrite done");
 		}
 
 		async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
@@ -390,12 +388,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			await Task.WhenAll (readTask, writeTask, t1, t2);
 
-			ctx.LogDebug (1, "HandleServer #1");
-
-			cancellationToken.ThrowIfCancellationRequested ();
-			await Server.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
-
-			ctx.LogDebug (1, "HandleServer #2");
+			ctx.LogDebug (1, "HandleServer done");
 		}
 
 		async Task RunNewMainLoop (TestContext ctx, CancellationToken cancellationToken)
@@ -427,15 +420,20 @@ namespace Mono.Security.NewTls.TestFramework
 			return base.Start (ctx, cancellationToken);
 		}
 
-		public override Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, CancellationToken cancellationToken)
+		public override async Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, CancellationToken cancellationToken)
 		{
 			renegotiationTcs.TrySetCanceled ();
-			return base.Shutdown (ctx, attemptCleanShutdown, cancellationToken);
+			ctx.LogDebug (1, "Shutdown: {0}", attemptCleanShutdown);
+			try {
+				return await base.Shutdown (ctx, attemptCleanShutdown, cancellationToken);
+			} finally {
+				ctx.LogDebug (1, "Shutdown done");
+			}
 		}
 
 		void OnRenegotiationCompleted (TestContext ctx)
 		{
-			ctx.LogMessage ("ON RENEGOTIATION COMPLETED");
+			ctx.LogDebug (1, "OnRenegotiationCompleted");
 			renegotiationTcs.SetResult (true);
 		}
 
