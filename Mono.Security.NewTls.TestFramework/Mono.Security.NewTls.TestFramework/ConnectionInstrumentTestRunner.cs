@@ -375,9 +375,20 @@ namespace Mono.Security.NewTls.TestFramework
 
 			var writeTask = HandleServerWrite (ctx, cancellationToken);
 
+			var t1 = readTask.ContinueWith (t => {
+				ctx.LogDebug (1, "Read done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				if (t.IsFaulted || t.IsCanceled)
+					Client.Dispose ();
+			});
+			var t2 = writeTask.ContinueWith (t => {
+				ctx.LogDebug (1, "Write done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				if (t.IsFaulted || t.IsCanceled)
+					Client.Dispose ();
+			});
+
 			ctx.LogDebug (1, "HandleServer");
 
-			await Task.WhenAll (readTask, writeTask);
+			await Task.WhenAll (readTask, writeTask, t1, t2);
 
 			ctx.LogDebug (1, "HandleServer #1");
 
@@ -394,7 +405,18 @@ namespace Mono.Security.NewTls.TestFramework
 			var clientTask = HandleClient (ctx, cancellationToken);
 			var serverTask = HandleServer (ctx, cancellationToken);
 
-			await Task.WhenAll (clientTask, serverTask);
+			var t1 = clientTask.ContinueWith (t => {
+				ctx.LogDebug (1, "Client done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				if (t.IsFaulted || t.IsCanceled)
+					Server.Dispose ();
+			});
+			var t2 = serverTask.ContinueWith (t => {
+				ctx.LogDebug (1, "Server done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				if (t.IsFaulted || t.IsCanceled)
+					Client.Dispose ();
+			});
+
+			await Task.WhenAll (clientTask, serverTask, t1, t2);
 		}
 
 		TaskCompletionSource<bool> renegotiationTcs;
