@@ -53,6 +53,12 @@ namespace Mono.Security.NewTls.TestProvider
 		NativeOpenSslProtocol protocol;
 		ShutdownState shutdownState;
 		TlsException lastAlert;
+		int lockReadState;
+		int lockWriteState;
+
+		readonly Func<bool,bool> shutdownHandler;
+		readonly Func<byte[],int,int,int> readHandler;
+		readonly Action<byte[],int,int> writeHandler;
 
 		public delegate bool RemoteValidationCallback (bool ok, X509Certificate certificate);
 
@@ -277,31 +283,94 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return false; }
 		}
 
-		delegate void WriteHandler (byte[] buffer, int offset, int size);
-		WriteHandler _WriteHandler;
+		static Exception GetConcurrentOperationEx ()
+		{
+			return new InvalidOperationException ("Attempted concurrent read/write operation.");
+		}
 
 		public override void Write (byte[] buffer, int offset, int size)
 		{
+			if (Interlocked.CompareExchange (ref lockWriteState, 1, 0) != 0)
+				throw GetConcurrentOperationEx ();
+
+			try {
+				Write_internal (buffer, offset, size);
+			} finally {
+				lockWriteState = 0;
+			}
+		}
+
+		void Write_internal (byte[] buffer, int offset, int size)
+		{
+			Debug ("WRITE: {0}", size);
 			var ret = native_openssl_write (handle, buffer, offset, size);
+			Debug ("WRITE DONE: {0}", ret);
 			if (ret != size)
 				throw new ConnectionException ("Write failed.");
 		}
 
 		public override IAsyncResult BeginWrite (byte[] buffer, int offset, int count, AsyncCallback callback, object state)
 		{
-			if (_WriteHandler == null)
-				Interlocked.CompareExchange (ref _WriteHandler, new WriteHandler (Write), null);
-			return _WriteHandler.BeginInvoke (buffer, offset, count, callback, state);
+			if (Interlocked.CompareExchange (ref lockWriteState, 1, 0) != 0)
+				throw GetConcurrentOperationEx ();
+
+			try {
+				return writeHandler.BeginInvoke (buffer, offset, count, callback, state);
+			} catch {
+				lockWriteState = 0;
+				throw;
+			}
 		}
 
 		public override void EndWrite (IAsyncResult asyncResult)
 		{
-			_WriteHandler.EndInvoke (asyncResult);
+			try {
+				writeHandler.EndInvoke (asyncResult);
+			} finally {
+				lockWriteState = 0;
+			}
 		}
 
 		public override int Read (byte[] buffer, int offset, int size)
 		{
-			return native_openssl_read (handle, buffer, offset, size);
+			if (Interlocked.CompareExchange (ref lockReadState, 1, 0) != 0)
+				throw GetConcurrentOperationEx ();
+
+			try {
+				return Read_internal (buffer, offset, size);
+			} finally {
+				lockReadState = 0;
+			}
+		}
+
+		int Read_internal (byte[] buffer, int offset, int size)
+		{
+			Debug ("READ: {0}", size);
+			var ret = native_openssl_read (handle, buffer, offset, size);
+			Debug ("READ DONE: {0}", ret);
+			return ret;
+		}
+
+		public override IAsyncResult BeginRead (byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+		{
+			if (Interlocked.CompareExchange (ref lockReadState, 1, 0) != 0)
+				throw GetConcurrentOperationEx ();
+
+			try {
+				return readHandler.BeginInvoke (buffer, offset, count, callback, state);
+			} catch {
+				lockReadState = 0;
+				throw;
+			}
+		}
+
+		public override int EndRead (IAsyncResult asyncResult)
+		{
+			try {
+				return readHandler.EndInvoke (asyncResult);
+			} finally {
+				lockReadState = 0;
+			}
 		}
 
 		public override void Flush ()
@@ -337,6 +406,10 @@ namespace Mono.Security.NewTls.TestProvider
 			this.isServer = isServer;
 			this.enableDebugging = debug;
 			this.protocol = protocol;
+
+			readHandler = Read_internal;
+			writeHandler = Write_internal;
+			shutdownHandler = Shutdown_internal;
 
 			if (debug)
 				debug_callback = new DebugCallback (OnDebugCallback);
@@ -467,26 +540,62 @@ namespace Mono.Security.NewTls.TestProvider
 			SentShutdown
 		}
 
-		public bool Shutdown (bool waitForReply)
+		bool Shutdown_internal (bool waitForReply)
 		{
+			Debug ("SHUTDOWN: {0} {1}", shutdownState, waitForReply);
 			if (shutdownState == ShutdownState.Error)
 				return false;
 			else if (shutdownState == ShutdownState.Closed)
 				return true;
-			var ret = native_openssl_shutdown (handle);
-			if (ret == 1) {
+
+			try {
+				var ret = native_openssl_shutdown (handle);
+				Debug ("SHUTDOWN #1: {0}", ret);
+				if (ret == 1) {
+					shutdownState = ShutdownState.Closed;
+					return true;
+				}
+				if (!waitForReply) {
+					shutdownState = ShutdownState.SentShutdown;
+					return false;
+				}
+				ret = native_openssl_shutdown (handle);
+				Debug ("SHUTDOWN #2: {0}", ret);
+				if (ret != 1)
+					throw new IOException ("Shutdown failed.");
 				shutdownState = ShutdownState.Closed;
 				return true;
+			} finally {
+				lockReadState = 0;
 			}
-			if (!waitForReply) {
-				shutdownState = ShutdownState.SentShutdown;
-				return false;
+		}
+
+		public IAsyncResult BeginShutdown (bool waitForReply, AsyncCallback callback, object state)
+		{
+			if (Interlocked.CompareExchange (ref lockReadState, 1, 0) != 0)
+				throw GetConcurrentOperationEx ();
+			if (Interlocked.CompareExchange (ref lockWriteState, 1, 0) != 0) {
+				lockReadState = 0;
+				throw GetConcurrentOperationEx ();
 			}
-			ret = native_openssl_shutdown (handle);
-			if (ret != 1)
-				throw new IOException ("Shutdown failed.");
-			shutdownState = ShutdownState.Closed;
-			return true;
+
+			try {
+				return shutdownHandler.BeginInvoke (waitForReply, callback, state);
+			} catch {
+				lockWriteState = 0;
+				lockReadState = 0;
+				throw;
+			}
+		}
+
+		public bool EndShutdown (IAsyncResult result)
+		{
+			try {
+				return shutdownHandler.EndInvoke (result);
+			} finally {
+				lockWriteState = 0;
+				lockReadState = 0;
+			}
 		}
 
 		public CipherSuiteCode CurrentCipher {

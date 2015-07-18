@@ -207,10 +207,8 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public sealed override Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, CancellationToken cancellationToken)
 		{
-			return Task.Run (() => {
-				ctx.LogMessage ("{0} shutdown: {1}", this, attemptCleanShutdown);
-				return openssl.Shutdown (attemptCleanShutdown);
-			});
+			ctx.LogMessage ("{0} shutdown: {1}", this, attemptCleanShutdown);
+			return Task.Factory.FromAsync (openssl.BeginShutdown, openssl.EndShutdown, attemptCleanShutdown, null);
 		}
 
 		protected override void Stop ()
