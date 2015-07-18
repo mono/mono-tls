@@ -249,7 +249,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.MartinTest:
 			case InstrumentationCategory.ManualClient:
 			case InstrumentationCategory.ManualServer:
-				return RunNewMainLoop (ctx, cancellationToken);
+				return base.MainLoop (ctx, cancellationToken);
 
 			default:
 				if (Parameters.Type == ConnectionInstrumentType.SendBlobAfterReceivingFinish)
@@ -292,7 +292,7 @@ namespace Mono.Security.NewTls.TestFramework
 			ctx.Expect (result, new IsEqualBlob (blob), "blob");
 		}
 
-		async Task HandleClient (TestContext ctx, CancellationToken cancellationToken)
+		protected override async Task HandleClient (TestContext ctx, CancellationToken cancellationToken)
 		{
 			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
 				return;
@@ -354,7 +354,7 @@ namespace Mono.Security.NewTls.TestFramework
 			ctx.LogDebug (1, "HandleServerWrite done");
 		}
 
-		async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
+		protected override async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
 		{
 			Task readTask = null;
 
@@ -389,27 +389,6 @@ namespace Mono.Security.NewTls.TestFramework
 			await Task.WhenAll (readTask, writeTask, t1, t2);
 
 			ctx.LogDebug (1, "HandleServer done");
-		}
-
-		async Task RunNewMainLoop (TestContext ctx, CancellationToken cancellationToken)
-		{
-			cancellationToken.ThrowIfCancellationRequested ();
-
-			var clientTask = HandleClient (ctx, cancellationToken);
-			var serverTask = HandleServer (ctx, cancellationToken);
-
-			var t1 = clientTask.ContinueWith (t => {
-				ctx.LogDebug (1, "Client done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
-				if (t.IsFaulted || t.IsCanceled)
-					Server.Dispose ();
-			});
-			var t2 = serverTask.ContinueWith (t => {
-				ctx.LogDebug (1, "Server done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
-				if (t.IsFaulted || t.IsCanceled)
-					Client.Dispose ();
-			});
-
-			await Task.WhenAll (clientTask, serverTask, t1, t2);
 		}
 
 		TaskCompletionSource<bool> renegotiationTcs;

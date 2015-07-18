@@ -84,7 +84,7 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		[AsyncTest]
+		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public async Task TestWithOpenSslServer (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("MonoWithNewTLS:OpenSsl")] InstrumentationConnectionType connectionType,

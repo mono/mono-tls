@@ -217,27 +217,68 @@ namespace Mono.Security.NewTls.TestFramework
 			return base.OnRun (ctx, cancellationToken);
 		}
 
-		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
+		protected override async Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
-			var serverStream = new StreamWrapper (Server.Stream);
-			var clientStream = new StreamWrapper (Client.Stream);
+			cancellationToken.ThrowIfCancellationRequested ();
 
-			return MainLoop (ctx, serverStream, clientStream, cancellationToken);
+			Task clientTask;
+			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
+				clientTask = FinishedTask;
+			else if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
+				clientTask = HandleClientWithManualServer (ctx, cancellationToken);
+			else
+				clientTask = HandleClient (ctx, cancellationToken);
+
+			Task serverTask;
+			if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
+				serverTask = FinishedTask;
+			else if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
+				serverTask = HandleServerWithManualClient (ctx, cancellationToken);
+			else
+				serverTask = HandleServer (ctx, cancellationToken);
+
+			var t1 = clientTask.ContinueWith (t => {
+				ctx.LogDebug (1, "Client done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				if (t.IsFaulted || t.IsCanceled)
+					Server.Dispose ();
+			});
+			var t2 = serverTask.ContinueWith (t => {
+				ctx.LogDebug (1, "Server done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				if (t.IsFaulted || t.IsCanceled)
+					Client.Dispose ();
+			});
+
+			try {
+				ctx.LogDebug (1, "MainLoop");
+				await Task.WhenAll (clientTask, serverTask, t1, t2);
+			} finally {
+				ctx.LogDebug (1, "MainLoop done");
+			}
 		}
 
-		protected async Task MainLoop (TestContext ctx, ILineBasedStream serverStream, ILineBasedStream clientStream, CancellationToken cancellationToken)
+		protected virtual async Task HandleClient (TestContext ctx, CancellationToken cancellationToken)
 		{
-			await serverStream.WriteLineAsync ("SERVER OK");
+			if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
+				await HandleClientWithManualServer (ctx, cancellationToken);
+			var clientStream = new StreamWrapper (Client.Stream);
+
 			var line = await clientStream.ReadLineAsync ();
 			if (!line.Equals ("SERVER OK"))
 				throw new ConnectionException ("Got unexpected output from server: '{0}'", line);
 			await clientStream.WriteLineAsync ("CLIENT OK");
-			line = await serverStream.ReadLineAsync ();
+		}
+
+		protected virtual async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
+		{
+			var serverStream = new StreamWrapper (Server.Stream);
+
+			await serverStream.WriteLineAsync ("SERVER OK");
+			var line = await serverStream.ReadLineAsync ();
 			if (!line.Equals ("CLIENT OK"))
 				throw new ConnectionException ("Got unexpected output from client: '{0}'", line);
 		}
 
-		async Task RunWithManualServer (TestContext ctx, CancellationToken cancellationToken)
+		protected virtual async Task HandleClientWithManualServer (TestContext ctx, CancellationToken cancellationToken)
 		{
 			var clientStream = new StreamWrapper (Client.Stream);
 
@@ -261,11 +302,9 @@ namespace Mono.Security.NewTls.TestFramework
 				throw new ConnectionException ("Got unexpected output from server: '{0}'", line);
 
 			ctx.LogMessage ("GOT RESPONSE: {0} {1}", protocol, status);
-
-			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 
-		async Task RunWithManualClient (TestContext ctx, CancellationToken cancellationToken)
+		protected virtual async Task HandleServerWithManualClient (TestContext ctx, CancellationToken cancellationToken)
 		{
 			ctx.LogMessage ("MANUAL CLIENT");
 
@@ -276,8 +315,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 			var line = await serverStream.ReadLineAsync ();
 			ctx.LogMessage ("GOT CLIENT MESSAGE: {0}", line);
-
-			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
 		}
 
 		public async Task ExpectAlert (TestContext ctx, AlertDescription alert, CancellationToken cancellationToken)
