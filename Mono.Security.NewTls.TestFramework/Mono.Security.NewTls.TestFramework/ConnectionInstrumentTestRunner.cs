@@ -47,9 +47,16 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.Type; }
 		}
 
+		TaskCompletionSource<bool> renegotiationTcs;
+		TaskCompletionSource<bool> serverReadTcs;
+		TaskCompletionSource<bool> clientTcs;
+
 		public ConnectionInstrumentTestRunner (IServer server, IClient client, ConnectionInstrumentParameters parameters, MonoConnectionFlags flags)
 			: base (server, client, parameters, flags)
 		{
+			renegotiationTcs = new TaskCompletionSource<bool> ();
+			serverReadTcs = new TaskCompletionSource<bool> ();
+			clientTcs = new TaskCompletionSource<bool> ();
 		}
 
 		public override Instrumentation CreateInstrument (TestContext ctx)
@@ -240,16 +247,12 @@ namespace Mono.Security.NewTls.TestFramework
 			return Parameters.HandshakeInstruments != null && Parameters.HandshakeInstruments.Contains (type);
 		}
 
-		protected override async Task HandleClient (TestContext ctx, CancellationToken cancellationToken)
+		protected override async Task HandleClientRead (TestContext ctx, CancellationToken cancellationToken)
 		{
-			if (Parameters.RequestClientRenegotiation) {
-				LogDebug (ctx, 1, "HandleClient - waiting for renegotiation");
-				var monoSslStream = (IMonoSslStream)Client.SslStream;
-				await monoSslStream.RequestRenegotiation ();
-				LogDebug (ctx, 1, "HandleClient - done waiting for renegotiation");
-			}
+			await clientTcs.Task;
+			cancellationToken.ThrowIfCancellationRequested ();
 
-			LogDebug (ctx, 1, "HandleClient");
+			LogDebug (ctx, 1, "HandleClientRead");
 
 			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest))
 				await ExpectBlob (ctx, Client, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
@@ -257,31 +260,32 @@ namespace Mono.Security.NewTls.TestFramework
 			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest))
 				await ExpectBlob (ctx, Client, HandshakeInstrumentType.SendBlobAfterHelloRequest, cancellationToken);
 
-			await ExpectBlob (ctx, Client, HandshakeInstrumentType.TestCompleted, cancellationToken);
+			await base.HandleClientRead (ctx, cancellationToken);
+		}
 
+		protected override async Task HandleClientWrite (TestContext ctx, CancellationToken cancellationToken)
+		{
+			await clientTcs.Task;
 			cancellationToken.ThrowIfCancellationRequested ();
 
-			LogDebug (ctx, 1, "HandleClient #1");
+			LogDebug (ctx, 1, "HandleClientWrite");
 
-			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
-			await Client.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
-
-			LogDebug (ctx, 1, "HandleClient done");
+			await base.HandleClientWrite (ctx, cancellationToken);
 		}
 
 		protected override async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
 		{
-			LogDebug (ctx, 1, "HandleServerRead");
+			await serverReadTcs.Task;
+			cancellationToken.ThrowIfCancellationRequested ();
 
+			LogDebug (ctx, 1, "HandleServerRead");
 			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello))
 				await ExpectBlob (ctx, Server, HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello, cancellationToken);
 
 			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterReceivingFinish))
 				await ExpectBlob (ctx, Server, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
 
-			await ExpectBlob (ctx, Server, HandshakeInstrumentType.TestCompleted, cancellationToken);
-
-			LogDebug (ctx, 1, "HandleServerRead done");
+			await base.HandleServerRead (ctx, cancellationToken);
 		}
 
 		protected override async Task HandleServerWrite (TestContext ctx, CancellationToken cancellationToken)
@@ -294,18 +298,27 @@ namespace Mono.Security.NewTls.TestFramework
 				LogDebug (ctx, 1, "HandleServerWrite - done waiting for renegotiation");
 			}
 
-			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
-			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
-
-			LogDebug (ctx, 1, "HandleServerWrite done");
+			await base.HandleServerWrite (ctx, cancellationToken);
 		}
 
-		protected override async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
+		protected override async Task OnHandleClient (TestContext ctx, CancellationToken cancellationToken)
 		{
-			Task readTask = null;
+			if (Parameters.RequestClientRenegotiation) {
+				LogDebug (ctx, 1, "HandleClient - waiting for renegotiation");
+				var monoSslStream = (IMonoSslStream)Client.SslStream;
+				await monoSslStream.RequestRenegotiation ();
+				LogDebug (ctx, 1, "HandleClient - done waiting for renegotiation");
+			}
 
+			clientTcs.SetResult (true);
+
+			await base.OnHandleClient (ctx, cancellationToken);
+		}
+
+		protected override async Task OnHandleServer (TestContext ctx, CancellationToken cancellationToken)
+		{
 			if (Parameters.QueueServerReadFirst)
-				readTask = HandleServerRead (ctx, cancellationToken);
+				serverReadTcs.SetResult (true);
 
 			if (Parameters.RequestServerRenegotiation) {
 				LogDebug (ctx, 1, "HandleServer - waiting for renegotiation");
@@ -314,34 +327,14 @@ namespace Mono.Security.NewTls.TestFramework
 				LogDebug (ctx, 1, "HandleServer - done waiting for renegotiation");
 			}
 
-			if (readTask == null)
-				readTask = HandleServerRead (ctx, cancellationToken);
+			if (!Parameters.QueueServerReadFirst)
+				serverReadTcs.SetResult (false);
 
-			var writeTask = HandleServerWrite (ctx, cancellationToken);
-
-			var t1 = readTask.ContinueWith (t => {
-				LogDebug (ctx, 1, "Read done", t.Status, t.IsFaulted, t.IsCanceled);
-				if (t.IsFaulted || t.IsCanceled)
-					Client.Dispose ();
-			});
-			var t2 = writeTask.ContinueWith (t => {
-				LogDebug (ctx, 1, "Write done", t.Status, t.IsFaulted, t.IsCanceled);
-				if (t.IsFaulted || t.IsCanceled)
-					Client.Dispose ();
-			});
-
-			LogDebug (ctx, 1, "HandleServer");
-
-			await Task.WhenAll (readTask, writeTask, t1, t2);
-
-			LogDebug (ctx, 1, "HandleServer done");
+			await base.OnHandleServer (ctx, cancellationToken);
 		}
-
-		TaskCompletionSource<bool> renegotiationTcs;
 
 		public override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
-			renegotiationTcs = new TaskCompletionSource<bool> ();
 			return base.Start (ctx, cancellationToken);
 		}
 
@@ -360,6 +353,14 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			LogDebug (ctx, 1, "OnRenegotiationCompleted");
 			renegotiationTcs.SetResult (true);
+		}
+
+		protected override void Dispose (bool disposing)
+		{
+			renegotiationTcs.TrySetCanceled ();
+			serverReadTcs.TrySetCanceled ();
+			clientTcs.TrySetCanceled ();
+			base.Dispose (disposing);
 		}
 
 		class ConnectionEventSink : InstrumentationEventSink
