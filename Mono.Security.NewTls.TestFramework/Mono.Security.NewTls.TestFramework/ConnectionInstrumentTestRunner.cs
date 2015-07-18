@@ -240,41 +240,7 @@ namespace Mono.Security.NewTls.TestFramework
 			return Parameters.HandshakeInstruments != null && Parameters.HandshakeInstruments.Contains (type);
 		}
 
-		protected override Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
-		{
-			switch (Category) {
-			case InstrumentationCategory.ClientRenegotiation:
-			case InstrumentationCategory.ServerRenegotiation:
-			case InstrumentationCategory.Renegotiation:
-			case InstrumentationCategory.MartinTest:
-			case InstrumentationCategory.ManualClient:
-			case InstrumentationCategory.ManualServer:
-				return base.MainLoop (ctx, cancellationToken);
-
-			default:
-				if (Parameters.Type == ConnectionInstrumentType.SendBlobAfterReceivingFinish)
-					return RunMainLoopBlob (ctx, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
-				else
-					return base.MainLoop (ctx, cancellationToken);
-			}
-		}
-
-		async Task RunMainLoopBlob (TestContext ctx, HandshakeInstrumentType type, CancellationToken cancellationToken)
-		{
-			var expected = Instrumentation.GetTextBuffer (type).GetBuffer ();
-
-			var buffer = new byte [4096];
-			int ret = await Server.Stream.ReadAsync (buffer, 0, buffer.Length);
-			ctx.Assert (ret, Is.EqualTo (expected.Length));
-
-			buffer = new BufferOffsetSize (buffer, 0, ret).GetBuffer ();
-
-			ctx.Assert (buffer, Is.EqualTo (expected), "blob");
-
-			await Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
-		}
-
-		async Task ExpectBlob (TestContext ctx, ICommonConnection connection, HandshakeInstrumentType type, CancellationToken cancellationToken)
+		static async Task ExpectBlob (TestContext ctx, ICommonConnection connection, HandshakeInstrumentType type, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested ();
 
@@ -286,19 +252,17 @@ namespace Mono.Security.NewTls.TestFramework
 
 			ctx.LogDebug (1, "ExpectBlob #1: {0} {1} {2}", connection, type, ret);
 
-			ctx.Assert (ret, Is.GreaterThan (0), "read success");
-			var result = new BufferOffsetSize (buffer, 0, ret);
+			if (ctx.Expect (ret, Is.GreaterThan (0), "read success")) {
+				var result = new BufferOffsetSize (buffer, 0, ret);
 
-			ctx.Expect (result, new IsEqualBlob (blob), "blob");
+				ctx.Expect (result, new IsEqualBlob (blob), "blob");
+			}
+
+			ctx.LogDebug (1, "ExpectBlob done: {0} {1}", connection, type);
 		}
 
 		protected override async Task HandleClient (TestContext ctx, CancellationToken cancellationToken)
 		{
-			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
-				return;
-
-			cancellationToken.ThrowIfCancellationRequested ();
-
 			if (Parameters.RequestClientRenegotiation) {
 				ctx.LogDebug (1, "Calling IMonoSslStream.RequestRenegotiation()");
 				var monoSslStream = (IMonoSslStream)Client.SslStream;
@@ -307,19 +271,19 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 
 			ctx.LogDebug (1, "HandleClient");
+
 			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest))
 				await ExpectBlob (ctx, Client, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
 
-			ctx.LogDebug (1, "HandleClient #1");
 			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterHelloRequest))
 				await ExpectBlob (ctx, Client, HandshakeInstrumentType.SendBlobAfterHelloRequest, cancellationToken);
 
-			ctx.LogDebug (1, "HandleClient #2");
 			await ExpectBlob (ctx, Client, HandshakeInstrumentType.TestCompleted, cancellationToken);
 
 			cancellationToken.ThrowIfCancellationRequested ();
 
-			ctx.LogDebug (1, "HandleClient #3");
+			ctx.LogDebug (1, "HandleClient #1");
+
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Client.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
@@ -333,7 +297,9 @@ namespace Mono.Security.NewTls.TestFramework
 			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello))
 				await ExpectBlob (ctx, Server, HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello, cancellationToken);
 
-			ctx.LogDebug (1, "HandleServerRead #1");
+			if (HasInstrument (HandshakeInstrumentType.SendBlobAfterReceivingFinish))
+				await ExpectBlob (ctx, Server, HandshakeInstrumentType.SendBlobAfterReceivingFinish, cancellationToken);
+
 			await ExpectBlob (ctx, Server, HandshakeInstrumentType.TestCompleted, cancellationToken);
 
 			ctx.LogDebug (1, "HandleServerRead done");
@@ -343,10 +309,11 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			ctx.LogDebug (1, "HandleServerWrite");
 
-			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation))
+			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation)) {
+				ctx.LogDebug (1, "HandleServerWrite - wait for renegotiation");
 				await renegotiationTcs.Task;
-
-			ctx.LogDebug (1, "HandleServerWrite #1");
+				ctx.LogDebug (1, "HandleServerWrite - done waiting for renegotiation");
+			}
 
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
