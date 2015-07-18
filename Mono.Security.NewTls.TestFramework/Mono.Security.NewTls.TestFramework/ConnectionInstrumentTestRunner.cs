@@ -240,37 +240,16 @@ namespace Mono.Security.NewTls.TestFramework
 			return Parameters.HandshakeInstruments != null && Parameters.HandshakeInstruments.Contains (type);
 		}
 
-		static async Task ExpectBlob (TestContext ctx, ICommonConnection connection, HandshakeInstrumentType type, CancellationToken cancellationToken)
-		{
-			cancellationToken.ThrowIfCancellationRequested ();
-
-			ctx.LogDebug (1, "ExpectBlob: {0} {1}", connection, type);
-
-			var buffer = new byte [4096];
-			var blob = Instrumentation.GetTextBuffer (type);
-			var ret = await connection.Stream.ReadAsync (buffer, 0, buffer.Length, cancellationToken);
-
-			ctx.LogDebug (1, "ExpectBlob #1: {0} {1} {2}", connection, type, ret);
-
-			if (ctx.Expect (ret, Is.GreaterThan (0), "read success")) {
-				var result = new BufferOffsetSize (buffer, 0, ret);
-
-				ctx.Expect (result, new IsEqualBlob (blob), "blob");
-			}
-
-			ctx.LogDebug (1, "ExpectBlob done: {0} {1}", connection, type);
-		}
-
 		protected override async Task HandleClient (TestContext ctx, CancellationToken cancellationToken)
 		{
 			if (Parameters.RequestClientRenegotiation) {
-				ctx.LogDebug (1, "Calling IMonoSslStream.RequestRenegotiation()");
+				LogDebug (ctx, 1, "HandleClient - waiting for renegotiation");
 				var monoSslStream = (IMonoSslStream)Client.SslStream;
 				await monoSslStream.RequestRenegotiation ();
-				ctx.LogDebug (1, "Done calling IMonoSslStream.RequestRenegotiation()");
+				LogDebug (ctx, 1, "HandleClient - done waiting for renegotiation");
 			}
 
-			ctx.LogDebug (1, "HandleClient");
+			LogDebug (ctx, 1, "HandleClient");
 
 			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeHelloRequest))
 				await ExpectBlob (ctx, Client, HandshakeInstrumentType.SendBlobBeforeHelloRequest, cancellationToken);
@@ -282,17 +261,17 @@ namespace Mono.Security.NewTls.TestFramework
 
 			cancellationToken.ThrowIfCancellationRequested ();
 
-			ctx.LogDebug (1, "HandleClient #1");
+			LogDebug (ctx, 1, "HandleClient #1");
 
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Client.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
-			ctx.LogDebug (1, "HandleClient done");
+			LogDebug (ctx, 1, "HandleClient done");
 		}
 
-		async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
+		protected override async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
 		{
-			ctx.LogDebug (1, "HandleServerRead");
+			LogDebug (ctx, 1, "HandleServerRead");
 
 			if (HasInstrument (HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello))
 				await ExpectBlob (ctx, Server, HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello, cancellationToken);
@@ -302,23 +281,23 @@ namespace Mono.Security.NewTls.TestFramework
 
 			await ExpectBlob (ctx, Server, HandshakeInstrumentType.TestCompleted, cancellationToken);
 
-			ctx.LogDebug (1, "HandleServerRead done");
+			LogDebug (ctx, 1, "HandleServerRead done");
 		}
 
-		async Task HandleServerWrite (TestContext ctx, CancellationToken cancellationToken)
+		protected override async Task HandleServerWrite (TestContext ctx, CancellationToken cancellationToken)
 		{
-			ctx.LogDebug (1, "HandleServerWrite");
+			LogDebug (ctx, 1, "HandleServerWrite");
 
 			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation)) {
-				ctx.LogDebug (1, "HandleServerWrite - wait for renegotiation");
+				LogDebug (ctx, 1, "HandleServerWrite - waiting for renegotiation");
 				await renegotiationTcs.Task;
-				ctx.LogDebug (1, "HandleServerWrite - done waiting for renegotiation");
+				LogDebug (ctx, 1, "HandleServerWrite - done waiting for renegotiation");
 			}
 
 			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
 			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
 
-			ctx.LogDebug (1, "HandleServerWrite done");
+			LogDebug (ctx, 1, "HandleServerWrite done");
 		}
 
 		protected override async Task HandleServer (TestContext ctx, CancellationToken cancellationToken)
@@ -329,10 +308,10 @@ namespace Mono.Security.NewTls.TestFramework
 				readTask = HandleServerRead (ctx, cancellationToken);
 
 			if (Parameters.RequestServerRenegotiation) {
-				ctx.LogDebug (1, "Calling IMonoSslStream.RequestRenegotiation()");
+				LogDebug (ctx, 1, "HandleServer - waiting for renegotiation");
 				var monoSslStream = (IMonoSslStream)Server.SslStream;
 				await monoSslStream.RequestRenegotiation ();
-				ctx.LogDebug (1, "Done calling IMonoSslStream.RequestRenegotiation()");
+				LogDebug (ctx, 1, "HandleServer - done waiting for renegotiation");
 			}
 
 			if (readTask == null)
@@ -341,21 +320,21 @@ namespace Mono.Security.NewTls.TestFramework
 			var writeTask = HandleServerWrite (ctx, cancellationToken);
 
 			var t1 = readTask.ContinueWith (t => {
-				ctx.LogDebug (1, "Read done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				LogDebug (ctx, 1, "Read done", t.Status, t.IsFaulted, t.IsCanceled);
 				if (t.IsFaulted || t.IsCanceled)
 					Client.Dispose ();
 			});
 			var t2 = writeTask.ContinueWith (t => {
-				ctx.LogDebug (1, "Write done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				LogDebug (ctx, 1, "Write done", t.Status, t.IsFaulted, t.IsCanceled);
 				if (t.IsFaulted || t.IsCanceled)
 					Client.Dispose ();
 			});
 
-			ctx.LogDebug (1, "HandleServer");
+			LogDebug (ctx, 1, "HandleServer");
 
 			await Task.WhenAll (readTask, writeTask, t1, t2);
 
-			ctx.LogDebug (1, "HandleServer done");
+			LogDebug (ctx, 1, "HandleServer done");
 		}
 
 		TaskCompletionSource<bool> renegotiationTcs;
@@ -369,17 +348,17 @@ namespace Mono.Security.NewTls.TestFramework
 		public override async Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, CancellationToken cancellationToken)
 		{
 			renegotiationTcs.TrySetCanceled ();
-			ctx.LogDebug (1, "Shutdown: {0}", attemptCleanShutdown);
+			LogDebug (ctx, 1, "Shutdown", attemptCleanShutdown);
 			try {
 				return await base.Shutdown (ctx, attemptCleanShutdown, cancellationToken);
 			} finally {
-				ctx.LogDebug (1, "Shutdown done");
+				LogDebug (ctx, 1, "Shutdown done");
 			}
 		}
 
 		void OnRenegotiationCompleted (TestContext ctx)
 		{
-			ctx.LogDebug (1, "OnRenegotiationCompleted");
+			LogDebug (ctx, 1, "OnRenegotiationCompleted");
 			renegotiationTcs.SetResult (true);
 		}
 

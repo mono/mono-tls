@@ -217,6 +217,59 @@ namespace Mono.Security.NewTls.TestFramework
 			return base.OnRun (ctx, cancellationToken);
 		}
 
+		protected void LogDebug (TestContext ctx, int level, string message, params object[] args)
+		{
+			var sb = new StringBuilder ();
+			sb.AppendFormat ("[{0}]: {1}", GetType ().Name, message);
+			if (args.Length > 0)
+				sb.Append (" -");
+			foreach (var arg in args) {
+				sb.Append (" ");
+				sb.Append (arg);
+			}
+			var formatted = sb.ToString ();
+			ctx.LogDebug (level, formatted);
+		}
+
+		protected async Task ExpectBlob (TestContext ctx, ICommonConnection connection, HandshakeInstrumentType type, CancellationToken cancellationToken)
+		{
+			cancellationToken.ThrowIfCancellationRequested ();
+
+			LogDebug (ctx, 1, "ExpectBlob", connection, type);
+
+			var buffer = new byte [4096];
+			var blob = Instrumentation.GetTextBuffer (type);
+			var ret = await connection.Stream.ReadAsync (buffer, 0, buffer.Length, cancellationToken);
+
+			LogDebug (ctx, 1, "ExpectBlob #1", connection, type, ret);
+
+			if (ctx.Expect (ret, Is.GreaterThan (0), "read success")) {
+				var result = new BufferOffsetSize (buffer, 0, ret);
+
+				ctx.Expect (result, new IsEqualBlob (blob), "blob");
+			}
+
+			LogDebug (ctx, 1, "ExpectBlob done", connection, type);
+		}
+
+		protected virtual async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
+		{
+			LogDebug (ctx, 1, "HandleServerRead");
+
+			await ExpectBlob (ctx, Server, HandshakeInstrumentType.TestCompleted, cancellationToken);
+
+			LogDebug (ctx, 1, "HandleServerRead done");
+		}
+
+		protected virtual async Task HandleServerWrite (TestContext ctx, CancellationToken cancellationToken)
+		{
+			LogDebug (ctx, 1, "HandleServerWrite");
+
+			var blob = Instrumentation.GetTextBuffer (HandshakeInstrumentType.TestCompleted);
+			await Server.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
+
+			LogDebug (ctx, 1, "HandleServerWrite done");
+		}
 		protected override async Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested ();
@@ -238,28 +291,26 @@ namespace Mono.Security.NewTls.TestFramework
 				serverTask = HandleServer (ctx, cancellationToken);
 
 			var t1 = clientTask.ContinueWith (t => {
-				ctx.LogDebug (1, "Client done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				LogDebug (ctx, 1, "Client done", t.Status, t.IsFaulted, t.IsCanceled);
 				if (t.IsFaulted || t.IsCanceled)
 					Server.Dispose ();
 			});
 			var t2 = serverTask.ContinueWith (t => {
-				ctx.LogDebug (1, "Server done: {0} {1} {2}", t.Status, t.IsFaulted, t.IsCanceled);
+				LogDebug (ctx, 1, "Server done", t.Status, t.IsFaulted, t.IsCanceled);
 				if (t.IsFaulted || t.IsCanceled)
 					Client.Dispose ();
 			});
 
 			try {
-				ctx.LogDebug (1, "MainLoop");
+				LogDebug (ctx, 1, "MainLoop");
 				await Task.WhenAll (clientTask, serverTask, t1, t2);
 			} finally {
-				ctx.LogDebug (1, "MainLoop done");
+				LogDebug (ctx, 1, "MainLoop done");
 			}
 		}
 
 		protected virtual async Task HandleClient (TestContext ctx, CancellationToken cancellationToken)
 		{
-			if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
-				await HandleClientWithManualServer (ctx, cancellationToken);
 			var clientStream = new StreamWrapper (Client.Stream);
 
 			var line = await clientStream.ReadLineAsync ();
@@ -282,7 +333,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			var clientStream = new StreamWrapper (Client.Stream);
 
-			ctx.LogMessage ("WRITING REQUEST: {0}", Parameters.ClientParameters.TargetHost ?? "<null>");
+			LogDebug (ctx, 1, "HandleClientWithManualServer", Parameters.ClientParameters.TargetHost ?? "<null>");
 
 			await clientStream.WriteLineAsync ("GET / HTTP/1.0");
 			try {
@@ -290,31 +341,31 @@ namespace Mono.Security.NewTls.TestFramework
 					await clientStream.WriteLineAsync (string.Format ("Host: {0}", Parameters.ClientParameters.TargetHost));
 				await clientStream.WriteLineAsync ();
 			} catch (Exception ex) {
-				ctx.LogMessage ("RECEIVED EXCEPTION WHILE WRITING REQUEST: {0}", ex.Message);
+				LogDebug (ctx, 1, "HandleClientWithManualServer error", ex.Message);
 			}
 
 			var line = await clientStream.ReadLineAsync ();
-			ctx.LogMessage ("GOT RESPONSE: {0}", line);
+			LogDebug (ctx, 1, "HandleClientWithManualServer response", line);
 
 			HttpProtocol protocol;
 			HttpStatusCode status;
 			if (!HttpResponse.ParseResponseHeader (line, out protocol, out status))
 				throw new ConnectionException ("Got unexpected output from server: '{0}'", line);
 
-			ctx.LogMessage ("GOT RESPONSE: {0} {1}", protocol, status);
+			LogDebug (ctx, 1, "HandleClientWithManualServer done", protocol, status);
 		}
 
 		protected virtual async Task HandleServerWithManualClient (TestContext ctx, CancellationToken cancellationToken)
 		{
-			ctx.LogMessage ("MANUAL CLIENT");
+			LogDebug (ctx, 1, "HandleServerWithManualClient");
 
 			var serverStream = new StreamWrapper (Server.Stream);
 			await serverStream.WriteLineAsync ("Hello World!");
 
-			ctx.LogMessage ("WAITING FOR CLIENT INPUT");
+			LogDebug (ctx, 1, "HandleServerWithManualClient reading");
 
 			var line = await serverStream.ReadLineAsync ();
-			ctx.LogMessage ("GOT CLIENT MESSAGE: {0}", line);
+			LogDebug (ctx, 1, "HandleServerWithManualClient done", line);
 		}
 
 		public async Task ExpectAlert (TestContext ctx, AlertDescription alert, CancellationToken cancellationToken)
