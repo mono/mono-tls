@@ -310,7 +310,8 @@ namespace Mono.Security.NewTls.TestFramework
 
 			LogDebug (ctx, 1, "HandleConnection shutdown", connection);
 
-			await connection.Shutdown (ctx, SupportsCleanShutdown, cancellationToken);
+			if (SupportsCleanShutdown)
+				await connection.Shutdown (ctx, cancellationToken);
 
 			LogDebug (ctx, 1, "HandleConnection done", connection);
 		}

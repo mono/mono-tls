@@ -338,12 +338,12 @@ namespace Mono.Security.NewTls.TestFramework
 			return base.Start (ctx, cancellationToken);
 		}
 
-		public override async Task<bool> Shutdown (TestContext ctx, bool attemptCleanShutdown, CancellationToken cancellationToken)
+		public override async Task<bool> Shutdown (TestContext ctx, CancellationToken cancellationToken)
 		{
 			renegotiationTcs.TrySetCanceled ();
-			LogDebug (ctx, 1, "Shutdown", attemptCleanShutdown);
+			LogDebug (ctx, 1, "Shutdown");
 			try {
-				return await base.Shutdown (ctx, attemptCleanShutdown, cancellationToken);
+				return await base.Shutdown (ctx, cancellationToken);
 			} finally {
 				LogDebug (ctx, 1, "Shutdown done");
 			}
