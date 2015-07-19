@@ -273,7 +273,9 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected virtual async Task HandleClientWrite (TestContext ctx, CancellationToken cancellationToken)
 		{
+			LogDebug (ctx, 1, "HandleClientWait - write finish");
 			await WriteBlob (ctx, Client, HandshakeInstrumentType.TestCompleted, cancellationToken);
+			LogDebug (ctx, 1, "HandleClientWait - done");
 		}
 
 		protected virtual async Task HandleServerRead (TestContext ctx, CancellationToken cancellationToken)
@@ -307,11 +309,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 			await Task.WhenAll (readTask, writeTask, t1, t2);
 			cancellationToken.ThrowIfCancellationRequested ();
-
-			LogDebug (ctx, 1, "HandleConnection shutdown", connection);
-
-			if (SupportsCleanShutdown)
-				await connection.Shutdown (ctx, cancellationToken);
 
 			LogDebug (ctx, 1, "HandleConnection done", connection);
 		}
@@ -354,6 +351,12 @@ namespace Mono.Security.NewTls.TestFramework
 
 				LogDebug (ctx, 1, "MainLoop");
 				await mainLoopTask;
+				cancellationToken.ThrowIfCancellationRequested ();
+
+				if (SupportsCleanShutdown) {
+					LogDebug (ctx, 1, "MainLoop shutdown");
+					await Shutdown (ctx, cancellationToken);
+				}
 			} finally {
 				LogDebug (ctx, 1, "MainLoop done");
 			}
