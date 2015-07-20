@@ -41,6 +41,7 @@ using Xamarin.WebTests.Resources;
 namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
+	using TestFeatures;
 
 	public class NotWorkingAttribute : TestFeatureAttribute
 	{
@@ -117,6 +118,9 @@ namespace Mono.Security.NewTls.Tests
 				yield return OpenSslCryptoProvider;
 				yield return HttpsWithOldTLS;
 				yield return HttpsWithNewTLS;
+
+				foreach (var feature in InstrumentationTestFeatures.ConnectionFeatures)
+					yield return feature;
 			}
 		}
 

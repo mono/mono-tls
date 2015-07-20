@@ -86,11 +86,13 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.ClientSignatureParameters:
 			case InstrumentationCategory.ClientConnection:
 			case InstrumentationCategory.ClientRenegotiation:
+			case InstrumentationCategory.MartinTestClient:
 				return MonoConnectionFlags.ClientInstrumentation;
 			case InstrumentationCategory.AllServerSignatureAlgorithms:
 			case InstrumentationCategory.ServerSignatureParameters:
 			case InstrumentationCategory.ServerConnection:
 			case InstrumentationCategory.ServerRenegotiation:
+			case InstrumentationCategory.MartinTestServer:
 				return MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.SignatureAlgorithms:
 			case InstrumentationCategory.Connection:

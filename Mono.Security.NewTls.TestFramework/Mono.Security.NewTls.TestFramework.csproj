@@ -84,6 +84,7 @@
     <Compile Include="Mono.Security.NewTls.TestFeatures\CipherInstrumentTestRunnerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IsEqualBlob.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoSslStream.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationTestFeatures.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

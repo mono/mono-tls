@@ -54,7 +54,10 @@ namespace Mono.Security.NewTls.TestFramework
 		ServerRenegotiation,
 		Renegotiation,
 
+		MartinTestClient,
+		MartinTestServer,
 		MartinTest,
+
 		ManualClient,
 		ManualServer
 	}

@@ -80,15 +80,19 @@ namespace Mono.Security.NewTls.TestFeatures
 			var supportedClientProviders = supportedProviders.Where (p => {
 				if (!string.IsNullOrEmpty (clientFilter))
 					return MatchesFilter (p, clientFilter);
-				else
+				else if (InstrumentationTestFeatures.IsClientEnabled (ctx, p))
 					return InstrumentationTestRunner.IsClientSupported (ctx, category, p);
+				else
+					return false;
 			});
 
 			var supportedServerProviders = supportedProviders.Where (p => {
 				if (!string.IsNullOrEmpty (serverFilter))
 					return MatchesFilter (p, serverFilter);
-				else
+				else if (InstrumentationTestFeatures.IsServerEnabled (ctx, p))
 					return InstrumentationTestRunner.IsServerSupported (ctx, category, p);
+				else
+					return false;
 			});
 
 			return InstrumentationTestRunner.Join (supportedClientProviders, supportedServerProviders, (c, s) => new InstrumentationConnectionType (category, c, s));

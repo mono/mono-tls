@@ -119,6 +119,8 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case InstrumentationCategory.MartinTest:
+			case InstrumentationCategory.MartinTestClient:
+			case InstrumentationCategory.MartinTestServer:
 				yield return ConnectionInstrumentType.MartinTest;
 				break;
 
