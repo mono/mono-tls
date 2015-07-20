@@ -330,7 +330,7 @@ namespace Mono.Security.NewTls
 		{
 			#if DEBUG_FULL
 			if (EnableDebugging) {
-				DebugHelper.WriteLine ("GenerateNextToken: {0}", negotiationHandler);
+				DebugHelper.WriteLine ("GenerateNextToken({0}): {1}", IsServer ? "server" : "client", negotiationHandler);
 				if (incoming != null)
 					DebugHelper.WriteRemaining ("  incoming", incoming);
 			}
@@ -379,6 +379,7 @@ namespace Mono.Security.NewTls
 					if (session.Read == null || session.Read.Cipher == null || !session.SecureRenegotiation)
 						throw new TlsException (AlertDescription.DecodeError);
 					// FIXME
+					Console.Error.WriteLine ("FUCK!");
 					throw new NotImplementedException ();
 				} else if (contentType != ContentType.Handshake) {
 					throw new TlsException (AlertDescription.UnexpectedMessage);
@@ -557,10 +558,14 @@ namespace Mono.Security.NewTls
 			var contentType = (ContentType)incoming.ReadByte ();
 			#if DEBUG_FULL
 			if (EnableDebugging)
-				DebugHelper.WriteLine ("DecryptMessage: {0}", contentType);
+				DebugHelper.WriteLine ("DecryptMessage({0}): {1}", IsServer ? "server" : "client", contentType);
 			#endif
 
 			if (contentType == ContentType.Handshake) {
+				#if INSTRUMENTATION
+				if (HasInstrumentationEventSink)
+					InstrumentationEventSink.StartRenegotiation (this);
+				#endif
 				incoming.Position--;
 				return SecurityStatus.Renegotiate;
 			}

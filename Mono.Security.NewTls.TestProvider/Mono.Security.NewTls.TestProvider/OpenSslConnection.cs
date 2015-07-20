@@ -76,6 +76,10 @@ namespace Mono.Security.NewTls.TestProvider
 			get { throw new NotImplementedException (); }
 		}
 
+		public IStreamInstrumentation StreamInstrumentation {
+			get { return null; }
+		}
+
 		public bool SupportsConnectionInfo {
 			get { return true; }
 		}

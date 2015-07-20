@@ -65,14 +65,13 @@ namespace Mono.Security.NewTls.TestProvider
 			return settings;
 		}
 
-		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
+		protected override async Task<MonoSslStream> Start (TestContext ctx, Stream stream, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
 			ctx.LogMessage ("Connected.");
 
 			var targetHost = Parameters.TargetHost ?? EndPoint.HostName ?? EndPoint.Address;
 			ctx.LogDebug (1, "Using '{0}' as target host.", targetHost);
 
-			var stream = new NetworkStream (socket);
 			var client = await ConnectionProvider.CreateClientStreamAsync (stream, targetHost, Parameters, settings, cancellationToken);
 
 			ctx.LogMessage ("Successfully authenticated client.");

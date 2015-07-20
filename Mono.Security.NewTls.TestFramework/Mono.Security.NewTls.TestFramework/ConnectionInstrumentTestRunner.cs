@@ -48,7 +48,8 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.Type; }
 		}
 
-		TaskCompletionSource<bool> renegotiationTcs;
+		TaskCompletionSource<bool> renegotiationStartedTcs;
+		TaskCompletionSource<bool> renegotiationCompletedTcs;
 		TaskCompletionSource<bool> serverReadTcs;
 		TaskCompletionSource<bool> serverWriteTcs;
 		TaskCompletionSource<bool> clientReadTcs;
@@ -57,7 +58,8 @@ namespace Mono.Security.NewTls.TestFramework
 		public ConnectionInstrumentTestRunner (IServer server, IClient client, ConnectionInstrumentParameters parameters, MonoConnectionFlags flags)
 			: base (server, client, parameters, flags)
 		{
-			renegotiationTcs = new TaskCompletionSource<bool> ();
+			renegotiationStartedTcs = new TaskCompletionSource<bool> ();
+			renegotiationCompletedTcs = new TaskCompletionSource<bool> ();
 			serverReadTcs = new TaskCompletionSource<bool> ();
 			serverWriteTcs = new TaskCompletionSource<bool> ();
 			clientReadTcs = new TaskCompletionSource<bool> ();
@@ -109,7 +111,7 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case InstrumentationCategory.ClientRenegotiation:
-				// yield return ConnectionInstrumentType.RequestClientRenegotiation;
+				yield return ConnectionInstrumentType.RequestClientRenegotiation;
 				break;
 
 			case InstrumentationCategory.ServerRenegotiation:
@@ -125,6 +127,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.Renegotiation:
 				yield return ConnectionInstrumentType.SendBlobBeforeRenegotiatingHello;
 				yield return ConnectionInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead;
+				yield return ConnectionInstrumentType.RequestClientRenegotiationWithPendingWrite;
 				break;
 
 			case InstrumentationCategory.MartinTest:
@@ -241,11 +244,13 @@ namespace Mono.Security.NewTls.TestFramework
 			case ConnectionInstrumentType.RequestClientRenegotiationWithPendingWrite:
 				parameters.RequestClientRenegotiation = true;
 				parameters.ServerWriteDuringClientRenegotiation = true;
+				parameters.ServerParameters.UseStreamInstrumentation = true;
 				break;
 
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestClientRenegotiation = true;
 				parameters.ServerWriteDuringClientRenegotiation = true;
+				parameters.ServerParameters.UseStreamInstrumentation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
 				};
 				parameters.EnableDebugging = true;
@@ -320,8 +325,32 @@ namespace Mono.Security.NewTls.TestFramework
 
 			if (HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation)) {
 				LogDebug (ctx, 1, "HandleServerWrite - waiting for renegotiation");
-				await renegotiationTcs.Task;
+				await renegotiationCompletedTcs.Task;
 				LogDebug (ctx, 1, "HandleServerWrite - done waiting for renegotiation");
+			}
+
+			if (Parameters.ServerWriteDuringClientRenegotiation) {
+				if (Server.StreamInstrumentation != null) {
+					var readTcs = new TaskCompletionSource<object> ();
+					Server.StreamInstrumentation.OnNextRead (() => {
+						LogDebug (ctx, 1, "HandleServerWrite - next read");
+						readTcs.SetResult (null);
+						return null;
+					}, null);
+					Server.StreamInstrumentation.OnNextWrite (async () => {
+						LogDebug (ctx, 1, "HandleServerWrite - next write");
+						serverReadTcs.SetResult (true);
+						await readTcs.Task;
+					}, async () => {
+						LogDebug (ctx, 1, "HandleServerWrite - next write #1");
+						await renegotiationStartedTcs.Task;
+						LogDebug (ctx, 1, "HandleServerWrite - next write #2");
+						await Task.Delay (1000);
+						LogDebug (ctx, 1, "HandleServerWrite - next write #3");
+					});
+				} else {
+					serverReadTcs.SetResult (true);
+				}
 			}
 
 			await base.HandleServerWrite (ctx, cancellationToken);
@@ -356,11 +385,15 @@ namespace Mono.Security.NewTls.TestFramework
 				LogDebug (ctx, 1, "HandleServer - done waiting for renegotiation");
 			}
 
-			if (!Parameters.QueueServerReadFirst)
-				serverReadTcs.SetResult (false);
-
-			if (Parameters.ServerWriteDuringClientRenegotiation || !Parameters.RequestClientRenegotiation)
+			if (Parameters.ServerWriteDuringClientRenegotiation) {
 				serverWriteTcs.SetResult (true);
+			} else {
+				if (!Parameters.RequestClientRenegotiation)
+					serverWriteTcs.SetResult (true);
+
+				if (!Parameters.QueueServerReadFirst)
+					serverReadTcs.SetResult (false);
+			}
 
 			await base.OnHandleServer (ctx, cancellationToken);
 		}
@@ -372,7 +405,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public override async Task<bool> Shutdown (TestContext ctx, CancellationToken cancellationToken)
 		{
-			renegotiationTcs.TrySetCanceled ();
+			renegotiationCompletedTcs.TrySetCanceled ();
 			LogDebug (ctx, 1, "Shutdown");
 			try {
 				return await base.Shutdown (ctx, cancellationToken);
@@ -381,15 +414,22 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 		}
 
-		void OnRenegotiationCompleted (TestContext ctx)
+		void OnRenegotiationStarted (TestContext ctx, bool server)
 		{
-			LogDebug (ctx, 1, "OnRenegotiationCompleted");
-			renegotiationTcs.SetResult (true);
+			LogDebug (ctx, 1, "OnRenegotiationStarted", server, renegotiationStartedTcs.Task.IsCompleted);
+			renegotiationStartedTcs.TrySetResult (true);
+		}
+
+		void OnRenegotiationCompleted (TestContext ctx, bool server)
+		{
+			LogDebug (ctx, 1, "OnRenegotiationCompleted", server, renegotiationCompletedTcs.Task.IsCompleted);
+			renegotiationCompletedTcs.TrySetResult (server);
 		}
 
 		protected override void Dispose (bool disposing)
 		{
-			renegotiationTcs.TrySetCanceled ();
+			renegotiationStartedTcs.TrySetCanceled ();
+			renegotiationCompletedTcs.TrySetCanceled ();
 			serverReadTcs.TrySetCanceled ();
 			serverWriteTcs.TrySetCanceled ();
 			clientReadTcs.TrySetCanceled ();
@@ -415,9 +455,14 @@ namespace Mono.Security.NewTls.TestFramework
 				Runner = runner;
 			}
 
-			public void RenegotiationCompleted ()
+			public void StartRenegotiation (ITlsContext context)
 			{
-				Runner.OnRenegotiationCompleted (Context);
+				Runner.OnRenegotiationStarted (Context, context.IsServer);
+			}
+
+			public void RenegotiationCompleted (ITlsContext context)
+			{
+				Runner.OnRenegotiationCompleted (Context, context.IsServer);
 			}
 		}
 	}

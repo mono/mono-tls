@@ -71,11 +71,8 @@ namespace Mono.Security.NewTls.TestProvider
 			return settings;
 		}
 
-		protected override async Task<MonoSslStream> Start (TestContext ctx, Socket socket, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
+		protected override async Task<MonoSslStream> Start (TestContext ctx, Stream stream, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
-			ctx.LogMessage ("Accepted connection from {0}.", socket.RemoteEndPoint);
-
-			var stream = new NetworkStream (socket);
 			var server = await ConnectionProvider.CreateServerStreamAsync (stream, Parameters, settings, cancellationToken);
 
 			ctx.LogMessage ("Successfully authenticated server.");

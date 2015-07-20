@@ -29,7 +29,9 @@ namespace Mono.Security.NewTls
 {
 	public interface InstrumentationEventSink
 	{
-		void RenegotiationCompleted ();
+		void StartRenegotiation (ITlsContext context);
+
+		void RenegotiationCompleted (ITlsContext context);
 	}
 }
 

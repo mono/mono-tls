@@ -97,11 +97,11 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 		}
 
-		protected abstract Task<MonoSslStream> Start (TestContext ctx, Socket socket, MSI.MonoTlsSettings settings, CancellationToken cancellationToken);
+		protected abstract Task<MonoSslStream> Start (TestContext ctx, Stream stream, MSI.MonoTlsSettings settings, CancellationToken cancellationToken);
 
 		protected abstract TlsSettings GetSettings (UserSettings userSettings);
 
-		protected sealed override async Task<ISslStream> Start (TestContext ctx, Socket socket, CancellationToken cancellationToken)
+		protected sealed override async Task<ISslStream> Start (TestContext ctx, Stream stream, CancellationToken cancellationToken)
 		{
 			UserSettings userSettings = null;
 			Instrumentation instrumentation = null;
@@ -117,7 +117,7 @@ namespace Mono.Security.NewTls.TestProvider
 			if (instrumentation != null)
 				((TlsSettings)settings).Instrumentation = instrumentation;
 
-			monoSslStream = await Start (ctx, socket, settings, cancellationToken);
+			monoSslStream = await Start (ctx, stream, settings, cancellationToken);
 			return monoSslStream;
 		}
 

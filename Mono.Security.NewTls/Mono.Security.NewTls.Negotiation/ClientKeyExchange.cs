@@ -146,7 +146,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 			#if INSTRUMENTATION
 			if (Session.IsRenegotiated && Context.HasInstrumentationEventSink) {
-				Context.InstrumentationEventSink.RenegotiationCompleted ();
+				Context.InstrumentationEventSink.RenegotiationCompleted (Context);
 			} else if (!Session.IsRenegotiated && Context.HasInstrument (HandshakeInstrumentType.RequestServerRenegotiation)) {
 				Session.IsRenegotiated = true;
 

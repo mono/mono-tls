@@ -45,7 +45,7 @@ namespace Mono.Security.NewTls.Tests
 	public class MartinTest
 	{
 		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTestClient)]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public async Task TestMartinClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
 			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
