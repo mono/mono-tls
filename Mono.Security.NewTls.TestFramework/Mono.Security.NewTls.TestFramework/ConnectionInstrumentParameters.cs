@@ -60,6 +60,7 @@ namespace Mono.Security.NewTls.TestFramework
 			RequestServerRenegotiation = other.RequestServerRenegotiation;
 			RequestClientRenegotiation = other.RequestClientRenegotiation;
 			QueueServerReadFirst = other.QueueServerReadFirst;
+			ServerWriteDuringClientRenegotiation = other.ServerWriteDuringClientRenegotiation;
 			HandshakeInstruments = other.HandshakeInstruments;
 		}
 
@@ -89,6 +90,10 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		public bool QueueServerReadFirst {
+			get; set;
+		}
+
+		public bool ServerWriteDuringClientRenegotiation {
 			get; set;
 		}
 

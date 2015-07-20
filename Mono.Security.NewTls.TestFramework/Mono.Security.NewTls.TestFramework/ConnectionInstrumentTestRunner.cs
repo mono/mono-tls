@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFramework
@@ -61,6 +62,14 @@ namespace Mono.Security.NewTls.TestFramework
 			serverWriteTcs = new TaskCompletionSource<bool> ();
 			clientReadTcs = new TaskCompletionSource<bool> ();
 			clientWriteTcs = new TaskCompletionSource<bool> ();
+		}
+
+		public static bool IsSupported (ConnectionInstrumentParameters parameters, ConnectionProviderType clientType, ConnectionProviderType serverType)
+		{
+			if (parameters.ServerWriteDuringClientRenegotiation && serverType == ConnectionProviderType.OpenSsl)
+				return false;
+
+			return true;
 		}
 
 		public override Instrumentation CreateInstrument (TestContext ctx)
@@ -229,8 +238,14 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.RequestClientRenegotiation = true;
 				break;
 
+			case ConnectionInstrumentType.RequestClientRenegotiationWithPendingWrite:
+				parameters.RequestClientRenegotiation = true;
+				parameters.ServerWriteDuringClientRenegotiation = true;
+				break;
+
 			case ConnectionInstrumentType.MartinTest:
 				parameters.RequestClientRenegotiation = true;
+				parameters.ServerWriteDuringClientRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
 				};
 				parameters.EnableDebugging = true;
@@ -319,6 +334,9 @@ namespace Mono.Security.NewTls.TestFramework
 				var monoSslStream = (IMonoSslStream)Client.SslStream;
 				await monoSslStream.RequestRenegotiation ();
 				LogDebug (ctx, 1, "HandleClient - done waiting for renegotiation");
+
+				if (!Parameters.ServerWriteDuringClientRenegotiation)
+					serverWriteTcs.SetResult (false);
 			}
 
 			clientReadTcs.SetResult (true);
@@ -341,7 +359,8 @@ namespace Mono.Security.NewTls.TestFramework
 			if (!Parameters.QueueServerReadFirst)
 				serverReadTcs.SetResult (false);
 
-			serverWriteTcs.SetResult (true);
+			if (Parameters.ServerWriteDuringClientRenegotiation || !Parameters.RequestClientRenegotiation)
+				serverWriteTcs.SetResult (true);
 
 			await base.OnHandleServer (ctx, cancellationToken);
 		}

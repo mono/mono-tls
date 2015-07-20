@@ -52,10 +52,18 @@ namespace Mono.Security.NewTls.TestFeatures
 			private set;
 		}
 
+		ConnectionInstrumentTestRunner CreateInstance (TestContext ctx, IServer server, IClient client, ConnectionInstrumentParameters parameters, MonoConnectionFlags flags)
+		{
+			if (!ConnectionInstrumentTestRunner.IsSupported (parameters, client.Provider.Type, server.Provider.Type))
+				ctx.IgnoreThisTest ();
+
+			return new ConnectionInstrumentTestRunner (server, client, parameters, flags);
+		}
+
 		public ConnectionInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
 			return MonoTestFeatures.CreateTestRunner<ConnectionInstrumentParameters,ConnectionInstrumentTestRunner> (
-				ctx, (s, c, p, f) => new ConnectionInstrumentTestRunner (s, c, p, f), ConnectionFlags);
+				ctx, (s, c, p, f) => CreateInstance (ctx, s, c, p, f), ConnectionFlags);
 		}
 	}
 }
