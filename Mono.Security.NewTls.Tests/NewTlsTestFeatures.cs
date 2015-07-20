@@ -101,26 +101,6 @@ namespace Mono.Security.NewTls.Tests
 			return new TestFeature (name, description, defaultValue);
 		}
 
-		#if FIXME
-		public readonly TestFeature DotNetConnectionProvider = CreateConnectionFeature (
-			"DotNetConnectionProvider", "DotNetConnectionProvider", ConnectionProviderType.DotNet);
-		public readonly TestFeature MonoConnectionProvider = CreateConnectionFeature (
-			"MonoConnectionProvider", "MonoConnectionProvider", ConnectionProviderType.Mono);
-		public readonly TestFeature OpenSslConnectionProvider = CreateConnectionFeature (
-			"OpenSslConnectionProvider", "OpenSslConnectionProvider", ConnectionProviderType.OpenSsl);
-		#endif
-
-		TestFeature CreateConnectionFeature (string name, string description, ConnectionProviderType type, bool defaultValue = true)
-		{
-			var factory = DependencyInjector.Get<ConnectionProviderFactory> ();
-			if (!factory.IsSupported (type)) {
-				// read-only and disabled
-				return new TestFeature (name, description, () => false);
-			}
-
-			return new TestFeature (name, description, defaultValue);
-		}
-
 		public readonly TestFeature HttpsWithOldTLS = new TestFeature ("HttpsWithOldTLS", "Use Mono's existing web stack with the old TLS", false);
 		public readonly TestFeature HttpsWithNewTLS = new TestFeature ("HttpsWithNewTLS", "Use Mono's existing web stack with the new TLS", true);
 
@@ -135,11 +115,6 @@ namespace Mono.Security.NewTls.Tests
 				yield return DotNetCryptoProvider;
 				yield return MonoCryptoProvider;
 				yield return OpenSslCryptoProvider;
-				#if FIXME
-				yield return DotNetConnectionProvider;
-				yield return MonoConnectionProvider;
-				yield return OpenSslConnectionProvider;
-				#endif
 				yield return HttpsWithOldTLS;
 				yield return HttpsWithNewTLS;
 			}

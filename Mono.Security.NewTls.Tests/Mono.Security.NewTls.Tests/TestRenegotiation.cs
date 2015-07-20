@@ -54,7 +54,7 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		[AsyncTest]
+		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
 		public async Task TestServerWithMonoClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("MonoWithNewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
@@ -64,7 +64,7 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		[AsyncTest]
+		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
 		public async Task TestServerWithDotNetClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("NewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,

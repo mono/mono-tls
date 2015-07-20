@@ -221,28 +221,6 @@ namespace Mono.Security.NewTls.TestFeatures
 			return provider.CreateMonoServer (parameters);
 		}
 
-		public static ClientAndServer CreateClientAndServer (TestContext ctx)
-		{
-			var clientProviderType = GetClientType (ctx);
-			ctx.Assert (clientProviderType, IsProviderSupported);
-			var clientProvider = Factory.GetProvider (clientProviderType);
-
-			var serverProviderType = GetServerType (ctx);
-			ctx.Assert (serverProviderType, IsProviderSupported);
-			var serverProvider = Factory.GetProvider (serverProviderType);
-
-			ClientAndServerParameters clientAndServerParameters = null;
-			var clientParameters = GetClientParameters (ctx, false, ref clientAndServerParameters);
-			var serverParameters = GetServerParameters (ctx, false, ref clientAndServerParameters);
-
-			if (clientAndServerParameters == null)
-				clientAndServerParameters = new ClientAndServerParameters (clientParameters, serverParameters);
-
-			var server = serverProvider.CreateServer (clientAndServerParameters.ServerParameters);
-			var client = clientProvider.CreateClient (clientAndServerParameters.ClientParameters);
-			return new ClientAndServer (server, client, clientAndServerParameters);
-		}
-
 		public static R CreateTestRunner<P,R> (TestContext ctx, MonoConnectionFlags flags, Func<IServer,IClient,P,MonoConnectionFlags,R> constructor)
 			where P : ClientAndServerParameters
 			where R : ClientAndServerTestRunner
