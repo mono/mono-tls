@@ -1,5 +1,5 @@
 ﻿//
-// ConnectionInstrumentType.cs
+// RenegotiationInstrumentType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,11 +27,23 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum ConnectionInstrumentType
+	public enum RenegotiationInstrumentType
 	{
-		MartinTest,
-		MartinClientPuppy,
-		MartinServerPuppy
+		RequestRenegotiation,
+		SendBlobBeforeHelloRequest,
+		SendBlobAfterHelloRequest,
+		SendBlobBeforeAndAfterHelloRequest,
+		SendDuplicateHelloRequest,
+
+		RequestServerRenegotiation,
+		RequestServerRenegotiationWithPendingRead,
+		SendBlobBeforeRenegotiatingHello,
+		SendBlobBeforeRenegotiatingHelloNoPendingRead,
+
+		RequestClientRenegotiation,
+		RequestClientRenegotiationWithPendingWrite,
+
+		MartinTest
 	}
 }
 

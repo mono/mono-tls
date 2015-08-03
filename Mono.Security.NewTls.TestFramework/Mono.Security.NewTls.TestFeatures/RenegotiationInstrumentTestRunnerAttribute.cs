@@ -1,5 +1,5 @@
 ﻿//
-// ConnectionInstrumentTestRunnerAttribute.cs
+// RenegotiationInstrumentTestRunnerAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -34,15 +34,15 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
-	public class ConnectionInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<ConnectionInstrumentTestRunner>
+	public class RenegotiationInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<RenegotiationInstrumentTestRunner>
 	{
-		public ConnectionInstrumentTestRunnerAttribute ()
-			: base (typeof (ConnectionInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		public RenegotiationInstrumentTestRunnerAttribute ()
+			: base (typeof (RenegotiationInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
 		{
 		}
 
-		public ConnectionInstrumentTestRunnerAttribute (MonoConnectionFlags flags)
-			: base (typeof (ConnectionInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		public RenegotiationInstrumentTestRunnerAttribute (MonoConnectionFlags flags)
+			: base (typeof (RenegotiationInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
 		{
 			ConnectionFlags = flags;
 		}
@@ -52,17 +52,17 @@ namespace Mono.Security.NewTls.TestFeatures
 			private set;
 		}
 
-		ConnectionInstrumentTestRunner CreateInstance (TestContext ctx, IServer server, IClient client, ConnectionInstrumentParameters parameters, MonoConnectionFlags flags)
+		RenegotiationInstrumentTestRunner CreateInstance (TestContext ctx, IServer server, IClient client, RenegotiationInstrumentParameters parameters, MonoConnectionFlags flags)
 		{
-			if (!ConnectionInstrumentTestRunner.IsSupported (parameters, client.Provider.Type, server.Provider.Type))
+			if (!RenegotiationInstrumentTestRunner.IsSupported (parameters, client.Provider.Type, server.Provider.Type))
 				ctx.IgnoreThisTest ();
 
-			return new ConnectionInstrumentTestRunner (server, client, parameters, flags);
+			return new RenegotiationInstrumentTestRunner (server, client, parameters, flags);
 		}
 
-		public ConnectionInstrumentTestRunner CreateInstance (TestContext ctx)
+		public RenegotiationInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return MonoTestFeatures.CreateTestRunner<ConnectionInstrumentParameters,ConnectionInstrumentTestRunner> (
+			return MonoTestFeatures.CreateTestRunner<RenegotiationInstrumentParameters,RenegotiationInstrumentTestRunner> (
 				ctx, (s, c, p, f) => CreateInstance (ctx, s, c, p, f), ConnectionFlags);
 		}
 	}

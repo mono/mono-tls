@@ -1,5 +1,5 @@
 ﻿//
-// ConnectionInstrumentParametersAttribute.cs
+// GenericConnectionInstrumentParametersAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -35,31 +35,31 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
-	public class ConnectionInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<ConnectionInstrumentParameters>
+	public class GenericConnectionInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<GenericConnectionInstrumentParameters>
 	{
-		public ConnectionInstrumentType? Type {
+		public GenericConnectionInstrumentType? Type {
 			get; set;
 		}
 
-		public ConnectionInstrumentParametersAttribute (string filter = null)
+		public GenericConnectionInstrumentParametersAttribute (string filter = null)
 			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
 		}
 
-		public ConnectionInstrumentParametersAttribute (ConnectionInstrumentType type)
+		public GenericConnectionInstrumentParametersAttribute (GenericConnectionInstrumentType type)
 			: base (null, TestFlags.Browsable | TestFlags.ContinueOnError)
 		{
 			Type = type;
 		}
 
-		public IEnumerable<ConnectionInstrumentParameters> GetParameters (TestContext ctx, string filter)
+		public IEnumerable<GenericConnectionInstrumentParameters> GetParameters (TestContext ctx, string filter)
 		{
 			if (filter != null)
 				throw new NotImplementedException ();
 
 			var category = ctx.GetParameter<InstrumentationCategory> ();
 
-			var parameters = ConnectionInstrumentTestRunner.GetParameters (ctx, category);
+			var parameters = GenericConnectionInstrumentTestRunner.GetParameters (ctx, category);
 			if (Type != null)
 				return parameters.Where (p => p.Type == Type);
 

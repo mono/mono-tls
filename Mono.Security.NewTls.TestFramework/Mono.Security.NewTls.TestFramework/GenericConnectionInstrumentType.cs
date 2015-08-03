@@ -1,5 +1,5 @@
 ﻿//
-// ConnectionInstrumentType.cs
+// GenericConnectionInstrumentType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,8 +27,11 @@ using System;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum ConnectionInstrumentType
+	public enum GenericConnectionInstrumentType
 	{
+		FragmentHandshakeMessages,
+		SendBlobAfterReceivingFinish,
+
 		MartinTest,
 		MartinClientPuppy,
 		MartinServerPuppy

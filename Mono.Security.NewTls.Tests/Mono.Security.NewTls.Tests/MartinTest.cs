@@ -48,8 +48,8 @@ namespace Mono.Security.NewTls.Tests
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public async Task TestMartinClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+			[RenegotiationInstrumentParameters] RenegotiationInstrumentParameters parameters,
+			[RenegotiationInstrumentTestRunner] RenegotiationInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -58,8 +58,8 @@ namespace Mono.Security.NewTls.Tests
 		[InstrumentationCategory (InstrumentationCategory.MartinTestServer)]
 		public async Task TestMartinServer (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+			[RenegotiationInstrumentParameters] RenegotiationInstrumentParameters parameters,
+			[RenegotiationInstrumentTestRunner] RenegotiationInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -68,8 +68,8 @@ namespace Mono.Security.NewTls.Tests
 		[InstrumentationCategory (InstrumentationCategory.ManualClient)]
 		public async Task TestClientPuppy (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("Manual:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+			[RenegotiationInstrumentParameters] RenegotiationInstrumentParameters parameters,
+			[RenegotiationInstrumentTestRunner] RenegotiationInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -78,8 +78,8 @@ namespace Mono.Security.NewTls.Tests
 		[InstrumentationCategory (InstrumentationCategory.ManualServer)]
 		public async Task TestServerPuppy (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("MonoWithNewTLS:Manual")] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+			[RenegotiationInstrumentParameters] RenegotiationInstrumentParameters parameters,
+			[RenegotiationInstrumentTestRunner] RenegotiationInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

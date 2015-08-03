@@ -30,37 +30,20 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public class ConnectionInstrument : SettingsProvider
 	{
-		public TestContext Context {
-			get;
-			private set;
+		bool? enableDebugging;
+
+		public InstrumentationEventSink EventSink {
+			get; set;
 		}
 
-		public ConnectionInstrumentTestRunner TestRunner {
-			get;
-			private set;
-		}
-
-		public ConnectionInstrumentParameters Parameters {
-			get { return TestRunner.Parameters; }
-		}
-
-		public ConnectionInstrument (UserSettings settings, TestContext ctx, ConnectionInstrumentTestRunner runner)
+		public ConnectionInstrument (UserSettings settings, bool? enableDebugging = null)
 			: base (settings)
 		{
-			Context = ctx;
-			TestRunner = runner;
+			this.enableDebugging = enableDebugging;
 		}
 
 		public override bool? EnableDebugging {
-			get { return Parameters.EnableDebugging; }
-		}
-
-		public override RenegotiationFlags? ClientRenegotiationFlags {
-			get { return Parameters.ClientRenegotiationFlags; }
-		}
-
-		public override RenegotiationFlags? ServerRenegotiationFlags {
-			get { return Parameters.ServerRenegotiationFlags; }
+			get { return enableDebugging; }
 		}
 	}
 }

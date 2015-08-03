@@ -67,8 +67,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentType.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\ConnectionInstrumentParametersAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\ConnectionInstrumentTestRunnerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SimpleConnectionTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SimpleConnectionParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SimpleConnectionType.cs" />
@@ -85,6 +83,20 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IsEqualBlob.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationTestFeatures.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentTestRunner.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentType.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\RenegotiationInstrumentTestRunnerAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\GenericConnectionInstrumentTestRunnerAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\GenericConnectionInstrumentParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\GenericConnectionInstrumentType.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\GenericConnectionInstrumentTestRunner.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\GenericConnectionInstrumentParametersAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\RenegotiationInstrumentParametersAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionHandler.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentConnectionHandler.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentConnectionHandler.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\DefaultInstrumentationConnectionHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

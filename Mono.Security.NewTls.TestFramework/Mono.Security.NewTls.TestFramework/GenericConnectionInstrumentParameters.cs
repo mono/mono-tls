@@ -1,5 +1,5 @@
 ﻿//
-// ConnectionInstrumentType.cs
+// GenericConnectionInstrumentParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,14 +24,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using Xamarin.AsyncTests;
+using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public enum ConnectionInstrumentType
+	public class GenericConnectionInstrumentParameters : ConnectionInstrumentParameters
 	{
-		MartinTest,
-		MartinClientPuppy,
-		MartinServerPuppy
+		public GenericConnectionInstrumentType Type {
+			get;
+			private set;
+		}
+
+		public GenericConnectionInstrumentParameters (InstrumentationCategory category, GenericConnectionInstrumentType type, string identifier, IServerCertificate certificate)
+			: base (category, identifier, certificate)
+		{
+			Type = type;
+		}
+
+		public GenericConnectionInstrumentParameters (InstrumentationCategory category, GenericConnectionInstrumentType type, ClientParameters clientParameters, ServerParameters serverParameters)
+			: base (category, clientParameters, serverParameters)
+		{
+			Type = type;
+		}
+
+		protected GenericConnectionInstrumentParameters (GenericConnectionInstrumentParameters other)
+			: base (other)
+		{
+			Type = other.Type;
+		}
+
+		public override ConnectionParameters DeepClone ()
+		{
+			return new GenericConnectionInstrumentParameters (this);
+		}
 	}
 }
 

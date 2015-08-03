@@ -54,6 +54,11 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
+		protected override InstrumentationConnectionHandler CreateConnectionHandler ()
+		{
+			return new DefaultInstrumentationConnectionHandler (this);
+		}
+
 		public override Instrumentation CreateInstrument (TestContext ctx)
 		{
 			return null;

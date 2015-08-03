@@ -48,8 +48,8 @@ namespace Mono.Security.NewTls.Tests
 		[InstrumentationCategory (InstrumentationCategory.ClientConnection)]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -58,8 +58,8 @@ namespace Mono.Security.NewTls.Tests
 		[InstrumentationCategory (InstrumentationCategory.ServerConnection)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -68,8 +68,8 @@ namespace Mono.Security.NewTls.Tests
 		[InstrumentationCategory (InstrumentationCategory.Connection)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[ConnectionInstrumentParameters] ConnectionInstrumentParameters parameters,
-			[ConnectionInstrumentTestRunner] ConnectionInstrumentTestRunner runner)
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

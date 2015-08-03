@@ -1,5 +1,5 @@
 ﻿//
-// ConnectionInstrumentParameters.cs
+// RenegotiationInstrumentParametersAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,40 +24,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.Resources;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
-	public abstract class ConnectionInstrumentParameters : InstrumentationParameters
+	using TestFramework;
+
+	public class RenegotiationInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<RenegotiationInstrumentParameters>
 	{
-		public ConnectionInstrumentParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
-			: base (category, identifier, certificate)
-		{
-		}
-
-		public ConnectionInstrumentParameters (InstrumentationCategory category, ClientParameters clientParameters, ServerParameters serverParameters)
-			: base (category, clientParameters, serverParameters)
-		{
-		}
-
-		protected ConnectionInstrumentParameters (ConnectionInstrumentParameters other)
-			: base (other)
-		{
-			EnableDebugging = other.EnableDebugging;
-			HandshakeInstruments = other.HandshakeInstruments;
-		}
-
-		public bool EnableDebugging {
+		public RenegotiationInstrumentType? Type {
 			get; set;
 		}
 
-		public HandshakeInstrumentType[] HandshakeInstruments {
-			get; set;
+		public RenegotiationInstrumentParametersAttribute (string filter = null)
+			: base (filter, TestFlags.Browsable | TestFlags.ContinueOnError)
+		{
+		}
+
+		public RenegotiationInstrumentParametersAttribute (RenegotiationInstrumentType type)
+			: base (null, TestFlags.Browsable | TestFlags.ContinueOnError)
+		{
+			Type = type;
+		}
+
+		public IEnumerable<RenegotiationInstrumentParameters> GetParameters (TestContext ctx, string filter)
+		{
+			if (filter != null)
+				throw new NotImplementedException ();
+
+			var category = ctx.GetParameter<InstrumentationCategory> ();
+
+			var parameters = RenegotiationInstrumentTestRunner.GetParameters (ctx, category);
+			if (Type != null)
+				return parameters.Where (p => p.Type == Type);
+
+			return parameters;
 		}
 	}
-
 }
 

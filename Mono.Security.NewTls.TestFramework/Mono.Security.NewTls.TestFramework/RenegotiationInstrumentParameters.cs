@@ -1,5 +1,5 @@
 ﻿//
-// ConnectionInstrumentParameters.cs
+// RenegotiationInstrumentParameters.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -31,33 +31,65 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public abstract class ConnectionInstrumentParameters : InstrumentationParameters
+	public class RenegotiationInstrumentParameters : ConnectionInstrumentParameters
 	{
-		public ConnectionInstrumentParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
+		public RenegotiationInstrumentType Type {
+			get;
+			private set;
+		}
+
+		public RenegotiationInstrumentParameters (InstrumentationCategory category, RenegotiationInstrumentType type, string identifier, IServerCertificate certificate)
 			: base (category, identifier, certificate)
 		{
+			Type = type;
 		}
 
-		public ConnectionInstrumentParameters (InstrumentationCategory category, ClientParameters clientParameters, ServerParameters serverParameters)
+		public RenegotiationInstrumentParameters (InstrumentationCategory category, RenegotiationInstrumentType type, ClientParameters clientParameters, ServerParameters serverParameters)
 			: base (category, clientParameters, serverParameters)
 		{
+			Type = type;
 		}
 
-		protected ConnectionInstrumentParameters (ConnectionInstrumentParameters other)
+		protected RenegotiationInstrumentParameters (RenegotiationInstrumentParameters other)
 			: base (other)
 		{
-			EnableDebugging = other.EnableDebugging;
-			HandshakeInstruments = other.HandshakeInstruments;
+			Type = other.Type;
+			ClientRenegotiationFlags = other.ClientRenegotiationFlags;
+			ServerRenegotiationFlags = other.ServerRenegotiationFlags;
+			RequestServerRenegotiation = other.RequestServerRenegotiation;
+			RequestClientRenegotiation = other.RequestClientRenegotiation;
+			QueueServerReadFirst = other.QueueServerReadFirst;
+			ServerWriteDuringClientRenegotiation = other.ServerWriteDuringClientRenegotiation;
 		}
 
-		public bool EnableDebugging {
+		public override ConnectionParameters DeepClone ()
+		{
+			return new RenegotiationInstrumentParameters (this);
+		}
+
+		public RenegotiationFlags? ClientRenegotiationFlags {
 			get; set;
 		}
 
-		public HandshakeInstrumentType[] HandshakeInstruments {
+		public RenegotiationFlags? ServerRenegotiationFlags {
+			get; set;
+		}
+
+		public bool RequestServerRenegotiation {
+			get; set;
+		}
+
+		public bool RequestClientRenegotiation {
+			get; set;
+		}
+
+		public bool QueueServerReadFirst {
+			get; set;
+		}
+
+		public bool ServerWriteDuringClientRenegotiation {
 			get; set;
 		}
 	}
-
 }
 
