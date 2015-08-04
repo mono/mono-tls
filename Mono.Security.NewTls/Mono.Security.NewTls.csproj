@@ -133,6 +133,23 @@
     <Compile Include="..\..\..\Users\martin\Documents\MartinContext.cs">
       <Link>Mono.Security.NewTls\MartinContext.cs</Link>
     </Compile>
+    <Compile Include="BouncyCastle\math\ec\ECAlgorithms.cs" />
+    <Compile Include="BouncyCastle\math\ec\ECCurve.cs" />
+    <Compile Include="BouncyCastle\math\ec\ECFieldElement.cs" />
+    <Compile Include="BouncyCastle\math\ec\ECPoint.cs" />
+    <Compile Include="BouncyCastle\math\ec\IntArray.cs" />
+    <Compile Include="BouncyCastle\math\ec\abc\SimpleBigDecimal.cs" />
+    <Compile Include="BouncyCastle\math\ec\abc\Tnaf.cs" />
+    <Compile Include="BouncyCastle\math\ec\abc\ZTauElement.cs" />
+    <Compile Include="BouncyCastle\math\ec\multiplier\ECMultiplier.cs" />
+    <Compile Include="BouncyCastle\math\ec\multiplier\FpNafMultiplier.cs" />
+    <Compile Include="BouncyCastle\math\ec\multiplier\PreCompInfo.cs" />
+    <Compile Include="BouncyCastle\math\ec\multiplier\ReferenceMultiplier.cs" />
+    <Compile Include="BouncyCastle\math\ec\multiplier\WNafMultiplier.cs" />
+    <Compile Include="BouncyCastle\math\ec\multiplier\WNafPreCompInfo.cs" />
+    <Compile Include="BouncyCastle\math\ec\multiplier\WTauNafMultiplier.cs" />
+    <Compile Include="BouncyCastle\math\ec\multiplier\WTauNafPreCompInfo.cs" />
+    <Compile Include="BouncyCastle\math\ec\x9\X9IntegerConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">
@@ -147,6 +164,7 @@
     <Folder Include="Mono.Security.NewTls.Extensions\" />
     <Folder Include="Mono.Security.NewTls.Handshake\" />
     <Folder Include="Mono.Security.NewTls.Negotiation\" />
+    <Folder Include="BouncyCastle\math\ec\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
