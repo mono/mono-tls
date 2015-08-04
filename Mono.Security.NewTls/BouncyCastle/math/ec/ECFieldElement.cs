@@ -138,7 +138,7 @@ namespace Org.BouncyCastle.Math.EC
 		public override ECFieldElement Sqrt()
 		{
 			if (!q.TestBit(0))
-				throw Platform.CreateNotImplementedException("even value of q");
+				throw new NotImplementedException("even value of q");
 
 			// p mod 4 == 3
 			if (q.TestBit(1))
