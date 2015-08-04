@@ -200,7 +200,13 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual TlsCertificateRequest GenerateCertificateRequest ()
 		{
-			if (!Settings.AskForClientCertificate)
+			Session.AskedForCertificate = Settings.AskForClientCertificate;
+			#if INSTRUMENTATION
+			if (Renegotiating && Context.HasInstrument (HandshakeInstrumentType.AskForClientCertificate))
+				Session.AskedForCertificate = true;
+			#endif
+
+			if (!Session.AskedForCertificate)
 				return null;
 
 			Session.ClientCertificateParameters = Context.SignatureProvider.GetServerCertificateParameters (Context);

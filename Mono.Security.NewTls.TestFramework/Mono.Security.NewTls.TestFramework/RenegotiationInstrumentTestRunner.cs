@@ -208,10 +208,9 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case RenegotiationInstrumentType.MartinTest:
-				parameters.RequestClientRenegotiation = true;
-				parameters.ServerWriteDuringClientRenegotiation = true;
-				parameters.ServerParameters.UseStreamInstrumentation = true;
+				parameters.RequestServerRenegotiation = true;
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.AskForClientCertificate
 				};
 				parameters.EnableDebugging = true;
 				break;

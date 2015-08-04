@@ -103,6 +103,10 @@ namespace Mono.Security.NewTls
 			get { return hasCertificateParameters; }
 		}
 
+		internal bool AskedForCertificate {
+			get; set;
+		}
+
 		internal ClientCertificateParameters ClientCertificateParameters {
 			get {
 				if (!hasCertificateParameters)

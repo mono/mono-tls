@@ -39,7 +39,7 @@ namespace Mono.Security.NewTls
 		internal static bool CheckClientCertificate (TlsContext context, MX.X509CertificateCollection certificates)
 		{
 			if (certificates == null || certificates.Count < 1) {
-				if (!context.SettingsProvider.AskForClientCertificate)
+				if (!context.SettingsProvider.AskForClientCertificate && !context.Session.AskedForCertificate)
 					return false;
 				if (context.SettingsProvider.RequireClientCertificate)
 					throw new TlsException (AlertDescription.CertificateUnknown);

@@ -45,7 +45,7 @@ namespace Mono.Security.NewTls.Negotiation
 		{
 			switch (message.Type) {
 			case HandshakeType.Certificate:
-				if (!Settings.AskForClientCertificate)
+				if (!Session.AskedForCertificate)
 					throw new TlsException (AlertDescription.UnexpectedMessage);
 				certificate = (TlsCertificate)message;
 				HandleCertificate (certificate);
