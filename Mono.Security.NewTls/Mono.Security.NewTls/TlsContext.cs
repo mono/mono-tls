@@ -104,8 +104,7 @@ namespace Mono.Security.NewTls
 			this.eventSink = eventSink;
 
 			#if INSTRUMENTATION
-			var userSettings = configuration.TlsSettings != null ? configuration.TlsSettings.UserSettings : null;
-			var instrumentation = userSettings != null ? userSettings.Instrumentation : null;
+			var instrumentation = configuration.UserSettings.Instrumentation;
 			if (instrumentation != null) {
 				if (instrumentation.HasSignatureInstrument)
 					signatureProvider = instrumentation.SignatureInstrument;
@@ -119,7 +118,7 @@ namespace Mono.Security.NewTls
 			if (signatureProvider == null)
 				signatureProvider = new SignatureProvider ();
 			if (settingsProvider == null)
-				settingsProvider = new SettingsProvider (configuration.TlsSettings.UserSettings);
+				settingsProvider = new SettingsProvider (configuration.UserSettings);
 
 			session = new Session (configuration);
 			Session.RandomNumberGenerator = RandomNumberGenerator.Create ();
@@ -523,8 +522,7 @@ namespace Mono.Security.NewTls
 				CipherCode = Session.CurrentCrypto.Cipher.Code, ProtocolVersion = protocol
 			};
 
-			if (configuration.TlsSettings != null)
-				configuration.TlsSettings.UserSettings.ConnectionInfo = connectionInfo;
+			configuration.UserSettings.ConnectionInfo = connectionInfo;
 		}
 
 		public TlsConnectionInfo ConnectionInfo {

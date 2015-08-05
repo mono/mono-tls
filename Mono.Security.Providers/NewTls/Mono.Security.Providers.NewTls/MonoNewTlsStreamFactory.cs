@@ -40,7 +40,6 @@ using PrebuiltSystem::Mono.Security.Interface;
 #else
 using Mono.Security.Interface;
 #endif
-using TlsSettings = Mono.Security.NewTls.TlsSettings;
 
 using PSSCX = PrebuiltSystem::System.Security.Cryptography.X509Certificates;
 using SSCX = System.Security.Cryptography.X509Certificates;
@@ -59,7 +58,7 @@ namespace Mono.Security.Providers.NewTls
 		}
 
 		public static MonoNewTlsStream CreateServer (
-			Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, TlsSettings settings,
+			Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, MonoTlsSettings settings,
 			SSCX.X509Certificate serverCertificate, bool clientCertificateRequired,
 			SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
@@ -78,7 +77,7 @@ namespace Mono.Security.Providers.NewTls
 		}
 
 		public static MonoNewTlsStream CreateClient (
-			Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, TlsSettings settings,
+			Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, MonoTlsSettings settings,
 			string targetHost, PSSCX.X509CertificateCollection clientCertificates, SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
 			var stream = new MonoNewTlsStream (innerStream, leaveOpen, certificateValidator, settings);

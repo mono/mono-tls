@@ -24,7 +24,12 @@ namespace Mono.Security.NewTls
 			get { return requestedProtocol; }
 		}
 
-		public TlsSettings TlsSettings {
+		public MonoTlsSettings TlsSettings {
+			get;
+			private set;
+		}
+
+		public UserSettings UserSettings {
 			get;
 			private set;
 		}
@@ -52,23 +57,33 @@ namespace Mono.Security.NewTls
 
 		internal const RenegotiationFlags DefaultRenegotiationFlags = RenegotiationFlags.SecureRenegotiation | RenegotiationFlags.SendClientHelloExtension;
 
-		public TlsConfiguration (TlsProtocols protocols, TlsSettings settings, string targetHost)
+		public TlsConfiguration (TlsProtocols protocols, MonoTlsSettings settings, string targetHost)
 		{
 			supportedProtocols = protocols;
 			requestedProtocol = CheckProtocol (ref supportedProtocols, false);
-			TlsSettings = settings ?? new TlsSettings ();
+			TlsSettings = settings;
 			TargetHost = targetHost;
+
+			if (settings != null)
+				UserSettings = (UserSettings)settings.UserSettings;
+			if (UserSettings == null)
+				UserSettings = new UserSettings ();
 
 			RenegotiationFlags = DefaultRenegotiationFlags;
 		}
 
-		public TlsConfiguration (TlsProtocols protocols, TlsSettings settings, MX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
+		public TlsConfiguration (TlsProtocols protocols, MonoTlsSettings settings, MX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
 		{
 			supportedProtocols = protocols;
 			requestedProtocol = CheckProtocol (ref supportedProtocols, true);
-			TlsSettings = settings ?? new TlsSettings ();
+			TlsSettings = settings;
 			Certificate = certificate;
 			PrivateKey = privateKey;
+
+			if (settings != null)
+				UserSettings = (UserSettings)settings.UserSettings;
+			if (UserSettings == null)
+				UserSettings = new UserSettings ();
 
 			RenegotiationFlags = DefaultRenegotiationFlags;
 		}

@@ -77,8 +77,8 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public TlsConnectionInfo GetConnectionInfo ()
 		{
-			var tlsSettings = settings as TlsSettings;
-			return tlsSettings != null ? tlsSettings.UserSettings.ConnectionInfo : null;
+			var userSettings = (UserSettings)settings.UserSettings;
+			return userSettings != null ? userSettings.ConnectionInfo : null;
 		}
 
 		public bool SupportsInstrumentation {
@@ -99,23 +99,24 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected abstract Task<MonoSslStream> Start (TestContext ctx, Stream stream, MSI.MonoTlsSettings settings, CancellationToken cancellationToken);
 
-		protected abstract TlsSettings GetSettings (UserSettings userSettings);
+		protected abstract void GetSettings (UserSettings settings);
 
 		protected sealed override async Task<ISslStream> Start (TestContext ctx, Stream stream, CancellationToken cancellationToken)
 		{
-			UserSettings userSettings = null;
-			Instrumentation instrumentation = null;
+			UserSettings userSettings = new UserSettings ();
 			if (SupportsInstrumentation && InstrumentationProvider != null) {
-				instrumentation = InstrumentationProvider.CreateInstrument (ctx);
+				var instrumentation = InstrumentationProvider.CreateInstrument (ctx);
 				if (instrumentation != null && instrumentation.HasSettingsInstrument)
 					userSettings = instrumentation.SettingsInstrument.UserSettings;
+				userSettings.Instrumentation = instrumentation;
 			}
 
-			if (ConnectionProvider.IsNewTls)
-				settings = GetSettings (userSettings);
+			GetSettings (userSettings);
 
-			if (instrumentation != null)
-				((TlsSettings)settings).UserSettings.Instrumentation = instrumentation;
+			if (ConnectionProvider.IsNewTls) {
+				settings = new MSI.MonoTlsSettings ();
+				settings.UserSettings = userSettings;
+			}
 
 			monoSslStream = await Start (ctx, stream, settings, cancellationToken);
 			return monoSslStream;

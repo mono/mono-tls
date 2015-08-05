@@ -68,7 +68,6 @@
     <Compile Include="Mono.Security.NewTls\Session.cs" />
     <Compile Include="Mono.Security.NewTls\TlsConfiguration.cs" />
     <Compile Include="Mono.Security.NewTls\TlsContext.cs" />
-    <Compile Include="Mono.Security.NewTls\TlsSettings.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\BlockCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\BlockCipherWithHMac.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\CbcBlockCipher.cs" />

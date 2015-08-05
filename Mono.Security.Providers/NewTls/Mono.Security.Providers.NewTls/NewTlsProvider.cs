@@ -86,11 +86,11 @@ namespace Mono.Security.Providers.NewTls
 			if (serverMode) {
 				var cert = (PSSCX.X509Certificate2)serverCertificate;
 				var monoCert = new MX.X509Certificate (cert.RawData);
-				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, monoCert, cert.PrivateKey);
+				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (MSI.MonoTlsSettings)settings, monoCert, cert.PrivateKey);
 				if (remoteCertRequired)
 					config.AskForClientCertificate = true;
 			} else {
-				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (TlsSettings)settings, hostname);
+				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (MSI.MonoTlsSettings)settings, hostname);
 			}
 
 			config.CertificateValidator = certificateValidator;

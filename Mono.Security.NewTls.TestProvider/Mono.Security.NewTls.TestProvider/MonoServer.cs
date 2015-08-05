@@ -57,18 +57,15 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return true; }
 		}
 
-		protected override TlsSettings GetSettings (UserSettings userSettings)
+		protected override void GetSettings (UserSettings settings)
 		{
-			var settings = new TlsSettings (userSettings);
 			if ((Parameters.Flags & ServerFlags.RequireClientCertificate) != 0)
-				settings.UserSettings.RequireClientCertificate = settings.UserSettings.AskForClientCertificate = true;
+				settings.RequireClientCertificate = settings.AskForClientCertificate = true;
 			else if ((Parameters.Flags & ServerFlags.AskForClientCertificate) != 0)
-				settings.UserSettings.AskForClientCertificate = true;
+				settings.AskForClientCertificate = true;
 
 			if (MonoParameters != null)
-				settings.UserSettings.RequestedCiphers = MonoParameters.ServerCiphers;
-
-			return settings;
+				settings.RequestedCiphers = MonoParameters.ServerCiphers;
 		}
 
 		protected override async Task<MonoSslStream> Start (TestContext ctx, Stream stream, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)

@@ -46,12 +46,12 @@ namespace Mono.Security.Providers.NewTls
 {
 	public class MonoNewTlsStream : SslStream
 	{
-		internal MonoNewTlsStream (Stream innerStream, TlsSettings settings)
+		internal MonoNewTlsStream (Stream innerStream, MonoTlsSettings settings)
 			: this (innerStream, false, null, settings)
 		{
 		}
 
-		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, TlsSettings settings)
+		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, MonoTlsSettings settings)
 			: this (innerStream, leaveOpen, null, settings)
 		{
 		}
