@@ -51,7 +51,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected virtual ConnectionInstrument CreateConnectionInstrument (TestContext ctx, UserSettings settings)
 		{
-			return new ConnectionInstrument (settings, Parameters.EnableDebugging);
+			return new ConnectionInstrument (settings);
 		}
 
 		public sealed override Instrumentation CreateInstrument (TestContext ctx)
@@ -59,6 +59,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var instrumentation = new Instrumentation ();
 
 			var settings = new UserSettings ();
+			settings.EnableDebugging = Parameters.EnableDebugging;
 			var connectionInstrument = CreateConnectionInstrument (ctx, settings);
 
 			instrumentation.SettingsInstrument = connectionInstrument;

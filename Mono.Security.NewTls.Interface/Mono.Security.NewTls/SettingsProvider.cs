@@ -37,6 +37,10 @@ namespace Mono.Security.NewTls
 			get { return settings; }
 		}
 
+		public virtual bool EnableDebugging {
+			get { return settings.EnableDebugging; }
+		}
+
 		public virtual bool AskForClientCertificate {
 			get { return askForClientCertificate ?? settings.AskForClientCertificate; }
 		}
@@ -72,10 +76,6 @@ namespace Mono.Security.NewTls
 		}
 
 		#region Instrumentation override only
-
-		public virtual bool? EnableDebugging {
-			get;
-		}
 
 		public virtual RenegotiationFlags? ClientRenegotiationFlags {
 			get { return null; }

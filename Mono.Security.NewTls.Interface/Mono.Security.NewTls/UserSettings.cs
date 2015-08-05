@@ -38,6 +38,10 @@ namespace Mono.Security.NewTls
 		bool hasSignatureParameters;
 		bool hasClientCertParameters;
 
+		public bool EnableDebugging {
+			get; set;
+		}
+
 		public bool AskForClientCertificate {
 			get { return askForCert || requireCert; }
 			set { askForCert = value; }

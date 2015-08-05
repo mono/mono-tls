@@ -30,20 +30,13 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public class ConnectionInstrument : SettingsProvider
 	{
-		bool? enableDebugging;
-
 		public InstrumentationEventSink EventSink {
 			get; set;
 		}
 
-		public ConnectionInstrument (UserSettings settings, bool? enableDebugging = null)
+		public ConnectionInstrument (UserSettings settings)
 			: base (settings)
 		{
-			this.enableDebugging = enableDebugging;
-		}
-
-		public override bool? EnableDebugging {
-			get { return enableDebugging; }
 		}
 	}
 }

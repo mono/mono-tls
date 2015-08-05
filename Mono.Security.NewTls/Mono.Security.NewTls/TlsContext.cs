@@ -127,9 +127,7 @@ namespace Mono.Security.NewTls
 			else
 				negotiationHandler = CreateNegotiationHandler (NegotiationState.InitialClientConnection);
 
-			if (Configuration.TlsSettings != null && Configuration.TlsSettings.EnableDebugging)
-				EnableDebugging = true;
-			else if (settingsProvider.EnableDebugging ?? false)
+			if (settingsProvider.EnableDebugging)
 				EnableDebugging = true;
 
 			settingsProvider.Initialize (this);
