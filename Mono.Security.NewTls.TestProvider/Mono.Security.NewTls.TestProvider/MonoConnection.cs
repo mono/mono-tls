@@ -78,7 +78,7 @@ namespace Mono.Security.NewTls.TestProvider
 		public TlsConnectionInfo GetConnectionInfo ()
 		{
 			var tlsSettings = settings as TlsSettings;
-			return tlsSettings != null ? tlsSettings.ConnectionInfo : null;
+			return tlsSettings != null ? tlsSettings.UserSettings.ConnectionInfo : null;
 		}
 
 		public bool SupportsInstrumentation {

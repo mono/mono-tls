@@ -92,6 +92,15 @@ namespace Mono.Security.NewTls
 			}
 		}
 
+		#region Provided by the server
+
+		[CLSCompliant (false)]
+		public TlsConnectionInfo ConnectionInfo {
+			get;
+			internal set;
+		}
+
+		#endregion
 
 		#if INSTRUMENTATION
 

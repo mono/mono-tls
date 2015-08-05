@@ -33,15 +33,6 @@ namespace Mono.Security.NewTls
 
 		#endregion
 
-		#region Provided by the server
-
-		[CLSCompliant (false)]
-		public TlsConnectionInfo ConnectionInfo {
-			get;
-			internal set;
-		}
-
-		#endregion
 	}
 }
 

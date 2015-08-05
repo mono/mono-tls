@@ -524,7 +524,7 @@ namespace Mono.Security.NewTls
 			};
 
 			if (configuration.TlsSettings != null)
-				configuration.TlsSettings.ConnectionInfo = connectionInfo;
+				configuration.TlsSettings.UserSettings.ConnectionInfo = connectionInfo;
 		}
 
 		public TlsConnectionInfo ConnectionInfo {
