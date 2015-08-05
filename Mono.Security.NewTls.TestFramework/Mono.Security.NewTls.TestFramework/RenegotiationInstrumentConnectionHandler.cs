@@ -35,6 +35,7 @@ using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
+using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -57,6 +58,17 @@ namespace Mono.Security.NewTls.TestFramework
 
 		TaskCompletionSource<bool> renegotiationStartedTcs;
 		TaskCompletionSource<bool> renegotiationCompletedTcs;
+
+		protected override bool NeedCustomCertificateSelectionCallback {
+			get { return Parameters.NeedCustomCertificateSelectionCallback; }
+		}
+
+		protected override IClientCertificate OnCertificateSelectionCallback (TestContext ctx, string targetHost, ICertificate[] localCertificates, ICertificate remoteCertificate, string[] acceptableIssuers)
+		{
+			LogDebug (ctx, 1, "CertificateSelectionCallback", targetHost, localCertificates != null ? localCertificates.Length : -1,
+				remoteCertificate, acceptableIssuers != null ? acceptableIssuers.Length : -1);
+			return base.OnCertificateSelectionCallback (ctx, targetHost, localCertificates, remoteCertificate, acceptableIssuers);
+		}
 
 		protected override async Task HandleClientRead (TestContext ctx, CancellationToken cancellationToken)
 		{

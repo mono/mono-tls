@@ -33,6 +33,8 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.HttpFramework;
+using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -73,6 +75,27 @@ namespace Mono.Security.NewTls.TestFramework
 		TaskCompletionSource<bool> clientWriteTcs;
 		TaskCompletionSource<bool> serverReadTcs;
 		TaskCompletionSource<bool> serverWriteTcs;
+
+		public void InitializeConnection (TestContext ctx)
+		{
+			if (NeedCustomCertificateSelectionCallback) {
+				var provider = DependencyInjector.Get<ICertificateProvider> ();
+				var selector = provider.GetCustomCertificateSelector ((t, lc, rc, ai) => OnCertificateSelectionCallback (ctx, t, lc, rc, ai));
+				Parameters.ClientParameters.ClientCertificateSelector = selector;
+			}
+		}
+
+		protected virtual bool NeedCustomCertificateSelectionCallback {
+			get { return false; }
+		}
+
+		protected virtual IClientCertificate OnCertificateSelectionCallback (
+			TestContext ctx, string targetHost, ICertificate[] localCertificates,
+			ICertificate remoteCertificate, string[] acceptableIssuers)
+		{
+			// Derived classes must override this when using 'NeedCustomCertificateSelectionCallback'.
+			throw new NotImplementedException ();
+		}
 
 		protected static Task FinishedTask {
 			get { return Task.FromResult<object> (null); }

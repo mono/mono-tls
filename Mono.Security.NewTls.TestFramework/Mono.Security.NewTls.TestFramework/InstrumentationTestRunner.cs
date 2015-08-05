@@ -74,6 +74,12 @@ namespace Mono.Security.NewTls.TestFramework
 			ConnectionHandler = CreateConnectionHandler ();
 		}
 
+		protected override void InitializeConnection (TestContext ctx)
+		{
+			ConnectionHandler.InitializeConnection (ctx);
+			base.InitializeConnection (ctx);
+		}
+
 		protected abstract InstrumentationConnectionHandler CreateConnectionHandler ();
 
 		public abstract Instrumentation CreateInstrument (TestContext ctx);

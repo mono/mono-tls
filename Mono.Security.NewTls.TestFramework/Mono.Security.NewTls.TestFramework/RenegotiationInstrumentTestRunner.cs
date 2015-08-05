@@ -212,6 +212,7 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
 					HandshakeInstrumentType.AskForClientCertificate
 				};
+				parameters.NeedCustomCertificateSelectionCallback = true;
 				parameters.EnableDebugging = true;
 				break;
 

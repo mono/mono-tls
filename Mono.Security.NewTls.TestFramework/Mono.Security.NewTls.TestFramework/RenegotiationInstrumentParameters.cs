@@ -60,6 +60,7 @@ namespace Mono.Security.NewTls.TestFramework
 			RequestClientRenegotiation = other.RequestClientRenegotiation;
 			QueueServerReadFirst = other.QueueServerReadFirst;
 			ServerWriteDuringClientRenegotiation = other.ServerWriteDuringClientRenegotiation;
+			NeedCustomCertificateSelectionCallback = other.NeedCustomCertificateSelectionCallback;
 		}
 
 		public override ConnectionParameters DeepClone ()
@@ -88,6 +89,10 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		public bool ServerWriteDuringClientRenegotiation {
+			get; set;
+		}
+
+		public bool NeedCustomCertificateSelectionCallback {
 			get; set;
 		}
 	}
