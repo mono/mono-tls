@@ -214,6 +214,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var protocol = GetProtocol (parameters, false);
 
 			CallbackHelpers.AddCertificateValidator (settings, parameters.ClientCertificateValidator);
+			CallbackHelpers.AddCertificateSelector (settings, parameters.ClientCertificateSelector);
 			var clientCertificates = CallbackHelpers.GetClientCertificates (parameters);
 
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
