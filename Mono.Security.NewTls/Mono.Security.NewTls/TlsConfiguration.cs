@@ -191,22 +191,6 @@ namespace Mono.Security.NewTls
 			PrivateKey = null;
 			Certificate = null;
 		}
-
-		#if INSTRUMENTATION
-
-		public bool HasInstrumentation {
-			get { return TlsSettings != null && TlsSettings.Instrumentation != null; }
-		}
-
-		public Instrumentation Instrumentation {
-			get {
-				if (!HasInstrumentation)
-					throw new InvalidOperationException ();
-				return TlsSettings.Instrumentation;
-			}
-		}
-
-		#endif
 	}
 }
 

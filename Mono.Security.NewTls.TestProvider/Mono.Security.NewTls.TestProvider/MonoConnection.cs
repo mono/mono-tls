@@ -115,7 +115,7 @@ namespace Mono.Security.NewTls.TestProvider
 				settings = GetSettings (userSettings);
 
 			if (instrumentation != null)
-				((TlsSettings)settings).Instrumentation = instrumentation;
+				((TlsSettings)settings).UserSettings.Instrumentation = instrumentation;
 
 			monoSslStream = await Start (ctx, stream, settings, cancellationToken);
 			return monoSslStream;

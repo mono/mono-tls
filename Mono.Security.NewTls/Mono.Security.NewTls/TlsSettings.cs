@@ -42,14 +42,6 @@ namespace Mono.Security.NewTls
 		}
 
 		#endregion
-
-		#if INSTRUMENTATION
-
-		public Instrumentation Instrumentation {
-			get; set;
-		}
-
-		#endif
 	}
 }
 

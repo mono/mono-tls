@@ -91,6 +91,15 @@ namespace Mono.Security.NewTls
 				hasSignatureParameters = true;
 			}
 		}
+
+
+		#if INSTRUMENTATION
+
+		public Instrumentation Instrumentation {
+			get; set;
+		}
+
+		#endif
 	}
 }
 

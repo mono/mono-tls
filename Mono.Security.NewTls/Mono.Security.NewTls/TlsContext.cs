@@ -104,13 +104,15 @@ namespace Mono.Security.NewTls
 			this.eventSink = eventSink;
 
 			#if INSTRUMENTATION
-			if (configuration.HasInstrumentation) {
-				if (configuration.Instrumentation.HasSignatureInstrument)
-					signatureProvider = configuration.Instrumentation.SignatureInstrument;
-				if (configuration.Instrumentation.HasSettingsInstrument)
-					settingsProvider = configuration.Instrumentation.SettingsInstrument;
-				handshakeInstruments = configuration.Instrumentation.HandshakeInstruments;
-				instrumentationEventSink = configuration.Instrumentation.EventSink;
+			var userSettings = configuration.TlsSettings != null ? configuration.TlsSettings.UserSettings : null;
+			var instrumentation = userSettings != null ? userSettings.Instrumentation : null;
+			if (instrumentation != null) {
+				if (instrumentation.HasSignatureInstrument)
+					signatureProvider = instrumentation.SignatureInstrument;
+				if (instrumentation.HasSettingsInstrument)
+					settingsProvider = instrumentation.SettingsInstrument;
+				handshakeInstruments = instrumentation.HandshakeInstruments;
+				instrumentationEventSink = instrumentation.EventSink;
 			}
 			#endif
 
