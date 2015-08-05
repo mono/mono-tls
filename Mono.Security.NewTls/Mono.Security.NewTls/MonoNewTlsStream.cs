@@ -47,17 +47,12 @@ namespace Mono.Security.Providers.NewTls
 	public class MonoNewTlsStream : SslStream
 	{
 		internal MonoNewTlsStream (Stream innerStream, MonoTlsSettings settings)
-			: this (innerStream, false, null, settings)
+			: this (innerStream, false, settings)
 		{
 		}
 
 		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, MonoTlsSettings settings)
-			: this (innerStream, leaveOpen, null, settings)
-		{
-		}
-
-		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, MonoTlsSettings settings)
-			: base (innerStream, leaveOpen, certificateValidator, EncryptionPolicy.RequireEncryption, settings)
+			: base (innerStream, leaveOpen, EncryptionPolicy.RequireEncryption, settings)
 		{
 		}
 

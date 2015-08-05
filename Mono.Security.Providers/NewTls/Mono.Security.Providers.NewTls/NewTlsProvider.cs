@@ -70,17 +70,16 @@ namespace Mono.Security.Providers.NewTls
 
 		public override MSI.MonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
-			MSI.ICertificateValidator certificateValidator,
 			MSI.MonoTlsSettings settings = null)
 		{
-			return MonoNewTlsStreamFactory.CreateSslStream (innerStream, leaveInnerStreamOpen, certificateValidator, settings);
+			return MonoNewTlsStreamFactory.CreateSslStream (innerStream, leaveInnerStreamOpen, settings);
 		}
 
 		public override MSI.IMonoTlsContext CreateTlsContext (
 			string hostname, bool serverMode, MSI.TlsProtocols protocolFlags,
 			SSCX.X509Certificate serverCertificate, PSSCX.X509CertificateCollection clientCertificates,
 			bool remoteCertRequired, MSI.MonoEncryptionPolicy encryptionPolicy,
-			MSI.ICertificateValidator certificateValidator, MSI.MonoTlsSettings settings)
+			MSI.MonoTlsSettings settings)
 		{
 			TlsConfiguration config;
 			if (serverMode) {
@@ -92,8 +91,6 @@ namespace Mono.Security.Providers.NewTls
 			} else {
 				config = new TlsConfiguration ((TlsProtocols)protocolFlags, (MSI.MonoTlsSettings)settings, hostname);
 			}
-
-			config.CertificateValidator = certificateValidator;
 
 			return new TlsContextWrapper (config, serverMode);
 		}

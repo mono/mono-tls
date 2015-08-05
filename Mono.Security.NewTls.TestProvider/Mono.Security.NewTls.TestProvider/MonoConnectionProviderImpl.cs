@@ -151,14 +151,15 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public MonoSslStream CreateServerStream (Stream stream, ServerParameters parameters)
 		{
+			var settings = new MSI.MonoTlsSettings ();
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
 
 			var protocol = GetProtocol (parameters, true);
-			var validator = CallbackHelpers.GetCertificateValidator (parameters.ServerCertificateValidator);
+			CallbackHelpers.AddCertificateValidator (settings, parameters.ServerCertificateValidator);
 
 			var askForCert = (parameters.Flags & (ServerFlags.AskForClientCertificate|ServerFlags.RequireClientCertificate)) != 0;
 
-			var sslStream = tlsProvider.CreateSslStream (stream, false, validator);
+			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
 			sslStream.AuthenticateAsServer (certificate, askForCert, protocol, false);
 
 			return new MonoSslStream (sslStream);
@@ -171,7 +172,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public Task<MonoSslStream> CreateServerStreamAsync (Stream stream, ServerParameters parameters, CancellationToken cancellationToken)
 		{
-			return CreateServerStreamAsync (stream, parameters, null, cancellationToken);
+			return CreateServerStreamAsync (stream, parameters, new MSI.MonoTlsSettings (), cancellationToken);
 		}
 
 		public async Task<MonoSslStream> CreateServerStreamAsync (Stream stream, ServerParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
@@ -179,15 +180,11 @@ namespace Mono.Security.NewTls.TestProvider
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
 			var protocol = GetProtocol (parameters, true);
 
-			MSI.ICertificateValidator validator = null;
-			if (settings != null)
-				CallbackHelpers.AddCertificateValidator (settings, parameters.ServerCertificateValidator);
-			else
-				validator = CallbackHelpers.GetCertificateValidator (parameters.ServerCertificateValidator);
+			CallbackHelpers.AddCertificateValidator (settings, parameters.ServerCertificateValidator);
 
 			var askForCert = (parameters.Flags & (ServerFlags.AskForClientCertificate|ServerFlags.RequireClientCertificate)) != 0;
 
-			var sslStream = tlsProvider.CreateSslStream (stream, false, validator, settings);
+			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
 			var monoSslStream = new MonoSslStream (sslStream);
 
 			try {
@@ -209,22 +206,17 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public Task<MonoSslStream> CreateClientStreamAsync (Stream stream, string targetHost, ClientParameters parameters, CancellationToken cancellationToken)
 		{
-			return CreateClientStreamAsync (stream, targetHost, parameters, null, cancellationToken);
+			return CreateClientStreamAsync (stream, targetHost, parameters, new MSI.MonoTlsSettings (), cancellationToken);
 		}
 
 		public async Task<MonoSslStream> CreateClientStreamAsync (Stream stream, string targetHost, ClientParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
 			var protocol = GetProtocol (parameters, false);
 
-			MSI.ICertificateValidator validator = null;
-			if (settings != null)
-				CallbackHelpers.AddCertificateValidator (settings, parameters.ClientCertificateValidator);
-			else
-				validator = CallbackHelpers.GetCertificateValidator (parameters.ClientCertificateValidator);
-
+			CallbackHelpers.AddCertificateValidator (settings, parameters.ClientCertificateValidator);
 			var clientCertificates = CallbackHelpers.GetClientCertificates (parameters);
 
-			var sslStream = tlsProvider.CreateSslStream (stream, false, validator, settings);
+			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
 			var monoSslStream = new MonoSslStream (sslStream);
 
 			try {

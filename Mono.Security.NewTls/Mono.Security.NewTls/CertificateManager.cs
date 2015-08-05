@@ -14,9 +14,7 @@ namespace Mono.Security.NewTls
 			if (certificates == null || certificates.Count < 1)
 				throw new TlsException (AlertDescription.CertificateUnknown);
 
-			var helper = config.CertificateValidator;
-			if (helper == null)
-				helper = CertificateValidationHelper.CreateDefaultValidator (config.TlsSettings);
+			var helper = CertificateValidationHelper.GetValidator (config.TlsSettings);
 
 			var result = helper.ValidateChain (config.TargetHost, certificates);
 			if (result != null && result.Trusted && !result.UserDenied)
@@ -53,9 +51,7 @@ namespace Mono.Security.NewTls
 				}
 			}
 
-			var helper = context.Configuration.CertificateValidator;
-			if (helper == null)
-				helper = CertificateValidationHelper.CreateDefaultValidator (context.Configuration.TlsSettings);
+			var helper = CertificateValidationHelper.GetValidator (context.Configuration.TlsSettings);
 
 			var result = helper.ValidateClientCertificate (certificates);
 			if (result != null && result.Trusted && !result.UserDenied)

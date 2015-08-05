@@ -167,10 +167,6 @@ namespace Mono.Security.NewTls
 			private set;
 		}
 
-		public ICertificateValidator CertificateValidator {
-			get; set;
-		}
-
 		#endregion
 
 		#region Common Configuration

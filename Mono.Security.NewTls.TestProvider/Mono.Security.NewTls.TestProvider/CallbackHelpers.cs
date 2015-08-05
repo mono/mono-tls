@@ -62,18 +62,6 @@ namespace Mono.Security.NewTls.TestProvider
 			return ((CertificateValidator)validator).ValidationCallback;
 		}
 
-		internal static MSI.ICertificateValidator GetCertificateValidator (ICertificateValidator validator)
-		{
-			if (validator == null)
-				return null;
-
-			var settings = new MSI.MonoTlsSettings ();
-			settings.ServerCertificateValidationCallback = (s, c, ch, e) => {
-				return ((CertificateValidator)validator).ValidationCallback (s, c, ch, (SslPolicyErrors)e);
-			};
-			return MSI.CertificateValidationHelper.CreateDefaultValidator (settings);
-		}
-
 		internal static X509Certificate2Collection GetClientCertificates (ClientParameters parameters)
 		{
 			if (parameters.ClientCertificate == null)

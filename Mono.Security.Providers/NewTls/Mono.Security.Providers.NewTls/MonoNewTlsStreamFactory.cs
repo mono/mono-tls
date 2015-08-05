@@ -50,19 +50,18 @@ namespace Mono.Security.Providers.NewTls
 	{
 		internal static MonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
-			ICertificateValidator certificateValidator,
 			MonoTlsSettings settings = null)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, certificateValidator, settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, settings);
 			return new MonoSslStreamImpl (stream);
 		}
 
 		public static MonoNewTlsStream CreateServer (
-			Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, MonoTlsSettings settings,
+			Stream innerStream, bool leaveOpen, MonoTlsSettings settings,
 			SSCX.X509Certificate serverCertificate, bool clientCertificateRequired,
 			SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveOpen, certificateValidator, settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveOpen, settings);
 
 			try {
 				stream.AuthenticateAsServer (serverCertificate, clientCertificateRequired, enabledSslProtocols, checkCertificateRevocation);
@@ -77,10 +76,10 @@ namespace Mono.Security.Providers.NewTls
 		}
 
 		public static MonoNewTlsStream CreateClient (
-			Stream innerStream, bool leaveOpen, ICertificateValidator certificateValidator, MonoTlsSettings settings,
+			Stream innerStream, bool leaveOpen, MonoTlsSettings settings,
 			string targetHost, PSSCX.X509CertificateCollection clientCertificates, SslProtocols enabledSslProtocols, bool checkCertificateRevocation)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveOpen, certificateValidator, settings);
+			var stream = new MonoNewTlsStream (innerStream, leaveOpen, settings);
 
 			try {
 				stream.AuthenticateAsClient (targetHost, clientCertificates, enabledSslProtocols, checkCertificateRevocation);
