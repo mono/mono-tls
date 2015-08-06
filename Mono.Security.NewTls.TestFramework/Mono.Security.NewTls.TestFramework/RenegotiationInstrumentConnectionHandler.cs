@@ -63,11 +63,20 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.NeedCustomCertificateSelectionCallback; }
 		}
 
-		protected override IClientCertificate OnCertificateSelectionCallback (TestContext ctx, string targetHost, ICertificate[] localCertificates, ICertificate remoteCertificate, string[] acceptableIssuers)
+		protected override IClientCertificate OnCertificateSelectionCallback (
+			TestContext ctx, string targetHost, ICertificate[] localCertificates,
+			ICertificate remoteCertificate, string[] acceptableIssuers)
 		{
-			LogDebug (ctx, 1, "CertificateSelectionCallback", targetHost, localCertificates != null ? localCertificates.Length : -1,
-				remoteCertificate, acceptableIssuers != null ? acceptableIssuers.Length : -1);
-			return base.OnCertificateSelectionCallback (ctx, targetHost, localCertificates, remoteCertificate, acceptableIssuers);
+			LogDebug (ctx, 1, "CertificateSelectionCallback", renegotiationStartedTcs.Task.Status, targetHost,
+				localCertificates != null ? localCertificates.Length : -1, remoteCertificate,
+				acceptableIssuers != null ? acceptableIssuers.Length : -1);
+			if (renegotiationStartedTcs.Task.IsCompleted) {
+				ctx.Assert (remoteCertificate, Is.Not.Null, "have remote certificate");
+				return ResourceManager.MonkeyCertificate;
+			} else {
+				ctx.Assert (remoteCertificate, Is.Null, "first call");
+				return null;
+			}
 		}
 
 		protected override async Task HandleClientRead (TestContext ctx, CancellationToken cancellationToken)
