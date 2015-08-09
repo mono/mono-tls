@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Security;
 using Mono.Security.Interface;
+using Mono.Security.X509.Extensions;
 
 namespace Mono.Security.NewTls
 {
@@ -58,6 +59,80 @@ namespace Mono.Security.NewTls
 				return true;
 
 			throw new TlsException (AlertDescription.CertificateUnknown);
+		}
+
+		internal static bool VerifyServerCertificate (TlsContext context, MX.X509Certificate certificate, ExchangeAlgorithmType algorithm)
+		{
+			if (certificate.KeyAlgorithm != null && !certificate.KeyAlgorithm.Equals (OidKeyAlgorithmRsa))
+				return false;
+			if (certificate.SignatureAlgorithm != null && !VerifySignatureAlgorithm (certificate.SignatureAlgorithm))
+				return false;
+
+			switch (algorithm) {
+			case ExchangeAlgorithmType.RsaSign:
+				return VerifyKeyUsage (certificate, KeyUsages.keyEncipherment);
+
+			case ExchangeAlgorithmType.DiffieHellman:
+				return VerifyKeyUsage (certificate, KeyUsages.digitalSignature);
+
+			default:
+				throw new TlsException (AlertDescription.InternalError);
+			}
+		}
+
+		const string OidKeyUsage = "2.5.29.15";
+		const string OidExtendedKeyUsage = "2.5.29.37";
+
+		const string OidServerAuth = "1.3.6.1.5.5.7.3.1";
+
+		const string OidKeyAlgorithmRsa = "1.2.840.113549.1.1.1";
+
+		static bool VerifySignatureAlgorithm (string algorithm)
+		{
+			switch (algorithm) {
+			case "1.2.840.113549.1.1.4":    // MD5 with RSA encryption
+			case "1.2.840.113549.1.1.5":    // SHA-1 with RSA Encryption
+			case "1.3.14.3.2.29":           // SHA1 with RSA signature
+			case "1.2.840.113549.1.1.11":   // SHA-256 with RSA Encryption
+			case "1.2.840.113549.1.1.12":   // SHA-384 with RSA Encryption
+			case "1.2.840.113549.1.1.13":   // SHA-512 with RSA Encryption
+				return true;
+
+			default:
+				return false;
+			}
+		}
+
+		internal static bool VerifyKeyUsage (MX.X509Certificate certificate, KeyUsages keyUsages)
+		{
+			if (certificate.Extensions == null)
+				return true;
+
+			KeyUsageExtension kux = null;
+			ExtendedKeyUsageExtension eku = null;
+
+			var xtn = certificate.Extensions [OidKeyUsage];
+			if (xtn != null)
+				kux = new KeyUsageExtension (xtn);
+
+			xtn = certificate.Extensions [OidExtendedKeyUsage];
+			if (xtn != null)
+				eku = new ExtendedKeyUsageExtension (xtn);
+
+			if ((kux != null) && (eku != null)) {
+				// RFC3280 states that when both KeyUsageExtension and
+				// ExtendedKeyUsageExtension are present then BOTH should
+				// be valid
+				if (!kux.Support (keyUsages))
+					return false;
+				return eku.KeyPurpose.Contains (OidServerAuth);
+			} else if (kux != null) {
+				return kux.Support (keyUsages);
+			} else if (eku != null) {
+				return eku.KeyPurpose.Contains (OidServerAuth);
+			}
+
+			return true;
 		}
 	}
 }

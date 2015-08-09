@@ -17,6 +17,12 @@ namespace Mono.Security.NewTls.Cipher
 				throw new TlsException (AlertDescription.ProtocolVersion);
 		}
 
+		public static ExchangeAlgorithmType GetExchangeAlgorithmType (TlsProtocolCode protocol, CipherSuiteCode code)
+		{
+			var cipher = CreateCipherSuite (protocol, code);
+			return cipher.ExchangeAlgorithmType;
+		}
+
 		static CipherSuite CreateCipherSuiteTls12 (CipherSuiteCode code)
 		{
 			// Sanity check.

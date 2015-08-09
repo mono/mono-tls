@@ -46,6 +46,16 @@ namespace Mono.Security.NewTls.Cipher
 			return new CipherSuiteCollection (Protocol, innerList.ToArray ());
 		}
 
+		public CipherSuiteCollection Filter (Func<CipherSuiteCode,bool> filter)
+		{
+			var copy = new CipherSuiteCollection (Protocol, null);
+			foreach (var code in innerList) {
+				if (filter (code))
+					copy.Add (code);
+			}
+			return copy;
+		}
+
 		#region IList implementation
 
 		public int IndexOf (CipherSuiteCode item)

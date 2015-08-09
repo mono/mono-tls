@@ -110,13 +110,22 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void SelectCipher (TlsClientHello message)
 		{
-			CipherSuiteCollection supportedCiphers;
-			if (Settings.RequestedCiphers != null)
-				supportedCiphers = new CipherSuiteCollection (Context.NegotiatedProtocol, Settings.RequestedCiphers);
-			else
-				supportedCiphers = CipherSuiteFactory.GetDefaultCiphers (Context.NegotiatedProtocol);
+			var certificate = Config.Certificate;
+			if (certificate == null)
+				throw new TlsException (AlertDescription.HandshakeFailure, "Missing server certificate");
+			if (certificate.Version < 3)
+				throw new TlsException (AlertDescription.UnsupportedCertificate, "X.509v3 server certificate required");
 
-			HandshakeParameters.SupportedCiphers = supportedCiphers;
+			CipherSuiteCollection requestedCiphers;
+			if (Settings.RequestedCiphers != null)
+				requestedCiphers = new CipherSuiteCollection (Context.NegotiatedProtocol, Settings.RequestedCiphers);
+			else
+				requestedCiphers = CipherSuiteFactory.GetDefaultCiphers (Context.NegotiatedProtocol);
+
+			HandshakeParameters.SupportedCiphers = requestedCiphers.Filter (cipher => {
+				var exchangeAlgorithm = CipherSuiteFactory.GetExchangeAlgorithmType (Context.NegotiatedProtocol, cipher);
+				return CertificateManager.VerifyServerCertificate (Context, certificate, exchangeAlgorithm);
+			});
 
 			CipherSuite selectedCipher = null;
 			foreach (var code in message.ClientCiphers) {
@@ -143,6 +152,8 @@ namespace Mono.Security.NewTls.Negotiation
 
 			// FIXME: Select best one.
 			Session.PendingCrypto = selectedCipher.Initialize (true, Context.NegotiatedProtocol);
+			Session.PendingCrypto.ServerCertificates = new X509CertificateCollection ();
+			Session.PendingCrypto.ServerCertificates.Add (certificate);
 		}
 
 		protected virtual void ProcessExtensions (TlsClientHello message)
@@ -158,14 +169,6 @@ namespace Mono.Security.NewTls.Negotiation
 				HandshakeParameters.ActiveExtensions.Add (extension);
 		}
 
-		protected virtual X509CertificateCollection GetCertificates ()
-		{
-			var certificates = new X509CertificateCollection ();
-			if (Config.Certificate != null)
-				certificates.Add (Config.Certificate);
-			return certificates;
-		}
-
 		protected virtual TlsServerHello GenerateServerHello ()
 		{
 			var serverUnixTime = HandshakeParameters.GetUnixTime ();
@@ -179,7 +182,6 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual TlsCertificate GenerateServerCertificate ()
 		{
-			PendingCrypto.ServerCertificates = GetCertificates ();
 			return new TlsCertificate (PendingCrypto.ServerCertificates);
 		}
 
