@@ -90,11 +90,25 @@ namespace Mono.Security.NewTls
 			private set;
 		}
 
-		void OnError (TlsException error)
+		byte[] OnError (TlsException error)
 		{
 			LastError = error;
 			if (eventSink != null)
 				eventSink.Error (error);
+
+			#if INSTRUMENTATION
+			if (HasInstrument (HandshakeInstrumentType.DontSendAlerts))
+				return null;
+			#endif
+
+			if (negotiationHandler == null || !negotiationHandler.CanSendAlert)
+				return null;
+
+			try {
+				return CreateAlert (error.Alert);
+			} catch {
+				return null;
+			}
 		}
 
 		public TlsContext (TlsConfiguration configuration, bool isServer, IMonoTlsEventSink eventSink)
@@ -312,11 +326,9 @@ namespace Mono.Security.NewTls
 				CheckValid ();
 				return _GenerateNextToken (incoming, outgoing);
 			} catch (TlsException ex) {
-				OnError (ex);
-				if (negotiationHandler != null && negotiationHandler.CanSendAlert) {
-					var alert = CreateAlert (ex.Alert);
+				var alert = OnError (ex);
+				if (alert != null)
 					outgoing.Add (alert);
-				}
 				Clear ();
 				return SecurityStatus.ContextExpired;
 			} catch {
@@ -539,9 +551,11 @@ namespace Mono.Security.NewTls
 				CheckValid ();
 				return _DecryptMessage (ref incoming);
 			} catch (TlsException ex) {
-				OnError (ex);
-				var alert = CreateAlert (ex.Alert);
-				incoming = new TlsBuffer (alert);
+				var alert = OnError (ex);
+				if (alert != null)
+					incoming = new TlsBuffer (alert);
+				else
+					incoming = null;
 				Clear ();
 				return SecurityStatus.ContextExpired;
 			} catch {
@@ -594,9 +608,11 @@ namespace Mono.Security.NewTls
 				CheckValid ();
 				return _EncryptMessage (ref incoming);
 			} catch (TlsException ex) {
-				OnError (ex);
-				var alert = CreateAlert (ex.Alert);
-				incoming = new TlsBuffer (alert);
+				var alert = OnError (ex);
+				if (alert != null)
+					incoming = new TlsBuffer (alert);
+				else
+					incoming = null;
 				Clear ();
 				return SecurityStatus.ContextExpired;
 			} catch {
