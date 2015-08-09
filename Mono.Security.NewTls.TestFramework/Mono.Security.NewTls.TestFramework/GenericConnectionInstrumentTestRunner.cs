@@ -125,12 +125,12 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case GenericConnectionInstrumentType.UnsupportedServerCertificate:
-				parameters.ServerParameters.ServerCertificate = ResourceManager.DefaultServerCertificate;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificate;
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate:
-				parameters.ServerParameters.ServerCertificate = ResourceManager.DefaultServerCertificate;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificate;
 				parameters.Add (HandshakeInstrumentType.OverrideServerCertificateSelection);
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;

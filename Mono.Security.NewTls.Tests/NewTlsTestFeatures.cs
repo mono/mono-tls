@@ -171,7 +171,7 @@ namespace Mono.Security.NewTls.Tests
 
 			public IEnumerable<ServerCertificateType> GetParameters (TestContext ctx, string filter)
 			{
-				yield return ServerCertificateType.Default;
+				yield return ServerCertificateType.LocalCA;
 				yield return ServerCertificateType.SelfSigned;
 			}
 		}
