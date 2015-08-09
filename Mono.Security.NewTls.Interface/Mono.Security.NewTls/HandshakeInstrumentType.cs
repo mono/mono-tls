@@ -41,7 +41,8 @@ namespace Mono.Security.NewTls
 		FragmentServerHello,
 		SendBlobBeforeRenegotiatingHello,
 		AskForClientCertificate,
-		RequireClientCertificate
+		RequireClientCertificate,
+		OverrideServerCertificateSelection
 	}
 }
 

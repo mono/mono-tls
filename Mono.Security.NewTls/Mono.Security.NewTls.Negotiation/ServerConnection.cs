@@ -113,8 +113,6 @@ namespace Mono.Security.NewTls.Negotiation
 			var certificate = Config.Certificate;
 			if (certificate == null)
 				throw new TlsException (AlertDescription.HandshakeFailure, "Missing server certificate");
-			if (certificate.Version < 3)
-				throw new TlsException (AlertDescription.UnsupportedCertificate, "X.509v3 server certificate required");
 
 			CipherSuiteCollection requestedCiphers;
 			if (Settings.RequestedCiphers != null)
@@ -123,6 +121,10 @@ namespace Mono.Security.NewTls.Negotiation
 				requestedCiphers = CipherSuiteFactory.GetDefaultCiphers (Context.NegotiatedProtocol);
 
 			HandshakeParameters.SupportedCiphers = requestedCiphers.Filter (cipher => {
+				#if INSTRUMENTATION
+				if (Context.HasInstrument (HandshakeInstrumentType.OverrideServerCertificateSelection))
+					return true;
+				#endif
 				var exchangeAlgorithm = CipherSuiteFactory.GetExchangeAlgorithmType (Context.NegotiatedProtocol, cipher);
 				return CertificateManager.VerifyServerCertificate (Context, certificate, exchangeAlgorithm);
 			});

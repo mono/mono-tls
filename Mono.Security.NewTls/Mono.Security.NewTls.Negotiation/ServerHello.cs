@@ -152,6 +152,13 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void HandleCertificate (TlsCertificate message)
 		{
+			if (message.Certificates == null || message.Certificates.Count < 1)
+				throw new TlsException (AlertDescription.CertificateUnknown);
+
+			var exchangeAlgorithm = PendingCrypto.Cipher.ExchangeAlgorithmType;
+			if (!CertificateManager.VerifyServerCertificate (Context, message.Certificates [0], exchangeAlgorithm))
+				throw new TlsException (AlertDescription.UnsupportedCertificate);
+
 			CertificateManager.CheckRemoteCertificate (Config, message.Certificates);
 			PendingCrypto.ServerCertificates = message.Certificates;
 			PendingCrypto.RemoteCertificateVerified = true;

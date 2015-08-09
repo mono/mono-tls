@@ -187,6 +187,11 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected override void OnWaitForServerConnectionCompleted (TestContext ctx, Task task)
 		{
+			if (Parameters.ExpectClientAlert != null) {
+				ctx.Assert (task.IsFaulted, "expecting exception");
+				throw new ConnectionFinishedException ();
+			}
+
 			if (Parameters.ExpectServerAlert != null) {
 				MonoConnectionHelper.ExpectAlert (ctx, task, Parameters.ExpectServerAlert.Value, "expect server alert");
 				throw new ConnectionFinishedException ();

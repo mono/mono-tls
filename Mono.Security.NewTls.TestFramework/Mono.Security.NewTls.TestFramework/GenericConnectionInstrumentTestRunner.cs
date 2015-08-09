@@ -70,10 +70,12 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case InstrumentationCategory.ServerConnection:
 				yield return GenericConnectionInstrumentType.FragmentHandshakeMessages;
+				yield return GenericConnectionInstrumentType.UnsupportedServerCertificate;
 				break;
 
 			case InstrumentationCategory.Connection:
 				yield return GenericConnectionInstrumentType.FragmentHandshakeMessages;
+				yield return GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate;
 				break;
 
 			case InstrumentationCategory.ManualClient:
@@ -82,6 +84,10 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case InstrumentationCategory.ManualServer:
 				yield return GenericConnectionInstrumentType.MartinServerPuppy;
+				break;
+
+			case InstrumentationCategory.MartinTest:
+				yield return GenericConnectionInstrumentType.MartinTest;
 				break;
 
 			default:
@@ -116,6 +122,28 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case GenericConnectionInstrumentType.SendBlobAfterReceivingFinish:
 				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.SendBlobAfterReceivingFinish };
+				break;
+
+			case GenericConnectionInstrumentType.UnsupportedServerCertificate:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.DefaultServerCertificate;
+				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
+			case GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.DefaultServerCertificate;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.OverrideServerCertificateSelection, HandshakeInstrumentType.DontSendAlerts
+				};
+				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
+			case GenericConnectionInstrumentType.MartinTest:
+				ctx.LogMessage ("MARTIN TEST!");
+				parameters.ServerParameters.ServerCertificate = ResourceManager.DefaultServerCertificate;
+				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
+					HandshakeInstrumentType.OverrideServerCertificateSelection, HandshakeInstrumentType.DontSendAlerts
+				};
+				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			default:

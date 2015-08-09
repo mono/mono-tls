@@ -63,6 +63,9 @@ namespace Mono.Security.NewTls
 
 		internal static bool VerifyServerCertificate (TlsContext context, MX.X509Certificate certificate, ExchangeAlgorithmType algorithm)
 		{
+			if (certificate.Version < 3)
+				throw new TlsException (AlertDescription.UnsupportedCertificate, "X.509v3 server certificate required");
+
 			if (certificate.KeyAlgorithm != null && !certificate.KeyAlgorithm.Equals (OidKeyAlgorithmRsa))
 				return false;
 			if (certificate.SignatureAlgorithm != null && !VerifySignatureAlgorithm (certificate.SignatureAlgorithm))
