@@ -117,11 +117,11 @@ namespace Mono.Security.NewTls.TestFramework
 
 			switch (type) {
 			case GenericConnectionInstrumentType.FragmentHandshakeMessages:
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.FragmentHandshakeMessages };
+				parameters.Add (HandshakeInstrumentType.FragmentHandshakeMessages);
 				break;
 
 			case GenericConnectionInstrumentType.SendBlobAfterReceivingFinish:
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] { HandshakeInstrumentType.SendBlobAfterReceivingFinish };
+				parameters.Add (HandshakeInstrumentType.SendBlobAfterReceivingFinish);
 				break;
 
 			case GenericConnectionInstrumentType.UnsupportedServerCertificate:
@@ -131,25 +131,20 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate:
 				parameters.ServerParameters.ServerCertificate = ResourceManager.DefaultServerCertificate;
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.OverrideServerCertificateSelection, HandshakeInstrumentType.DontSendAlerts
-				};
+				parameters.Add (HandshakeInstrumentType.OverrideServerCertificateSelection);
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.MartinTest:
-				ctx.LogMessage ("MARTIN TEST!");
-				parameters.ServerParameters.ServerCertificate = ResourceManager.DefaultServerCertificate;
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.OverrideServerCertificateSelection, HandshakeInstrumentType.DontSendAlerts
-				};
-				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
-				break;
+				goto case GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate;
 
 			default:
 				ctx.AssertFail ("Unsupported connection instrument: '{0}'.", type);
 				break;
 			}
+
+			if (parameters.ExpectClientAlert != null || parameters.ExpectServerAlert != null)
+				parameters.Add (HandshakeInstrumentType.DontSendAlerts);
 
 			return parameters;
 		}

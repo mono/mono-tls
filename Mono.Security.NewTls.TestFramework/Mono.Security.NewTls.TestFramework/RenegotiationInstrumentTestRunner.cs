@@ -139,38 +139,24 @@ namespace Mono.Security.NewTls.TestFramework
 
 			switch (type) {
 			case RenegotiationInstrumentType.RequestRenegotiation:
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.RequestServerRenegotiation
-				};
+				parameters.Add (HandshakeInstrumentType.RequestServerRenegotiation);
 				break;
 
 			case RenegotiationInstrumentType.SendBlobBeforeHelloRequest:
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.RequestServerRenegotiation,
-					HandshakeInstrumentType.SendBlobBeforeHelloRequest
-				};
+				parameters.Add (HandshakeInstrumentType.RequestServerRenegotiation, HandshakeInstrumentType.SendBlobBeforeHelloRequest);
 				break;
 
 			case RenegotiationInstrumentType.SendBlobAfterHelloRequest:
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.RequestServerRenegotiation,
-					HandshakeInstrumentType.SendBlobAfterHelloRequest
-				};
+				parameters.Add (HandshakeInstrumentType.RequestServerRenegotiation, HandshakeInstrumentType.SendBlobAfterHelloRequest);
 				break;
 
 			case RenegotiationInstrumentType.SendBlobBeforeAndAfterHelloRequest:
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.RequestServerRenegotiation,
-					HandshakeInstrumentType.SendBlobBeforeHelloRequest,
-					HandshakeInstrumentType.SendBlobAfterHelloRequest
-				};
+				parameters.Add (HandshakeInstrumentType.RequestServerRenegotiation);
+				parameters.Add (HandshakeInstrumentType.SendBlobBeforeHelloRequest, HandshakeInstrumentType.SendBlobAfterHelloRequest);
 				break;
 
 			case RenegotiationInstrumentType.SendDuplicateHelloRequest:
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.RequestServerRenegotiation,
-					HandshakeInstrumentType.SendDuplicateHelloRequest
-				};
+				parameters.Add (HandshakeInstrumentType.RequestServerRenegotiation, HandshakeInstrumentType.SendDuplicateHelloRequest);
 				break;
 
 			case RenegotiationInstrumentType.RequestServerRenegotiation:
@@ -185,16 +171,12 @@ namespace Mono.Security.NewTls.TestFramework
 			case RenegotiationInstrumentType.SendBlobBeforeRenegotiatingHello:
 				parameters.RequestServerRenegotiation = true;
 				parameters.QueueServerReadFirst = true;
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
-				};
+				parameters.Add (HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello);
 				break;
 
 			case RenegotiationInstrumentType.SendBlobBeforeRenegotiatingHelloNoPendingRead:
 				parameters.RequestServerRenegotiation = true;
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello
-				};
+				parameters.Add (HandshakeInstrumentType.SendBlobBeforeRenegotiatingHello);
 				break;
 
 			case RenegotiationInstrumentType.RequestClientRenegotiation:
@@ -209,9 +191,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case RenegotiationInstrumentType.MartinTest:
 				parameters.RequestServerRenegotiation = true;
-				parameters.HandshakeInstruments = new HandshakeInstrumentType[] {
-					HandshakeInstrumentType.AskForClientCertificate
-				};
+				parameters.Add (HandshakeInstrumentType.AskForClientCertificate);
 				parameters.NeedCustomCertificateSelectionCallback = true;
 				parameters.EnableDebugging = true;
 				break;

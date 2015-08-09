@@ -47,15 +47,30 @@ namespace Mono.Security.NewTls.TestFramework
 			: base (other)
 		{
 			EnableDebugging = other.EnableDebugging;
-			HandshakeInstruments = other.HandshakeInstruments;
+
+			if (other.handshakeInstruments != null)
+				handshakeInstruments = new HashSet<HandshakeInstrumentType> (other.handshakeInstruments);
 		}
 
 		public bool EnableDebugging {
 			get; set;
 		}
 
-		public HandshakeInstrumentType[] HandshakeInstruments {
-			get; set;
+		HashSet<HandshakeInstrumentType> handshakeInstruments;
+
+		public ISet<HandshakeInstrumentType> HandshakeInstruments {
+			get {
+				if (handshakeInstruments == null)
+					handshakeInstruments = new HashSet<HandshakeInstrumentType> ();
+				return handshakeInstruments;
+			}
+		}
+
+		public void Add (params HandshakeInstrumentType[] instruments)
+		{
+			foreach (var instrument in instruments) {
+				HandshakeInstruments.Add (instrument);
+			}
 		}
 	}
 
