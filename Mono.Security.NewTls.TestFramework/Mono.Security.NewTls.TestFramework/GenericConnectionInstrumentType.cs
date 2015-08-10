@@ -35,6 +35,9 @@ namespace Mono.Security.NewTls.TestFramework
 		UnsupportedServerCertificate,
 		ServerProvidesUnsupportedCertificate,
 
+		UnsupportedClientCertificate,
+		ClientProvidesUnsupportedCertificate,
+
 		MartinTest,
 		MartinClientPuppy,
 		MartinServerPuppy

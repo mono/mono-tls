@@ -212,8 +212,20 @@ namespace Mono.Security.NewTls.Negotiation
 		protected virtual X509CertificateCollection GetCertificates ()
 		{
 			var certificates = new X509CertificateCollection ();
-			if (Config.Certificate != null)
-				certificates.Add (Config.Certificate);
+
+			var certificate = Config.Certificate;
+			if (certificate == null)
+				return certificates;
+
+			var verifyVertificate = true;
+			#if INSTRUMENTATION
+			if (Context.HasInstrument (HandshakeInstrumentType.OverrideClientCertificateSelection))
+				verifyVertificate = false;
+			#endif
+			if (verifyVertificate && !CertificateManager.VerifyClientCertificate (Context, certificate))
+				throw new TlsException (AlertDescription.UnsupportedCertificate);
+
+			certificates.Add (certificate);
 			return certificates;
 		}
 

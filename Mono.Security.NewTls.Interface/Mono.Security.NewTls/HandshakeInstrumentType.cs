@@ -42,7 +42,8 @@ namespace Mono.Security.NewTls
 		SendBlobBeforeRenegotiatingHello,
 		AskForClientCertificate,
 		RequireClientCertificate,
-		OverrideServerCertificateSelection
+		OverrideServerCertificateSelection,
+		OverrideClientCertificateSelection
 	}
 }
 

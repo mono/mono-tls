@@ -35,15 +35,8 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		internal static bool CheckClientCertificate (TlsContext context, MX.X509CertificateCollection certificates)
+		internal static void CheckClientCertificate (TlsContext context, MX.X509CertificateCollection certificates)
 		{
-			if (certificates == null || certificates.Count < 1) {
-				if (!context.SettingsProvider.AskForClientCertificate && !context.Session.AskedForCertificate)
-					return false;
-				if (context.SettingsProvider.RequireClientCertificate)
-					throw new TlsException (AlertDescription.CertificateUnknown);
-			}
-
 			if (context.SettingsProvider.HasClientCertificateParameters) {
 				var certParams = context.SettingsProvider.ClientCertificateParameters;
 				if (certParams.CertificateAuthorities.Count > 0) {
@@ -55,10 +48,8 @@ namespace Mono.Security.NewTls
 			var helper = CertificateValidationHelper.GetValidator (context.Configuration.TlsSettings);
 
 			var result = helper.ValidateClientCertificate (certificates);
-			if (result != null && result.Trusted && !result.UserDenied)
-				return true;
-
-			throw new TlsException (AlertDescription.CertificateUnknown);
+			if (result == null || !result.Trusted || result.UserDenied)
+				throw new TlsException (AlertDescription.CertificateUnknown);
 		}
 
 		internal static bool VerifyServerCertificate (TlsContext context, MX.X509Certificate certificate, ExchangeAlgorithmType algorithm)
@@ -73,20 +64,34 @@ namespace Mono.Security.NewTls
 
 			switch (algorithm) {
 			case ExchangeAlgorithmType.RsaSign:
-				return VerifyKeyUsage (certificate, KeyUsages.keyEncipherment);
+				return VerifyKeyUsage (certificate, KeyUsages.keyEncipherment, OidServerAuth);
 
 			case ExchangeAlgorithmType.DiffieHellman:
-				return VerifyKeyUsage (certificate, KeyUsages.digitalSignature);
+				return VerifyKeyUsage (certificate, KeyUsages.digitalSignature, OidServerAuth);
 
 			default:
 				throw new TlsException (AlertDescription.InternalError);
 			}
 		}
 
+		internal static bool VerifyClientCertificate (TlsContext context, MX.X509Certificate certificate)
+		{
+			if (context.NegotiatedProtocol == TlsProtocolCode.Tls12 && certificate.Version < 3)
+				throw new TlsException (AlertDescription.UnsupportedCertificate, "X.509v3 client certificate required");
+
+			if (certificate.KeyAlgorithm != null && !certificate.KeyAlgorithm.Equals (OidKeyAlgorithmRsa))
+				return false;
+			if (certificate.SignatureAlgorithm != null && !VerifySignatureAlgorithm (certificate.SignatureAlgorithm))
+				return false;
+
+			return VerifyKeyUsage (certificate, KeyUsages.digitalSignature, OidClientAuth);
+		}
+
 		const string OidKeyUsage = "2.5.29.15";
 		const string OidExtendedKeyUsage = "2.5.29.37";
 
 		const string OidServerAuth = "1.3.6.1.5.5.7.3.1";
+		const string OidClientAuth = "1.3.6.1.5.5.7.3.2";
 
 		const string OidKeyAlgorithmRsa = "1.2.840.113549.1.1.1";
 
@@ -106,7 +111,7 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		internal static bool VerifyKeyUsage (MX.X509Certificate certificate, KeyUsages keyUsages)
+		internal static bool VerifyKeyUsage (MX.X509Certificate certificate, KeyUsages keyUsages, string purpose)
 		{
 			if (certificate.Extensions == null)
 				return true;
@@ -128,11 +133,11 @@ namespace Mono.Security.NewTls
 				// be valid
 				if (!kux.Support (keyUsages))
 					return false;
-				return eku.KeyPurpose.Contains (OidServerAuth);
+				return eku.KeyPurpose.Contains (purpose);
 			} else if (kux != null) {
 				return kux.Support (keyUsages);
 			} else if (eku != null) {
-				return eku.KeyPurpose.Contains (OidServerAuth);
+				return eku.KeyPurpose.Contains (purpose);
 			}
 
 			return true;

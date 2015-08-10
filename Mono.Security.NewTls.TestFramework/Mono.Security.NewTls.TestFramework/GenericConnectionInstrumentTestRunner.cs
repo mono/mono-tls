@@ -66,6 +66,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.ClientConnection:
 				yield return GenericConnectionInstrumentType.FragmentHandshakeMessages;
 				yield return GenericConnectionInstrumentType.SendBlobAfterReceivingFinish;
+				yield return GenericConnectionInstrumentType.UnsupportedClientCertificate;
 				break;
 
 			case InstrumentationCategory.ServerConnection:
@@ -76,6 +77,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.Connection:
 				yield return GenericConnectionInstrumentType.FragmentHandshakeMessages;
 				yield return GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate;
+				yield return GenericConnectionInstrumentType.ClientProvidesUnsupportedCertificate;
 				break;
 
 			case InstrumentationCategory.ManualClient:
@@ -135,8 +137,21 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
+			case GenericConnectionInstrumentType.UnsupportedClientCertificate:
+				parameters.ClientCertificate = ResourceManager.InvalidClientCertificate;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
+			case GenericConnectionInstrumentType.ClientProvidesUnsupportedCertificate:
+				parameters.ClientCertificate = ResourceManager.InvalidClientCertificate;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.Add (HandshakeInstrumentType.OverrideClientCertificateSelection);
+				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
 			case GenericConnectionInstrumentType.MartinTest:
-				goto case GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate;
+				goto case GenericConnectionInstrumentType.ClientProvidesUnsupportedCertificate;
 
 			default:
 				ctx.AssertFail ("Unsupported connection instrument: '{0}'.", type);

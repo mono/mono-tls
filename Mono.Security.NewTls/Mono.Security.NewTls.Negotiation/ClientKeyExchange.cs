@@ -82,8 +82,19 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual void HandleCertificate (TlsCertificate message)
 		{
-			if (CertificateManager.CheckClientCertificate (Context, message.Certificates))
-				PendingCrypto.ClientCertificates = message.Certificates;
+			if (message.Certificates == null || message.Certificates.Count < 1) {
+				if (Context.SettingsProvider.RequireClientCertificate)
+					throw new TlsException (AlertDescription.CertificateUnknown);
+				return;
+			}
+
+			var certificate = message.Certificates [0];
+			if (!CertificateManager.VerifyClientCertificate (Context, certificate))
+				throw new TlsException (AlertDescription.UnsupportedCertificate);
+
+			CertificateManager.CheckClientCertificate (Context, message.Certificates);
+
+			PendingCrypto.ClientCertificates = message.Certificates;
 		}
 
 		protected virtual void HandleCertificateVerify (TlsCertificateVerify message)
