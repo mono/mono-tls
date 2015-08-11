@@ -35,6 +35,8 @@ using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
+using Xamarin.AsyncTests.Portable;
+using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -113,6 +115,14 @@ namespace Mono.Security.NewTls.TestFramework
 			};
 		}
 
+		protected static ICertificateValidator AcceptFromLocalCA {
+			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptFromCA (ResourceManager.LocalCACertificate); }
+		}
+
+		protected static ICertificateValidator AcceptSelfSigned {
+			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptThisCertificate (ResourceManager.SelfSignedServerCertificate); }
+		}
+
 		static GenericConnectionInstrumentParameters Create (TestContext ctx, InstrumentationCategory category, GenericConnectionInstrumentType type)
 		{
 			var parameters = CreateParameters (category, type);
@@ -148,6 +158,14 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.Add (HandshakeInstrumentType.OverrideClientCertificateSelection);
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
+			case GenericConnectionInstrumentType.MartinClientPuppy:
+				var provider = DependencyInjector.Get<IPortableEndPointSupport> ();
+				parameters.ServerParameters.EndPoint = provider.GetEndpoint ("0.0.0.0", 4433);
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ClientCertificateValidator = AcceptSelfSigned;
+				parameters.ServerCertificateValidator = AcceptFromLocalCA;
 				break;
 
 			case GenericConnectionInstrumentType.MartinTest:

@@ -44,7 +44,7 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class MartinTest
 	{
-		[AsyncTest]
+		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public async Task TestMartinClient (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
@@ -64,12 +64,12 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		// [AsyncTest]
+		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ManualClient)]
 		public async Task TestClientPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType ("Manual:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
-			[RenegotiationInstrumentParameters] RenegotiationInstrumentParameters parameters,
-			[RenegotiationInstrumentTestRunner] RenegotiationInstrumentTestRunner runner)
+			[InstrumentationConnectionType ("Manual:DotNet")] InstrumentationConnectionType connectionType,
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner (MonoConnectionFlags.ManualClient)] GenericConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
