@@ -40,7 +40,7 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
-	[Work]
+	[Renegotiation]
 	[AsyncTestFixture]
 	public class TestConnectionInstruments
 	{

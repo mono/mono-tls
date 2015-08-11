@@ -128,6 +128,7 @@ namespace Mono.Security.NewTls.Tests
 			get {
 				yield return Work;
 				yield return Martin;
+				yield return RenegotiationAttribute.Instance;
 				yield return CryptoTests;
 			}
 		}
