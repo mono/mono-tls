@@ -39,9 +39,7 @@
     <Compile Include="Mono.Security.NewTls.Tests\TestCbcBlockCipher-Generated.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterGipher-Generated.cs" />
-    <Compile Include="Mono.Security.NewTls.Tests\TestHttps.cs" />
     <Compile Include="NewTlsTestFeatures.cs" />
-    <Compile Include="Mono.Security.NewTls.Tests\TestSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestPuppy.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\MartinTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestSignatureAlgorithms.cs" />
@@ -49,6 +47,12 @@
     <Compile Include="Mono.Security.NewTls.Tests\SimpleConnectionTests.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\SelectCiphersTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestRenegotiation.cs" />
+    <Compile Include="..\external\web-tests\Xamarin.WebTests\Xamarin.WebTests.Tests\TestHttps.cs">
+      <Link>Xamarin.WebTests.Tests\TestHttps.cs</Link>
+    </Compile>
+    <Compile Include="..\external\web-tests\Xamarin.WebTests\Xamarin.WebTests.Tests\TestSslStream.cs">
+      <Link>Xamarin.WebTests.Tests\TestSslStream.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
@@ -72,5 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mono.Security.NewTls.Tests\" />
+    <Folder Include="Xamarin.WebTests.Tests\" />
   </ItemGroup>
 </Project>

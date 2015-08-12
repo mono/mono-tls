@@ -32,6 +32,7 @@ using Xamarin.WebTests.HttpFramework;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
+using Xamarin.WebTests.Features;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
 [assembly: RequireDependency (typeof (MonoConnectionProviderFactory))]
@@ -43,27 +44,6 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
-	public class NotWorkingAttribute : TestFeatureAttribute
-	{
-		public override TestFeature Feature {
-			get { return NewTlsTestFeatures.Instance.NotWorking; }
-		}
-	}
-
-	public class MartinAttribute : TestCategoryAttribute
-	{
-		public override TestCategory Category {
-			get { return NewTlsTestFeatures.Instance.Martin; }
-		}
-	}
-
-	public class WorkAttribute : TestCategoryAttribute
-	{
-		public override TestCategory Category {
-			get { return NewTlsTestFeatures.Instance.Work; }
-		}
-	}
-
 	public class CryptoTestsAttribute : TestCategoryAttribute
 	{
 		public override TestCategory Category {
@@ -71,18 +51,15 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	public class NewTlsTestFeatures : ITestConfigurationProvider
+	public class NewTlsTestFeatures : SharedWebTestFeatures
 	{
 		public static NewTlsTestFeatures Instance {
 			get { return DependencyInjector.Get<NewTlsTestFeatures> (); }
 		}
 
-		public readonly TestCategory Work = new TestCategory ("Work");
-		public readonly TestCategory Martin = new TestCategory ("Martin");
 		public readonly TestCategory CryptoTests = new TestCategory ("CryptoTests");
 
 		public readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
-		public readonly TestFeature NotWorking = new TestFeature ("NotWorking", "Not Working");
 
 		public readonly TestFeature DotNetCryptoProvider = CreateCryptoFeature (
 			"DotNetCryptoProvider", "Use .NET as crypto provider", CryptoProviderType.DotNet, false);
@@ -105,14 +82,36 @@ namespace Mono.Security.NewTls.Tests
 		public readonly TestFeature HttpsWithOldTLS = new TestFeature ("HttpsWithOldTLS", "Use Mono's existing web stack with the old TLS", false);
 		public readonly TestFeature HttpsWithNewTLS = new TestFeature ("HttpsWithNewTLS", "Use Mono's existing web stack with the new TLS", true);
 
-		public string Name {
+		public override string Name {
 			get { return "Mono.Security.NewTls.Tests"; }
 		}
 
-		public IEnumerable<TestFeature> Features {
+		readonly TestFeature sslFeature = new TestFeature ("SSL", "Enable SSL", () => true);
+		public override TestFeature SSL {
+			get { return sslFeature; }
+		}
+
+		protected override bool HasMonoVersion (Version version)
+		{
+			return true;
+		}
+
+		protected override bool IsNetworkAvailable ()
+		{
+			return true;
+		}
+
+		protected override bool SupportsCertificateTests ()
+		{
+			return true;
+		}
+
+		public override IEnumerable<TestFeature> Features {
 			get {
+				foreach (var feature in base.Features)
+					yield return feature;
+
 				yield return Hello;
-				yield return NotWorking;
 				yield return DotNetCryptoProvider;
 				yield return MonoCryptoProvider;
 				yield return OpenSslCryptoProvider;
@@ -124,10 +123,11 @@ namespace Mono.Security.NewTls.Tests
 			}
 		}
 
-		public IEnumerable<TestCategory> Categories {
+		public override IEnumerable<TestCategory> Categories {
 			get {
-				yield return Work;
-				yield return Martin;
+				foreach (var category in base.Categories)
+					yield return category;
+
 				yield return RenegotiationAttribute.Instance;
 				yield return CryptoTests;
 			}
