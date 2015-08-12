@@ -74,6 +74,7 @@ namespace Mono.Security.NewTls.TestProvider
 			switch (type) {
 			case ConnectionProviderType.NewTLS:
 			case ConnectionProviderType.MonoWithNewTLS:
+			case ConnectionProviderType.PlatformDefault:
 				return IsNewTls;
 			case ConnectionProviderType.OldTLS:
 			case ConnectionProviderType.MonoWithOldTLS:

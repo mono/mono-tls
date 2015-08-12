@@ -48,6 +48,7 @@ namespace Mono.Security.NewTls.TestProvider
 		readonly MonoConnectionProviderImpl monoWithNewTlsConnectionProvider;
 		readonly MonoConnectionProviderImpl monoWithOldTlsConnectionProvider;
 		readonly OpenSslConnectionProvider openSslConnectionProvider;
+		readonly MonoConnectionProviderImpl platformDefaultConnectionProvider;
 		readonly ManualConnectionProvider manualConnectionProvider;
 
 		internal MonoConnectionProviderFactoryImpl ()
@@ -70,6 +71,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 			monoWithOldTlsConnectionProvider = new MonoConnectionProviderImpl (this, ConnectionProviderType.MonoWithOldTLS, legacyTlsProvider, true);
 			Install (monoWithOldTlsConnectionProvider);
+
+			platformDefaultConnectionProvider = new MonoConnectionProviderImpl (this, ConnectionProviderType.PlatformDefault, newTlsProvider, true);
+			Install (platformDefaultConnectionProvider);
 
 			openSslConnectionProvider = new OpenSslConnectionProvider (this);
 			Install (openSslConnectionProvider);
