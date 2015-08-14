@@ -45,6 +45,9 @@ namespace Mono.Security.NewTls.TestFramework
 		RequireClientCertificateRSA,
 		RequireClientCertificateDHE,
 
+		CipherSelectionOrder,
+		CipherSelectionOrder2,
+
 		InvalidServerCertificate,
 		RequireRsaKeyExchange,
 		RsaKeyExchangeNotAllowed,

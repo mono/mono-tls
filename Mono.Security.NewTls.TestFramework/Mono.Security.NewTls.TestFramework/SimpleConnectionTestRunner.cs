@@ -97,6 +97,8 @@ namespace Mono.Security.NewTls.TestFramework
 				yield break;
 
 			case InstrumentationCategory.InvalidCertificates:
+				yield return SimpleConnectionType.CipherSelectionOrder;
+				yield return SimpleConnectionType.CipherSelectionOrder2;
 				yield return SimpleConnectionType.InvalidServerCertificate;
 				yield return SimpleConnectionType.RequireRsaKeyExchange;
 				yield return SimpleConnectionType.RsaKeyExchangeNotAllowed;
@@ -220,6 +222,22 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA };
 				break;
 
+			case SimpleConnectionType.CipherSelectionOrder:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ClientCiphers = new CipherSuiteCode[] {
+					CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA, CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA
+				};
+				parameters.ExpectedServerCipher = CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA;
+				break;
+
+			case SimpleConnectionType.CipherSelectionOrder2:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ClientCiphers = new CipherSuiteCode[] {
+					CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA, CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
+				};
+				parameters.ExpectedServerCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+				break;
+
 			case SimpleConnectionType.InvalidServerCertificate:
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
 				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificate;
@@ -229,7 +247,10 @@ namespace Mono.Security.NewTls.TestFramework
 			case SimpleConnectionType.RequireRsaKeyExchange:
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
 				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
-				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCiphers = new CipherSuiteCode[] {
+					CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA, CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
+				};
+				parameters.ExpectedServerCipher = CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA;
 				break;
 
 			case SimpleConnectionType.RsaKeyExchangeNotAllowed:
@@ -242,7 +263,10 @@ namespace Mono.Security.NewTls.TestFramework
 			case SimpleConnectionType.RequireDheKeyExchange:
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
 				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
-				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCiphers = new CipherSuiteCode[] {
+					CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA, CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA
+				};
+				parameters.ExpectedServerCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
 				break;
 
 			case SimpleConnectionType.DheKeyExchangeNotAllowed:
