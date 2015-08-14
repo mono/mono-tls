@@ -64,62 +64,58 @@ namespace Mono.Security.NewTls.TestFramework
 			return null;
 		}
 
-		public static IEnumerable<SimpleConnectionParameters> GetParameters (TestContext ctx, InstrumentationCategory category)
+		public static IEnumerable<SimpleConnectionType> GetTestTypes (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
 			case InstrumentationCategory.SimpleMonoClient:
-				return ClientConnectionTypes.Select (t => Create (ctx, category, t));
+				yield return SimpleConnectionType.CheckDefaultCipher;
+				yield return SimpleConnectionType.SimpleTls10;
+				yield return SimpleConnectionType.SimpleTls11;
+				yield return SimpleConnectionType.SimpleTls12;
+				yield break;
 
 			case InstrumentationCategory.SimpleMonoServer:
-				return ServerConnectionTypes.Select (t => Create (ctx, category, t));
+				yield return SimpleConnectionType.CheckDefaultCipher;
+				yield return SimpleConnectionType.SimpleTls10;
+				yield return SimpleConnectionType.SimpleTls11;
+				yield return SimpleConnectionType.SimpleTls12;
+				yield break;
 
 			case InstrumentationCategory.SimpleMonoConnection:
-				return ConnectionTypes.Select (t => Create (ctx, category, t));
+				yield return SimpleConnectionType.CheckDefaultCipher;
+				yield return SimpleConnectionType.SimpleTls10;
+				yield return SimpleConnectionType.SimpleTls11;
+				yield return SimpleConnectionType.SimpleTls12;
+				yield break;
 
 			case InstrumentationCategory.MonoProtocolVersions:
-				return AllVersionTypes.Select (t => Create (ctx, category, t));
+				yield return SimpleConnectionType.Simple;
+				yield return SimpleConnectionType.ValidateCertificate;
+				yield return SimpleConnectionType.RequestClientCertificate;
+				yield return SimpleConnectionType.RequireClientCertificateRSA;
+				yield return SimpleConnectionType.RequireClientCertificateDHE;
+				yield break;
+
+			case InstrumentationCategory.InvalidCertificates:
+				yield return SimpleConnectionType.InvalidServerCertificate;
+				yield break;
 
 			case InstrumentationCategory.MartinTest:
-				return MartinTestTypes.Select (t => Create (ctx, category, t));
+			case InstrumentationCategory.ManualClient:
+			case InstrumentationCategory.ManualServer:
+				yield return SimpleConnectionType.MartinTest;
+				yield break;
 
 			default:
-				ctx.AssertFail ("Unsupported connection category: '{0}'.", category);
-				return null;
+				ctx.AssertFail ("Unspported connection category: '{0}.", category);
+				yield break;
 			}
 		}
 
-		internal static readonly SimpleConnectionType[] ClientConnectionTypes = {
-			SimpleConnectionType.CheckDefaultCipher,
-			SimpleConnectionType.SimpleTls10,
-			SimpleConnectionType.SimpleTls11,
-			SimpleConnectionType.SimpleTls12
-		};
-
-		internal static readonly SimpleConnectionType[] ServerConnectionTypes = {
-			SimpleConnectionType.CheckDefaultCipher,
-			SimpleConnectionType.SimpleTls10,
-			SimpleConnectionType.SimpleTls11,
-			SimpleConnectionType.SimpleTls12
-		};
-
-		internal static readonly SimpleConnectionType[] ConnectionTypes = {
-			SimpleConnectionType.CheckDefaultCipher,
-			SimpleConnectionType.SimpleTls10,
-			SimpleConnectionType.SimpleTls11,
-			SimpleConnectionType.SimpleTls12
-		};
-
-		internal static readonly SimpleConnectionType[] AllVersionTypes = {
-			SimpleConnectionType.Simple,
-			SimpleConnectionType.ValidateCertificate,
-			SimpleConnectionType.RequestClientCertificate,
-			SimpleConnectionType.RequireClientCertificateRSA,
-			SimpleConnectionType.RequireClientCertificateDHE
-		};
-
-		internal static readonly SimpleConnectionType[] MartinTestTypes = {
-			SimpleConnectionType.MartinTest
-		};
+		public static IEnumerable<SimpleConnectionParameters> GetParameters (TestContext ctx, InstrumentationCategory category)
+		{
+			return GetTestTypes (ctx, category).Select (t => Create (ctx, category, t));
+		}
 
 		static SimpleConnectionParameters CreateParameters (InstrumentationCategory category, SimpleConnectionType type, params object[] args)
 		{
@@ -220,7 +216,16 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA };
 				break;
 
+			case SimpleConnectionType.InvalidServerCertificate:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificate;
+				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
 			case SimpleConnectionType.MartinTest:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificate;
+				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			default:

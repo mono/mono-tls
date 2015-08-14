@@ -45,6 +45,8 @@ namespace Mono.Security.NewTls.TestFramework
 		RequireClientCertificateRSA,
 		RequireClientCertificateDHE,
 
+		InvalidServerCertificate,
+
 		MartinTest
 	}
 }

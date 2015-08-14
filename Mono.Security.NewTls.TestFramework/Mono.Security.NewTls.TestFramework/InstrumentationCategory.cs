@@ -46,6 +46,8 @@ namespace Mono.Security.NewTls.TestFramework
 		SimpleMonoConnection,
 		MonoProtocolVersions,
 
+		InvalidCertificates,
+
 		SelectClientCipher,
 		SelectServerCipher,
 		SelectCipher,

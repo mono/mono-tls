@@ -83,6 +83,50 @@ namespace Mono.Security.NewTls.Tests
 		{
 			return runner.Run (ctx, cancellationToken);
 		}
+
+		[Work]
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.InvalidCertificates)]
+		public Task TestInvalidCertificates (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
+		{
+			return runner.Run (ctx, cancellationToken);
+		}
+
+		[Martin]
+		[AsyncTest]
+		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
+		public Task MartinTest (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("MonoWithNewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
+		{
+			return runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[ManualClient]
+		[InstrumentationCategory (InstrumentationCategory.ManualClient)]
+		public Task ClientPuppy (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("Manual:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
+		{
+			return runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[ManualServer]
+		[InstrumentationCategory (InstrumentationCategory.ManualServer)]
+		public Task ServerPuppy (TestContext ctx, CancellationToken cancellationToken,
+			[InstrumentationConnectionType ("MonoWithNewTLS:Manual")] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
+		{
+			return runner.Run (ctx, cancellationToken);
+		}
 	}
 }
 
