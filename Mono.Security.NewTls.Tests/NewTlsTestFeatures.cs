@@ -44,9 +44,9 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
-	public class CryptoTestsAttribute : TestCategoryAttribute
+	public class CryptoTestsAttribute : TestFeatureAttribute
 	{
-		public override TestCategory Category {
+		public override TestFeature Feature {
 			get { return NewTlsTestFeatures.Instance.CryptoTests; }
 		}
 	}
@@ -57,7 +57,7 @@ namespace Mono.Security.NewTls.Tests
 			get { return DependencyInjector.Get<NewTlsTestFeatures> (); }
 		}
 
-		public readonly TestCategory CryptoTests = new TestCategory ("CryptoTests");
+		public readonly TestFeature CryptoTests = new TestFeature ("CryptoTests", "Enable crypto tests", () => SupportsCryptoTests);
 
 		public readonly TestFeature Hello = new TestFeature ("Hello", "Hello World");
 
@@ -67,6 +67,13 @@ namespace Mono.Security.NewTls.Tests
 			"MonoCryptoProvider", "Use Mono.Security as crypto provider", CryptoProviderType.Mono, false);
 		public readonly TestFeature OpenSslCryptoProvider = CreateCryptoFeature (
 			"OpenSslCryptoProvider", "Use OpenSSL as crypto provider", CryptoProviderType.OpenSsl, false);
+
+		static bool SupportsCryptoTests {
+			get {
+				var provider = DependencyInjector.Get<ICryptoProvider> ();
+				return provider.IsSupported (CryptoProviderType.DotNet, true);
+			}
+		}
 
 		static TestFeature CreateCryptoFeature (string name, string description, CryptoProviderType type, bool needsEncryption, bool defaultValue = true)
 		{
@@ -117,6 +124,7 @@ namespace Mono.Security.NewTls.Tests
 				yield return OpenSslCryptoProvider;
 				yield return HttpsWithOldTLS;
 				yield return HttpsWithNewTLS;
+				yield return CryptoTests;
 
 				foreach (var feature in InstrumentationTestFeatures.ConnectionFeatures)
 					yield return feature;
@@ -129,7 +137,6 @@ namespace Mono.Security.NewTls.Tests
 					yield return category;
 
 				yield return RenegotiationAttribute.Instance;
-				yield return CryptoTests;
 			}
 		}
 
