@@ -75,20 +75,24 @@ namespace Mono.Security.NewTls.TestFeatures
 			}
 
 			var factory = DependencyInjector.Get<ConnectionProviderFactory> ();
-			var supportedProviders = factory.GetSupportedProviders ();
+			var providers = factory.GetProviders ();
 
-			var supportedClientProviders = supportedProviders.Where (p => {
+			var supportedClientProviders = providers.Where (p => {
 				if (!string.IsNullOrEmpty (clientFilter))
 					return MatchesFilter (p, clientFilter);
+				else if (factory.IsExplicit (p))
+					return false;
 				else if (InstrumentationTestFeatures.IsClientEnabled (ctx, p))
 					return InstrumentationTestRunner.IsClientSupported (ctx, category, p);
 				else
 					return false;
 			});
 
-			var supportedServerProviders = supportedProviders.Where (p => {
+			var supportedServerProviders = providers.Where (p => {
 				if (!string.IsNullOrEmpty (serverFilter))
 					return MatchesFilter (p, serverFilter);
+				else if (factory.IsExplicit (p))
+					return false;
 				else if (InstrumentationTestFeatures.IsServerEnabled (ctx, p))
 					return InstrumentationTestRunner.IsServerSupported (ctx, category, p);
 				else
