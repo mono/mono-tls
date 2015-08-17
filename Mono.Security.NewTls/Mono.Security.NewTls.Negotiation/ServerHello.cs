@@ -222,7 +222,9 @@ namespace Mono.Security.NewTls.Negotiation
 			if (Context.HasInstrument (HandshakeInstrumentType.OverrideClientCertificateSelection))
 				verifyVertificate = false;
 			#endif
-			if (verifyVertificate && !CertificateManager.VerifyClientCertificate (Context, certificate))
+
+			var exchangeAlgorithm = PendingCrypto.Cipher.ExchangeAlgorithmType;
+			if (verifyVertificate && !CertificateManager.VerifyClientCertificate (Context, certificate, exchangeAlgorithm))
 				throw new TlsException (AlertDescription.UnsupportedCertificate);
 
 			certificates.Add (certificate);

@@ -89,7 +89,8 @@ namespace Mono.Security.NewTls.Negotiation
 			}
 
 			var certificate = message.Certificates [0];
-			if (!CertificateManager.VerifyClientCertificate (Context, certificate))
+			var exchangeAlgorithm = PendingCrypto.Cipher.ExchangeAlgorithmType;
+			if (!CertificateManager.VerifyClientCertificate (Context, certificate, exchangeAlgorithm))
 				throw new TlsException (AlertDescription.UnsupportedCertificate);
 
 			CertificateManager.CheckClientCertificate (Context, message.Certificates);

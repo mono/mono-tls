@@ -98,6 +98,8 @@ namespace Mono.Security.NewTls.TestFramework
 				yield return GenericConnectionInstrumentType.RsaKeyExchangeNotAllowed;
 				yield return GenericConnectionInstrumentType.RequireDheKeyExchange;
 				yield return GenericConnectionInstrumentType.DheKeyExchangeNotAllowed;
+				yield return GenericConnectionInstrumentType.ClientCertificateInvalidForRsa;
+				yield return GenericConnectionInstrumentType.ClientCertificateInvalidForDhe;
 				break;
 
 			case InstrumentationCategory.ManualClient:
@@ -223,13 +225,30 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case GenericConnectionInstrumentType.MartinClientPuppy:
 			case GenericConnectionInstrumentType.MartinServerPuppy:
+				goto case GenericConnectionInstrumentType.MartinTest;
+
+			case GenericConnectionInstrumentType.ClientCertificateInvalidForDhe:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
-				parameters.ClientCertificateValidator = AcceptSelfSigned;
+				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptFromLocalCA;
+				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
+			case GenericConnectionInstrumentType.ClientCertificateInvalidForRsa:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ClientCertificateValidator = AcceptAnyCertificate;
+				parameters.ServerCertificateValidator = AcceptFromLocalCA;
+				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.MartinTest:
-				goto case GenericConnectionInstrumentType.ClientProvidesInvalidCertificate;
+				goto case GenericConnectionInstrumentType.ClientCertificateInvalidForRsa;
 
 			default:
 				ctx.AssertFail ("Unsupported connection instrument: '{0}'.", type);

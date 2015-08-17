@@ -74,7 +74,7 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		internal static bool VerifyClientCertificate (TlsContext context, MX.X509Certificate certificate)
+		internal static bool VerifyClientCertificate (TlsContext context, MX.X509Certificate certificate, ExchangeAlgorithmType algorithm)
 		{
 			if (context.NegotiatedProtocol == TlsProtocolCode.Tls12 && certificate.Version < 3)
 				throw new TlsException (AlertDescription.UnsupportedCertificate, "X.509v3 client certificate required");
@@ -84,7 +84,16 @@ namespace Mono.Security.NewTls
 			if (certificate.SignatureAlgorithm != null && !VerifySignatureAlgorithm (certificate.SignatureAlgorithm))
 				return false;
 
-			return VerifyKeyUsage (certificate, KeyUsages.digitalSignature, OidClientAuth);
+			switch (algorithm) {
+			case ExchangeAlgorithmType.RsaSign:
+				return VerifyKeyUsage (certificate, KeyUsages.keyEncipherment, OidClientAuth);
+
+			case ExchangeAlgorithmType.DiffieHellman:
+				return VerifyKeyUsage (certificate, KeyUsages.digitalSignature, OidClientAuth);
+
+			default:
+				throw new TlsException (AlertDescription.InternalError);
+			}
 		}
 
 		const string OidKeyUsage = "2.5.29.15";
