@@ -45,6 +45,9 @@ namespace Mono.Security.NewTls.TestFramework
 		RequireDheKeyExchange,
 		DheKeyExchangeNotAllowed,
 
+		ClientCertificateRequiresRsaKeyExchange,
+		ClientCertificateRequiresDheKeyExchange,
+
 		ClientCertificateInvalidForRsa,
 		ClientProvidesCertificateThatsInvalidForRsa,
 		ClientCertificateInvalidForDhe,

@@ -100,6 +100,8 @@ namespace Mono.Security.NewTls.TestFramework
 				yield return GenericConnectionInstrumentType.DheKeyExchangeNotAllowed;
 				yield return GenericConnectionInstrumentType.ClientCertificateInvalidForRsa;
 				yield return GenericConnectionInstrumentType.ClientCertificateInvalidForDhe;
+				yield return GenericConnectionInstrumentType.ClientCertificateRequiresRsaKeyExchange;
+				yield return GenericConnectionInstrumentType.ClientCertificateRequiresDheKeyExchange;
 				break;
 
 			case InstrumentationCategory.ManualClient:
@@ -227,13 +229,31 @@ namespace Mono.Security.NewTls.TestFramework
 			case GenericConnectionInstrumentType.MartinServerPuppy:
 				goto case GenericConnectionInstrumentType.MartinTest;
 
+			case GenericConnectionInstrumentType.ClientCertificateRequiresRsaKeyExchange:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ClientCertificateValidator = AcceptAnyCertificate;
+				parameters.ServerCertificateValidator = AcceptAnyCertificate;
+				break;
+
+			case GenericConnectionInstrumentType.ClientCertificateRequiresDheKeyExchange:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ClientCertificateValidator = AcceptAnyCertificate;
+				parameters.ServerCertificateValidator = AcceptAnyCertificate;
+				break;
+
 			case GenericConnectionInstrumentType.ClientCertificateInvalidForDhe:
 				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
 				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
-				parameters.ServerCertificateValidator = AcceptFromLocalCA;
+				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
@@ -243,7 +263,7 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
-				parameters.ServerCertificateValidator = AcceptFromLocalCA;
+				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
