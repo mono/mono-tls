@@ -326,24 +326,10 @@ namespace Mono.Security.NewTls.TestFramework
 
 			LogDebug (ctx, 1, "HandleClientWithManualServer", Parameters.ClientParameters.TargetHost ?? "<null>");
 
-			await clientStream.WriteLineAsync ("GET / HTTP/1.0");
-			try {
-				if (Parameters.ClientParameters.TargetHost != null)
-					await clientStream.WriteLineAsync (string.Format ("Host: {0}", Parameters.ClientParameters.TargetHost));
-				await clientStream.WriteLineAsync ();
-			} catch (Exception ex) {
-				LogDebug (ctx, 1, "HandleClientWithManualServer error", ex.Message);
-			}
+			await clientStream.WriteLineAsync ("Hello World!");
 
 			var line = await clientStream.ReadLineAsync ();
-			LogDebug (ctx, 1, "HandleClientWithManualServer response", line);
-
-			HttpProtocol protocol;
-			HttpStatusCode status;
-			if (!HttpResponse.ParseResponseHeader (line, out protocol, out status))
-				throw new ConnectionException ("Got unexpected output from server: '{0}'", line);
-
-			LogDebug (ctx, 1, "HandleClientWithManualServer done", protocol, status);
+			LogDebug (ctx, 1, "HandleClientWithManualServer done", line);
 		}
 
 		protected virtual async Task HandleServerWithManualClient (TestContext ctx, CancellationToken cancellationToken)
