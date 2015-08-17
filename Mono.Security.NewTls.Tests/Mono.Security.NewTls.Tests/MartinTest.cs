@@ -40,7 +40,7 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
-	[Martin]
+	// [Martin]
 	[AsyncTestFixture]
 	public class MartinTest
 	{
@@ -64,7 +64,7 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		[AsyncTest]
+		// [AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ManualClient)]
 		public async Task TestClientPuppy (TestContext ctx, CancellationToken cancellationToken,
 			[InstrumentationConnectionType ("Manual:DotNet")] InstrumentationConnectionType connectionType,

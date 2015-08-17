@@ -117,9 +117,9 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.MartinTest:
 				return MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.ClientInstrumentation;
 			case InstrumentationCategory.ManualClient:
-				return MonoConnectionFlags.ServerInstrumentation;
+				return MonoConnectionFlags.ManualClient;
 			case InstrumentationCategory.ManualServer:
-				return MonoConnectionFlags.ClientInstrumentation;
+				return MonoConnectionFlags.ManualServer;
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
 				return MonoConnectionFlags.None;
@@ -131,6 +131,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var connectionFlags = GetConnectionFlags (ctx, category);
 			switch (type) {
 			case ConnectionProviderType.NewTLS:
+			case ConnectionProviderType.PlatformDefault:
 				return (connectionFlags & (MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.RequireMonoClient)) == 0;
 			case ConnectionProviderType.OpenSsl:
 				return (connectionFlags & (MonoConnectionFlags.ClientInstrumentation)) == 0;
@@ -146,6 +147,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var connectionFlags = GetConnectionFlags (ctx, category);
 			switch (type) {
 			case ConnectionProviderType.NewTLS:
+			case ConnectionProviderType.PlatformDefault:
 				return (connectionFlags & (MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.RequireMonoServer)) == 0;
 			case ConnectionProviderType.OpenSsl:
 				return (connectionFlags & (MonoConnectionFlags.ServerInstrumentation)) == 0;

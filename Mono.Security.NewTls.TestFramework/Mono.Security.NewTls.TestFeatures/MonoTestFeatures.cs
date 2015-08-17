@@ -276,23 +276,22 @@ namespace Mono.Security.NewTls.TestFeatures
 			if (ctx.TryGetParameter<ProtocolVersions> (out protocolVersion))
 				parameters.ProtocolVersion = protocolVersion;
 
-			if (serverProviderType == ConnectionProviderType.Manual) {
+			if (serverProviderType == ConnectionProviderType.Manual || clientProviderType == ConnectionProviderType.Manual) {
 				string serverAddress;
-				if (!ctx.Settings.TryGetValue ("ServerAddress", out serverAddress))
-					throw new NotSupportedException ("Missing 'ServerAddress' setting.");
+				if (ctx.Settings.TryGetValue ("ServerAddress", out serverAddress)) {
+					var support = DependencyInjector.Get<IPortableEndPointSupport> ();
+					parameters.EndPoint = support.ParseEndpoint (serverAddress, 443, true);
 
-				var support = DependencyInjector.Get<IPortableEndPointSupport> ();
-				parameters.EndPoint = support.ParseEndpoint (serverAddress, 443, true);
+					string serverHost;
+					if (ctx.Settings.TryGetValue ("ServerHost", out serverHost))
+						parameters.ClientParameters.TargetHost = serverHost;
+				}
+			}
+
+			if (serverProviderType == ConnectionProviderType.Manual)
 				flags |= MonoConnectionFlags.ManualServer;
-
-				string serverHost;
-				if (ctx.Settings.TryGetValue ("ServerHost", out serverHost))
-					parameters.ClientParameters.TargetHost = serverHost;
-			}
-
-			if (clientProviderType == ConnectionProviderType.Manual) {
+			if (clientProviderType == ConnectionProviderType.Manual)
 				flags |= MonoConnectionFlags.ManualClient;
-			}
 
 			if (parameters.EndPoint != null) {
 				if (parameters.ClientParameters.EndPoint == null)

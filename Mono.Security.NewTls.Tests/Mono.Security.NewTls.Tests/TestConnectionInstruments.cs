@@ -88,7 +88,7 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public Task MartinTest (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType ("MonoWithNewTLS:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[InstrumentationConnectionType ("PlatformDefault:PlatformDefault")] InstrumentationConnectionType connectionType,
 			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
 			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
@@ -99,7 +99,7 @@ namespace Mono.Security.NewTls.Tests
 		[ManualClient]
 		[InstrumentationCategory (InstrumentationCategory.ManualClient)]
 		public Task ClientPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType ("Manual:MonoWithNewTLS")] InstrumentationConnectionType connectionType,
+			[InstrumentationConnectionType ("Manual:PlatformDefault")] InstrumentationConnectionType connectionType,
 			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
 			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
@@ -110,7 +110,7 @@ namespace Mono.Security.NewTls.Tests
 		[ManualServer]
 		[InstrumentationCategory (InstrumentationCategory.ManualServer)]
 		public Task ServerPuppy (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType ("MonoWithNewTLS:Manual")] InstrumentationConnectionType connectionType,
+			[InstrumentationConnectionType ("PlatformDefault:Manual")] InstrumentationConnectionType connectionType,
 			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
 			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
