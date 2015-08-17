@@ -49,8 +49,11 @@ namespace Mono.Security.NewTls.TestProvider
 		protected override void CreateConnection ()
 		{
 			var endpoint = GetEndPoint ();
-			if (Parameters.ClientCertificate != null)
-				openssl.SetCertificate (Parameters.ClientCertificate.Data, Parameters.ClientCertificate.Password);
+			if (Parameters.ClientCertificate != null) {
+				string password;
+				var data = CertificateProvider.GetRawCertificateData (Parameters.ClientCertificate, out password);
+				openssl.SetCertificate (data, password);
+			}
 
 			if (MonoParameters != null) {
 				if (MonoParameters.ClientCiphers != null)

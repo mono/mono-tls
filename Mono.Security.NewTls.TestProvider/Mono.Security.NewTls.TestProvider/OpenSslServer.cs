@@ -48,7 +48,9 @@ namespace Mono.Security.NewTls.TestProvider
 			if (!IPAddress.IsLoopback (endpoint.Address) && endpoint.Address != IPAddress.Any)
 				throw new InvalidOperationException ();
 
-			openssl.SetCertificate (Certificate.Data, Certificate.Password);
+			string password;
+			var data = CertificateProvider.GetRawCertificateData (Certificate, out password);
+			openssl.SetCertificate (data, password);
 			openssl.Bind (endpoint);
 		}
 
