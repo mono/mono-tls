@@ -91,6 +91,7 @@ namespace Mono.Security.NewTls.TestFramework
 				yield return GenericConnectionInstrumentType.InvalidServerCertificateV1;
 				yield return GenericConnectionInstrumentType.InvalidServerCertificateRsa512;
 				yield return GenericConnectionInstrumentType.InvalidClientCertificateV1;
+				yield return GenericConnectionInstrumentType.InvalidServerCertificateRsa512;
 				yield return GenericConnectionInstrumentType.ServerProvidesInvalidCertificate;
 				yield return GenericConnectionInstrumentType.ClientProvidesInvalidCertificate;
 				yield return GenericConnectionInstrumentType.RequireRsaKeyExchange;
@@ -170,13 +171,19 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case GenericConnectionInstrumentType.InvalidClientCertificateV1:
-				parameters.ClientCertificate = ResourceManager.InvalidClientCertificate;
+				parameters.ClientCertificate = ResourceManager.InvalidClientCertificateV1;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
+			case GenericConnectionInstrumentType.InvalidClientCertificateRsa512:
+				parameters.ClientCertificate = ResourceManager.InvalidClientCertificateRsa512;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.ClientProvidesInvalidCertificate:
-				parameters.ClientCertificate = ResourceManager.InvalidClientCertificate;
+				parameters.ClientCertificate = ResourceManager.InvalidClientCertificateV1;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.Add (HandshakeInstrumentType.OverrideClientCertificateSelection);
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;

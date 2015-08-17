@@ -37,6 +37,7 @@ namespace Mono.Security.NewTls.TestFramework
 		ServerProvidesInvalidCertificate,
 
 		InvalidClientCertificateV1,
+		InvalidClientCertificateRsa512,
 		ClientProvidesInvalidCertificate,
 
 		RequireRsaKeyExchange,
