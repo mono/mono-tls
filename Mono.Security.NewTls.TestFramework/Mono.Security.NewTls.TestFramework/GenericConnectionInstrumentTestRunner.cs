@@ -247,20 +247,20 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				break;
 
-			case GenericConnectionInstrumentType.ClientCertificateInvalidForDhe:
-				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
-				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
-				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
+			case GenericConnectionInstrumentType.ClientCertificateInvalidForRsa:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
-			case GenericConnectionInstrumentType.ClientCertificateInvalidForRsa:
-				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
-				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
-				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
+			case GenericConnectionInstrumentType.ClientCertificateInvalidForDhe:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
