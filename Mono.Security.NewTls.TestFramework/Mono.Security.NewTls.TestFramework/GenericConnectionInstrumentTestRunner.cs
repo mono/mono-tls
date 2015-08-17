@@ -99,7 +99,9 @@ namespace Mono.Security.NewTls.TestFramework
 				yield return GenericConnectionInstrumentType.RequireDheKeyExchange;
 				yield return GenericConnectionInstrumentType.DheKeyExchangeNotAllowed;
 				yield return GenericConnectionInstrumentType.ClientCertificateInvalidForRsa;
+				yield return GenericConnectionInstrumentType.ClientProvidesCertificateThatsInvalidForRsa;
 				yield return GenericConnectionInstrumentType.ClientCertificateInvalidForDhe;
+				yield return GenericConnectionInstrumentType.ClientProvidesCertificateThatsInvalidForDhe;
 				yield return GenericConnectionInstrumentType.ClientCertificateRequiresRsaKeyExchange;
 				yield return GenericConnectionInstrumentType.ClientCertificateRequiresDheKeyExchange;
 				break;
@@ -267,8 +269,30 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
+			case GenericConnectionInstrumentType.ClientProvidesCertificateThatsInvalidForRsa:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ClientCertificateValidator = AcceptAnyCertificate;
+				parameters.ServerCertificateValidator = AcceptAnyCertificate;
+				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
+				parameters.Add (HandshakeInstrumentType.OverrideClientCertificateSelection);
+				break;
+
+			case GenericConnectionInstrumentType.ClientProvidesCertificateThatsInvalidForDhe:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
+				parameters.ClientCertificateValidator = AcceptAnyCertificate;
+				parameters.ServerCertificateValidator = AcceptAnyCertificate;
+				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
+				parameters.Add (HandshakeInstrumentType.OverrideClientCertificateSelection);
+				break;
+
 			case GenericConnectionInstrumentType.MartinTest:
-				goto case GenericConnectionInstrumentType.ClientCertificateInvalidForRsa;
+				goto case GenericConnectionInstrumentType.ClientProvidesCertificateThatsInvalidForRsa;
 
 			default:
 				ctx.AssertFail ("Unsupported connection instrument: '{0}'.", type);
