@@ -41,12 +41,12 @@ namespace Mono.Security.NewTls.TestFramework
 		ServerConnection,
 		Connection,
 
+		CertificateChecks,
+
 		SimpleMonoClient,
 		SimpleMonoServer,
 		SimpleMonoConnection,
 		MonoProtocolVersions,
-
-		InvalidCertificates,
 
 		SelectClientCipher,
 		SelectServerCipher,

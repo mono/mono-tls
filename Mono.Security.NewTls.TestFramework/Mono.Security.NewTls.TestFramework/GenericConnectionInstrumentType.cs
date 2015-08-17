@@ -32,11 +32,17 @@ namespace Mono.Security.NewTls.TestFramework
 		FragmentHandshakeMessages,
 		SendBlobAfterReceivingFinish,
 
-		UnsupportedServerCertificate,
-		ServerProvidesUnsupportedCertificate,
+		InvalidServerCertificateV1,
+		InvalidServerCertificateRsa512,
+		ServerProvidesInvalidCertificate,
 
-		UnsupportedClientCertificate,
-		ClientProvidesUnsupportedCertificate,
+		InvalidClientCertificateV1,
+		ClientProvidesInvalidCertificate,
+
+		RequireRsaKeyExchange,
+		RsaKeyExchangeNotAllowed,
+		RequireDheKeyExchange,
+		DheKeyExchangeNotAllowed,
 
 		MartinTest,
 		MartinClientPuppy,

@@ -48,12 +48,6 @@ namespace Mono.Security.NewTls.TestFramework
 		CipherSelectionOrder,
 		CipherSelectionOrder2,
 
-		InvalidServerCertificate,
-		RequireRsaKeyExchange,
-		RsaKeyExchangeNotAllowed,
-		RequireDheKeyExchange,
-		DheKeyExchangeNotAllowed,
-
 		MartinTest
 	}
 }

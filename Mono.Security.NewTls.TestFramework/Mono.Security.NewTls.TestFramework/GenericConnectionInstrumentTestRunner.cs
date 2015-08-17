@@ -68,18 +68,35 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.ClientConnection:
 				yield return GenericConnectionInstrumentType.FragmentHandshakeMessages;
 				yield return GenericConnectionInstrumentType.SendBlobAfterReceivingFinish;
-				yield return GenericConnectionInstrumentType.UnsupportedClientCertificate;
+				yield return GenericConnectionInstrumentType.InvalidClientCertificateV1;
 				break;
 
 			case InstrumentationCategory.ServerConnection:
 				yield return GenericConnectionInstrumentType.FragmentHandshakeMessages;
-				yield return GenericConnectionInstrumentType.UnsupportedServerCertificate;
+				yield return GenericConnectionInstrumentType.InvalidServerCertificateV1;
+				yield return GenericConnectionInstrumentType.InvalidServerCertificateRsa512;
 				break;
 
 			case InstrumentationCategory.Connection:
 				yield return GenericConnectionInstrumentType.FragmentHandshakeMessages;
-				yield return GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate;
-				yield return GenericConnectionInstrumentType.ClientProvidesUnsupportedCertificate;
+				yield return GenericConnectionInstrumentType.ServerProvidesInvalidCertificate;
+				yield return GenericConnectionInstrumentType.ClientProvidesInvalidCertificate;
+				yield return GenericConnectionInstrumentType.RequireRsaKeyExchange;
+				yield return GenericConnectionInstrumentType.RsaKeyExchangeNotAllowed;
+				yield return GenericConnectionInstrumentType.RequireDheKeyExchange;
+				yield return GenericConnectionInstrumentType.DheKeyExchangeNotAllowed;
+				break;
+
+			case InstrumentationCategory.CertificateChecks:
+				yield return GenericConnectionInstrumentType.InvalidServerCertificateV1;
+				yield return GenericConnectionInstrumentType.InvalidServerCertificateRsa512;
+				yield return GenericConnectionInstrumentType.InvalidClientCertificateV1;
+				yield return GenericConnectionInstrumentType.ServerProvidesInvalidCertificate;
+				yield return GenericConnectionInstrumentType.ClientProvidesInvalidCertificate;
+				yield return GenericConnectionInstrumentType.RequireRsaKeyExchange;
+				yield return GenericConnectionInstrumentType.RsaKeyExchangeNotAllowed;
+				yield return GenericConnectionInstrumentType.RequireDheKeyExchange;
+				yield return GenericConnectionInstrumentType.DheKeyExchangeNotAllowed;
 				break;
 
 			case InstrumentationCategory.ManualClient:
@@ -136,40 +153,76 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.Add (HandshakeInstrumentType.SendBlobAfterReceivingFinish);
 				break;
 
-			case GenericConnectionInstrumentType.UnsupportedServerCertificate:
-				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificate;
+			case GenericConnectionInstrumentType.InvalidServerCertificateV1:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificateV1;
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
-			case GenericConnectionInstrumentType.ServerProvidesUnsupportedCertificate:
-				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificate;
+			case GenericConnectionInstrumentType.InvalidServerCertificateRsa512:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificateRsa512;
+				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
+				break;
+
+			case GenericConnectionInstrumentType.ServerProvidesInvalidCertificate:
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificateV1;
 				parameters.Add (HandshakeInstrumentType.OverrideServerCertificateSelection);
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
-			case GenericConnectionInstrumentType.UnsupportedClientCertificate:
+			case GenericConnectionInstrumentType.InvalidClientCertificateV1:
 				parameters.ClientCertificate = ResourceManager.InvalidClientCertificate;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
-			case GenericConnectionInstrumentType.ClientProvidesUnsupportedCertificate:
+			case GenericConnectionInstrumentType.ClientProvidesInvalidCertificate:
 				parameters.ClientCertificate = ResourceManager.InvalidClientCertificate;
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.Add (HandshakeInstrumentType.OverrideClientCertificateSelection);
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
+			case GenericConnectionInstrumentType.RequireRsaKeyExchange:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] {
+					CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA, CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
+				};
+				parameters.ExpectedServerCipher = CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA;
+				break;
+
+			case GenericConnectionInstrumentType.RsaKeyExchangeNotAllowed:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ExpectServerAlert = AlertDescription.InsuficientSecurity;
+				break;
+
+			case GenericConnectionInstrumentType.RequireDheKeyExchange:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ClientCiphers = new CipherSuiteCode[] {
+					CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA, CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA
+				};
+				parameters.ExpectedServerCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+				break;
+
+			case GenericConnectionInstrumentType.DheKeyExchangeNotAllowed:
+				parameters.ProtocolVersion = ProtocolVersions.Tls12;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
+				parameters.ExpectServerAlert = AlertDescription.InsuficientSecurity;
+				break;
+
 			case GenericConnectionInstrumentType.MartinClientPuppy:
-				var provider = DependencyInjector.Get<IPortableEndPointSupport> ();
-				parameters.ServerParameters.EndPoint = provider.GetEndpoint ("0.0.0.0", 4433);
+			case GenericConnectionInstrumentType.MartinServerPuppy:
 				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptSelfSigned;
 				parameters.ServerCertificateValidator = AcceptFromLocalCA;
 				break;
 
 			case GenericConnectionInstrumentType.MartinTest:
-				goto case GenericConnectionInstrumentType.ClientProvidesUnsupportedCertificate;
+				goto case GenericConnectionInstrumentType.ClientProvidesInvalidCertificate;
 
 			default:
 				ctx.AssertFail ("Unsupported connection instrument: '{0}'.", type);
