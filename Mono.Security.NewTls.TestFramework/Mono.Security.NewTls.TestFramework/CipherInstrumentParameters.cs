@@ -31,6 +31,9 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using TestFeatures;
+
+	[CipherInstrumentParameters]
 	public class CipherInstrumentParameters : InstrumentationParameters
 	{
 		public CipherInstrumentType Type {
@@ -40,12 +43,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public CipherInstrumentParameters (InstrumentationCategory category, CipherInstrumentType type, string identifier, IServerCertificate certificate)
 			: base (category, identifier, certificate)
-		{
-			Type = type;
-		}
-
-		public CipherInstrumentParameters (InstrumentationCategory category, CipherInstrumentType type, ClientParameters clientParameters, ServerParameters serverParameters)
-			: base (category, clientParameters, serverParameters)
 		{
 			Type = type;
 		}

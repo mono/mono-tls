@@ -35,7 +35,7 @@ using Xamarin.WebTests.Resources;
 using Xamarin.WebTests.Features;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
-[assembly: RequireDependency (typeof (MonoConnectionProviderFactory))]
+[assembly: RequireDependency (typeof (ConnectionProviderFactory))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
 [assembly: RequireDependency (typeof (IPortableWebSupport))]
 

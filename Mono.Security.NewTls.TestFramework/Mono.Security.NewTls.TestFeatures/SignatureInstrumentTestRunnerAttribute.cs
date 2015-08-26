@@ -27,6 +27,7 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.Features;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -34,6 +35,7 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
+	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
 	public class SignatureInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<SignatureInstrumentTestRunner>
 	{
 		public SignatureInstrumentTestRunnerAttribute ()
@@ -43,8 +45,8 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public SignatureInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return MonoTestFeatures.CreateTestRunner<SignatureInstrumentParameters,SignatureInstrumentTestRunner> (
-				ctx, (s, c, p, f) => new SignatureInstrumentTestRunner (s, c, p, f));
+			return ConnectionTestFeatures.CreateTestRunner<InstrumentationConnectionProvider,SignatureInstrumentParameters,SignatureInstrumentTestRunner> (
+				ctx, (s, c, p, a) => new SignatureInstrumentTestRunner (s, c, p, a));
 		}
 	}
 }

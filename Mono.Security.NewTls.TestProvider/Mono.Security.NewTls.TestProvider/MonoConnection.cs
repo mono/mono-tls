@@ -52,18 +52,18 @@ namespace Mono.Security.NewTls.TestProvider
 
 	abstract class MonoConnection : DotNetConnection
 	{
-		public MonoConnection (MonoConnectionProviderImpl provider, ConnectionParameters parameters)
+		public MonoConnection (MonoConnectionProvider provider, ConnectionParameters parameters)
 			: base (provider, parameters)
 		{
 			this.provider = provider;
 		}
 
 		MSI.MonoTlsSettings settings;
-		MonoConnectionProviderImpl provider;
+		MonoConnectionProvider provider;
 		MonoSslStream monoSslStream;
 		InstrumentationProvider instrumentationProvider;
 
-		public MonoConnectionProviderImpl ConnectionProvider {
+		public MonoConnectionProvider ConnectionProvider {
 			get { return provider; }
 		}
 

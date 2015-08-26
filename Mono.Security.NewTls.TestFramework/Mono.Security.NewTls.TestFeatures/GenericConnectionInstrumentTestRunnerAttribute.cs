@@ -27,6 +27,7 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.Features;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -34,6 +35,7 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
+	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
 	public class GenericConnectionInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<GenericConnectionInstrumentTestRunner>
 	{
 		public GenericConnectionInstrumentTestRunnerAttribute ()
@@ -41,29 +43,20 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
-		public GenericConnectionInstrumentTestRunnerAttribute (MonoConnectionFlags flags)
-			: base (typeof (GenericConnectionInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
-		{
-			ConnectionFlags = flags;
-		}
-
-		public MonoConnectionFlags? ConnectionFlags {
-			get;
-			private set;
-		}
-
-		GenericConnectionInstrumentTestRunner CreateInstance (TestContext ctx, IServer server, IClient client, GenericConnectionInstrumentParameters parameters, MonoConnectionFlags flags)
+		GenericConnectionInstrumentTestRunner CreateInstance (
+			TestContext ctx, IServer server, IClient client,
+			InstrumentationConnectionProvider provider, GenericConnectionInstrumentParameters parameters)
 		{
 			if (!GenericConnectionInstrumentTestRunner.IsSupported (parameters, client.Provider.Type, server.Provider.Type))
 				ctx.IgnoreThisTest ();
 
-			return new GenericConnectionInstrumentTestRunner (server, client, parameters, flags);
+			return new GenericConnectionInstrumentTestRunner (server, client, provider, parameters);
 		}
 
 		public GenericConnectionInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return MonoTestFeatures.CreateTestRunner<GenericConnectionInstrumentParameters,GenericConnectionInstrumentTestRunner> (
-				ctx, (s, c, p, f) => CreateInstance (ctx, s, c, p, f), ConnectionFlags);
+			return ConnectionTestFeatures.CreateTestRunner<InstrumentationConnectionProvider,GenericConnectionInstrumentParameters,GenericConnectionInstrumentTestRunner> (
+				ctx, (s, c, p, a) => CreateInstance (ctx, s, c, p, a));
 		}
 	}
 }

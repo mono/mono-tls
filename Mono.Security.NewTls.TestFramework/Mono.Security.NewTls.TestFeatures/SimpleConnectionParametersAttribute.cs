@@ -35,6 +35,7 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
+	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
 	public class SimpleConnectionParametersAttribute : TestParameterAttribute, ITestParameterSource<SimpleConnectionParameters>
 	{
 		public SimpleConnectionType? Type {

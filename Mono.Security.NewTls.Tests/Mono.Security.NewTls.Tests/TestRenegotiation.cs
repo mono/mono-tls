@@ -47,9 +47,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.Renegotiation)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[RenegotiationInstrumentParameters] RenegotiationInstrumentParameters parameters,
-			[RenegotiationInstrumentTestRunner] RenegotiationInstrumentTestRunner runner)
+			InstrumentationConnectionProvider provider,
+			RenegotiationInstrumentParameters parameters,
+			RenegotiationInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -57,9 +57,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ServerRenegotiation)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[RenegotiationInstrumentParameters] RenegotiationInstrumentParameters parameters,
-			[RenegotiationInstrumentTestRunner] RenegotiationInstrumentTestRunner runner)
+			InstrumentationConnectionProvider provider,
+			RenegotiationInstrumentParameters parameters,
+			RenegotiationInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -67,9 +67,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ClientRenegotiation)]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
-			[RenegotiationInstrumentParameters] RenegotiationInstrumentParameters parameters,
-			[RenegotiationInstrumentTestRunner] RenegotiationInstrumentTestRunner runner)
+			InstrumentationConnectionProvider provider,
+			RenegotiationInstrumentParameters parameters,
+			RenegotiationInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

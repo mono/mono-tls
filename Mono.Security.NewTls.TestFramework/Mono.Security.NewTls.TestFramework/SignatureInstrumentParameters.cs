@@ -31,6 +31,9 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using TestFeatures;
+
+	[SignatureInstrumentParameters]
 	public class SignatureInstrumentParameters : InstrumentationParameters
 	{
 		public SignatureInstrumentType Type {
@@ -40,12 +43,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public SignatureInstrumentParameters (InstrumentationCategory category, SignatureInstrumentType type, string identifier, IServerCertificate certificate)
 			: base (category, identifier, certificate)
-		{
-			Type = type;
-		}
-
-		public SignatureInstrumentParameters (InstrumentationCategory category, SignatureInstrumentType type, ClientParameters clientParameters, ServerParameters serverParameters)
-			: base (category, clientParameters, serverParameters)
 		{
 			Type = type;
 		}

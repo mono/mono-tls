@@ -21,19 +21,11 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return Parameters.ServerCertificate; }
 		}
 
-		ServerParameters IServer.Parameters {
-			get { return Parameters; }
+		public MonoConnectionParameters MonoParameters {
+			get { return base.Parameters as MonoConnectionParameters; }
 		}
 
-		new public ServerParameters Parameters {
-			get { return (ServerParameters)base.Parameters; }
-		}
-
-		public MonoServerParameters MonoParameters {
-			get { return base.Parameters as MonoServerParameters; }
-		}
-
-		public OpenSslServer (OpenSslConnectionProvider provider, ServerParameters parameters)
+		public OpenSslServer (OpenSslConnectionProvider provider, ConnectionParameters parameters)
 			: base (provider, parameters)
 		{
 		}

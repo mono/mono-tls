@@ -38,6 +38,9 @@ using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using TestFeatures;
+
+	[RenegotiationInstrumentTestRunner]
 	public class RenegotiationInstrumentTestRunner : ConnectionInstrumentTestRunner
 	{
 		new public RenegotiationInstrumentParameters Parameters {
@@ -51,8 +54,8 @@ namespace Mono.Security.NewTls.TestFramework
 		TaskCompletionSource<bool> renegotiationStartedTcs;
 		TaskCompletionSource<bool> renegotiationCompletedTcs;
 
-		public RenegotiationInstrumentTestRunner (IServer server, IClient client, RenegotiationInstrumentParameters parameters, MonoConnectionFlags flags)
-			: base (server, client, parameters, flags)
+		public RenegotiationInstrumentTestRunner (IServer server, IClient client, InstrumentationConnectionProvider provider, RenegotiationInstrumentParameters parameters)
+			: base (server, client, provider, parameters)
 		{
 			renegotiationStartedTcs = new TaskCompletionSource<bool> ();
 			renegotiationCompletedTcs = new TaskCompletionSource<bool> ();
@@ -186,7 +189,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case RenegotiationInstrumentType.RequestClientRenegotiationWithPendingWrite:
 				parameters.RequestClientRenegotiation = true;
 				parameters.ServerWriteDuringClientRenegotiation = true;
-				parameters.ServerParameters.UseStreamInstrumentation = true;
+				parameters.UseStreamInstrumentation = true;
 				break;
 
 			case RenegotiationInstrumentType.MartinTest:

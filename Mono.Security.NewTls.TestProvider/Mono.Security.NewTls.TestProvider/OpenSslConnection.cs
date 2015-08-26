@@ -160,13 +160,9 @@ namespace Mono.Security.NewTls.TestProvider
 			CertificateValidator validator = null;
 
 			if (IsServer) {
-				var serverParameters = Parameters as ServerParameters;
-				if (serverParameters != null)
-					validator = (CertificateValidator)serverParameters.ServerCertificateValidator;
+				validator = (CertificateValidator)Parameters.ServerCertificateValidator;
 			} else {
-				var clientParameters = Parameters as ClientParameters;
-				if (clientParameters != null)
-					validator = (CertificateValidator)clientParameters.ClientCertificateValidator;
+				validator = (CertificateValidator)Parameters.ClientCertificateValidator;
 			}
 
 			if (validator == null)
