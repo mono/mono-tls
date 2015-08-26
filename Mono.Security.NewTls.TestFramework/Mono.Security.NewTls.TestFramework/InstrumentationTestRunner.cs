@@ -41,7 +41,7 @@ using Xamarin.WebTests.TestRunners;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public abstract class InstrumentationTestRunner : ClientAndServer, InstrumentationProvider
+	public abstract class InstrumentationTestRunner : ClientAndServerTestRunner, InstrumentationProvider
 	{
 		new public InstrumentationParameters Parameters {
 			get { return (InstrumentationParameters)base.Parameters; }
@@ -51,13 +51,9 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.Category; }
 		}
 
-		public InstrumentationConnectionProvider Provider {
+		public MonoConnectionFlags ConnectionFlags {
 			get;
 			private set;
-		}
-
-		public InstrumentationConnectionFlags  ConnectionFlags {
-			get { return Provider.Flags; }
 		}
 
 		public InstrumentationConnectionHandler ConnectionHandler {
@@ -65,14 +61,14 @@ namespace Mono.Security.NewTls.TestFramework
 			private set;
 		}
 
-		public InstrumentationTestRunner (IServer server, IClient client, InstrumentationConnectionProvider provider, InstrumentationParameters parameters)
+		public InstrumentationTestRunner (IServer server, IClient client, InstrumentationParameters parameters, MonoConnectionFlags flags)
 			: base (server, client, parameters)
 		{
-			Provider = provider;
+			ConnectionFlags = flags;
 
-			if ((provider.Flags & InstrumentationConnectionFlags.ServerInstrumentation) != 0)
+			if ((flags & MonoConnectionFlags.ServerInstrumentation) != 0)
 				((IMonoServer)server).InstrumentationProvider = this;
-			if ((provider.Flags & InstrumentationConnectionFlags.ClientInstrumentation) != 0)
+			if ((flags & MonoConnectionFlags.ClientInstrumentation) != 0)
 				((IMonoClient)client).InstrumentationProvider = this;
 
 			ConnectionHandler = CreateConnectionHandler ();
@@ -88,42 +84,85 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public abstract Instrumentation CreateInstrument (TestContext ctx);
 
-		public static InstrumentationConnectionFlags GetConnectionFlags (TestContext ctx, InstrumentationCategory category)
+		public static MonoConnectionFlags GetConnectionFlags (TestContext ctx, InstrumentationCategory category)
 		{
 			switch (category) {
 			case InstrumentationCategory.SimpleMonoClient:
 			case InstrumentationCategory.SelectClientCipher:
-				return InstrumentationConnectionFlags.RequireMonoClient;
+				return MonoConnectionFlags.RequireMonoClient;
 			case InstrumentationCategory.SimpleMonoServer:
 			case InstrumentationCategory.SelectServerCipher:
-				return InstrumentationConnectionFlags.RequireMonoServer;
+				return MonoConnectionFlags.RequireMonoServer;
 			case InstrumentationCategory.SimpleMonoConnection:
 			case InstrumentationCategory.MonoProtocolVersions:
 			case InstrumentationCategory.SelectCipher:
-				return InstrumentationConnectionFlags.RequireMonoClient | InstrumentationConnectionFlags.RequireMonoServer;
+				return MonoConnectionFlags.RequireMonoClient | MonoConnectionFlags.RequireMonoServer;
 			case InstrumentationCategory.AllClientSignatureAlgorithms:
 			case InstrumentationCategory.ClientSignatureParameters:
 			case InstrumentationCategory.ClientConnection:
 			case InstrumentationCategory.ClientRenegotiation:
 			case InstrumentationCategory.MartinTestClient:
-				return InstrumentationConnectionFlags.ClientInstrumentation;
+				return MonoConnectionFlags.ClientInstrumentation;
 			case InstrumentationCategory.AllServerSignatureAlgorithms:
+			case InstrumentationCategory.ServerSignatureParameters:
 			case InstrumentationCategory.ServerConnection:
 			case InstrumentationCategory.ServerRenegotiation:
 			case InstrumentationCategory.MartinTestServer:
-				return InstrumentationConnectionFlags.ServerInstrumentation;
-			case InstrumentationCategory.ServerSignatureParameters:
-				return InstrumentationConnectionFlags.ClientInstrumentation | InstrumentationConnectionFlags.ServerInstrumentation;
+				return MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.SignatureAlgorithms:
 			case InstrumentationCategory.Connection:
 			case InstrumentationCategory.Renegotiation:
 			case InstrumentationCategory.CertificateChecks:
-				return InstrumentationConnectionFlags.ClientInstrumentation | InstrumentationConnectionFlags.ServerInstrumentation;
+				return MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.MartinTest:
-				return InstrumentationConnectionFlags.ServerInstrumentation | InstrumentationConnectionFlags.ClientInstrumentation;
+				return MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.ClientInstrumentation;
+			case InstrumentationCategory.ManualClient:
+				return MonoConnectionFlags.ManualClient;
+			case InstrumentationCategory.ManualServer:
+				return MonoConnectionFlags.ManualServer;
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
-				return InstrumentationConnectionFlags.None;
+				return MonoConnectionFlags.None;
+			}
+		}
+
+		public static bool IsClientSupported (TestContext ctx, InstrumentationCategory category, ConnectionProviderType type)
+		{
+			var connectionFlags = GetConnectionFlags (ctx, category);
+			switch (type) {
+			case ConnectionProviderType.NewTLS:
+			case ConnectionProviderType.PlatformDefault:
+				return (connectionFlags & (MonoConnectionFlags.ClientInstrumentation | MonoConnectionFlags.RequireMonoClient)) == 0;
+			case ConnectionProviderType.OpenSsl:
+				return (connectionFlags & (MonoConnectionFlags.ClientInstrumentation)) == 0;
+			case ConnectionProviderType.MonoWithNewTLS:
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		public static bool IsServerSupported (TestContext ctx, InstrumentationCategory category, ConnectionProviderType type)
+		{
+			var connectionFlags = GetConnectionFlags (ctx, category);
+			switch (type) {
+			case ConnectionProviderType.NewTLS:
+			case ConnectionProviderType.PlatformDefault:
+				return (connectionFlags & (MonoConnectionFlags.ServerInstrumentation | MonoConnectionFlags.RequireMonoServer)) == 0;
+			case ConnectionProviderType.OpenSsl:
+				return (connectionFlags & (MonoConnectionFlags.ServerInstrumentation)) == 0;
+			case ConnectionProviderType.MonoWithNewTLS:
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		public bool IsManualConnection {
+			get {
+				if (Category == InstrumentationCategory.ManualClient || Category == InstrumentationCategory.ManualServer)
+					return true;
+				return (ConnectionFlags & (MonoConnectionFlags.ManualClient | MonoConnectionFlags.ManualServer)) != 0;
 			}
 		}
 
@@ -195,7 +234,7 @@ namespace Mono.Security.NewTls.TestFramework
 				ctx.Expect (Server.ProtocolVersion, Is.EqualTo (Parameters.ProtocolVersion), "server protocol version");
 			}
 
-			if (Server.Provider.SupportsSslStreams && Parameters.RequireClientCertificate) {
+			if (Server.Provider.SupportsSslStreams && (Parameters.ServerFlags & ServerFlags.RequireClientCertificate) != 0) {
 				ctx.Expect (Server.SslStream.HasRemoteCertificate, "has remote certificate");
 				ctx.Expect (Server.SslStream.IsMutuallyAuthenticated, "is mutually authenticated");
 			}

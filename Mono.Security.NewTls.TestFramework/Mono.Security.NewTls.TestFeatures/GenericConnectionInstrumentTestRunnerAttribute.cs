@@ -27,7 +27,6 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
-using Xamarin.WebTests.Features;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -35,7 +34,6 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
-	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
 	public class GenericConnectionInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<GenericConnectionInstrumentTestRunner>
 	{
 		public GenericConnectionInstrumentTestRunnerAttribute ()
@@ -43,20 +41,29 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
-		GenericConnectionInstrumentTestRunner CreateInstance (
-			TestContext ctx, IServer server, IClient client,
-			InstrumentationConnectionProvider provider, GenericConnectionInstrumentParameters parameters)
+		public GenericConnectionInstrumentTestRunnerAttribute (MonoConnectionFlags flags)
+			: base (typeof (GenericConnectionInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		{
+			ConnectionFlags = flags;
+		}
+
+		public MonoConnectionFlags? ConnectionFlags {
+			get;
+			private set;
+		}
+
+		GenericConnectionInstrumentTestRunner CreateInstance (TestContext ctx, IServer server, IClient client, GenericConnectionInstrumentParameters parameters, MonoConnectionFlags flags)
 		{
 			if (!GenericConnectionInstrumentTestRunner.IsSupported (parameters, client.Provider.Type, server.Provider.Type))
 				ctx.IgnoreThisTest ();
 
-			return new GenericConnectionInstrumentTestRunner (server, client, provider, parameters);
+			return new GenericConnectionInstrumentTestRunner (server, client, parameters, flags);
 		}
 
 		public GenericConnectionInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return ConnectionTestFeatures.CreateTestRunner<InstrumentationConnectionProvider,GenericConnectionInstrumentParameters,GenericConnectionInstrumentTestRunner> (
-				ctx, (s, c, p, a) => CreateInstance (ctx, s, c, p, a));
+			return MonoTestFeatures.CreateTestRunner<GenericConnectionInstrumentParameters,GenericConnectionInstrumentTestRunner> (
+				ctx, (s, c, p, f) => CreateInstance (ctx, s, c, p, f), ConnectionFlags);
 		}
 	}
 }

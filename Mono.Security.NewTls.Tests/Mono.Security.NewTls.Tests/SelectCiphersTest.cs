@@ -46,9 +46,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.SelectClientCipher)]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			CipherInstrumentParameters parameters,
-			CipherInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[CipherInstrumentParameters] CipherInstrumentParameters parameters,
+			[CipherInstrumentTestRunner] CipherInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -56,9 +56,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.SelectServerCipher)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			CipherInstrumentParameters parameters,
-			CipherInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[CipherInstrumentParameters] CipherInstrumentParameters parameters,
+			[CipherInstrumentTestRunner] CipherInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -66,9 +66,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.SelectCipher)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			CipherInstrumentParameters parameters,
-			CipherInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[CipherInstrumentParameters] CipherInstrumentParameters parameters,
+			[CipherInstrumentTestRunner] CipherInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

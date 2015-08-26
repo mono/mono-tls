@@ -36,9 +36,6 @@ using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFeatures;
-
-	[SignatureInstrumentTestRunner]
 	public class SignatureInstrumentTestRunner : InstrumentationTestRunner
 	{
 		new public SignatureInstrumentParameters Parameters {
@@ -49,8 +46,8 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.Type; }
 		}
 
-		public SignatureInstrumentTestRunner (IServer server, IClient client, InstrumentationConnectionProvider provider, SignatureInstrumentParameters parameters)
-			: base (server, client, provider, parameters)
+		public SignatureInstrumentTestRunner (IServer server, IClient client, SignatureInstrumentParameters parameters, MonoConnectionFlags flags)
+			: base (server, client, parameters, flags)
 		{
 		}
 
@@ -179,7 +176,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var parameters = CreateParameters (category, type, algorithm.Hash, algorithm.Signature, cipher);
 
 			parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
-			parameters.RequireClientCertificate = true;
+			parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 
 			var signatureParameters = new SignatureParameters ();
 			signatureParameters.Add (algorithm);
@@ -208,7 +205,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var parameters = CreateParameters (category, type);
 
 			parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
-			parameters.RequireClientCertificate = true;
+			parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 
 			switch (type) {
 			case SignatureInstrumentType.NoClientSignatureAlgorithms:
@@ -218,6 +215,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case SignatureInstrumentType.VerifyClientSignatureAlgorithms:
 				parameters.ExpectClientAlert = AlertDescription.IlegalParameter;
+				parameters.ServerFlags |= ServerFlags.ClientAbortsHandshake;
 				goto case SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms;
 
 			case SignatureInstrumentType.ClientProvidesSomeUnsupportedSignatureAlgorithms:
@@ -252,6 +250,7 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Sha384);
 				parameters.ServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha512);
 				parameters.ExpectClientAlert = AlertDescription.IlegalParameter;
+				parameters.ServerFlags |= ServerFlags.ClientAbortsHandshake;
 				break;
 
 			case SignatureInstrumentType.ServerUsesUnsupportedSignatureAlgorithm2:
@@ -265,6 +264,7 @@ namespace Mono.Security.NewTls.TestFramework
 				// Instrumentation override lets us force set this.
 				parameters.ServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Md5Sha1);
 				parameters.ExpectClientAlert = AlertDescription.IlegalParameter;
+				parameters.ServerFlags |= ServerFlags.ClientAbortsHandshake;
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
 				break;
 

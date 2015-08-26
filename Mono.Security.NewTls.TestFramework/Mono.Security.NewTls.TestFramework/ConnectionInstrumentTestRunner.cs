@@ -44,8 +44,8 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return (ConnectionInstrumentParameters)base.Parameters; }
 		}
 
-		public ConnectionInstrumentTestRunner (IServer server, IClient client, InstrumentationConnectionProvider provider, ConnectionInstrumentParameters parameters)
-			: base (server, client, provider, parameters)
+		public ConnectionInstrumentTestRunner (IServer server, IClient client, ConnectionInstrumentParameters parameters, MonoConnectionFlags flags)
+			: base (server, client, parameters, flags)
 		{
 		}
 

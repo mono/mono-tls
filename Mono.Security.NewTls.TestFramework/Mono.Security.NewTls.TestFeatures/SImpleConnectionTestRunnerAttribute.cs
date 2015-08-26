@@ -27,7 +27,6 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
-using Xamarin.WebTests.Features;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -35,7 +34,6 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
-	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
 	public class SimpleConnectionTestRunnerAttribute : TestHostAttribute, ITestHost<SimpleConnectionTestRunner>
 	{
 		public SimpleConnectionTestRunnerAttribute ()
@@ -43,10 +41,21 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
+		public SimpleConnectionTestRunnerAttribute (MonoConnectionFlags flags)
+			: base (typeof (SimpleConnectionTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		{
+			ConnectionFlags = flags;
+		}
+
+		public MonoConnectionFlags? ConnectionFlags {
+			get;
+			private set;
+		}
+
 		public SimpleConnectionTestRunner CreateInstance (TestContext ctx)
 		{
-			return ConnectionTestFeatures.CreateTestRunner<InstrumentationConnectionProvider,SimpleConnectionParameters,SimpleConnectionTestRunner> (
-				ctx, (s, c, p, a) => new SimpleConnectionTestRunner (s, c, p, a));
+			return MonoTestFeatures.CreateTestRunner<SimpleConnectionParameters,SimpleConnectionTestRunner> (
+				ctx, (s, c, p, f) => new SimpleConnectionTestRunner (s, c, p, f), ConnectionFlags);
 		}
 	}
 }

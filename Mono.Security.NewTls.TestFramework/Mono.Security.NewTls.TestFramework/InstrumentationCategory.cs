@@ -58,7 +58,10 @@ namespace Mono.Security.NewTls.TestFramework
 
 		MartinTestClient,
 		MartinTestServer,
-		MartinTest
+		MartinTest,
+
+		ManualClient,
+		ManualServer
 	}
 }
 

@@ -46,9 +46,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ClientConnection)]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			GenericConnectionInstrumentParameters parameters,
-			GenericConnectionInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -56,9 +56,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ServerConnection)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			GenericConnectionInstrumentParameters parameters,
-			GenericConnectionInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -66,19 +66,20 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.Connection)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			GenericConnectionInstrumentParameters parameters,
-			GenericConnectionInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
 
+		[Work]
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.CertificateChecks)]
 		public Task TestInvalidCertificates (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			GenericConnectionInstrumentParameters parameters,
-			GenericConnectionInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
 		}
@@ -87,33 +88,31 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public Task MartinTest (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			GenericConnectionInstrumentParameters parameters,
-			GenericConnectionInstrumentTestRunner runner)
+			[InstrumentationConnectionType ("PlatformDefault:PlatformDefault")] InstrumentationConnectionType connectionType,
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
 		[ManualClient]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		[InstrumentationConnectionFlags (InstrumentationConnectionFlags.ManualClient)]
+		[InstrumentationCategory (InstrumentationCategory.ManualClient)]
 		public Task ClientPuppy (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			GenericConnectionInstrumentParameters parameters,
-			GenericConnectionInstrumentTestRunner runner)
+			[InstrumentationConnectionType ("Manual:PlatformDefault")] InstrumentationConnectionType connectionType,
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
 		}
 
 		[AsyncTest]
 		[ManualServer]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		[InstrumentationConnectionFlags (InstrumentationConnectionFlags.ManualServer)]
+		[InstrumentationCategory (InstrumentationCategory.ManualServer)]
 		public Task ServerPuppy (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			GenericConnectionInstrumentParameters parameters,
-			GenericConnectionInstrumentTestRunner runner)
+			[InstrumentationConnectionType ("PlatformDefault:Manual")] InstrumentationConnectionType connectionType,
+			[GenericConnectionInstrumentParameters] GenericConnectionInstrumentParameters parameters,
+			[GenericConnectionInstrumentTestRunner] GenericConnectionInstrumentTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
 		}

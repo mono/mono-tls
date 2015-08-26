@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationConnectionFlags.cs
+// MonoConnectionProviderFactory.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,21 +24,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	[Flags]
-	public enum InstrumentationConnectionFlags
+	public abstract class MonoConnectionProviderFactory : ConnectionProviderFactory
 	{
-		None			= 0,
+		public bool IsMonoSupported (ConnectionProviderType type)
+		{
+			var flags = GetProviderFlags (type);
+			return (flags & ConnectionProviderFlags.SupportsMonoExtensions) != 0;
+		}
 
-		RequireMonoClient	= 1,
-		RequireMonoServer	= 2,
-		ClientInstrumentation	= 4,
-		ServerInstrumentation	= 8,
+		public bool IsInstrumentationSupported (ConnectionProviderType type)
+		{
+			var flags = GetProviderFlags (type);
+			return (flags & ConnectionProviderFlags.SupportsInstrumentation) != 0;
+		}
 
-		ManualClient		= 16,
-		ManualServer		= 32
+		public MonoConnectionProvider GetMonoProvider (ConnectionProviderType type)
+		{
+			var flags = GetProviderFlags (type);
+			if ((flags & ConnectionProviderFlags.SupportsMonoExtensions) == 0)
+				throw new InvalidOperationException ();
+			return (MonoConnectionProvider)GetProvider (type);
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 ﻿//
-// MonoConnectionParameters.cs
+// MonoConnectionProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,57 +24,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public abstract class MonoConnectionParameters : ConnectionParameters
+	public abstract class MonoConnectionProvider : ConnectionProvider
 	{
-		public MonoConnectionParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		public MonoConnectionProvider (MonoConnectionProviderFactory factory, ConnectionProviderType type, ConnectionProviderFlags flags)
+			: base (factory, type, flags)
 		{
+			SupportsMonoExtensions = (flags & ConnectionProviderFlags.SupportsMonoExtensions) != 0;
 		}
 
-		protected MonoConnectionParameters (MonoConnectionParameters other)
-			: base (other)
-		{
-			if (other.ClientCiphers != null)
-				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
-			ExpectedClientCipher = other.ExpectedClientCipher;
-			ExpectClientAlert = other.ExpectClientAlert;
-
-			if (other.ServerCiphers != null)
-				ServerCiphers = new List<CipherSuiteCode> (other.ServerCiphers);
-			ExpectedServerCipher = other.ExpectedServerCipher;
-			ExpectServerAlert = other.ExpectServerAlert;
+		public bool SupportsMonoExtensions {
+			get;
+			private set;
 		}
 
-		public ICollection<CipherSuiteCode> ClientCiphers {
-			get; set;
-		}
+		public abstract IMonoClient CreateMonoClient (ClientParameters parameters);
 
-		public CipherSuiteCode? ExpectedClientCipher {
-			get; set;
-		}
-
-		public AlertDescription? ExpectClientAlert {
-			get; set;
-		}
-
-		public ICollection<CipherSuiteCode> ServerCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedServerCipher {
-			get; set;
-		}
-
-		public AlertDescription? ExpectServerAlert {
-			get; set;
-		}
+		public abstract IMonoServer CreateMonoServer (ServerParameters parameters);
 	}
 }
 

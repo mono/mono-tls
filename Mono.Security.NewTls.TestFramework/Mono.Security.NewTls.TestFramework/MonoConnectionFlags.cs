@@ -1,5 +1,5 @@
 ﻿//
-// InstrumentationConnectionFlagsAttribute.cs
+// MonoConnectionFlags.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,39 +24,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Xamarin.AsyncTests;
 
-namespace Mono.Security.NewTls.TestFeatures
+namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFramework;
-
-	[AttributeUsage (AttributeTargets.Method, AllowMultiple = false)]
-	public class InstrumentationConnectionFlagsAttribute : FixedTestParameterAttribute
+	[Flags]
+	public enum MonoConnectionFlags
 	{
-		public override Type Type {
-			get { return typeof(InstrumentationConnectionFlags); }
-		}
+		None			= 0,
+		RequireMonoClient	= 1,
+		RequireMonoServer	= 2,
+		ClientInstrumentation	= 4,
+		ServerInstrumentation	= 8,
 
-		public override object Value {
-			get { return flags; }
-		}
+		ManualClient		= 16,
+		ManualServer		= 32,
 
-		public override string Identifier {
-			get { return identifier; }
-		}
-
-		public InstrumentationConnectionFlags Flags {
-			get { return flags; }
-		}
-
-		readonly string identifier;
-		readonly InstrumentationConnectionFlags flags;
-
-		public InstrumentationConnectionFlagsAttribute (InstrumentationConnectionFlags flags)
-		{
-			this.flags = flags;
-			this.identifier = Type.Name;
-		}
+		Default			= RequireMonoClient | RequireMonoServer
 	}
 }
 

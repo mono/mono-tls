@@ -27,7 +27,6 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
-using Xamarin.WebTests.Features;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -35,7 +34,6 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
-	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
 	public class RenegotiationInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<RenegotiationInstrumentTestRunner>
 	{
 		public RenegotiationInstrumentTestRunnerAttribute ()
@@ -43,20 +41,29 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
-		RenegotiationInstrumentTestRunner CreateInstance (
-			TestContext ctx, IServer server, IClient client,
-			InstrumentationConnectionProvider provider, RenegotiationInstrumentParameters parameters)
+		public RenegotiationInstrumentTestRunnerAttribute (MonoConnectionFlags flags)
+			: base (typeof (RenegotiationInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
+		{
+			ConnectionFlags = flags;
+		}
+
+		public MonoConnectionFlags? ConnectionFlags {
+			get;
+			private set;
+		}
+
+		RenegotiationInstrumentTestRunner CreateInstance (TestContext ctx, IServer server, IClient client, RenegotiationInstrumentParameters parameters, MonoConnectionFlags flags)
 		{
 			if (!RenegotiationInstrumentTestRunner.IsSupported (parameters, client.Provider.Type, server.Provider.Type))
 				ctx.IgnoreThisTest ();
 
-			return new RenegotiationInstrumentTestRunner (server, client, provider, parameters);
+			return new RenegotiationInstrumentTestRunner (server, client, parameters, flags);
 		}
 
 		public RenegotiationInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return ConnectionTestFeatures.CreateTestRunner<InstrumentationConnectionProvider,RenegotiationInstrumentParameters,RenegotiationInstrumentTestRunner> (
-				ctx, (s, c, p, a) => CreateInstance (ctx, s, c, p, a));
+			return MonoTestFeatures.CreateTestRunner<RenegotiationInstrumentParameters,RenegotiationInstrumentTestRunner> (
+				ctx, (s, c, p, f) => CreateInstance (ctx, s, c, p, f), ConnectionFlags);
 		}
 	}
 }

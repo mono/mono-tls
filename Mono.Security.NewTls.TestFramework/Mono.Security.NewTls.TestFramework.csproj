@@ -40,10 +40,16 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IEncryptionTestHost.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IHashTestHost.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IRandomNumberGenerator.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientAndServerParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoClientParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoServerParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoCommonConnection.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoServer.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoClient.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\MonoTestFeatures.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\IsSupportedConstraint.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionProviderFactory.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\ProtocolVersionsAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationParameters.cs" />
@@ -52,6 +58,7 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\SignatureInstrumentParametersAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionFlags.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\SignatureInstrumentTestRunnerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationCategory.cs" />
@@ -65,6 +72,8 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\SimpleConnectionType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\SimpleConnectionParametersAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\SImpleConnectionTestRunnerAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionType.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationConnectionTypeAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationCategoryAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CipherInstrumentTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\CipherInstrumentType.cs" />
@@ -89,13 +98,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentConnectionHandler.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\DefaultInstrumentationConnectionHandler.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\RenegotiationAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionFilter.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionFlags.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationConnectionProviderAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationConnectionFlagsAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionParameters.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoConnectionProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

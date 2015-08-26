@@ -40,13 +40,10 @@ using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFeatures;
-
-	[GenericConnectionInstrumentTestRunner]
 	public class GenericConnectionInstrumentTestRunner : ConnectionInstrumentTestRunner
 	{
-		public GenericConnectionInstrumentTestRunner (IServer server, IClient client, InstrumentationConnectionProvider provider, GenericConnectionInstrumentParameters parameters)
-			: base (server, client, provider, parameters)
+		public GenericConnectionInstrumentTestRunner (IServer server, IClient client, GenericConnectionInstrumentParameters parameters, MonoConnectionFlags flags)
+			: base (server, client, parameters, flags)
 		{
 		}
 
@@ -109,6 +106,14 @@ namespace Mono.Security.NewTls.TestFramework
 				yield return GenericConnectionInstrumentType.ClientCertificateRequiresDheKeyExchange;
 				break;
 
+			case InstrumentationCategory.ManualClient:
+				yield return GenericConnectionInstrumentType.MartinClientPuppy;
+				break;
+
+			case InstrumentationCategory.ManualServer:
+				yield return GenericConnectionInstrumentType.MartinServerPuppy;
+				break;
+
 			case InstrumentationCategory.MartinTest:
 				yield return GenericConnectionInstrumentType.MartinTest;
 				break;
@@ -156,43 +161,43 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case GenericConnectionInstrumentType.InvalidServerCertificateV1:
-				parameters.ServerCertificate = ResourceManager.InvalidServerCertificateV1;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificateV1;
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.InvalidServerCertificateRsa512:
-				parameters.ServerCertificate = ResourceManager.InvalidServerCertificateRsa512;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificateRsa512;
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.ServerProvidesInvalidCertificate:
-				parameters.ServerCertificate = ResourceManager.InvalidServerCertificateV1;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificateV1;
 				parameters.Add (HandshakeInstrumentType.OverrideServerCertificateSelection);
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.InvalidClientCertificateV1:
 				parameters.ClientCertificate = ResourceManager.InvalidClientCertificateV1;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.InvalidClientCertificateRsa512:
 				parameters.ClientCertificate = ResourceManager.InvalidClientCertificateRsa512;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.ClientProvidesInvalidCertificate:
 				parameters.ClientCertificate = ResourceManager.InvalidClientCertificateV1;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.Add (HandshakeInstrumentType.OverrideClientCertificateSelection);
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.RequireRsaKeyExchange:
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
-				parameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] {
 					CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA, CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
 				};
@@ -201,14 +206,14 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case GenericConnectionInstrumentType.RsaKeyExchangeNotAllowed:
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
-				parameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
 				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
-				parameters.ExpectServerAlert = AlertDescription.HandshakeFailure;
+				parameters.ExpectServerAlert = AlertDescription.InsuficientSecurity;
 				break;
 
 			case GenericConnectionInstrumentType.RequireDheKeyExchange:
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
-				parameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] {
 					CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA, CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA
 				};
@@ -217,9 +222,9 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case GenericConnectionInstrumentType.DheKeyExchangeNotAllowed:
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
-				parameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
 				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
-				parameters.ExpectServerAlert = AlertDescription.HandshakeFailure;
+				parameters.ExpectServerAlert = AlertDescription.InsuficientSecurity;
 				break;
 
 			case GenericConnectionInstrumentType.MartinClientPuppy:
@@ -227,48 +232,48 @@ namespace Mono.Security.NewTls.TestFramework
 				goto case GenericConnectionInstrumentType.MartinTest;
 
 			case GenericConnectionInstrumentType.ClientCertificateRequiresRsaKeyExchange:
-				parameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
 				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.ClientCertificateRequiresDheKeyExchange:
-				parameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
 				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.ClientCertificateInvalidForRsa:
-				parameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
 				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.ClientCertificateInvalidForDhe:
-				parameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
 				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				parameters.ExpectClientAlert = AlertDescription.UnsupportedCertificate;
 				break;
 
 			case GenericConnectionInstrumentType.ClientProvidesCertificateThatsInvalidForRsa:
-				parameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateRsaOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
 				parameters.ClientCertificate = ResourceManager.ClientCertificateDheOnly;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
@@ -276,10 +281,10 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case GenericConnectionInstrumentType.ClientProvidesCertificateThatsInvalidForDhe:
-				parameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateDheOnly;
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
 				parameters.ClientCertificate = ResourceManager.ClientCertificateRsaOnly;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags |= ServerFlags.RequireClientCertificate;
 				parameters.ClientCertificateValidator = AcceptAnyCertificate;
 				parameters.ServerCertificateValidator = AcceptAnyCertificate;
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;

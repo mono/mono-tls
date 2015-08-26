@@ -39,9 +39,6 @@ using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFeatures;
-
-	[SimpleConnectionTestRunner]
 	public class SimpleConnectionTestRunner : InstrumentationTestRunner
 	{
 		new public SimpleConnectionParameters Parameters {
@@ -52,8 +49,8 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.Type; }
 		}
 
-		public SimpleConnectionTestRunner (IServer server, IClient client, InstrumentationConnectionProvider provider, SimpleConnectionParameters parameters)
-			: base (server, client, provider, parameters)
+		public SimpleConnectionTestRunner (IServer server, IClient client, SimpleConnectionParameters parameters, MonoConnectionFlags flags)
+			: base (server, client, parameters, flags)
 		{
 		}
 
@@ -102,6 +99,8 @@ namespace Mono.Security.NewTls.TestFramework
 				yield break;
 
 			case InstrumentationCategory.MartinTest:
+			case InstrumentationCategory.ManualClient:
+			case InstrumentationCategory.ManualServer:
 				yield return SimpleConnectionType.MartinTest;
 				yield break;
 
@@ -143,7 +142,7 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case SimpleConnectionType.ValidateCertificate:
-				parameters.ServerCertificate = ResourceManager.ServerCertificateFromCA;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.ServerCertificateFromCA;
 				parameters.ClientCertificateValidator = acceptFromCA;
 				break;
 
@@ -187,7 +186,7 @@ namespace Mono.Security.NewTls.TestFramework
 				 */
 				parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
 				parameters.ClientCertificateValidator = acceptSelfSigned;
-				parameters.AskForClientCertificate = true;
+				parameters.ServerFlags = ServerFlags.AskForClientCertificate;
 				parameters.ServerCertificateValidator = acceptFromCA;
 				break;
 
@@ -198,7 +197,7 @@ namespace Mono.Security.NewTls.TestFramework
 				 */
 				parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
 				parameters.ClientCertificateValidator = acceptSelfSigned;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags = ServerFlags.RequireClientCertificate;
 				parameters.ServerCertificateValidator = acceptFromCA;
 				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA };
 				break;
@@ -210,7 +209,7 @@ namespace Mono.Security.NewTls.TestFramework
 				 */
 				parameters.ClientCertificate = ResourceManager.MonkeyCertificate;
 				parameters.ClientCertificateValidator = acceptSelfSigned;
-				parameters.RequireClientCertificate = true;
+				parameters.ServerFlags = ServerFlags.RequireClientCertificate;
 				parameters.ServerCertificateValidator = acceptFromCA;
 				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA };
 				break;
@@ -233,7 +232,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case SimpleConnectionType.MartinTest:
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
-				parameters.ServerCertificate = ResourceManager.InvalidServerCertificateRsa512;
+				parameters.ServerParameters.ServerCertificate = ResourceManager.InvalidServerCertificateRsa512;
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
 				break;
 

@@ -57,6 +57,10 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Runner.Parameters; }
 		}
 
+		protected MonoConnectionFlags ConnectionFlags {
+			get { return Runner.ConnectionFlags; }
+		}
+
 		public InstrumentationConnectionHandler (InstrumentationTestRunner runner)
 		{
 			Runner = runner;
@@ -77,7 +81,7 @@ namespace Mono.Security.NewTls.TestFramework
 			if (NeedCustomCertificateSelectionCallback) {
 				var provider = DependencyInjector.Get<ICertificateProvider> ();
 				var selector = provider.GetCustomCertificateSelector ((t, lc, rc, ai) => OnCertificateSelectionCallback (ctx, t, lc, rc, ai));
-				Parameters.ClientCertificateSelector = selector;
+				Parameters.ClientParameters.ClientCertificateSelector = selector;
 			}
 		}
 
@@ -238,17 +242,17 @@ namespace Mono.Security.NewTls.TestFramework
 			cancellationToken.ThrowIfCancellationRequested ();
 
 			Task clientTask;
-			if (Runner.IsManualClient)
+			if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
 				clientTask = FinishedTask;
-			else if (Runner.IsManualServer)
+			else if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
 				clientTask = HandleClientWithManualServer (ctx, cancellationToken);
 			else
 				clientTask = MyHandleClient (ctx, cancellationToken);
 
 			Task serverTask;
-			if (Runner.IsManualServer)
+			if ((ConnectionFlags & MonoConnectionFlags.ManualServer) != 0)
 				serverTask = FinishedTask;
-			else if (Runner.IsManualClient)
+			else if ((ConnectionFlags & MonoConnectionFlags.ManualClient) != 0)
 				serverTask = HandleServerWithManualClient (ctx, cancellationToken);
 			else
 				serverTask = MyHandleServer (ctx, cancellationToken);
@@ -320,7 +324,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			var clientStream = new StreamWrapper (Client.Stream);
 
-			LogDebug (ctx, 1, "HandleClientWithManualServer", Parameters.TargetHost ?? "<null>");
+			LogDebug (ctx, 1, "HandleClientWithManualServer", Parameters.ClientParameters.TargetHost ?? "<null>");
 
 			await clientStream.WriteLineAsync ("Hello World!");
 

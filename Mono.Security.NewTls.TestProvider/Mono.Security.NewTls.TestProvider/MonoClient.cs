@@ -34,11 +34,19 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	class MonoClient : MonoConnection, IMonoClient
 	{
-		public MonoConnectionParameters MonoParameters {
-			get { return base.Parameters as MonoConnectionParameters; }
+		ClientParameters IClient.Parameters {
+			get { return Parameters; }
 		}
 
-		public MonoClient (MonoConnectionProvider provider, ConnectionParameters parameters)
+		new public ClientParameters Parameters {
+			get { return (ClientParameters)base.Parameters; }
+		}
+
+		public MonoClientParameters MonoParameters {
+			get { return base.Parameters as MonoClientParameters; }
+		}
+
+		public MonoClient (MonoConnectionProviderImpl provider, ClientParameters parameters)
 			: base (provider, parameters)
 		{
 		}

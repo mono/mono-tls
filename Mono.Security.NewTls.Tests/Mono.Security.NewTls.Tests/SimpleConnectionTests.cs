@@ -46,9 +46,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.SimpleMonoClient)]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SimpleConnectionParameters parameters,
-			SimpleConnectionTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -56,9 +56,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.SimpleMonoServer)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SimpleConnectionParameters parameters,
-			SimpleConnectionTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -66,9 +66,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.SimpleMonoConnection)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SimpleConnectionParameters parameters,
-			SimpleConnectionTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -76,10 +76,10 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MonoProtocolVersions)]
 		public Task TestAllVersions (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SimpleConnectionParameters parameters,
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SimpleConnectionParameters] SimpleConnectionParameters parameters,
 			[ProtocolVersions] ProtocolVersions protocolVersion,
-			SimpleConnectionTestRunner runner)
+			[SimpleConnectionTestRunner] SimpleConnectionTestRunner runner)
 		{
 			return runner.Run (ctx, cancellationToken);
 		}

@@ -46,9 +46,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 	class MonoHttpProvider : IHttpProvider
 	{
-		readonly MonoConnectionProvider connectionProvider;
+		readonly MonoConnectionProviderImpl connectionProvider;
 
-		internal MonoHttpProvider (MonoConnectionProvider connectionProvider)
+		internal MonoHttpProvider (MonoConnectionProviderImpl connectionProvider)
 		{
 			this.connectionProvider = connectionProvider;
 		}
@@ -68,9 +68,9 @@ namespace Mono.Security.NewTls.TestProvider
 			return new HttpWebRequestImpl (request);
 		}
 
-		public HttpServer CreateServer (IPortableEndPoint clientAndPoint, IPortableEndPoint listenAddress, ListenerFlags flags, ConnectionParameters parameters = null)
+		public HttpServer CreateServer (IPortableEndPoint endpoint, ListenerFlags flags, ServerParameters parameters = null)
 		{
-			return new HttpServer (this, clientAndPoint, listenAddress, flags, parameters);
+			return new HttpServer (this, endpoint, flags, parameters);
 		}
 
 		public bool SupportsHttpClient {

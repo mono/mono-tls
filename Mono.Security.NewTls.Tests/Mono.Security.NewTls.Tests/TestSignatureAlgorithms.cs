@@ -46,9 +46,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.AllClientSignatureAlgorithms)]
 		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SignatureInstrumentParameters parameters,
-			SignatureInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SignatureInstrumentParameters] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -56,9 +56,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ClientSignatureParameters)]
 		public async Task TestClient2 (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SignatureInstrumentParameters parameters,
-			SignatureInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SignatureInstrumentParameters] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -66,9 +66,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.AllServerSignatureAlgorithms)]
 		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SignatureInstrumentParameters parameters,
-			SignatureInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SignatureInstrumentParameters] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -76,9 +76,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.ServerSignatureParameters)]
 		public async Task TestServer2 (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SignatureInstrumentParameters parameters,
-			SignatureInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SignatureInstrumentParameters] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}
@@ -86,9 +86,9 @@ namespace Mono.Security.NewTls.Tests
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.SignatureAlgorithms)]
 		public async Task TestConnection (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			SignatureInstrumentParameters parameters,
-			SignatureInstrumentTestRunner runner)
+			[InstrumentationConnectionType] InstrumentationConnectionType connectionType,
+			[SignatureInstrumentParameters] SignatureInstrumentParameters parameters,
+			[SignatureInstrumentTestRunner] SignatureInstrumentTestRunner runner)
 		{
 			await runner.Run (ctx, cancellationToken);
 		}

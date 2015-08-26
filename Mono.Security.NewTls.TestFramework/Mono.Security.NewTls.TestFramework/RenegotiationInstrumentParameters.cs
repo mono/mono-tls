@@ -31,9 +31,6 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFeatures;
-
-	[RenegotiationInstrumentParameters]
 	public class RenegotiationInstrumentParameters : ConnectionInstrumentParameters
 	{
 		public RenegotiationInstrumentType Type {
@@ -43,6 +40,12 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public RenegotiationInstrumentParameters (InstrumentationCategory category, RenegotiationInstrumentType type, string identifier, IServerCertificate certificate)
 			: base (category, identifier, certificate)
+		{
+			Type = type;
+		}
+
+		public RenegotiationInstrumentParameters (InstrumentationCategory category, RenegotiationInstrumentType type, ClientParameters clientParameters, ServerParameters serverParameters)
+			: base (category, clientParameters, serverParameters)
 		{
 			Type = type;
 		}

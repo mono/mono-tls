@@ -35,7 +35,6 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
-	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
 	public class RenegotiationInstrumentParametersAttribute : TestParameterAttribute, ITestParameterSource<RenegotiationInstrumentParameters>
 	{
 		public RenegotiationInstrumentType? Type {

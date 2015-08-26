@@ -31,9 +31,6 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using TestFeatures;
-
-	[SimpleConnectionParameters]
 	public class SimpleConnectionParameters : InstrumentationParameters
 	{
 		public SimpleConnectionType Type {
@@ -43,6 +40,12 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public SimpleConnectionParameters (InstrumentationCategory category, SimpleConnectionType type, string identifier, IServerCertificate certificate)
 			: base (category, identifier, certificate)
+		{
+			Type = type;
+		}
+
+		public SimpleConnectionParameters (InstrumentationCategory category, SimpleConnectionType type, ClientParameters clientParameters, ServerParameters serverParameters)
+			: base (category, clientParameters, serverParameters)
 		{
 			Type = type;
 		}

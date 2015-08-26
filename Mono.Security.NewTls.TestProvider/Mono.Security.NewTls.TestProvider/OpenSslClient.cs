@@ -20,11 +20,19 @@ namespace Mono.Security.NewTls.TestProvider
 
 	public class OpenSslClient : OpenSslConnection, IMonoClient
 	{
-		public MonoConnectionParameters MonoParameters {
-			get { return base.Parameters as MonoConnectionParameters; }
+		ClientParameters IClient.Parameters {
+			get { return Parameters; }
 		}
 
-		public OpenSslClient (OpenSslConnectionProvider provider, ConnectionParameters parameters)
+		new public ClientParameters Parameters {
+			get { return (ClientParameters)base.Parameters; }
+		}
+
+		public MonoClientParameters MonoParameters {
+			get { return base.Parameters as MonoClientParameters; }
+		}
+
+		public OpenSslClient (OpenSslConnectionProvider provider, ClientParameters parameters)
 			: base (provider, parameters)
 		{
 		}

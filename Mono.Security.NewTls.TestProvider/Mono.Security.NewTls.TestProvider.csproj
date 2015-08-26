@@ -56,10 +56,10 @@
     <Compile Include="Mono.Security.NewTls.TestProvider\CallbackHelpers.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\MonoSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\OpenSslConnectionProvider.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactoryImpl.cs" />
+    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProviderImpl.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\NativeOpenSslProtocol.cs" />
     <Compile Include="Mono.Security.NewTls.TestProvider\NativeCryptoHashType.cs" />
-    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactory.cs" />
-    <Compile Include="Mono.Security.NewTls.TestProvider\MonoConnectionProvider.cs" />
   </ItemGroup>
   <Import Project="..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

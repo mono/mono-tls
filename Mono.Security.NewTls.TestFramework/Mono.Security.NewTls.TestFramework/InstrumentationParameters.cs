@@ -31,19 +31,21 @@ using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public abstract class InstrumentationParameters : MonoConnectionParameters
+	public abstract class InstrumentationParameters : MonoClientAndServerParameters
 	{
 		public InstrumentationCategory Category {
 			get;
 			private set;
 		}
 
-		public InstrumentationConnectionFlags ConnectionFlags {
-			get; set;
-		}
-
 		public InstrumentationParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
 			: base (identifier, certificate)
+		{
+			Category = category;
+		}
+
+		public InstrumentationParameters (InstrumentationCategory category, ClientParameters clientParameters, ServerParameters serverParameters)
+			: base (clientParameters, serverParameters)
 		{
 			Category = category;
 		}
@@ -53,11 +55,40 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			Category = other.Category;
 			ExpectedCipher = other.ExpectedCipher;
-			ConnectionFlags = other.ConnectionFlags;
+		}
+
+		public ICollection<CipherSuiteCode> ClientCiphers {
+			get { return MonoClientParameters.ClientCiphers; }
+			set { MonoClientParameters.ClientCiphers = value; }
+		}
+
+		public ICollection<CipherSuiteCode> ServerCiphers {
+			get { return MonoServerParameters.ServerCiphers; }
+			set { MonoServerParameters.ServerCiphers = value; }
 		}
 
 		public CipherSuiteCode? ExpectedCipher {
 			get; set;
+		}
+
+		public CipherSuiteCode? ExpectedClientCipher {
+			get { return MonoClientParameters.ExpectedCipher; }
+			set { MonoClientParameters.ExpectedCipher = value; }
+		}
+
+		public CipherSuiteCode? ExpectedServerCipher {
+			get { return MonoServerParameters.ExpectedCipher; }
+			set { MonoServerParameters.ExpectedCipher = value; }
+		}
+
+		public AlertDescription? ExpectClientAlert {
+			get { return MonoClientParameters.ExpectAlert; }
+			set { MonoClientParameters.ExpectAlert = value; }
+		}
+
+		public AlertDescription? ExpectServerAlert {
+			get { return MonoServerParameters.ExpectAlert; }
+			set { MonoServerParameters.ExpectAlert = value; }
 		}
 	}
 }
