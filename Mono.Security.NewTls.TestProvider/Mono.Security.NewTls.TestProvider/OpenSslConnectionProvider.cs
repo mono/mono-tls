@@ -43,7 +43,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public bool SupportsInstrumentation {
-			get { return true; }
+			get { return false; }
 		}
 
 		public override ProtocolVersions SupportedProtocols {
