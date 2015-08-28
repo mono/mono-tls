@@ -39,14 +39,11 @@ namespace Mono.Security.NewTls.TestProvider
 	class MonoConnectionProviderFactory : ConnectionProviderFactory
 	{
 		readonly MSI.MonoTlsProvider newTlsProvider;
-		readonly MSI.MonoTlsProvider legacyTlsProvider;
 		readonly DefaultHttpProvider dotNetHttpProvider;
 		readonly DotNetSslStreamProvider dotNetStreamProvider;
 		readonly DotNetConnectionProvider dotNetConnectionProvider;
 		readonly MonoConnectionProvider newTlsConnectionProvider;
-		readonly MonoConnectionProvider legacyConnectionProvider;
 		readonly MonoConnectionProvider monoWithNewTlsConnectionProvider;
-		readonly MonoConnectionProvider monoWithOldTlsConnectionProvider;
 		readonly OpenSslConnectionProvider openSslConnectionProvider;
 		readonly ManualConnectionProvider manualConnectionProvider;
 
@@ -61,15 +58,8 @@ namespace Mono.Security.NewTls.TestProvider
 			newTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.NewTLS, newTlsProvider, false);
 			Install (newTlsConnectionProvider);
 
-			legacyTlsProvider = MSI.MonoTlsProviderFactory.GetDefaultProvider ();
-			legacyConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.OldTLS, legacyTlsProvider, false);
-			Install (legacyConnectionProvider);
-
 			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithNewTLS, newTlsProvider, true);
 			Install (monoWithNewTlsConnectionProvider);
-
-			monoWithOldTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithOldTLS, legacyTlsProvider, true);
-			Install (monoWithOldTlsConnectionProvider);
 
 			openSslConnectionProvider = new OpenSslConnectionProvider (this);
 			Install (openSslConnectionProvider);

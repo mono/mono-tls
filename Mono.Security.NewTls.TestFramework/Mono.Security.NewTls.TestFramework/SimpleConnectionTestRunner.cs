@@ -232,6 +232,7 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case SimpleConnectionType.MartinTest:
+				goto case SimpleConnectionType.CheckDefaultCipher;
 				parameters.ProtocolVersion = ProtocolVersions.Tls12;
 				parameters.ServerCertificate = ResourceManager.InvalidServerCertificateRsa512;
 				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;

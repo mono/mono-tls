@@ -96,6 +96,8 @@ namespace Mono.Security.NewTls.TestFramework
 				return false;
 			if (HasFlag (InstrumentationConnectionFlags.RequireMonoServer) && !SupportsMonoExtensions (provider))
 				return false;
+			if ((provider.Flags & ConnectionProviderFlags.SupportsTls12) == 0)
+				return false;
 
 			var match = MatchesFilter (provider, filter);
 			if (match != null)
