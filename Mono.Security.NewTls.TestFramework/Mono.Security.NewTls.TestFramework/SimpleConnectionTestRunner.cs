@@ -153,7 +153,6 @@ namespace Mono.Security.NewTls.TestFramework
 
 			case SimpleConnectionType.SimpleTls10:
 				parameters.ProtocolVersion = ProtocolVersions.Tls10;
-				parameters.ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
 				break;
 
 			case SimpleConnectionType.SimpleTls11:
