@@ -31,11 +31,19 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public sealed class OpenSslConnectionProvider : MonoConnectionProvider
+	public sealed class OpenSslConnectionProvider : ConnectionProvider, IMonoConnectionProvider
 	{
-		public OpenSslConnectionProvider (MonoConnectionProviderFactory factory)
-			: base (factory, ConnectionProviderType.OpenSsl, ConnectionProviderFlags.CanSelectCiphers | ConnectionProviderFlags.SupportsMonoExtensions | ConnectionProviderFlags.SupportsTls12)
+		public OpenSslConnectionProvider (ConnectionProviderFactory factory)
+			: base (factory, ConnectionProviderType.OpenSsl, ConnectionProviderFlags.SupportsTls12)
 		{
+		}
+
+		public bool SupportsMonoExtensions {
+			get { return true; }
+		}
+
+		public bool SupportsInstrumentation {
+			get { return true; }
 		}
 
 		public override ProtocolVersions SupportedProtocols {
@@ -47,24 +55,14 @@ namespace Mono.Security.NewTls.TestProvider
 			return true;
 		}
 
-		public override IMonoClient CreateMonoClient (ClientParameters parameters)
+		public override IClient CreateClient (ConnectionParameters parameters)
 		{
 			return new OpenSslClient (this, parameters);
 		}
 
-		public override IMonoServer CreateMonoServer (ServerParameters parameters)
+		public override IServer CreateServer (ConnectionParameters parameters)
 		{
 			return new OpenSslServer (this, parameters);
-		}
-
-		public override IClient CreateClient (ClientParameters parameters)
-		{
-			return CreateMonoClient (parameters);
-		}
-
-		public override IServer CreateServer (ServerParameters parameters)
-		{
-			return CreateMonoServer (parameters);
 		}
 
 		protected override ISslStreamProvider GetSslStreamProvider ()

@@ -36,19 +36,11 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return Parameters.ServerCertificate; }
 		}
 
-		ServerParameters IServer.Parameters {
-			get { return Parameters; }
+		public MonoConnectionParameters MonoParameters {
+			get { return base.Parameters as MonoConnectionParameters; }
 		}
 
-		new public ServerParameters Parameters {
-			get { return (ServerParameters)base.Parameters; }
-		}
-
-		public MonoServerParameters MonoParameters {
-			get { return base.Parameters as MonoServerParameters; }
-		}
-
-		public MonoServer (MonoConnectionProviderImpl provider, ServerParameters parameters)
+		public MonoServer (MonoConnectionProvider provider, ConnectionParameters parameters)
 			: base (provider, parameters)
 		{
 		}
@@ -59,9 +51,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected override void GetSettings (UserSettings settings)
 		{
-			if ((Parameters.Flags & ServerFlags.RequireClientCertificate) != 0)
+			if (Parameters.RequireClientCertificate)
 				settings.RequireClientCertificate = settings.AskForClientCertificate = true;
-			else if ((Parameters.Flags & ServerFlags.AskForClientCertificate) != 0)
+			else if (Parameters.AskForClientCertificate)
 				settings.AskForClientCertificate = true;
 
 			if (MonoParameters != null)

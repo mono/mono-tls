@@ -36,6 +36,9 @@ using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using TestFeatures;
+
+	[CipherInstrumentTestRunner]
 	public class CipherInstrumentTestRunner : InstrumentationTestRunner
 	{
 		new public CipherInstrumentParameters Parameters {
@@ -46,8 +49,8 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.Type; }
 		}
 
-		public CipherInstrumentTestRunner (IServer server, IClient client, CipherInstrumentParameters parameters, MonoConnectionFlags flags)
-			: base (server, client, parameters, flags)
+		public CipherInstrumentTestRunner (IServer server, IClient client, InstrumentationConnectionProvider provider, CipherInstrumentParameters parameters)
+			: base (server, client, provider, parameters)
 		{
 		}
 

@@ -38,11 +38,6 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
-		public ConnectionInstrumentParameters (InstrumentationCategory category, ClientParameters clientParameters, ServerParameters serverParameters)
-			: base (category, clientParameters, serverParameters)
-		{
-		}
-
 		protected ConnectionInstrumentParameters (ConnectionInstrumentParameters other)
 			: base (other)
 		{

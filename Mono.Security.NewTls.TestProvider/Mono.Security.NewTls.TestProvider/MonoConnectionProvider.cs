@@ -40,29 +40,34 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	class MonoConnectionProviderImpl : MonoConnectionProvider, ISslStreamProvider
+	class MonoConnectionProvider : ConnectionProvider, IMonoConnectionProvider, ISslStreamProvider
 	{
 		readonly MSI.MonoTlsProvider tlsProvider;
 		readonly MonoHttpProvider httpProvider;
+		readonly bool enableMonoExtensions;
 
-		public MonoConnectionProviderImpl (MonoConnectionProviderFactoryImpl factory, ConnectionProviderType type, MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
+		public MonoConnectionProvider (MonoConnectionProviderFactory factory, ConnectionProviderType type, MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
 			: base (factory, type, GetFlags (tlsProvider, enableMonoExtensions))
 		{
 			this.tlsProvider = tlsProvider;
 			this.httpProvider = new MonoHttpProvider (this);
+			this.enableMonoExtensions = enableMonoExtensions;
 		}
 
 		static ConnectionProviderFlags GetFlags (MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
 		{
 			var flags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
 			if (tlsProvider is NewTlsProvider)
-				flags |= ConnectionProviderFlags.IsNewTls | ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsInstrumentation;
-			if (!enableMonoExtensions)
-				return flags;
-			flags |= ConnectionProviderFlags.SupportsMonoExtensions;
-			if (tlsProvider is NewTlsProvider)
-				flags |= ConnectionProviderFlags.CanSelectCiphers;
+				flags |= ConnectionProviderFlags.SupportsTls12;
 			return flags;
+		}
+
+		public bool SupportsMonoExtensions {
+			get { return enableMonoExtensions; }
+		}
+
+		public bool SupportsInstrumentation {
+			get { return enableMonoExtensions && (tlsProvider is NewTlsProvider); }
 		}
 
 		public override ProtocolVersions SupportedProtocols {
@@ -74,7 +79,6 @@ namespace Mono.Security.NewTls.TestProvider
 			switch (type) {
 			case ConnectionProviderType.NewTLS:
 			case ConnectionProviderType.MonoWithNewTLS:
-			case ConnectionProviderType.PlatformDefault:
 				return IsNewTls;
 			case ConnectionProviderType.OldTLS:
 			case ConnectionProviderType.MonoWithOldTLS:
@@ -86,21 +90,7 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 		}
 
-		public override IMonoClient CreateMonoClient (ClientParameters parameters)
-		{
-			if (!SupportsMonoExtensions)
-				throw new InvalidOperationException ();
-			return new MonoClient (this, parameters);
-		}
-
-		public override IMonoServer CreateMonoServer (ServerParameters parameters)
-		{
-			if (!SupportsMonoExtensions)
-				throw new InvalidOperationException ();
-			return new MonoServer (this, parameters);
-		}
-
-		public override IClient CreateClient (ClientParameters parameters)
+		public override IClient CreateClient (ConnectionParameters parameters)
 		{
 			if (SupportsMonoExtensions)
 				return new MonoClient (this, parameters);
@@ -108,7 +98,7 @@ namespace Mono.Security.NewTls.TestProvider
 				return new DotNetClient (this, parameters, this);
 		}
 
-		public override IServer CreateServer (ServerParameters parameters)
+		public override IServer CreateServer (ConnectionParameters parameters)
 		{
 			if (SupportsMonoExtensions)
 				return new MonoServer (this, parameters);
@@ -145,12 +135,12 @@ namespace Mono.Security.NewTls.TestProvider
 			return (SslProtocols)protocol;
 		}
 
-		ISslStream ISslStreamProvider.CreateServerStream (Stream stream, ServerParameters parameters)
+		ISslStream ISslStreamProvider.CreateServerStream (Stream stream, ConnectionParameters parameters)
 		{
 			return CreateServerStream (stream, parameters);
 		}
 
-		public MonoSslStream CreateServerStream (Stream stream, ServerParameters parameters)
+		public MonoSslStream CreateServerStream (Stream stream, ConnectionParameters parameters)
 		{
 			var settings = new MSI.MonoTlsSettings ();
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
@@ -158,7 +148,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var protocol = GetProtocol (parameters, true);
 			CallbackHelpers.AddCertificateValidator (settings, parameters.ServerCertificateValidator);
 
-			var askForCert = (parameters.Flags & (ServerFlags.AskForClientCertificate|ServerFlags.RequireClientCertificate)) != 0;
+			var askForCert = parameters.AskForClientCertificate || parameters.RequireClientCertificate;
 
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
 			sslStream.AuthenticateAsServer (certificate, askForCert, protocol, false);
@@ -166,25 +156,24 @@ namespace Mono.Security.NewTls.TestProvider
 			return new MonoSslStream (sslStream);
 		}
 
-		async Task<ISslStream> ISslStreamProvider.CreateServerStreamAsync (Stream stream, ServerParameters parameters, CancellationToken cancellationToken)
+		async Task<ISslStream> ISslStreamProvider.CreateServerStreamAsync (Stream stream, ConnectionParameters parameters, CancellationToken cancellationToken)
 		{
 			return await CreateServerStreamAsync (stream, parameters, cancellationToken).ConfigureAwait (false);
 		}
 
-		public Task<MonoSslStream> CreateServerStreamAsync (Stream stream, ServerParameters parameters, CancellationToken cancellationToken)
+		public Task<MonoSslStream> CreateServerStreamAsync (Stream stream, ConnectionParameters parameters, CancellationToken cancellationToken)
 		{
 			return CreateServerStreamAsync (stream, parameters, new MSI.MonoTlsSettings (), cancellationToken);
 		}
 
-		public async Task<MonoSslStream> CreateServerStreamAsync (Stream stream, ServerParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
+		public async Task<MonoSslStream> CreateServerStreamAsync (Stream stream, ConnectionParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
 			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
 			var protocol = GetProtocol (parameters, true);
 
 			CallbackHelpers.AddCertificateValidator (settings, parameters.ServerCertificateValidator);
 
-			var askForCert = (parameters.Flags & (ServerFlags.AskForClientCertificate|ServerFlags.RequireClientCertificate)) != 0;
-
+			var askForCert = parameters.AskForClientCertificate || parameters.RequireClientCertificate;
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
 			var monoSslStream = new MonoSslStream (sslStream);
 
@@ -200,17 +189,17 @@ namespace Mono.Security.NewTls.TestProvider
 			return monoSslStream;
 		}
 
-		async Task<ISslStream> ISslStreamProvider.CreateClientStreamAsync (Stream stream, string targetHost, ClientParameters parameters, CancellationToken cancellationToken)
+		async Task<ISslStream> ISslStreamProvider.CreateClientStreamAsync (Stream stream, string targetHost, ConnectionParameters parameters, CancellationToken cancellationToken)
 		{
 			return await CreateClientStreamAsync (stream, targetHost, parameters, cancellationToken).ConfigureAwait (false);
 		}
 
-		public Task<MonoSslStream> CreateClientStreamAsync (Stream stream, string targetHost, ClientParameters parameters, CancellationToken cancellationToken)
+		public Task<MonoSslStream> CreateClientStreamAsync (Stream stream, string targetHost, ConnectionParameters parameters, CancellationToken cancellationToken)
 		{
 			return CreateClientStreamAsync (stream, targetHost, parameters, new MSI.MonoTlsSettings (), cancellationToken);
 		}
 
-		public async Task<MonoSslStream> CreateClientStreamAsync (Stream stream, string targetHost, ClientParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
+		public async Task<MonoSslStream> CreateClientStreamAsync (Stream stream, string targetHost, ConnectionParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
 			var protocol = GetProtocol (parameters, false);
 

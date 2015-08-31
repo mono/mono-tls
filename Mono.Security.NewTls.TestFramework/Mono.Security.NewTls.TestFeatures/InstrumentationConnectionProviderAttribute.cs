@@ -1,5 +1,5 @@
 ﻿//
-// MonoClientAndServerParameters.cs
+// InstrumentationConnectionTypeAttribute.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,47 +24,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.AsyncTests.Framework;
+using Xamarin.AsyncTests.Portable;
+using Xamarin.WebTests.Providers;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.TestFeatures
 {
-	public class MonoClientAndServerParameters : ClientAndServerParameters
+	using TestFramework;
+
+	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
+	public class InstrumentationConnectionProviderAttribute : TestParameterAttribute, ITestParameterSource<InstrumentationConnectionProvider>
 	{
-		public MonoClientAndServerParameters (string identifier, IServerCertificate certificate)
-			: base (identifier, new MonoClientParameters (identifier), new MonoServerParameters (identifier, certificate))
+		public InstrumentationConnectionProviderAttribute (string filter = null, TestFlags flags = TestFlags.Browsable)
+			: base (filter, flags)
 		{
 		}
 
-		protected MonoClientAndServerParameters (string identifier, MonoClientParameters clientParameters, MonoServerParameters serverParameters)
-			: base (identifier, clientParameters, serverParameters)
+		public IEnumerable<InstrumentationConnectionProvider> GetParameters (TestContext ctx, string argument)
 		{
-		}
+			var category = ctx.GetParameter<InstrumentationCategory> ();
 
-		public MonoClientAndServerParameters (ClientParameters clientParameters, ServerParameters serverParameters)
-			: base (clientParameters, serverParameters)
-		{
-		}
+			InstrumentationConnectionFilter filter;
+			if (!ctx.TryGetParameter<InstrumentationConnectionFilter> (out filter)) {
+				var flags = InstrumentationTestRunner.GetConnectionFlags (ctx, category);
 
-		protected MonoClientAndServerParameters (MonoClientAndServerParameters other)
-			: base (other)
-		{
-		}
+				InstrumentationConnectionFlags explicitFlags;
+				if (ctx.TryGetParameter<InstrumentationConnectionFlags> (out explicitFlags))
+					flags |= explicitFlags;
 
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoClientAndServerParameters (this);
-		}
+				filter = new InstrumentationConnectionFilter (category, flags);
+			}
 
-		public MonoClientParameters MonoClientParameters {
-			get { return (MonoClientParameters)base.ClientParameters; }
-		}
-
-		public MonoServerParameters MonoServerParameters {
-			get { return (MonoServerParameters)base.ServerParameters; }
+			return filter.GetSupportedProviders (ctx, argument).Cast<InstrumentationConnectionProvider> ();
 		}
 	}
 }
-

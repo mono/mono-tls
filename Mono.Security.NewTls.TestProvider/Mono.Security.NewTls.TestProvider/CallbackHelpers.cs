@@ -44,7 +44,7 @@ namespace Mono.Security.NewTls.TestProvider
 			return (SslProtocols)ServicePointManager.SecurityProtocol;
 		}
 
-		internal static RemoteCertificateValidationCallback GetValidationCallback (ServerParameters parameters)
+		internal static RemoteCertificateValidationCallback GetServerValidationCallback (ConnectionParameters parameters)
 		{
 			var validator = parameters.ServerCertificateValidator;
 			if (validator == null)
@@ -53,7 +53,7 @@ namespace Mono.Security.NewTls.TestProvider
 			return ((CertificateValidator)validator).ValidationCallback;
 		}
 
-		internal static RemoteCertificateValidationCallback GetValidationCallback (ClientParameters parameters)
+		internal static RemoteCertificateValidationCallback GetClientValidationCallback (ConnectionParameters parameters)
 		{
 			var validator = parameters.ClientCertificateValidator;
 			if (validator == null)
@@ -62,7 +62,7 @@ namespace Mono.Security.NewTls.TestProvider
 			return ((CertificateValidator)validator).ValidationCallback;
 		}
 
-		internal static X509Certificate2Collection GetClientCertificates (ClientParameters parameters)
+		internal static X509Certificate2Collection GetClientCertificates (ConnectionParameters parameters)
 		{
 			if (parameters.ClientCertificate == null)
 				return null;

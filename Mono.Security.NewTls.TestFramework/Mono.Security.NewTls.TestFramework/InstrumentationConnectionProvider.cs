@@ -1,5 +1,5 @@
 ﻿//
-// MonoClientParameters.cs
+// InstrumentationConnectionProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,43 +24,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
+using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Features;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public class MonoClientParameters : ClientParameters
+	using TestFeatures;
+
+	[InstrumentationConnectionProvider (Identifier = "ClientAndServerProvider")]
+	public class InstrumentationConnectionProvider : ClientAndServerProvider
 	{
-		public MonoClientParameters (string identifier)
-			: base (identifier)
+		public InstrumentationCategory Category {
+			get;
+			private set;
+		}
+
+		public InstrumentationConnectionFlags Flags {
+			get;
+			private set;
+		}
+
+		static string GetFlagsName (InstrumentationConnectionFlags flags)
 		{
+			if ((flags & InstrumentationConnectionFlags.ManualClient) != 0)
+				return ":ManualClient";
+			else if ((flags & InstrumentationConnectionFlags.ManualServer) != 0)
+				return ":ManuelServer";
+			else
+				return string.Empty;
 		}
 
-		MonoClientParameters (MonoClientParameters other)
-			: base (other)
+		public InstrumentationConnectionProvider (ConnectionProvider client, ConnectionProvider server, InstrumentationCategory category, InstrumentationConnectionFlags flags)
+			: base (client, server, string.Format ("{0}:{1}:{2}{3}", client.Name, server.Name, category, GetFlagsName (flags)))
 		{
-			if (other.ClientCiphers != null)
-				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
-			ExpectedCipher = other.ExpectedCipher;
-			ExpectAlert = other.ExpectAlert;
-		}
-
-		public override ConnectionParameters DeepClone ()
-		{
-			return new MonoClientParameters (this);
-		}
-
-		public ICollection<CipherSuiteCode> ClientCiphers {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
-		}
-
-		public AlertDescription? ExpectAlert {
-			get; set;
+			Category = category;
+			Flags = flags;
 		}
 	}
 }
-

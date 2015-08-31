@@ -27,6 +27,7 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.Features;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -34,6 +35,7 @@ namespace Mono.Security.NewTls.TestFeatures
 {
 	using TestFramework;
 
+	[AttributeUsage (AttributeTargets.Class, AllowMultiple = false)]
 	public class CipherInstrumentTestRunnerAttribute : TestHostAttribute, ITestHost<CipherInstrumentTestRunner>
 	{
 		public CipherInstrumentTestRunnerAttribute ()
@@ -41,21 +43,10 @@ namespace Mono.Security.NewTls.TestFeatures
 		{
 		}
 
-		public CipherInstrumentTestRunnerAttribute (MonoConnectionFlags flags)
-			: base (typeof (CipherInstrumentTestRunnerAttribute), TestFlags.Hidden | TestFlags.PathHidden)
-		{
-			ConnectionFlags = flags;
-		}
-
-		public MonoConnectionFlags? ConnectionFlags {
-			get;
-			private set;
-		}
-
 		public CipherInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return MonoTestFeatures.CreateTestRunner<CipherInstrumentParameters,CipherInstrumentTestRunner> (
-				ctx, (s, c, p, f) => new CipherInstrumentTestRunner (s, c, p, f), ConnectionFlags);
+			return ConnectionTestFeatures.CreateTestRunner<InstrumentationConnectionProvider,CipherInstrumentParameters,CipherInstrumentTestRunner> (
+				ctx, (s, c, p, a) => new CipherInstrumentTestRunner (s, c, p, a));
 		}
 	}
 }
