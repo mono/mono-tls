@@ -31,7 +31,6 @@ namespace Mono.Security.NewTls.TestFramework
 	{
 		Simple,
 		ValidateCertificate,
-		CheckDefaultCipher,
 
 		SimpleTls10,
 		SimpleTls11,

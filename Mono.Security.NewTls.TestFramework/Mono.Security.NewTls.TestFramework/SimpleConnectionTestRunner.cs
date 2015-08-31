@@ -71,21 +71,18 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			switch (category) {
 			case InstrumentationCategory.SimpleMonoClient:
-				yield return SimpleConnectionType.CheckDefaultCipher;
 				yield return SimpleConnectionType.SimpleTls10;
 				yield return SimpleConnectionType.SimpleTls11;
 				yield return SimpleConnectionType.SimpleTls12;
 				yield break;
 
 			case InstrumentationCategory.SimpleMonoServer:
-				yield return SimpleConnectionType.CheckDefaultCipher;
 				yield return SimpleConnectionType.SimpleTls10;
 				yield return SimpleConnectionType.SimpleTls11;
 				yield return SimpleConnectionType.SimpleTls12;
 				yield break;
 
 			case InstrumentationCategory.SimpleMonoConnection:
-				yield return SimpleConnectionType.CheckDefaultCipher;
 				yield return SimpleConnectionType.SimpleTls10;
 				yield return SimpleConnectionType.SimpleTls11;
 				yield return SimpleConnectionType.SimpleTls12;
@@ -145,10 +142,6 @@ namespace Mono.Security.NewTls.TestFramework
 			case SimpleConnectionType.ValidateCertificate:
 				parameters.ServerCertificate = ResourceManager.ServerCertificateFromCA;
 				parameters.ClientCertificateValidator = acceptFromCA;
-				break;
-
-			case SimpleConnectionType.CheckDefaultCipher:
-				parameters.ExpectedCipher = CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384;
 				break;
 
 			case SimpleConnectionType.SimpleTls10:
@@ -231,11 +224,7 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case SimpleConnectionType.MartinTest:
-				goto case SimpleConnectionType.CheckDefaultCipher;
-				parameters.ProtocolVersion = ProtocolVersions.Tls12;
-				parameters.ServerCertificate = ResourceManager.InvalidServerCertificateRsa512;
-				parameters.ExpectServerAlert = AlertDescription.UnsupportedCertificate;
-				break;
+				goto case SimpleConnectionType.SimpleTls12;
 
 			default:
 				ctx.AssertFail ("Unsupported connection type: '{0}'.", type);
