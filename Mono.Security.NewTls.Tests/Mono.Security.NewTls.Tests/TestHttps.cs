@@ -42,12 +42,10 @@ using Xamarin.WebTests.Features;
 
 namespace Mono.Security.NewTls.Tests
 {
-	[SSL]
 	[AsyncTestFixture (Timeout = 5000)]
 	public class TestHttps
 	{
 		[AsyncTest]
-		[CertificateTests]
 		[ConnectionTestCategory (ConnectionTestCategory.HttpsWithMono)]
 		public async Task TestMonoConnection (TestContext ctx, CancellationToken cancellationToken,
 			ConnectionTestProvider provider, HttpsTestParameters parameters,
@@ -57,7 +55,6 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AsyncTest]
-		[CertificateTests]
 		[ConnectionTestCategory (ConnectionTestCategory.HttpsWithDotNet)]
 		public async Task TestDotNetConnection (TestContext ctx, CancellationToken cancellationToken,
 			ConnectionTestProvider provider, HttpsTestParameters parameters,
