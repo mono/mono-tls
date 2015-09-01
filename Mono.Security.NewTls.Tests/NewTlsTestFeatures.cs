@@ -30,9 +30,9 @@ using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.HttpFramework;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
-using Xamarin.WebTests.Features;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
 [assembly: RequireDependency (typeof (ConnectionProviderFactory))]

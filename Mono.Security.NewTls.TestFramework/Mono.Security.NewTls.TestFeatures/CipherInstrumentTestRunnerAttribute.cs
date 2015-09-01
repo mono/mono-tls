@@ -27,7 +27,7 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
-using Xamarin.WebTests.Features;
+using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -45,7 +45,7 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public CipherInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return ConnectionTestFeatures.CreateTestRunner<InstrumentationConnectionProvider,CipherInstrumentParameters,CipherInstrumentTestRunner> (
+			return ConnectionTestHelper.CreateTestRunner<InstrumentationConnectionProvider,CipherInstrumentParameters,CipherInstrumentTestRunner> (
 				ctx, (s, c, p, a) => new CipherInstrumentTestRunner (s, c, p, a));
 		}
 	}

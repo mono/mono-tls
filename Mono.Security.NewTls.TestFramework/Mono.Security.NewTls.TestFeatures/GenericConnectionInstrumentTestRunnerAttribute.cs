@@ -27,7 +27,7 @@ using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.AsyncTests.Constraints;
-using Xamarin.WebTests.Features;
+using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.TestRunners;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -55,7 +55,7 @@ namespace Mono.Security.NewTls.TestFeatures
 
 		public GenericConnectionInstrumentTestRunner CreateInstance (TestContext ctx)
 		{
-			return ConnectionTestFeatures.CreateTestRunner<InstrumentationConnectionProvider,GenericConnectionInstrumentParameters,GenericConnectionInstrumentTestRunner> (
+			return ConnectionTestHelper.CreateTestRunner<InstrumentationConnectionProvider,GenericConnectionInstrumentParameters,GenericConnectionInstrumentTestRunner> (
 				ctx, (s, c, p, a) => CreateInstance (ctx, s, c, p, a));
 		}
 	}
