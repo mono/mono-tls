@@ -40,7 +40,6 @@
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestGaloisCounterGipher-Generated.cs" />
     <Compile Include="NewTlsTestFeatures.cs" />
-    <Compile Include="Mono.Security.NewTls.Tests\TestPuppy.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\MartinTest.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestSignatureAlgorithms.cs" />
     <Compile Include="Mono.Security.NewTls.Tests\TestConnectionInstruments.cs" />
