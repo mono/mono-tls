@@ -93,22 +93,12 @@ namespace Mono.Security.NewTls.Tests
 			get { return "Mono.Security.NewTls.Tests"; }
 		}
 
-		readonly TestFeature sslFeature = new TestFeature ("SSL", "Enable SSL", () => true);
-		public override TestFeature SSL {
-			get { return sslFeature; }
-		}
-
 		protected override bool HasMonoVersion (Version version)
 		{
 			return true;
 		}
 
 		protected override bool IsNetworkAvailable ()
-		{
-			return true;
-		}
-
-		protected override bool SupportsCertificateTests ()
 		{
 			return true;
 		}
