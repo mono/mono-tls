@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{C0AB21A9-9053-49F2-9B4C-C90CF22263A0}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Mono.Security.NewTls.TestProvider</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\CryptoProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoServer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeCryptoProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeOpenSsl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeOpenSslError.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeOpenSslException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslServer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoHttpProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NewTlsDependencyProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\CallbackHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoSslStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslConnectionProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeOpenSslProtocol.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeCryptoHashType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnectionProvider.cs" />
+  </ItemGroup>
+</Project>

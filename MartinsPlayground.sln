@@ -27,6 +27,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.WebTests.PortableIm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.DotNetConsole", "Mono.Security.NewTls.DotNetConsole\Mono.Security.NewTls.DotNetConsole.csproj", "{E06C322C-DF78-463B-81FC-919E24200A0F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{C0AB21A9-9053-49F2-9B4C-C90CF22263A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
