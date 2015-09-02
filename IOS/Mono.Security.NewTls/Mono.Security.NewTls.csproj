@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;NET_4_5;MOBILE;INSIDE_MONO_SECURITY;INSTRUMENTATION</DefineConstants>
+    <DefineConstants>DEBUG;NET_4_5;MOBILE;INSIDE_MONO_SECURITY;INSTRUMENTATION;INSIDE_MONO_NEWTLS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -41,6 +41,18 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Mono.Security.NewTls\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\MD5SHA1.cs">
+      <Link>Mono.Security.Cryptography\MD5SHA1.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\RSASslSignatureFormatter.cs">
+      <Link>Mono.Security.Cryptography\RSASslSignatureFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\RSASslSignatureDeformatter.cs">
+      <Link>Mono.Security.Cryptography\RSASslSignatureDeformatter.cs</Link>
+    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\CryptoException.cs">
       <Link>BouncyCastle\crypto\CryptoException.cs</Link>
     </Compile>
@@ -53,35 +65,8 @@
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\ICipherParameters.cs">
       <Link>BouncyCastle\crypto\ICipherParameters.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\IDigest.cs">
-      <Link>BouncyCastle\crypto\IDigest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\IMac.cs">
-      <Link>BouncyCastle\crypto\IMac.cs</Link>
-    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\InvalidCipherTextException.cs">
       <Link>BouncyCastle\crypto\InvalidCipherTextException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\GeneralDigest.cs">
-      <Link>BouncyCastle\crypto\digests\GeneralDigest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\LongDigest.cs">
-      <Link>BouncyCastle\crypto\digests\LongDigest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\NullDigest.cs">
-      <Link>BouncyCastle\crypto\digests\NullDigest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\Sha256Digest.cs">
-      <Link>BouncyCastle\crypto\digests\Sha256Digest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\Sha384Digest.cs">
-      <Link>BouncyCastle\crypto\digests\Sha384Digest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\Sha512Digest.cs">
-      <Link>BouncyCastle\crypto\digests\Sha512Digest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\digests\ShortenedDigest.cs">
-      <Link>BouncyCastle\crypto\digests\ShortenedDigest.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\engines\AesEngine.cs">
       <Link>BouncyCastle\crypto\engines\AesEngine.cs</Link>
@@ -91,9 +76,6 @@
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\engines\AesLightEngine.cs">
       <Link>BouncyCastle\crypto\engines\AesLightEngine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\macs\HMac.cs">
-      <Link>BouncyCastle\crypto\macs\HMac.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\modes\CbcBlockCipher.cs">
       <Link>BouncyCastle\crypto\modes\CbcBlockCipher.cs</Link>
@@ -146,15 +128,6 @@
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\util\Arrays.cs">
       <Link>BouncyCastle\util\Arrays.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\MD5SHA1.cs">
-      <Link>Mono.Security.Cryptography\MD5SHA1.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\RSASslSignatureDeformatter.cs">
-      <Link>Mono.Security.Cryptography\RSASslSignatureDeformatter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\RSASslSignatureFormatter.cs">
-      <Link>Mono.Security.Cryptography\RSASslSignatureFormatter.cs</Link>
-    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\CertificateManager.cs">
       <Link>Mono.Security.NewTls\CertificateManager.cs</Link>
     </Compile>
@@ -169,9 +142,6 @@
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\TlsContext.cs">
       <Link>Mono.Security.NewTls\TlsContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\TlsSettings.cs">
-      <Link>Mono.Security.NewTls\TlsSettings.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\BlockCipher.cs">
       <Link>Mono.Security.NewTls.Cipher\BlockCipher.cs</Link>
@@ -293,18 +263,6 @@
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Handshake\TlsServerKeyExchange.cs">
       <Link>Mono.Security.NewTls.Handshake\TlsServerKeyExchange.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Instrumentation\ContextInstrument.cs">
-      <Link>Mono.Security.NewTls.Instrumentation\ContextInstrument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Instrumentation\Instrument.cs">
-      <Link>Mono.Security.NewTls.Instrumentation\Instrument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Instrumentation\InstrumentCollection.cs">
-      <Link>Mono.Security.NewTls.Instrumentation\InstrumentCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Instrumentation\NegotiationInstrument.cs">
-      <Link>Mono.Security.NewTls.Instrumentation\NegotiationInstrument.cs</Link>
-    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\ClientConnection.cs">
       <Link>Mono.Security.NewTls.Negotiation\ClientConnection.cs</Link>
     </Compile>
@@ -326,35 +284,56 @@
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Negotiation\ServerHello.cs">
       <Link>Mono.Security.NewTls.Negotiation\ServerHello.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\Signature.cs">
+      <Link>Mono.Security.NewTls.Cipher\Signature.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\IRunningHash.cs">
-      <Link>System.Security.Cryptography\IRunningHash.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\SignatureTls12.cs">
+      <Link>Mono.Security.NewTls.Cipher\SignatureTls12.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\MD5CryptoServiceProvider.cs">
-      <Link>System.Security.Cryptography\MD5CryptoServiceProvider.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\SignatureTls10.cs">
+      <Link>Mono.Security.NewTls.Cipher\SignatureTls10.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA1CryptoServiceProvider.cs">
-      <Link>System.Security.Cryptography\SHA1CryptoServiceProvider.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs">
+      <Link>Mono.Security.NewTls.Cipher\TlsCipherSuite11.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA1Managed.cs">
-      <Link>System.Security.Cryptography\SHA1Managed.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\MD5CryptoServiceProvider.cs">
+      <Link>Mono.Security.Cryptography\MD5CryptoServiceProvider.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA256Managed.cs">
-      <Link>System.Security.Cryptography\SHA256Managed.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\SHA1CryptoServiceProvider.cs">
+      <Link>Mono.Security.Cryptography\SHA1CryptoServiceProvider.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA384Managed.cs">
-      <Link>System.Security.Cryptography\SHA384Managed.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\SHA256Managed.cs">
+      <Link>Mono.Security.Cryptography\SHA256Managed.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHA512Managed.cs">
-      <Link>System.Security.Cryptography\SHA512Managed.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\SHA384Managed.cs">
+      <Link>Mono.Security.Cryptography\SHA384Managed.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\System.Security.Cryptography\SHAConstants.cs">
-      <Link>System.Security.Cryptography\SHAConstants.cs</Link>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\SHA512Managed.cs">
+      <Link>Mono.Security.Cryptography\SHA512Managed.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\SHAConstants.cs">
+      <Link>Mono.Security.Cryptography\SHAConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\PKCS1.cs">
+      <Link>Mono.Security.Cryptography\PKCS1.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\HashAlgorithmProvider.cs">
+      <Link>Mono.Security.Cryptography\HashAlgorithmProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\SHA224Managed.cs">
+      <Link>Mono.Security.Cryptography\SHA224Managed.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.Cryptography\SHA224.cs">
+      <Link>Mono.Security.Cryptography\SHA224.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\SignatureTls11.cs">
+      <Link>Mono.Security.NewTls.Cipher\SignatureTls11.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.Providers\common\Consts.cs">
       <Link>common\Consts.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Users\martin\Documents\MartinContext.cs">
+      <Link>Mono.Security.NewTls\MartinContext.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
