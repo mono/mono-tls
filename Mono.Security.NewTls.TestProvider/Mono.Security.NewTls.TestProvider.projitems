@@ -9,7 +9,6 @@
     <Import_RootNamespace>Mono.Security.NewTls.TestProvider</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\CryptoProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnection.cs" />
@@ -24,7 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoHttpProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NewTlsDependencyProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\CallbackHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoSslStream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslConnectionProvider.cs" />
@@ -32,5 +30,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeCryptoHashType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnectionProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NewTlsDependencyProvider.cs" />
   </ItemGroup>
 </Project>
