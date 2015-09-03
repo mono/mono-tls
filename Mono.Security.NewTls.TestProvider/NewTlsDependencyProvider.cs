@@ -27,6 +27,7 @@ using System;
 using System.Net;
 using System.Threading;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
@@ -60,6 +61,8 @@ namespace Mono.Security.NewTls.TestProvider
 				MonoTlsProviderFactory.InstallProvider (newTlsProvider);
 				return newTlsProvider;
 			});
+
+			DependencyInjector.RegisterDependency<IPortableSupport> (() => new PortableSupportImpl ());
 
 			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
 			DependencyInjector.RegisterDependency<ICertificateProvider> (() => new CertificateProvider ());
