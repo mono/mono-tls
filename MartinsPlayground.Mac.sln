@@ -19,9 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestFr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Tests", "Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj", "{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestProvider", "Mac\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.csproj", "{97CF1313-8F68-49E2-A93B-5A7EB4BACD5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Mac", "Mac\Mono.Security.NewTls.Mac\Mono.Security.NewTls.Mac.csproj", "{97CF1313-8F68-49E2-A93B-5A7EB4BACD5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.UI", "external\web-tests\Xamarin.AsyncTests.UI\Xamarin.AsyncTests.UI.csproj", "{49780FD0-2761-4C20-ACC5-5956FFEBD51F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{C0AB21A9-9053-49F2-9B4C-C90CF22263A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
