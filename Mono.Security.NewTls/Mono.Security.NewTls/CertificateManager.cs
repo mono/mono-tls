@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using Mono.Security.Interface;
 using Mono.Security.X509.Extensions;
 
@@ -17,7 +18,14 @@ namespace Mono.Security.NewTls
 
 			var helper = CertificateValidationHelper.GetValidator (config.TlsSettings);
 
-			var result = helper.ValidateChain (config.TargetHost, certificates);
+			X509Certificate2Collection scerts = null;
+			if (certificates != null) {
+				scerts = new X509Certificate2Collection ();
+				for (int i = 0; i < certificates.Count; i++)
+					scerts.Add (new X509Certificate2 (certificates [i].RawData));
+			}
+
+			var result = helper.ValidateChain (config.TargetHost, scerts);
 			if (result != null && result.Trusted && !result.UserDenied)
 				return;
 
@@ -47,7 +55,14 @@ namespace Mono.Security.NewTls
 
 			var helper = CertificateValidationHelper.GetValidator (context.Configuration.TlsSettings);
 
-			var result = helper.ValidateClientCertificate (certificates);
+			X509Certificate2Collection scerts = null;
+			if (certificates != null) {
+				scerts = new X509Certificate2Collection ();
+				for (int i = 0; i < certificates.Count; i++)
+					scerts.Add (new X509Certificate2 (certificates [i].RawData));
+			}
+
+			var result = helper.ValidateClientCertificate (scerts);
 			if (result == null || !result.Trusted || result.UserDenied)
 				throw new TlsException (AlertDescription.CertificateUnknown);
 		}
