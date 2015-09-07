@@ -57,9 +57,6 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Mono.Security.NewTls.TestProvider\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\AppDelegate.cs">
       <Link>AppDelegate.cs</Link>
     </Compile>
@@ -70,6 +67,7 @@
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems" Label="Shared" Condition="Exists('..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems')" />
+  <Import Project="..\..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
@@ -112,6 +110,10 @@
     <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.Framework\Xamarin.WebTests.Framework.csproj">
       <Project>{85371459-6509-4D96-A95D-862399E0F0BE}</Project>
       <Name>Xamarin.WebTests.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.UI\Xamarin.AsyncTests.UI.csproj">
+      <Project>{49780FD0-2761-4C20-ACC5-5956FFEBD51F}</Project>
+      <Name>Xamarin.AsyncTests.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

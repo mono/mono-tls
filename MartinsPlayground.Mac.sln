@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.UI", "ex
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{C0AB21A9-9053-49F2-9B4C-C90CF22263A0}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.WebTests.PortableImpl", "external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.shproj", "{D578985A-B8C0-4083-8F3E-1AE2B680E85B}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.AsyncTests.PortableImpl", "external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.shproj", "{4D53941A-ABBE-4B89-A362-C56F7BC0B20A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
