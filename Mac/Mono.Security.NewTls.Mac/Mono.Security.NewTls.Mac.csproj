@@ -127,16 +127,8 @@
     </InterfaceDefinition>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="..\..\lib\libcrypto.1.0.0.dylib">
-      <Link>libcrypto.1.0.0.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </BundleResource>
     <BundleResource Include="..\..\lib\libNativeOpenSsl.dylib">
       <Link>libNativeOpenSsl.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </BundleResource>
-    <BundleResource Include="..\..\lib\libssl.1.0.0.dylib">
-      <Link>libssl.1.0.0.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </BundleResource>
   </ItemGroup>
