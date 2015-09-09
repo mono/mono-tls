@@ -35,8 +35,8 @@
 		5B387A071A29273A0048D5F1 /* NativeOpenSsl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeOpenSsl.h; sourceTree = "<group>"; };
 		5BDAC29D1A2E64430044E015 /* NativeCryptoTest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NativeCryptoTest.c; sourceTree = "<group>"; };
 		5BDAC29E1A2E64430044E015 /* NativeCryptoTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeCryptoTest.h; sourceTree = "<group>"; };
-		5BF01F6D1BA0892200FBDB8A /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../../../../../Workspace/INSTALL/lib/libcrypto.a; sourceTree = "<group>"; };
-		5BF01F6F1BA0893F00FBDB8A /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../../../../../Workspace/INSTALL/lib/libssl.a; sourceTree = "<group>"; };
+		5BF01F6D1BA0892200FBDB8A /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "$(INSTALL_PATH)/lib/libcrypto.a"; sourceTree = "<group>"; };
+		5BF01F6F1BA0893F00FBDB8A /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "$(INSTALL_PATH)/lib/libssl.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
