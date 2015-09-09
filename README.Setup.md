@@ -25,15 +25,16 @@ Dependencies:
   Xamarin Studio (go to Preferences / .NET Runtime to install it,
   then select via Project / Active Runtime ...).
 
-* Shared-library build of OpenSsl 1.0.1.
+* Local build of OpenSsl 1.0.1k.
 
-  The default version of OpenSsl on OS X is too old and it's also not built as shared library.  You need to download the openssl 1.0.1 sources, then configure and compile with:
+  The default version of OpenSsl on OS X is too old and does not support TLS 1.2, so we need to build our own.
+  You need to download the openssl 1.0.1k sources, then configure and compile with:
   
 ```
     $ ./config -t
-    $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL -shared
+    $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL
     $ make
-    $ make install
+    $ make -k install
 ```
 
   For full debugging use
