@@ -9,13 +9,11 @@
 /* Begin PBXBuildFile section */
 		5B387A081A29273A0048D5F1 /* NativeOpenSsl.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B387A061A29273A0048D5F1 /* NativeOpenSsl.c */; };
 		5B387A091A29273A0048D5F1 /* NativeOpenSsl.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B387A071A29273A0048D5F1 /* NativeOpenSsl.h */; };
-		5B387A0B1A2928E20048D5F1 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B387A0A1A2928E20048D5F1 /* libcrypto.1.0.0.dylib */; };
-		5B387A0D1A2928F50048D5F1 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B387A0C1A2928F50048D5F1 /* libssl.1.0.0.dylib */; };
-		5B387A101A292E2D0048D5F1 /* libssl.1.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B387A0C1A2928F50048D5F1 /* libssl.1.0.0.dylib */; };
-		5B387A111A292E2D0048D5F1 /* libcrypto.1.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B387A0A1A2928E20048D5F1 /* libcrypto.1.0.0.dylib */; };
 		5B387A121A292E2D0048D5F1 /* libNativeOpenSsl.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B31F1C91A292003001BA250 /* libNativeOpenSsl.dylib */; };
 		5BDAC29F1A2E64430044E015 /* NativeCryptoTest.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BDAC29D1A2E64430044E015 /* NativeCryptoTest.c */; };
 		5BDAC2A01A2E64430044E015 /* NativeCryptoTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BDAC29E1A2E64430044E015 /* NativeCryptoTest.h */; };
+		5BF01F6E1BA0892200FBDB8A /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF01F6D1BA0892200FBDB8A /* libcrypto.a */; };
+		5BF01F701BA0893F00FBDB8A /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF01F6F1BA0893F00FBDB8A /* libssl.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,8 +23,6 @@
 			dstPath = "${SRCROOT}/../lib";
 			dstSubfolderSpec = 0;
 			files = (
-				5B387A101A292E2D0048D5F1 /* libssl.1.0.0.dylib in CopyFiles */,
-				5B387A111A292E2D0048D5F1 /* libcrypto.1.0.0.dylib in CopyFiles */,
 				5B387A121A292E2D0048D5F1 /* libNativeOpenSsl.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -37,10 +33,10 @@
 		5B31F1C91A292003001BA250 /* libNativeOpenSsl.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libNativeOpenSsl.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B387A061A29273A0048D5F1 /* NativeOpenSsl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NativeOpenSsl.c; sourceTree = "<group>"; };
 		5B387A071A29273A0048D5F1 /* NativeOpenSsl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeOpenSsl.h; sourceTree = "<group>"; };
-		5B387A0A1A2928E20048D5F1 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = ../../INSTALL/lib/libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
-		5B387A0C1A2928F50048D5F1 /* libssl.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.1.0.0.dylib; path = ../../INSTALL/lib/libssl.1.0.0.dylib; sourceTree = "<group>"; };
 		5BDAC29D1A2E64430044E015 /* NativeCryptoTest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NativeCryptoTest.c; sourceTree = "<group>"; };
 		5BDAC29E1A2E64430044E015 /* NativeCryptoTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeCryptoTest.h; sourceTree = "<group>"; };
+		5BF01F6D1BA0892200FBDB8A /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../../../../../Workspace/INSTALL/lib/libcrypto.a; sourceTree = "<group>"; };
+		5BF01F6F1BA0893F00FBDB8A /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../../../../../Workspace/INSTALL/lib/libssl.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,8 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B387A0D1A2928F50048D5F1 /* libssl.1.0.0.dylib in Frameworks */,
-				5B387A0B1A2928E20048D5F1 /* libcrypto.1.0.0.dylib in Frameworks */,
+				5BF01F701BA0893F00FBDB8A /* libssl.a in Frameworks */,
+				5BF01F6E1BA0892200FBDB8A /* libcrypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,10 +55,10 @@
 		5B31F1C01A292003001BA250 = {
 			isa = PBXGroup;
 			children = (
+				5BF01F6F1BA0893F00FBDB8A /* libssl.a */,
+				5BF01F6D1BA0892200FBDB8A /* libcrypto.a */,
 				5BDAC29D1A2E64430044E015 /* NativeCryptoTest.c */,
 				5BDAC29E1A2E64430044E015 /* NativeCryptoTest.h */,
-				5B387A0C1A2928F50048D5F1 /* libssl.1.0.0.dylib */,
-				5B387A0A1A2928E20048D5F1 /* libcrypto.1.0.0.dylib */,
 				5B387A061A29273A0048D5F1 /* NativeOpenSsl.c */,
 				5B387A071A29273A0048D5F1 /* NativeOpenSsl.h */,
 				5B31F1CA1A292003001BA250 /* Products */,
