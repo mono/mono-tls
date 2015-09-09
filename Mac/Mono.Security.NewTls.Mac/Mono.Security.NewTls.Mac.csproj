@@ -127,9 +127,9 @@
     </InterfaceDefinition>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="..\..\lib\libNativeOpenSsl.dylib">
-      <Link>libNativeOpenSsl.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </BundleResource>
+    <NativeReference Include="..\..\lib\libNativeOpenSsl.dylib">
+      <IsCxx>False</IsCxx>
+      <Kind>Dynamic</Kind>
+    </NativeReference>
   </ItemGroup>
 </Project>
