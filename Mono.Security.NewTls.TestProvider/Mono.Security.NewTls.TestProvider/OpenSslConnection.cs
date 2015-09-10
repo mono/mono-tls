@@ -179,7 +179,7 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var protocol = GetProtocolVersion ();
 			ctx.LogMessage ("Starting {0} version {1}.", this, protocol);
-			openssl = new NativeOpenSsl (IsServer, false, protocol);
+			openssl = new NativeOpenSsl (IsServer, Parameters.EnableDebugging, protocol);
 			var validationCallback = GetValidationCallback ();
 			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_PEER, validationCallback);
 			Initialize ();
