@@ -42,6 +42,11 @@ namespace Mono.Security.NewTls.TestProvider
 
 	public abstract class NewTlsDependencyProvider : IDependencyProvider
 	{
+		protected virtual ConnectionProviderFactory CreateConnectionProviderFactory ()
+		{
+			return new MonoConnectionProviderFactory ();
+		}
+
 		public virtual void Initialize ()
 		{
 			DependencyInjector.RegisterDependency<NewTlsProvider> (() => {
@@ -54,7 +59,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
 			DependencyInjector.RegisterDependency<ICertificateProvider> (() => new CertificateProvider ());
-			DependencyInjector.RegisterDependency<ConnectionProviderFactory> (() => new MonoConnectionProviderFactory ());
+			DependencyInjector.RegisterDependency<ConnectionProviderFactory> (() => CreateConnectionProviderFactory ());
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
 
