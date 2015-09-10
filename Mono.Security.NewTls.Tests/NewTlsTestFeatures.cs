@@ -24,9 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.HttpFramework;
 using Xamarin.WebTests.ConnectionFramework;
@@ -35,8 +37,11 @@ using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
+[assembly: DependencyProvider (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeaturesProvider))]
 [assembly: RequireDependency (typeof (ConnectionProviderFactory))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
+[assembly: RequireDependency (typeof (ICertificateProvider))]
+[assembly: RequireDependency (typeof (IPortableSupport))]
 [assembly: RequireDependency (typeof (IPortableWebSupport))]
 
 namespace Mono.Security.NewTls.Tests
@@ -48,6 +53,14 @@ namespace Mono.Security.NewTls.Tests
 	{
 		public override TestFeature Feature {
 			get { return NewTlsTestFeatures.Instance.CryptoTests; }
+		}
+	}
+
+	public class NewTlsTestFeaturesProvider : IDependencyProvider
+	{
+		public void Initialize ()
+		{
+			DependencyInjector.RegisterDependency<NewTlsTestFeatures> (() => new NewTlsTestFeatures ());
 		}
 	}
 

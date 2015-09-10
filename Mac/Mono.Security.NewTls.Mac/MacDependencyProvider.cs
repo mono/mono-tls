@@ -30,12 +30,12 @@ using Xamarin.AsyncTests.MacUI;
 using AppKit;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
-
 [assembly: DependencyProvider (typeof (Mono.Security.NewTls.Mac.MacDependencyProvider))]
 
 namespace Mono.Security.NewTls.Mac
 {
 	using TestProvider;
+	using Tests;
 
 	public class MacDependencyProvider : IDependencyProvider
 	{

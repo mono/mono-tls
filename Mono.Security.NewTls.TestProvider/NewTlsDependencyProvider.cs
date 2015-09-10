@@ -41,7 +41,6 @@ using Mono.Security.Providers.NewTls;
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
-	using Tests;
 
 	public sealed class NewTlsDependencyProvider : IDependencyProvider
 	{
@@ -60,8 +59,6 @@ namespace Mono.Security.NewTls.TestProvider
 			DependencyInjector.RegisterDependency<ConnectionProviderFactory> (() => new MonoConnectionProviderFactory ());
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-
-			DependencyInjector.RegisterDependency<NewTlsTestFeatures> (() => new NewTlsTestFeatures ());
 
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 		}
