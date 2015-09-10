@@ -32,7 +32,7 @@ Dependencies:
   
 ```
     $ ./config -t
-    $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL
+    $ ./Configure darwin64-x86_64-cc --prefix=/Workspace/INSTALL
     $ make
     $ make -k install
 ```

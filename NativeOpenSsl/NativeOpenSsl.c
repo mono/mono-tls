@@ -145,9 +145,9 @@ dump_callback (BIO *bio, int cmd, const char *argp, int argi, long argl, long re
 	if (!ptr || !ptr->debug_callback) return ret;
 	
 	if (cmd == (BIO_CB_READ|BIO_CB_RETURN))
-		ptr->debug_callback (cmd, argp, argi, ret);
+		ptr->debug_callback (cmd, argp, argi, (int)ret);
 	else if (cmd == (BIO_CB_WRITE|BIO_CB_RETURN))
-		ptr->debug_callback (cmd, argp, argi, ret);
+		ptr->debug_callback (cmd, argp, argi, (int)ret);
 	return ret;
 }
 
@@ -157,7 +157,7 @@ message_callback (int write_p, int version, int content_type, const void *buf,
 {
 	NativeOpenSsl *ptr = (NativeOpenSsl*)arg;
 	if (ptr->message_callback)
-		ptr->message_callback (write_p, version, content_type, buf, len);
+		ptr->message_callback (write_p, version, content_type, buf, (int)len);
 }
 
 static void
@@ -389,7 +389,7 @@ native_openssl_set_certificate (NativeOpenSsl *ptr, X509 *certificate, EVP_PKEY 
 int
 native_openssl_BIO_get_mem_data (BIO *bio, void **data)
 {
-	return BIO_get_mem_data (bio, data);
+	return (int)BIO_get_mem_data (bio, data);
 }
 
 static int
