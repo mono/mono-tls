@@ -33,26 +33,17 @@ using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Server;
 
-#if MACUI
-using Xamarin.AsyncTests.MacUI;
-using AppKit;
-#elif !__MOBILE__
-using Xamarin.AsyncTests.Console;
-#endif
-
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 
 [assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
-
-[assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 	using Tests;
 
-	public class NewTlsDependencyProvider : IDependencyProvider
+	public sealed class NewTlsDependencyProvider : IDependencyProvider
 	{
 		public void Initialize ()
 		{
@@ -70,29 +61,10 @@ namespace Mono.Security.NewTls.TestProvider
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
 
-			#if MACUI
-			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());
-			#endif
-
 			DependencyInjector.RegisterDependency<NewTlsTestFeatures> (() => new NewTlsTestFeatures ());
 
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 		}
-
-		#if MACUI
-		static void Main (string[] args)
-		{
-			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
-
-			NSApplication.Init ();
-			NSApplication.Main (args);
-		}
-		#elif !__MOBILE__
-		static void Main (string[] args)
-		{
-			Program.Run (typeof (NewTlsDependencyProvider).Assembly, args);
-		}
-		#endif
 	}
 }
 

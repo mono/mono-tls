@@ -1,5 +1,5 @@
-﻿ //
-// AppDelegate.cs
+﻿//
+// ConsoleMain.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,44 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Foundation;
-using UIKit;
 using Xamarin.AsyncTests;
+using Xamarin.AsyncTests.Console;
+using Mono.Security.NewTls.TestProvider;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
 
-namespace Mono.Security.NewTls.iOS
+namespace Mono.Security.NewTls.Console
 {
-	using TestProvider;
-	using Xamarin.Forms;
-	using Xamarin.Forms.Platform.iOS;
-	using Xamarin.AsyncTests;
-	using Xamarin.AsyncTests.Framework;
-	using Xamarin.AsyncTests.Portable;
-	using Xamarin.AsyncTests.Mobile;
-
-	[Register("AppDelegate")]
-	public partial class AppDelegate : FormsApplicationDelegate
+	public static class ConsoleMain
 	{
-		public TestFramework Framework {
-			get;
-			private set;
-		}
-
-		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
+		static void Main (string[] args)
 		{
-			Forms.Init();
-
 			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
 
-			Framework = TestFramework.GetLocalFramework (typeof(Tests.NewTlsTestFeatures).Assembly);
-
-			LoadApplication (new MobileTestApp (Framework));
-
-			return base.FinishedLaunching (app, options);
+			Program.Run (typeof (ConsoleMain).Assembly, args);
 		}
 	}
 }

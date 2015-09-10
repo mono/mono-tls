@@ -343,7 +343,7 @@
     <Compile Include="..\..\Mono.Security.Providers\common\Consts.cs">
       <Link>common\Consts.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Users\martin\Documents\MartinContext.cs">
+    <Compile Include="\Users\martin\Documents\MartinContext.cs">
       <Link>Mono.Security.NewTls\MartinContext.cs</Link>
     </Compile>
   </ItemGroup>
