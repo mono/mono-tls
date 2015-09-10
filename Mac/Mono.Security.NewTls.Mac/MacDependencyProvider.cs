@@ -37,16 +37,16 @@ namespace Mono.Security.NewTls.Mac
 	using TestProvider;
 	using Tests;
 
-	public class MacDependencyProvider : IDependencyProvider
+	public class MacDependencyProvider : NewTlsDependencyProvider
 	{
-		public void Initialize ()
+		public override void Initialize ()
 		{
+			base.Initialize ();
 			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());
 		}
 
 		static void Main (string[] args)
 		{
-			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
 			DependencyInjector.RegisterAssembly (typeof(MacDependencyProvider).Assembly);
 
 			NSApplication.Init ();

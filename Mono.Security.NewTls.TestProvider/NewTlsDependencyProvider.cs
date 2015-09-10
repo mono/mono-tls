@@ -36,15 +36,13 @@ using Xamarin.WebTests.Server;
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
-
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public sealed class NewTlsDependencyProvider : IDependencyProvider
+	public abstract class NewTlsDependencyProvider : IDependencyProvider
 	{
-		public void Initialize ()
+		public virtual void Initialize ()
 		{
 			DependencyInjector.RegisterDependency<NewTlsProvider> (() => {
 				var newTlsProvider = new NewTlsProvider ();

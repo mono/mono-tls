@@ -1,5 +1,5 @@
 ﻿//
-// ConsoleMain.cs
+// MobileDependencyProvider.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,21 +25,25 @@
 // THE SOFTWARE.
 using System;
 using Xamarin.AsyncTests;
-using Xamarin.AsyncTests.Console;
 using Mono.Security.NewTls.TestProvider;
+using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.Tests;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
+[assembly: DependencyProvider (typeof (Mono.Security.NewTls.iOS.MobileDependencyProvider))]
 
-namespace Mono.Security.NewTls.Console
+namespace Mono.Security.NewTls.iOS
 {
-	public static class ConsoleMain
-	{
-		static void Main (string[] args)
-		{
-			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
+	using Xamarin.AsyncTests;
+	using Xamarin.AsyncTests.Framework;
 
-			Program.Run (typeof (ConsoleMain).Assembly, args);
+	public class MobileDependencyProvider : NewTlsDependencyProvider
+	{
+		public static TestFramework GetFramework ()
+		{
+			DependencyInjector.RegisterAssembly (typeof(MobileDependencyProvider).Assembly);
+
+			return TestFramework.GetLocalFramework (typeof(NewTlsTestFeatures).Assembly);
 		}
 	}
 }
-

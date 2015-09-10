@@ -128,6 +128,7 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="MobileDependencyProvider.cs" />
   </ItemGroup>
   <Import Project="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems" Label="Shared" Condition="Exists('..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems')" />
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
