@@ -28,6 +28,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.AsyncTests;
+using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -65,6 +66,17 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public bool HasRemoteCertificate {
 			get { return stream.RemoteCertificate != null; }
+		}
+
+		public ICertificate RemoteCertificate {
+			get {
+				var certificate = stream.RemoteCertificate;
+				if (certificate == null)
+					throw new InvalidOperationException ();
+
+				var provider = DependencyInjector.Get<ICertificateProvider> ();
+				return provider.GetCertificateFromData (certificate.GetRawCertData ());
+			}
 		}
 
 		public Stream AuthenticatedStream {
