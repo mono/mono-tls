@@ -107,6 +107,10 @@ namespace Mono.Security.NewTls.TestProvider
 			return true;
 		}
 
+		public bool SupportsRenegotiation {
+			get { return monoNewTlsStream != null; }
+		}
+
 		public Task RequestRenegotiation ()
 		{
 			return monoNewTlsStream.RequestRenegotiation ();

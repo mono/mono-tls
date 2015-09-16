@@ -31,6 +31,10 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IMonoSslStream
 	{
+		bool SupportsRenegotiation {
+			get;
+		}
+
 		Task RequestRenegotiation ();
 	}
 }
