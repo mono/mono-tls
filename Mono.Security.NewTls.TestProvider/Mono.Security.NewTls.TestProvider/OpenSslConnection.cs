@@ -118,7 +118,7 @@ namespace Mono.Security.NewTls.TestProvider
 				return connectionInfo;
 
 			connectionInfo = new TlsConnectionInfo {
-				CipherCode = (CipherSuiteCode)openssl.CurrentCipher
+				CipherSuiteCode = (CipherSuiteCode)openssl.CurrentCipher
 			};
 
 			return connectionInfo;

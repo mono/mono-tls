@@ -92,15 +92,6 @@ namespace Mono.Security.NewTls
 			}
 		}
 
-		#region Provided by the server
-
-		public TlsConnectionInfo ConnectionInfo {
-			get;
-			internal set;
-		}
-
-		#endregion
-
 		#if INSTRUMENTATION
 
 		public Instrumentation Instrumentation {

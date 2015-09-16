@@ -531,10 +531,8 @@ namespace Mono.Security.NewTls
 			}
 
 			connectionInfo = new TlsConnectionInfo {
-				CipherCode = Session.CurrentCrypto.Cipher.Code, ProtocolVersion = protocol
+				CipherSuiteCode = Session.CurrentCrypto.Cipher.Code, ProtocolVersion = protocol
 			};
-
-			configuration.UserSettings.ConnectionInfo = connectionInfo;
 		}
 
 		public TlsConnectionInfo ConnectionInfo {

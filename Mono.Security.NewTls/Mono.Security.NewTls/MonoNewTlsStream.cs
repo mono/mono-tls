@@ -35,9 +35,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 #if PREBUILT_MSI
-using PrebuiltSystem::Mono.Security.Interface;
+using MSI = PrebuiltSystem::Mono.Security.Interface;
 #else
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 #endif
 
 using Mono.Security.NewTls;
@@ -46,18 +46,14 @@ namespace Mono.Security.Providers.NewTls
 {
 	public class MonoNewTlsStream : SslStream
 	{
-		MonoTlsSettings settings;
-
-		internal MonoNewTlsStream (Stream innerStream, MonoTlsSettings settings)
+		internal MonoNewTlsStream (Stream innerStream, MSI.MonoTlsSettings settings)
 			: this (innerStream, false, settings)
 		{
-			this.settings = settings;
 		}
 
-		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, MonoTlsSettings settings)
+		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, MSI.MonoTlsSettings settings)
 			: base (innerStream, leaveOpen, EncryptionPolicy.RequireEncryption, settings)
 		{
-			this.settings = settings;
 		}
 
 		new public bool IsClosed {
@@ -70,7 +66,13 @@ namespace Mono.Security.Providers.NewTls
 
 		public TlsConnectionInfo GetConnectionInfo ()
 		{
-			return base.GetConnectionInfo ();
+			var info = GetMonoConnectionInfo ();
+			if (info == null)
+				return null;
+			return new TlsConnectionInfo {
+				CipherSuiteCode = (CipherSuiteCode)info.CipherSuiteCode,
+				ProtocolVersion = (TlsProtocols)info.ProtocolVersion
+			};
 		}
 
 		public Task Shutdown ()

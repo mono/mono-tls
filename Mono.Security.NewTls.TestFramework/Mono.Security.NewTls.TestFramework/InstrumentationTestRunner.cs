@@ -170,7 +170,7 @@ namespace Mono.Security.NewTls.TestFramework
 			var connectionInfo = connection.GetConnectionInfo ();
 
 			if (ctx.Expect (connectionInfo, Is.Not.Null, "connection info"))
-				ctx.Expect (connectionInfo.CipherCode, Is.EqualTo (cipher), "expected cipher");
+				ctx.Expect (connectionInfo.CipherSuiteCode, Is.EqualTo (cipher), "expected cipher");
 		}
 
 		protected override Task OnRun (TestContext ctx, CancellationToken cancellationToken)
