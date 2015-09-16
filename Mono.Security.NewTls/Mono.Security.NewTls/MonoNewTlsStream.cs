@@ -46,14 +46,18 @@ namespace Mono.Security.Providers.NewTls
 {
 	public class MonoNewTlsStream : SslStream
 	{
+		MonoTlsSettings settings;
+
 		internal MonoNewTlsStream (Stream innerStream, MonoTlsSettings settings)
 			: this (innerStream, false, settings)
 		{
+			this.settings = settings;
 		}
 
 		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, MonoTlsSettings settings)
 			: base (innerStream, leaveOpen, EncryptionPolicy.RequireEncryption, settings)
 		{
+			this.settings = settings;
 		}
 
 		new public bool IsClosed {
@@ -62,6 +66,11 @@ namespace Mono.Security.Providers.NewTls
 
 		new public TlsException LastError {
 			get { return (TlsException)base.LastError; }
+		}
+
+		public TlsConnectionInfo GetConnectionInfo ()
+		{
+			return base.GetConnectionInfo ();
 		}
 
 		public Task Shutdown ()

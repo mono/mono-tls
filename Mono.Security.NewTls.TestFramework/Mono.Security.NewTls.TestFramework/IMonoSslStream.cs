@@ -31,6 +31,12 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public interface IMonoSslStream
 	{
+		bool SupportsConnectionInfo {
+			get;
+		}
+
+		TlsConnectionInfo GetConnectionInfo ();
+
 		bool SupportsRenegotiation {
 			get;
 		}

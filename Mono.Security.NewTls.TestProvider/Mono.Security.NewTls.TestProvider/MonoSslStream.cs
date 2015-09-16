@@ -99,6 +99,15 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 		}
 
+		public bool SupportsConnectionInfo {
+			get { return monoNewTlsStream != null; }
+		}
+
+		public TlsConnectionInfo GetConnectionInfo ()
+		{
+			return monoNewTlsStream.GetConnectionInfo ();
+		}
+
 		public async Task<bool> TryCleanShutdown ()
 		{
 			if (monoNewTlsStream == null)
