@@ -38,7 +38,7 @@ namespace Mono.Security.NewTls.TestProvider
 			;
 		}
 
-		protected override void CreateConnection ()
+		protected override void CreateConnection (TestContext ctx)
 		{
 			var endpoint = GetEndPoint ();
 			if (Parameters.ClientCertificate != null) {
@@ -47,10 +47,8 @@ namespace Mono.Security.NewTls.TestProvider
 				openssl.SetCertificate (data, password);
 			}
 
-			if (MonoParameters != null) {
-				if (MonoParameters.ClientCiphers != null)
-					openssl.SetCipherList (MonoParameters.ClientCiphers);
-			}
+			if (MonoParameters != null)
+				SelectCiphers (ctx, MonoParameters.ClientCiphers);
 
 			openssl.Connect (endpoint);
 		}

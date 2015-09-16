@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
 using System.Threading;
@@ -186,7 +187,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			Task.Factory.StartNew (() => {
 				try {
-					CreateConnection ();
+					CreateConnection (ctx);
 					createTcs.SetResult (null);
 				} catch (Exception ex) {
 					createTcs.SetException (ex);
@@ -195,9 +196,18 @@ namespace Mono.Security.NewTls.TestProvider
 			return FinishedTask;
 		}
 
+		protected void SelectCiphers (TestContext ctx, ICollection<CipherSuiteCode> ciphers)
+		{
+			if (ciphers == null)
+				return;
+
+			ctx.LogDebug (2, "Select Ciphers: {0}", string.Join (":", ciphers));
+			openssl.SetCipherList (ciphers);
+		}
+
 		protected abstract void Initialize ();
 
-		protected abstract void CreateConnection ();
+		protected abstract void CreateConnection (TestContext ctx);
 
 		public sealed override Task WaitForConnection (TestContext ctx, CancellationToken cancellationToken)
 		{

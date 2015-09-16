@@ -46,12 +46,10 @@ namespace Mono.Security.NewTls.TestProvider
 			openssl.Bind (endpoint);
 		}
 
-		protected override void CreateConnection ()
+		protected override void CreateConnection (TestContext ctx)
 		{
-			if (MonoParameters != null) {
-				if (MonoParameters.ServerCiphers != null)
-					openssl.SetCipherList (MonoParameters.ServerCiphers);
-			}
+			if (MonoParameters != null)
+				SelectCiphers (ctx, MonoParameters.ServerCiphers);
 
 			openssl.Accept ();
 		}
