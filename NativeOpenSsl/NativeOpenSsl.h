@@ -46,6 +46,7 @@ typedef enum {
 typedef struct {
 	int debug;
 	NativeOpenSslProtocol protocol;
+	int is_server;
 	int socket;
 	int accepted;
 	SSL_CTX *ctx;
@@ -55,10 +56,14 @@ typedef struct {
 	MessageCallback message_callback;
 	VerifyCallback verify_callback;
 	CertificateVerifyCallback cert_verify_callback;
+	DH *dh_params;
 } NativeOpenSsl;
 
 NativeOpenSsl *
 native_openssl_initialize (int debug, NativeOpenSslProtocol protocol, DebugCallback debug_callback, MessageCallback message_callback);
+
+int
+native_openssl_set_dh_params (NativeOpenSsl *ptr, const unsigned char *p, int p_len, const unsigned char *g, int g_len);
 
 int
 native_openssl_connect (NativeOpenSsl *ptr, unsigned char ip[4], int port);

@@ -194,6 +194,9 @@ namespace Mono.Security.NewTls.TestProvider
 		extern static OpenSslHandle native_openssl_initialize (int debug, NativeOpenSslProtocol protocol, DebugCallback debug_callback, MessageCallback message_callback);
 
 		[DllImport (DLL)]
+		extern static int native_openssl_set_dh_params (OpenSslHandle handle, byte[] p, int p_len, byte[] g, int b_len);
+
+		[DllImport (DLL)]
 		extern static int native_openssl_create_context (OpenSslHandle handle, bool client);
 
 		[DllImport (DLL)]
@@ -285,6 +288,13 @@ namespace Mono.Security.NewTls.TestProvider
 		static Exception GetConcurrentOperationEx ()
 		{
 			return new InvalidOperationException ("Attempted concurrent read/write operation.");
+		}
+
+		public void SetDhParams (byte[] p, byte[] g)
+		{
+			var ret = native_openssl_set_dh_params (handle, p, p.Length, g, g.Length);
+			if (ret != 0)
+				throw new ConnectionException ("native_openssl_set_dh_params() failed.");
 		}
 
 		public override void Write (byte[] buffer, int offset, int size)

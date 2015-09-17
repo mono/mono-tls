@@ -103,6 +103,21 @@ get_dh512 (void)
 }
 
 int
+native_openssl_set_dh_params (NativeOpenSsl *ptr, const unsigned char *p, int p_len, const unsigned char *g, int g_len)
+{
+	DH *dh = NULL;
+
+	if ((dh=DH_new ()) == NULL) return -1;
+	dh->p = BN_bin2bn (p, p_len, NULL);
+	dh->g = BN_bin2bn (g, g_len, NULL);
+	if (!dh->p || !dh->g)
+		return -1;
+
+	ptr->dh_params = dh;
+	return 0;
+}
+
+int
 native_openssl_shutdown (NativeOpenSsl *ptr)
 {
 	return SSL_shutdown(ptr->ssl);
@@ -119,6 +134,10 @@ native_openssl_destroy (NativeOpenSsl *ptr)
 	if (ptr->ctx) {
 		SSL_CTX_free (ptr->ctx);
 		ptr->ctx = NULL;
+	}
+	if (ptr->dh_params) {
+		DH_free(ptr->dh_params);
+		ptr->dh_params = NULL;
 	}
 	free (ptr);
 }
@@ -445,17 +464,13 @@ native_openssl_create_context (NativeOpenSsl *ptr, short client_p)
 		method = client_p ? TLSv1_2_client_method () : TLSv1_2_server_method ();
 		break;
 	}
+
+	ptr->is_server = !client_p;
 	
 	ptr->ctx = SSL_CTX_new (method);
 	if (!ptr->ctx) {
 		native_openssl_error(ptr, "Failed to create context.");
 		return NATIVE_OPENSSL_ERROR_CREATE_CONTEXT;
-	}
-
-	if (!client_p) {
-		DH *dh = get_dh512();
-		if (dh)
-			SSL_CTX_set_tmp_dh(ptr->ctx, dh);
 	}
 
 	SSL_CTX_set_mode(ptr->ctx, SSL_MODE_AUTO_RETRY);
@@ -467,6 +482,13 @@ native_openssl_create_context (NativeOpenSsl *ptr, short client_p)
 int
 native_openssl_create_connection (NativeOpenSsl *ptr)
 {
+	if (ptr->is_server) {
+		if (!ptr->dh_params)
+			ptr->dh_params = get_dh512();
+		if (ptr->dh_params)
+			SSL_CTX_set_tmp_dh(ptr->ctx, ptr->dh_params);
+	}
+
 	ptr->ssl = SSL_new (ptr->ctx);
 	if (!ptr->ssl) {
 		native_openssl_error(ptr, "Failed to create connection.");

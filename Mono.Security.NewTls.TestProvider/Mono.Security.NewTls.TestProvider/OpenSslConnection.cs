@@ -39,6 +39,7 @@ using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
+using Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -176,6 +177,13 @@ namespace Mono.Security.NewTls.TestProvider
 			};
 		}
 
+		void InitDiffieHellman ()
+		{
+			var dh = new DiffieHellmanManaged ();
+			var dhparams = dh.ExportParameters (true);
+			openssl.SetDhParams (dhparams.P, dhparams.G);
+		}
+
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
 		{
 			var protocol = GetProtocolVersion ();
@@ -183,6 +191,7 @@ namespace Mono.Security.NewTls.TestProvider
 			openssl = new NativeOpenSsl (IsServer, Parameters.EnableDebugging, protocol);
 			var validationCallback = GetValidationCallback ();
 			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_PEER, validationCallback);
+			InitDiffieHellman ();
 			Initialize ();
 
 			Task.Factory.StartNew (() => {
