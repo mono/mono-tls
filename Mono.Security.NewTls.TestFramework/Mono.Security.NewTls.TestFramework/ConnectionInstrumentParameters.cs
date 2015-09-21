@@ -41,14 +41,8 @@ namespace Mono.Security.NewTls.TestFramework
 		protected ConnectionInstrumentParameters (ConnectionInstrumentParameters other)
 			: base (other)
 		{
-			EnableDebugging = other.EnableDebugging;
-
 			if (other.handshakeInstruments != null)
 				handshakeInstruments = new HashSet<HandshakeInstrumentType> (other.handshakeInstruments);
-		}
-
-		public bool EnableDebugging {
-			get; set;
 		}
 
 		HashSet<HandshakeInstrumentType> handshakeInstruments;

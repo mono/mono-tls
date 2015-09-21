@@ -30,6 +30,7 @@ using System.Threading.Tasks;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.Resources;
+using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Portable;
@@ -39,13 +40,16 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
+	[Work]
 	[AsyncTestFixture]
 	public class SelectCiphersTests
 	{
 		[AsyncTest]
+		[ProtocolVersion (ProtocolVersions.Tls10)]
 		[InstrumentationCategory (InstrumentationCategory.SelectClientCipher)]
-		public async Task TestClient (TestContext ctx, CancellationToken cancellationToken,
+		public async Task TestClientTls10 (TestContext ctx, CancellationToken cancellationToken,
 			InstrumentationConnectionProvider provider,
+			[CipherSuite] CipherSuiteCode cipher,
 			CipherInstrumentParameters parameters,
 			CipherInstrumentTestRunner runner)
 		{
@@ -53,9 +57,59 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.SelectServerCipher)]
-		public async Task TestServer (TestContext ctx, CancellationToken cancellationToken,
+		[ProtocolVersion (ProtocolVersions.Tls11)]
+		[InstrumentationCategory (InstrumentationCategory.SelectClientCipher)]
+		public async Task TestClientTls11 (TestContext ctx, CancellationToken cancellationToken,
 			InstrumentationConnectionProvider provider,
+			[CipherSuite] CipherSuiteCode cipher,
+			CipherInstrumentParameters parameters,
+			CipherInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[ProtocolVersion (ProtocolVersions.Tls12)]
+		[InstrumentationCategory (InstrumentationCategory.SelectClientCipher)]
+		public async Task TestClientTls12 (TestContext ctx, CancellationToken cancellationToken,
+			InstrumentationConnectionProvider provider,
+			[CipherSuite] CipherSuiteCode cipher,
+			CipherInstrumentParameters parameters,
+			CipherInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[ProtocolVersion (ProtocolVersions.Tls10)]
+		[InstrumentationCategory (InstrumentationCategory.SelectServerCipher)]
+		public async Task TestServerTls10 (TestContext ctx, CancellationToken cancellationToken,
+			InstrumentationConnectionProvider provider,
+			[CipherSuite] CipherSuiteCode cipher,
+			CipherInstrumentParameters parameters,
+			CipherInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[ProtocolVersion (ProtocolVersions.Tls11)]
+		[InstrumentationCategory (InstrumentationCategory.SelectServerCipher)]
+		public async Task TestServerTls11 (TestContext ctx, CancellationToken cancellationToken,
+			InstrumentationConnectionProvider provider,
+			[CipherSuite] CipherSuiteCode cipher,
+			CipherInstrumentParameters parameters,
+			CipherInstrumentTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		[AsyncTest]
+		[ProtocolVersion (ProtocolVersions.Tls12)]
+		[InstrumentationCategory (InstrumentationCategory.SelectServerCipher)]
+		public async Task TestServerTls12 (TestContext ctx, CancellationToken cancellationToken,
+			InstrumentationConnectionProvider provider,
+			[CipherSuite] CipherSuiteCode cipher,
 			CipherInstrumentParameters parameters,
 			CipherInstrumentTestRunner runner)
 		{

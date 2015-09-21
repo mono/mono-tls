@@ -68,22 +68,10 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			switch (category) {
 			case InstrumentationCategory.SelectClientCipher:
-				return SelectAllCiphers ((protocol, cipher) => {
-					var parameters = CreateParameters (category, CipherInstrumentType.SelectClientCipher, protocol, cipher);
-					parameters.ProtocolVersion = protocol;
-					parameters.ClientCiphers = new CipherSuiteCode[] { cipher };
-					parameters.ExpectedClientCipher = cipher;
-					return parameters;
-				});
+				return SelectClientCipherTypes.Select (t => Create (ctx, category, t));
 
 			case InstrumentationCategory.SelectServerCipher:
-				return SelectAllCiphers ((protocol, cipher) => {
-					var parameters = CreateParameters (category, CipherInstrumentType.SelectServerCipher, protocol, cipher);
-					parameters.ProtocolVersion = protocol;
-					parameters.ServerCiphers = new CipherSuiteCode[] { cipher };
-					parameters.ExpectedServerCipher = cipher;
-					return parameters;
-				});
+				return SelectServerCipherTypes.Select (t => Create (ctx, category, t));
 
 			case InstrumentationCategory.SelectCipher:
 				return ConnectionTypes.Select (t => Create (ctx, category, t));
@@ -96,6 +84,14 @@ namespace Mono.Security.NewTls.TestFramework
 
 		internal static readonly CipherInstrumentType[] ConnectionTypes = {
 			CipherInstrumentType.InvalidCipher
+		};
+
+		internal static readonly CipherInstrumentType[] SelectClientCipherTypes = {
+			CipherInstrumentType.SelectClientCipher
+		};
+
+		internal static readonly CipherInstrumentType[] SelectServerCipherTypes = {
+			CipherInstrumentType.SelectServerCipher
 		};
 
 		internal static readonly CipherSuiteCode[] CiphersTls10 = {
@@ -156,6 +152,16 @@ namespace Mono.Security.NewTls.TestFramework
 			var parameters = CreateParameters (category, type);
 
 			switch (type) {
+			case CipherInstrumentType.SelectClientCipher:
+				parameters.ProtocolVersion = ctx.GetParameter<ProtocolVersions> ();
+				parameters.ClientCiphers = new CipherSuiteCode[] { ctx.GetParameter<CipherSuiteCode> () };
+				break;
+
+			case CipherInstrumentType.SelectServerCipher:
+				parameters.ProtocolVersion = ctx.GetParameter<ProtocolVersions> ();
+				parameters.ServerCiphers = new CipherSuiteCode[] { ctx.GetParameter<CipherSuiteCode> () };
+				break;
+
 			case CipherInstrumentType.InvalidCipher:
 				parameters.ServerCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256 };

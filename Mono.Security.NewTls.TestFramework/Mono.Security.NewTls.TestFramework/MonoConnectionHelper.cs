@@ -28,11 +28,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
+using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
 	public static class MonoConnectionHelper
 	{
+		public static TlsProtocolCode GetProtocolCode (ProtocolVersions version)
+		{
+			if ((version & ProtocolVersions.Tls12) != 0)
+				return TlsProtocolCode.Tls12;
+			if ((version & ProtocolVersions.Tls11) != 0)
+				return TlsProtocolCode.Tls11;
+			if ((version & ProtocolVersions.Tls10) != 0)
+				return TlsProtocolCode.Tls10;
+			throw new InvalidOperationException ();
+		}
+
 		public static void ExpectAlert (TestContext ctx, Task t, AlertDescription expectedAlert, string message)
 		{
 			ctx.Assert (t.IsFaulted, Is.True, "#1:" + message);
