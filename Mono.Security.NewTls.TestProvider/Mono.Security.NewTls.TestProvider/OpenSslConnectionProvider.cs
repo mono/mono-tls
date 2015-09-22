@@ -34,7 +34,8 @@ namespace Mono.Security.NewTls.TestProvider
 	public sealed class OpenSslConnectionProvider : ConnectionProvider, IMonoConnectionProvider
 	{
 		public OpenSslConnectionProvider (ConnectionProviderFactory factory)
-			: base (factory, ConnectionProviderType.OpenSsl, ConnectionProviderFlags.SupportsTls12)
+			: base (factory, ConnectionProviderType.OpenSsl,
+				ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers)
 		{
 		}
 
