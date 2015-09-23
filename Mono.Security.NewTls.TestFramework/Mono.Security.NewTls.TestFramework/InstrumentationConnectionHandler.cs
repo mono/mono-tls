@@ -233,7 +233,7 @@ namespace Mono.Security.NewTls.TestFramework
 			LogDebug (ctx, 1, "HandleConnection done", connection);
 		}
 
-		public async Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
+		public virtual async Task MainLoop (TestContext ctx, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested ();
 
