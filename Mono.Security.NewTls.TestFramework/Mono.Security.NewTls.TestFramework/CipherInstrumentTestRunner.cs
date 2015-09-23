@@ -155,11 +155,13 @@ namespace Mono.Security.NewTls.TestFramework
 			case CipherInstrumentType.SelectClientCipher:
 				parameters.ProtocolVersion = ctx.GetParameter<ProtocolVersions> ();
 				parameters.ClientCiphers = new CipherSuiteCode[] { ctx.GetParameter<CipherSuiteCode> () };
+				parameters.ValidateCipherList = true;
 				break;
 
 			case CipherInstrumentType.SelectServerCipher:
 				parameters.ProtocolVersion = ctx.GetParameter<ProtocolVersions> ();
 				parameters.ServerCiphers = new CipherSuiteCode[] { ctx.GetParameter<CipherSuiteCode> () };
+				parameters.ValidateCipherList = true;
 				break;
 
 			case CipherInstrumentType.InvalidCipher:

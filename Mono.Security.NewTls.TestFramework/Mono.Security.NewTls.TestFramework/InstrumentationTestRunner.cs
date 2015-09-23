@@ -80,6 +80,15 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected override void InitializeConnection (TestContext ctx)
 		{
+			if (Parameters.ValidateCipherList) {
+				var provider = ctx.GetParameter<ClientAndServerProvider> ("ClientAndServerProvider");
+
+				if (!ValidateCipherList (provider, Parameters.ClientCiphers))
+					ctx.IgnoreThisTest ();
+				if (!ValidateCipherList (provider, Parameters.ServerCiphers))
+					ctx.IgnoreThisTest ();
+			}
+
 			ConnectionHandler.InitializeConnection (ctx);
 			base.InitializeConnection (ctx);
 		}
@@ -137,6 +146,51 @@ namespace Mono.Security.NewTls.TestFramework
 
 		protected static ICertificateValidator AcceptAnyCertificate {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptAll (); }
+		}
+
+		protected static bool ProviderSupportsCipher (ClientAndServerProvider provider, CipherSuiteCode cipher)
+		{
+			return ProviderSupportsCipher (provider.Client, cipher) && ProviderSupportsCipher (provider.Server, cipher);
+		}
+
+		protected static bool ProviderSupportsCipher (ConnectionProvider provider, CipherSuiteCode cipher)
+		{
+			bool aead = (provider.Flags & ConnectionProviderFlags.SupportsAeadCiphers) != 0;
+			bool tls12 = (provider.Flags & ConnectionProviderFlags.SupportsTls12) != 0;
+
+			switch (cipher) {
+			// Galois-Counter Cipher Suites.
+			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
+			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
+				return aead;
+
+			// Galois-Counter with Legacy RSA Key Exchange.
+			case CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256:
+			case CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384:
+				return aead;
+
+			// Diffie-Hellman Cipher Suites
+			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
+			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
+			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
+			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
+				return tls12;
+
+			// Legacy AES Cipher Suites
+			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256:
+			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256:
+			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA:
+			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
+				return true;
+
+			default:
+				return false;
+			}
+		}
+
+		protected static bool ValidateCipherList (ClientAndServerProvider provider, ICollection<CipherSuiteCode> ciphers)
+		{
+			return ciphers == null || ciphers.Any (cipher => ProviderSupportsCipher (provider, cipher));
 		}
 
 		protected override void OnWaitForClientConnectionCompleted (TestContext ctx, Task task)

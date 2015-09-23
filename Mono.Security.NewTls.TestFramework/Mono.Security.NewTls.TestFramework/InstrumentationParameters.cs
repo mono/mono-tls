@@ -54,6 +54,11 @@ namespace Mono.Security.NewTls.TestFramework
 			Category = other.Category;
 			ExpectedCipher = other.ExpectedCipher;
 			ConnectionFlags = other.ConnectionFlags;
+			ValidateCipherList = other.ValidateCipherList;
+		}
+
+		public bool ValidateCipherList {
+			get; set;
 		}
 
 		public CipherSuiteCode? ExpectedCipher {
