@@ -103,20 +103,13 @@ namespace Mono.Security.NewTls.TestFeatures
 			}
 		}
 
-		static bool FilterCipher (ClientAndServerProvider provider, CipherSuiteCode cipher, string filter)
+		static bool FilterCipher (CipherSuiteCode cipher, string filter)
 		{
-			if (string.IsNullOrEmpty (filter))
+			if (filter == null)
 				return true;
 
 			FilterFlags? includeFlags = null;
 			FilterFlags excludeFlags = FilterFlags.None;
-
-			var providerFlags = provider.Client.Flags & provider.Server.Flags;
-
-			if ((providerFlags & ConnectionProviderFlags.SupportsAeadCiphers) == 0)
-				excludeFlags |= FilterFlags.AEAD;
-			if ((providerFlags & ConnectionProviderFlags.SupportsEcDheCiphers) == 0)
-				excludeFlags |= FilterFlags.ECDHE;
 
 			var parts = filter.Split (':');
 			foreach (var part in parts) {
@@ -150,8 +143,6 @@ namespace Mono.Security.NewTls.TestFeatures
 
 			var protocol = MonoConnectionHelper.GetProtocolCode (version);
 
-			var provider = ctx.GetParameter<ClientAndServerProvider> ("ClientAndServerProvider");
-
 			CipherSuiteCode[] ciphers;
 			switch (protocol) {
 			case TlsProtocolCode.Tls12:
@@ -166,7 +157,7 @@ namespace Mono.Security.NewTls.TestFeatures
 				return null;
 			}
 
-			return ciphers.Where (c => FilterCipher (provider, c, filter));
+			return ciphers.Where (c => FilterCipher (c, filter));
 		}
 	}
 }
