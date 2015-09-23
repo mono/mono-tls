@@ -38,7 +38,9 @@ namespace Mono.Security.NewTls.TestFramework
 		ServerInstrumentation	= 8,
 
 		ManualClient		= 16,
-		ManualServer		= 32
+		ManualServer		= 32,
+
+		RequireTls12		= 64
 	}
 }
 
