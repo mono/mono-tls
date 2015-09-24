@@ -116,6 +116,11 @@ namespace Mono.Security.NewTls.TestProvider
 			return true;
 		}
 
+		public void Close ()
+		{
+			stream.AuthenticatedStream.Dispose ();
+		}
+
 		public bool SupportsRenegotiation {
 			get { return monoNewTlsStream != null; }
 		}
