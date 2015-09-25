@@ -97,6 +97,7 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IMonoConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\CipherSuiteAttribute.cs" />
+    <Compile Include="Mono.Security.NewTls.TestFramework\CipherList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

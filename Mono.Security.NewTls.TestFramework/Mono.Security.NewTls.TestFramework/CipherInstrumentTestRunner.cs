@@ -94,52 +94,13 @@ namespace Mono.Security.NewTls.TestFramework
 			CipherInstrumentType.SelectServerCipher
 		};
 
-		internal static readonly CipherSuiteCode[] CiphersTls10 = {
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
-			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
-			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
-		};
-
-		internal static readonly CipherSuiteCode[] CiphersTls12 = {
-			// ECDHE Galois-Counter Ciphers.
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-
-			// ECDHE AES Ciphers.
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
-
-			// Galois-Counter Cipher Suites.
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
-
-			// Galois-Counter with Legacy RSA Key Exchange.
-			CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256,
-			CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384,
-
-			// Diffie-Hellman Cipher Suites
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
-			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
-
-			// Legacy AES Cipher Suites
-			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256,
-			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256,
-			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
-			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
-		};
-
 		static IEnumerable<CipherInstrumentParameters> SelectAllCiphers (Func<ProtocolVersions,CipherSuiteCode,CipherInstrumentParameters> func)
 		{
-			foreach (var cipher in CiphersTls10)
+			foreach (var cipher in CipherList.CiphersTls10)
 				yield return func (ProtocolVersions.Tls10, cipher);
-			foreach (var cipher in CiphersTls10)
+			foreach (var cipher in CipherList.CiphersTls10)
 				yield return func (ProtocolVersions.Tls11, cipher);
-			foreach (var cipher in CiphersTls12)
+			foreach (var cipher in CipherList.CiphersTls12)
 				yield return func (ProtocolVersions.Tls12, cipher);
 		}
 

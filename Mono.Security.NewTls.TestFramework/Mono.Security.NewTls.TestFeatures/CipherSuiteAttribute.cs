@@ -52,102 +52,6 @@ namespace Mono.Security.NewTls.TestFeatures
 			Cipher = cipher;
 		}
 
-		[Flags]
-		enum FilterFlags {
-			None		= 0,
-			RSA		= 1,
-			DHE		= 2,
-			AEAD		= 4,
-			CBC		= 8,
-			ECDHE		= 16,
-			ALL		= 32
-		}
-
-		static bool CipherMatchesFilterFlags (CipherSuiteCode code, FilterFlags flags)
-		{
-			if ((flags & FilterFlags.ALL) != 0)
-				return true;
-
-			bool rsa = (flags & FilterFlags.RSA) != 0;
-			bool dhe = (flags & FilterFlags.DHE) != 0;
-			bool ecdhe = (flags & FilterFlags.ECDHE) != 0;
-			bool aead = (flags & FilterFlags.AEAD) != 0;
-			bool cbc = (flags & FilterFlags.CBC) != 0;
-
-			switch (code) {
-			// Galois-Counter Cipher Suites.
-			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
-			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
-				return dhe | aead;
-
-			// Galois-Counter with Legacy RSA Key Exchange.
-			case CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256:
-			case CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384:
-				return rsa | aead;
-
-			// Diffie-Hellman Cipher Suites
-			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
-			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
-			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
-			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
-				return dhe | cbc;
-
-			// Legacy AES Cipher Suites
-			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256:
-			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256:
-			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA:
-			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
-				return rsa | cbc;
-
-			// ECDHE Galois-Counter Ciphers.
-			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
-			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
-				return ecdhe | aead;
-
-			// ECDHE AES Ciphers.
-			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384:
-			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
-			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
-			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
-				return ecdhe | cbc;
-
-			default:
-				return false;
-			}
-		}
-
-		static bool FilterCipher (CipherSuiteCode cipher, string filter)
-		{
-			if (filter == null)
-				return true;
-
-			FilterFlags? includeFlags = null;
-			FilterFlags excludeFlags = FilterFlags.None;
-
-			var parts = filter.Split (':');
-			foreach (var part in parts) {
-				var name = part;
-				if (part [0] == '+' || part [0] == '-')
-					name = name.Substring (1);
-
-				var flag = (FilterFlags)Enum.Parse (typeof(FilterFlags), name, true);
-				if (part [0] == '-') {
-					excludeFlags |= flag;
-				} else {
-					if (includeFlags == null)
-						includeFlags = FilterFlags.None;
-					includeFlags |= flag;
-				}
-			}
-
-			if (CipherMatchesFilterFlags (cipher, excludeFlags))
-				return false;
-			if (includeFlags != null && !CipherMatchesFilterFlags (cipher, includeFlags.Value))
-				return false;
-
-			return true;
-		}
-
 		public IEnumerable<CipherSuiteCode> GetParameters (TestContext ctx, string filter)
 		{
 			ProtocolVersions version;
@@ -159,18 +63,18 @@ namespace Mono.Security.NewTls.TestFeatures
 			CipherSuiteCode[] ciphers;
 			switch (protocol) {
 			case TlsProtocolCode.Tls12:
-				ciphers = CipherInstrumentTestRunner.CiphersTls12;
+				ciphers = CipherList.CiphersTls12;
 				break;
 			case TlsProtocolCode.Tls11:
 			case TlsProtocolCode.Tls10:
-				ciphers = CipherInstrumentTestRunner.CiphersTls10;
+				ciphers = CipherList.CiphersTls10;
 				break;
 			default:
 				ctx.AssertFail ("Invalid protocol version `{0}'.", version);
 				return null;
 			}
 
-			return ciphers.Where (c => FilterCipher (c, filter));
+			return ciphers.Where (c => CipherList.FilterCipher (c, filter));
 		}
 	}
 }
