@@ -184,7 +184,12 @@ namespace Mono.Security.NewTls.TestFramework
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
 				return true;
 
-			// ECDHE Ciphers
+			// ECDHE Galois-Counter Ciphers.
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
+				return aead && ecdhe;
+
+			// ECDHE AES Ciphers.
 			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384:
 			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
 			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
