@@ -157,6 +157,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			bool aead = (provider.Flags & ConnectionProviderFlags.SupportsAeadCiphers) != 0;
 			bool tls12 = (provider.Flags & ConnectionProviderFlags.SupportsTls12) != 0;
+			bool ecdhe = (provider.Flags & ConnectionProviderFlags.SupportsEcDheCiphers) != 0;
 
 			switch (cipher) {
 			// Galois-Counter Cipher Suites.
@@ -182,6 +183,13 @@ namespace Mono.Security.NewTls.TestFramework
 			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA:
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
 				return true;
+
+			// ECDHE Ciphers
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384:
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
+				return ecdhe;
 
 			default:
 				return false;

@@ -70,6 +70,7 @@ namespace Mono.Security.NewTls.TestFeatures
 
 			bool rsa = (flags & FilterFlags.RSA) != 0;
 			bool dhe = (flags & FilterFlags.DHE) != 0;
+			bool ecdhe = (flags & FilterFlags.ECDHE) != 0;
 			bool aead = (flags & FilterFlags.AEAD) != 0;
 			bool cbc = (flags & FilterFlags.CBC) != 0;
 
@@ -97,6 +98,13 @@ namespace Mono.Security.NewTls.TestFeatures
 			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA:
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
 				return rsa | cbc;
+
+			// ECDHE Ciphers
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384:
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
+				return ecdhe;
 
 			default:
 				return false;

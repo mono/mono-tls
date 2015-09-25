@@ -102,6 +102,12 @@ namespace Mono.Security.NewTls.TestFramework
 		};
 
 		internal static readonly CipherSuiteCode[] CiphersTls12 = {
+			// ECDHE Ciphers.
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+
 			// Galois-Counter Cipher Suites.
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
