@@ -40,7 +40,8 @@ namespace Mono.Security.NewTls.TestFramework
 		ManualClient		= 16,
 		ManualServer		= 32,
 
-		RequireTls12		= 64
+		RequireTls12		= 64,
+		RequireEcDhe		= 128
 	}
 }
 

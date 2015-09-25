@@ -65,6 +65,16 @@ namespace Mono.Security.NewTls.TestFramework
 			return monoProvider != null && monoProvider.SupportsMonoExtensions;
 		}
 
+		static bool SupportsTls12 (ConnectionProvider provider)
+		{
+			return (provider.Flags & ConnectionProviderFlags.SupportsTls12) != 0;
+		}
+
+		static bool SupportsEcDhe (ConnectionProvider provider)
+		{
+			return (provider.Flags & ConnectionProviderFlags.SupportsEcDheCiphers) != 0;
+		}
+
 		protected override ClientAndServerProvider Create (ConnectionProvider client, ConnectionProvider server)
 		{
 			return new InstrumentationConnectionProvider (client, server, Category, Flags);
@@ -77,6 +87,8 @@ namespace Mono.Security.NewTls.TestFramework
 			if (HasFlag (InstrumentationConnectionFlags.ClientInstrumentation) && !SupportsInstrumentation (provider))
 				return false;
 			if (HasFlag (InstrumentationConnectionFlags.RequireMonoClient) && !SupportsMonoExtensions (provider))
+				return false;
+			if (HasFlag (InstrumentationConnectionFlags.RequireEcDhe) && !SupportsEcDhe (provider))
 				return false;
 			if ((provider.Flags & ConnectionProviderFlags.SupportsTls12) == 0)
 				return false;
@@ -97,6 +109,8 @@ namespace Mono.Security.NewTls.TestFramework
 			if (HasFlag (InstrumentationConnectionFlags.ServerInstrumentation) && !SupportsInstrumentation (provider))
 				return false;
 			if (HasFlag (InstrumentationConnectionFlags.RequireMonoServer) && !SupportsMonoExtensions (provider))
+				return false;
+			if (HasFlag (InstrumentationConnectionFlags.RequireEcDhe) && !SupportsEcDhe (provider))
 				return false;
 			if ((provider.Flags & ConnectionProviderFlags.SupportsTls12) == 0)
 				return false;
