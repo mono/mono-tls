@@ -30,7 +30,7 @@ namespace Mono.Security.NewTls.TestProvider
 	// Keep in sync with the native code
 	public enum NativeOpenSslError
 	{
-		Ok,
+		OK,
 		SOCKET,
 		SSL_CONNECT,
 		SSL_ACCEPT,
@@ -42,7 +42,9 @@ namespace Mono.Security.NewTls.TestProvider
 		PKEY_DOES_NOT_MATCH,
 		CREATE_CONTEXT,
 		CREATE_CONNECTION,
-		INVALID_CIPHER
+		INVALID_CIPHER,
+		UNKNOWN_CURVE_NAME,
+		INVALID_CURVE
 	}
 }
 

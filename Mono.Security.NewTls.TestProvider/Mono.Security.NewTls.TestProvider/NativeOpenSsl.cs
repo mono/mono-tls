@@ -197,6 +197,9 @@ namespace Mono.Security.NewTls.TestProvider
 		extern static int native_openssl_set_dh_params (OpenSslHandle handle, byte[] p, int p_len, byte[] g, int b_len);
 
 		[DllImport (DLL)]
+		extern static int native_openssl_set_named_curve (OpenSslHandle handle, string curve_name);
+
+		[DllImport (DLL)]
 		extern static int native_openssl_create_context (OpenSslHandle handle, bool client);
 
 		[DllImport (DLL)]
@@ -295,6 +298,12 @@ namespace Mono.Security.NewTls.TestProvider
 			var ret = native_openssl_set_dh_params (handle, p, p.Length, g, g.Length);
 			if (ret != 0)
 				throw new ConnectionException ("native_openssl_set_dh_params() failed.");
+		}
+
+		public void SetNamedCurve (string curve)
+		{
+			var ret = native_openssl_set_named_curve (handle, curve);
+			CheckError (ret);
 		}
 
 		public override void Write (byte[] buffer, int offset, int size)

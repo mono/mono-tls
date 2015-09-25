@@ -182,6 +182,9 @@ namespace Mono.Security.NewTls.TestProvider
 			var dh = new DiffieHellmanManaged ();
 			var dhparams = dh.ExportParameters (true);
 			openssl.SetDhParams (dhparams.P, dhparams.G);
+
+			// Optional: this is OpenSsl's default value.
+			openssl.SetNamedCurve ("prime256v1");
 		}
 
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)

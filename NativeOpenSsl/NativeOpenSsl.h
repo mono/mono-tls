@@ -34,7 +34,9 @@ typedef enum {
 	NATIVE_OPENSSL_ERROR_PKEY_DOES_NOT_MATCH,
 	NATIVE_OPENSSL_ERROR_CREATE_CONTEXT,
 	NATIVE_OPENSSL_ERROR_CREATE_CONNECTION,
-	NATIVE_OPENSSL_ERROR_INVALID_CIPHER
+	NATIVE_OPENSSL_ERROR_INVALID_CIPHER,
+	NATIVE_OPENSSL_ERROR_UNKNOWN_CURVE_NAME,
+	NATIVE_OPENSSL_ERROR_INVALID_CURVE
 } NativeOpenSslError;
 
 typedef enum {
@@ -57,6 +59,7 @@ typedef struct {
 	VerifyCallback verify_callback;
 	CertificateVerifyCallback cert_verify_callback;
 	DH *dh_params;
+	EC_KEY *ecdh;
 } NativeOpenSsl;
 
 NativeOpenSsl *
@@ -64,6 +67,9 @@ native_openssl_initialize (int debug, NativeOpenSslProtocol protocol, DebugCallb
 
 int
 native_openssl_set_dh_params (NativeOpenSsl *ptr, const unsigned char *p, int p_len, const unsigned char *g, int g_len);
+
+int
+native_openssl_set_named_curve (NativeOpenSsl *ptr, const char *curve_name);
 
 int
 native_openssl_connect (NativeOpenSsl *ptr, unsigned char ip[4], int port);

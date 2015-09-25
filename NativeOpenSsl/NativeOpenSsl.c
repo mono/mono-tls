@@ -121,6 +121,22 @@ native_openssl_set_dh_params (NativeOpenSsl *ptr, const unsigned char *p, int p_
 }
 
 int
+native_openssl_set_named_curve (NativeOpenSsl *ptr, const char *curve_name)
+{
+	int nid;
+
+	nid = OBJ_sn2nid (curve_name);
+	if (nid == 0)
+		return NATIVE_OPENSSL_ERROR_UNKNOWN_CURVE_NAME;
+
+	ptr->ecdh = EC_KEY_new_by_curve_name (nid);
+	if (!ptr->ecdh)
+		return NATIVE_OPENSSL_ERROR_INVALID_CURVE;
+
+	return 0;
+}
+
+int
 native_openssl_shutdown (NativeOpenSsl *ptr)
 {
 	return SSL_shutdown(ptr->ssl);
@@ -141,6 +157,10 @@ native_openssl_destroy (NativeOpenSsl *ptr)
 	if (ptr->dh_params) {
 		DH_free(ptr->dh_params);
 		ptr->dh_params = NULL;
+	}
+	if (ptr->ecdh) {
+		EC_KEY_free(ptr->ecdh);
+		ptr->ecdh = NULL;
 	}
 	free (ptr);
 }
@@ -487,9 +507,14 @@ native_openssl_create_connection (NativeOpenSsl *ptr)
 {
 	if (ptr->is_server) {
 		if (!ptr->dh_params)
-			ptr->dh_params = get_dh512();
+			ptr->dh_params = get_dh512 ();
 		if (ptr->dh_params)
-			SSL_CTX_set_tmp_dh(ptr->ctx, ptr->dh_params);
+			SSL_CTX_set_tmp_dh (ptr->ctx, ptr->dh_params);
+
+		if (!ptr->ecdh)
+			ptr->ecdh = EC_KEY_new_by_curve_name (NID_X9_62_prime256v1);
+		if (ptr->ecdh)
+			SSL_CTX_set_tmp_ecdh (ptr->ctx, ptr->ecdh);
 	}
 
 	ptr->ssl = SSL_new (ptr->ctx);
