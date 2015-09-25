@@ -80,17 +80,39 @@ namespace Mono.Security.NewTls.TestFramework
 			return new InstrumentationConnectionProvider (client, server, Category, Flags);
 		}
 
-		public override bool IsClientSupported (TestContext ctx, ConnectionProvider provider, string filter)
+		protected virtual bool IsSupported (ConnectionProvider provider)
 		{
-			if (HasFlag (InstrumentationConnectionFlags.ManualClient) && provider.Type != ConnectionProviderType.Manual)
-				return false;
-			if (HasFlag (InstrumentationConnectionFlags.ClientInstrumentation) && !SupportsInstrumentation (provider))
-				return false;
 			if (HasFlag (InstrumentationConnectionFlags.RequireMonoClient) && !SupportsMonoExtensions (provider))
 				return false;
 			if (HasFlag (InstrumentationConnectionFlags.RequireEcDhe) && !SupportsEcDhe (provider))
 				return false;
 			if ((provider.Flags & ConnectionProviderFlags.SupportsTls12) == 0)
+				return false;
+
+			return true;
+		}
+
+		protected virtual bool IsClientSupported (ConnectionProvider provider)
+		{
+			if (HasFlag (InstrumentationConnectionFlags.ClientInstrumentation) && !SupportsInstrumentation (provider))
+				return false;
+
+			return IsSupported (provider);
+		}
+
+		protected virtual bool IsServerSupported (ConnectionProvider provider)
+		{
+			if (HasFlag (InstrumentationConnectionFlags.ServerInstrumentation) && !SupportsInstrumentation (provider))
+				return false;
+
+			return IsSupported (provider);
+		}
+
+		public override bool IsClientSupported (TestContext ctx, ConnectionProvider provider, string filter)
+		{
+			if (HasFlag (InstrumentationConnectionFlags.ManualClient) && provider.Type != ConnectionProviderType.Manual)
+				return false;
+			if (!IsClientSupported (provider))
 				return false;
 
 			var match = MatchesFilter (provider, filter);
@@ -106,13 +128,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			if (HasFlag (InstrumentationConnectionFlags.ManualServer) && provider.Type != ConnectionProviderType.Manual)
 				return false;
-			if (HasFlag (InstrumentationConnectionFlags.ServerInstrumentation) && !SupportsInstrumentation (provider))
-				return false;
-			if (HasFlag (InstrumentationConnectionFlags.RequireMonoServer) && !SupportsMonoExtensions (provider))
-				return false;
-			if (HasFlag (InstrumentationConnectionFlags.RequireEcDhe) && !SupportsEcDhe (provider))
-				return false;
-			if ((provider.Flags & ConnectionProviderFlags.SupportsTls12) == 0)
+			if (!IsServerSupported (provider))
 				return false;
 
 			var match = MatchesFilter (provider, filter);
