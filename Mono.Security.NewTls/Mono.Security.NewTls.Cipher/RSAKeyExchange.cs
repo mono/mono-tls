@@ -34,7 +34,7 @@ namespace Mono.Security.NewTls.Cipher
 		byte[] encryptedPreMasterSecret;
 
 		public override ExchangeAlgorithmType ExchangeAlgorithm {
-			get { return ExchangeAlgorithmType.RsaSign; }
+			get { return ExchangeAlgorithmType.Rsa; }
 		}
 
 		public override void GenerateClient (TlsContext ctx)

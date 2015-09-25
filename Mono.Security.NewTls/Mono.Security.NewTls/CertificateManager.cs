@@ -78,10 +78,11 @@ namespace Mono.Security.NewTls
 				return false;
 
 			switch (algorithm) {
-			case ExchangeAlgorithmType.RsaSign:
+			case ExchangeAlgorithmType.Rsa:
 				return VerifyKeyUsage (certificate, KeyUsages.keyEncipherment, OidServerAuth);
 
-			case ExchangeAlgorithmType.DiffieHellman:
+			case ExchangeAlgorithmType.Dhe:
+			case ExchangeAlgorithmType.EcDhe:
 				return VerifyKeyUsage (certificate, KeyUsages.digitalSignature, OidServerAuth);
 
 			default:
@@ -100,10 +101,11 @@ namespace Mono.Security.NewTls
 				return false;
 
 			switch (algorithm) {
-			case ExchangeAlgorithmType.RsaSign:
+			case ExchangeAlgorithmType.Rsa:
 				return VerifyKeyUsage (certificate, KeyUsages.keyEncipherment, OidClientAuth);
 
-			case ExchangeAlgorithmType.DiffieHellman:
+			case ExchangeAlgorithmType.Dhe:
+			case ExchangeAlgorithmType.EcDhe:
 				return VerifyKeyUsage (certificate, KeyUsages.digitalSignature, OidClientAuth);
 
 			default:

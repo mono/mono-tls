@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;NET_4_5;MOBILE;INSIDE_MONO_SECURITY;INSTRUMENTATION;INSIDE_MONO_NEWTLS</DefineConstants>
+    <DefineConstants>DEBUG;NET_4_5;MOBILE;INSIDE_MONO_SECURITY;INSTRUMENTATION;INSIDE_MONO_NEWTLS;DEBUG_FULL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -346,6 +346,7 @@
     <Compile Include="..\..\..\..\..\..\Users\martin\Documents\MartinContext.cs">
       <Link>Mono.Security.NewTls\MartinContext.cs</Link>
     </Compile>
+    <Compile Include="Mono.Security.NewTls.Cipher\EllipticCurveKeyExchange.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <ItemGroup>

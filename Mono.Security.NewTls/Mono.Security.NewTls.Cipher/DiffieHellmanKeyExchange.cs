@@ -13,7 +13,7 @@ namespace Mono.Security.NewTls.Cipher
 		TlsProtocolCode protocol;
 
 		public override ExchangeAlgorithmType ExchangeAlgorithm {
-			get { return ExchangeAlgorithmType.DiffieHellman; }
+			get { return ExchangeAlgorithmType.Dhe; }
 		}
 
 		public Signature Signature {

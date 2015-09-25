@@ -28,7 +28,7 @@ namespace Mono.Security.NewTls.Negotiation
 		}
 
 		bool UsingServerKeyExchange {
-			get { return PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.DiffieHellman; }
+			get { return PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.Dhe || PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.EcDhe; }
 		}
 
 		protected override bool VerifyMessage (HandshakeType type)
@@ -173,7 +173,7 @@ namespace Mono.Security.NewTls.Negotiation
 		{
 			if (!PendingCrypto.RemoteCertificateVerified)
 				throw new TlsException (AlertDescription.UnexpectedMessage);
-			if (PendingCrypto.Cipher.ExchangeAlgorithmType != ExchangeAlgorithmType.DiffieHellman)
+			if (PendingCrypto.Cipher.ExchangeAlgorithmType != ExchangeAlgorithmType.Dhe)
 				throw new TlsException (AlertDescription.UnexpectedMessage);
 
 			HandshakeParameters.KeyExchange = message.KeyExchange;
@@ -286,7 +286,7 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual TlsClientKeyExchange GenerateClientKeyExchange ()
 		{
-			if (PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.RsaSign)
+			if (PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.Rsa)
 				HandshakeParameters.KeyExchange = new RSAKeyExchange ();
 
 			HandshakeParameters.KeyExchange.GenerateClient (Context);
