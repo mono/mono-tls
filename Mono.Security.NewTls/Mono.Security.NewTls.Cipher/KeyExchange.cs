@@ -52,7 +52,7 @@ namespace Mono.Security.NewTls.Cipher
 
 		public abstract void GenerateClient (TlsContext ctx);
 
-		public abstract void HandleClient (TlsContext context, KeyExchange serverExchange);
+		public abstract void HandleClient (TlsContext context, KeyExchange clientExchange);
 
 		public abstract void WriteClient (TlsStream stream);
 

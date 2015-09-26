@@ -103,9 +103,9 @@ namespace Mono.Security.NewTls.Cipher
 			}
 		}
 
-		public override void HandleClient (TlsContext ctx, KeyExchange serverExchange)
+		public override void HandleClient (TlsContext ctx, KeyExchange clientExchange)
 		{
-			var serverDh = (DiffieHellmanKeyExchange)serverExchange;
+			var serverDh = (DiffieHellmanKeyExchange)clientExchange;
 			using (var X = new SecureBuffer (dh.DecryptKeyExchange (serverDh.Y))) {
 				ComputeMasterSecret (ctx, X);
 			}

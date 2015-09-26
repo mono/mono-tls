@@ -11,6 +11,7 @@ namespace Mono.Security.NewTls
 	internal class Session : DisposeContext
 	{
 		RandomNumberGenerator rng;
+		SecureRandomGenerator rngWrapper;
 		CryptoParameters currentCrypto;
 		CryptoParameters pendingCrypto;
 		SecureBuffer clientVerifyData;
@@ -124,10 +125,15 @@ namespace Mono.Security.NewTls
 			set {
 #if !BOOTSTRAP_BASIC
 				rng = Add (value);
+				rngWrapper = new SecureRandomGenerator (rng);
 #else
 				throw new NotSupportedException ();
 #endif
 			}
+		}
+
+		internal Random SecureRandom {
+			get { return rngWrapper; }
 		}
 
 		internal SecureBuffer GetSecureRandomBytes (int size)

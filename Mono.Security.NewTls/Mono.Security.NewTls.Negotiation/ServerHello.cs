@@ -173,7 +173,7 @@ namespace Mono.Security.NewTls.Negotiation
 		{
 			if (!PendingCrypto.RemoteCertificateVerified)
 				throw new TlsException (AlertDescription.UnexpectedMessage);
-			if (PendingCrypto.Cipher.ExchangeAlgorithmType != ExchangeAlgorithmType.Dhe)
+			if (!UsingServerKeyExchange)
 				throw new TlsException (AlertDescription.UnexpectedMessage);
 
 			HandshakeParameters.KeyExchange = message.KeyExchange;
