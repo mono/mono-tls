@@ -415,12 +415,6 @@
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\IDigest.cs">
       <Link>BouncyCastle\crypto\IDigest.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\AsymmetricKeyParameter.cs">
-      <Link>BouncyCastle\crypto\AsymmetricKeyParameter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\AsymmetricCipherKeyPair.cs">
-      <Link>BouncyCastle\crypto\AsymmetricCipherKeyPair.cs</Link>
-    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\SecureRandomGenerator.cs">
       <Link>Mono.Security.NewTls.Cipher\SecureRandomGenerator.cs</Link>
     </Compile>
