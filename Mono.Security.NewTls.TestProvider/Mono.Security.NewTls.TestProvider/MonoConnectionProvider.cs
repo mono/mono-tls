@@ -129,7 +129,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var protocol = (ProtocolVersions)tlsProvider.SupportedProtocols;
 			protocol &= server ? ProtocolVersions.ServerMask : ProtocolVersions.ClientMask;
 			if (parameters.ProtocolVersion != null)
-				protocol &= parameters.ProtocolVersion;
+				protocol &= parameters.ProtocolVersion.Value;
 			if (protocol == ProtocolVersions.Unspecified)
 				throw new NotSupportedException ();
 			return (SslProtocols)protocol;
