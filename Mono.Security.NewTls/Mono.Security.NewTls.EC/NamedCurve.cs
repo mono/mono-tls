@@ -1,4 +1,4 @@
-namespace Mono.Security.NewTls.EC
+namespace Mono.Security.NewTls
 {
 	/// <summary>
 	/// RFC 4492 5.1.1

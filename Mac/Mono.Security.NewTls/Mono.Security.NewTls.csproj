@@ -424,9 +424,6 @@
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\SecObjectIdentifiers.cs">
       <Link>Mono.Security.NewTls.EC\SecObjectIdentifiers.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\NamedCurve.cs">
-      <Link>Mono.Security.NewTls.EC\NamedCurve.cs</Link>
-    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\NamedCurveHelper.cs">
       <Link>Mono.Security.NewTls.EC\NamedCurveHelper.cs</Link>
     </Compile>
