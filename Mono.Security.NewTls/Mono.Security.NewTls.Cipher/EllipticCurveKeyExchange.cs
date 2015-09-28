@@ -44,7 +44,7 @@ namespace Mono.Security.NewTls.Cipher
 		public EllipticCurveKeyExchange (TlsContext context)
 		{
 			curveType = ECCurveType.named_curve;
-			namedCurve = NamedCurve.secp256k1;
+			namedCurve = context.Configuration.UserSettings.NamedCurve ?? NamedCurve.secp256k1;
 			domainParameters = NamedCurveHelper.GetECParameters (namedCurve);
 
 			GenerateKeyPair (context, domainParameters, out serverQ, out serverD);

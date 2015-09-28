@@ -56,8 +56,10 @@ namespace Mono.Security.NewTls.TestProvider
 			else if (Parameters.AskForClientCertificate)
 				settings.AskForClientCertificate = true;
 
-			if (MonoParameters != null)
+			if (MonoParameters != null) {
 				settings.RequestedCiphers = MonoParameters.ServerCiphers;
+				settings.NamedCurve = MonoParameters.ServerNamedCurve;
+			}
 		}
 
 		protected override async Task<MonoSslStream> Start (TestContext ctx, Stream stream, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
