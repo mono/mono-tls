@@ -511,7 +511,7 @@ native_openssl_create_connection (NativeOpenSsl *ptr)
 		if (ptr->dh_params)
 			SSL_CTX_set_tmp_dh (ptr->ctx, ptr->dh_params);
 
-		if (!ptr->ecdh)
+		if (ptr->protocol == NATIVE_OPENSSL_PROTOCOL_TLS12 && !ptr->ecdh)
 			ptr->ecdh = EC_KEY_new_by_curve_name (NID_X9_62_prime256v1);
 		if (ptr->ecdh)
 			SSL_CTX_set_tmp_ecdh (ptr->ctx, ptr->ecdh);

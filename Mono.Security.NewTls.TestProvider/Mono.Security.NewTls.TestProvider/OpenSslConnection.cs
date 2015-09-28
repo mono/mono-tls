@@ -177,14 +177,15 @@ namespace Mono.Security.NewTls.TestProvider
 			};
 		}
 
-		void InitDiffieHellman ()
+		void InitDiffieHellman (NativeOpenSslProtocol protocol)
 		{
 			var dh = new DiffieHellmanManaged ();
 			var dhparams = dh.ExportParameters (true);
 			openssl.SetDhParams (dhparams.P, dhparams.G);
 
 			// Optional: this is OpenSsl's default value.
-			openssl.SetNamedCurve ("prime256v1");
+			if (protocol == NativeOpenSslProtocol.TLS12)
+				openssl.SetNamedCurve ("prime256v1");
 		}
 
 		public sealed override Task Start (TestContext ctx, CancellationToken cancellationToken)
@@ -194,7 +195,7 @@ namespace Mono.Security.NewTls.TestProvider
 			openssl = new NativeOpenSsl (IsServer, Parameters.EnableDebugging, protocol);
 			var validationCallback = GetValidationCallback ();
 			openssl.SetCertificateVerify (NativeOpenSsl.VerifyMode.SSL_VERIFY_PEER, validationCallback);
-			InitDiffieHellman ();
+			InitDiffieHellman (protocol);
 			Initialize ();
 
 			Task.Factory.StartNew (() => {
