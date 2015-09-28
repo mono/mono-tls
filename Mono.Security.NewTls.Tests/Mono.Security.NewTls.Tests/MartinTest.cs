@@ -30,6 +30,7 @@ using System.Threading.Tasks;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.Resources;
+using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Portable;
@@ -39,50 +40,18 @@ namespace Mono.Security.NewTls.Tests
 	using TestFramework;
 	using TestFeatures;
 
-	// [Martin]
+	[Martin]
 	[AsyncTestFixture]
 	public class MartinTest
 	{
-		// [AsyncTest]
+		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public async Task TestMartinClient (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			RenegotiationInstrumentParameters parameters,
-			RenegotiationInstrumentTestRunner runner)
-		{
-			await runner.Run (ctx, cancellationToken);
-		}
-
-		// [AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTestServer)]
-		public async Task TestMartinServer (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			RenegotiationInstrumentParameters parameters,
-			RenegotiationInstrumentTestRunner runner)
-		{
-			await runner.Run (ctx, cancellationToken);
-		}
-
-		// [AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		[InstrumentationConnectionFlags (InstrumentationConnectionFlags.ManualClient)]
-		public async Task TestClientPuppy (TestContext ctx, CancellationToken cancellationToken,
+		public Task Test (TestContext ctx, CancellationToken cancellationToken,
 			InstrumentationConnectionProvider provider,
 			GenericConnectionInstrumentParameters parameters,
 			GenericConnectionInstrumentTestRunner runner)
 		{
-			await runner.Run (ctx, cancellationToken);
-		}
-
-		// [AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		[InstrumentationConnectionFlags (InstrumentationConnectionFlags.ManualServer)]
-		public async Task TestServerPuppy (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			RenegotiationInstrumentParameters parameters,
-			RenegotiationInstrumentTestRunner runner)
-		{
-			await runner.Run (ctx, cancellationToken);
+			return runner.Run (ctx, cancellationToken);
 		}
 	}
 }

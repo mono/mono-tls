@@ -129,7 +129,7 @@ namespace Mono.Security.NewTls.TestFramework
 			case InstrumentationCategory.CertificateChecks:
 				return InstrumentationConnectionFlags.ClientInstrumentation | InstrumentationConnectionFlags.ServerInstrumentation;
 			case InstrumentationCategory.MartinTest:
-				return InstrumentationConnectionFlags.ServerInstrumentation | InstrumentationConnectionFlags.ClientInstrumentation;
+				return InstrumentationConnectionFlags.RequireMonoClient | InstrumentationConnectionFlags.RequireMonoServer | InstrumentationConnectionFlags.RequireTls12;
 			default:
 				ctx.AssertFail ("Unsupported instrumentation category: '{0}'.", category);
 				return InstrumentationConnectionFlags.None;

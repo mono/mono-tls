@@ -83,17 +83,6 @@ namespace Mono.Security.NewTls.Tests
 			return runner.Run (ctx, cancellationToken);
 		}
 
-		[Martin]
-		[AsyncTest]
-		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
-		public Task MartinTest (TestContext ctx, CancellationToken cancellationToken,
-			InstrumentationConnectionProvider provider,
-			GenericConnectionInstrumentParameters parameters,
-			GenericConnectionInstrumentTestRunner runner)
-		{
-			return runner.Run (ctx, cancellationToken);
-		}
-
 		[AsyncTest]
 		[ManualClient]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]

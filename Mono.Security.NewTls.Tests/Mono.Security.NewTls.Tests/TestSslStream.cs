@@ -75,17 +75,6 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AsyncTest]
-		[Martin]
-		[ConnectionTestFlags (ConnectionTestFlags.RequireSslStream)]
-		[ConnectionTestCategory (ConnectionTestCategory.MartinTest)]
-		public async Task TestMartin (TestContext ctx, CancellationToken cancellationToken,
-			ConnectionTestProvider provider, SslStreamTestParameters parameters,
-			SslStreamTestRunner runner)
-		{
-			await runner.Run (ctx, cancellationToken);
-		}
-
-		[AsyncTest]
 		[ManualClient]
 		[ManualSslStream]
 		[ConnectionTestFlags (ConnectionTestFlags.ManualClient)]

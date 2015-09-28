@@ -287,7 +287,10 @@ namespace Mono.Security.NewTls.TestFramework
 				break;
 
 			case GenericConnectionInstrumentType.MartinTest:
-				goto case GenericConnectionInstrumentType.ClientProvidesCertificateThatsInvalidForRsa;
+				parameters.ClientCiphers = parameters.ServerCiphers = new CipherSuiteCode[] {
+					CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+				};
+				break;
 
 			default:
 				ctx.AssertFail ("Unsupported connection instrument: '{0}'.", type);
