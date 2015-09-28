@@ -62,9 +62,19 @@ namespace Mono.Security.NewTls.Cipher
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
 				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Rsa);
 
-			// EXPERIMENTAL
+			// ECDHE Cipher Suites
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm256, HashAlgorithmType.Sha384, ExchangeAlgorithmType.EcDhe);
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.EcDhe);
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384:
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha384, ExchangeAlgorithmType.EcDhe);
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.EcDhe);
 			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
 				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.EcDhe);
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.EcDhe);
 
 			default:
 				throw new TlsException (AlertDescription.InsuficientSecurity, "Unknown cipher suite: {0}", code);
@@ -179,8 +189,13 @@ namespace Mono.Security.NewTls.Cipher
 			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
 			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA,
 
-			// EXPERIMENTAL
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+			// ECDHE Cipher Suites
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
 		};
 
 		static readonly CipherSuiteCode[] SupportedCiphersTls10 = {

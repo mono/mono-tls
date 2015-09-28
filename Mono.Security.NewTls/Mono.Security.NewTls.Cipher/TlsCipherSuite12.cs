@@ -17,6 +17,8 @@ namespace Mono.Security.NewTls.Cipher
 			get {
 				if (CipherAlgorithmType == CipherAlgorithmType.AesGcm256 && HashAlgorithmType == HashAlgorithmType.Sha384)
 					return HandshakeHashType.SHA384;
+				else if (HashAlgorithmType == HashAlgorithmType.Sha384)
+					return HandshakeHashType.SHA384;
 				else
 					return HandshakeHashType.SHA256;
 			}
@@ -61,6 +63,8 @@ namespace Mono.Security.NewTls.Cipher
 					return 20;
 				case HashAlgorithmType.Sha256:
 					return 32;
+				case HashAlgorithmType.Sha384:
+					return 48;
 				case HashAlgorithmType.None:
 					return 0;
 				default:
