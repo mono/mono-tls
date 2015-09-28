@@ -152,7 +152,6 @@
     <Compile Include="BouncyCastle\math\ec\x9\X9IntegerConverter.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\SecureRandomGenerator.cs" />
     <Compile Include="Mono.Security.NewTls.EC\ECCurveType.cs" />
-    <Compile Include="Mono.Security.NewTls.EC\NamedCurve.cs" />
     <Compile Include="Mono.Security.NewTls.EC\NamedCurveHelper.cs" />
     <Compile Include="Mono.Security.NewTls.EC\SecNamedCurves.cs" />
     <Compile Include="Mono.Security.NewTls.EC\SecObjectIdentifiers.cs" />
