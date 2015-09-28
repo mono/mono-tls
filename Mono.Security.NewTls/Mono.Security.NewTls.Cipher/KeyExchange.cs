@@ -37,10 +37,12 @@ namespace Mono.Security.NewTls.Cipher
 		public static KeyExchange Create (TlsProtocolCode protocol, ExchangeAlgorithmType algorithm)
 		{
 			switch (algorithm) {
-			case ExchangeAlgorithmType.RsaSign:
+			case ExchangeAlgorithmType.Rsa:
 				return new RSAKeyExchange ();
-			case ExchangeAlgorithmType.DiffieHellman:
+			case ExchangeAlgorithmType.Dhe:
 				return new DiffieHellmanKeyExchange (protocol);
+			case ExchangeAlgorithmType.EcDhe:
+				return new EllipticCurveKeyExchange ();
 			default:
 				throw new InvalidOperationException ();
 			}
@@ -50,7 +52,7 @@ namespace Mono.Security.NewTls.Cipher
 
 		public abstract void GenerateClient (TlsContext ctx);
 
-		public abstract void HandleClient (TlsContext context, KeyExchange serverExchange);
+		public abstract void HandleClient (TlsContext context, KeyExchange clientExchange);
 
 		public abstract void WriteClient (TlsStream stream);
 

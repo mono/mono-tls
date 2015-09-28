@@ -34,8 +34,8 @@ namespace Mono.Security.NewTls
 	enum ExchangeAlgorithmType
 	{
 		None,
-		DiffieHellman,
-		RsaKeyX,
-		RsaSign
+		Dhe,
+		Rsa,
+		EcDhe
 	}
 }

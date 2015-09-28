@@ -49,8 +49,10 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected override void GetSettings (UserSettings settings)
 		{
-			if (MonoParameters != null)
+			if (MonoParameters != null) {
 				settings.RequestedCiphers = MonoParameters.ClientCiphers;
+				settings.NamedCurve = MonoParameters.ClientNamedCurve;
+			}
 		}
 
 		protected override async Task<MonoSslStream> Start (TestContext ctx, Stream stream, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)

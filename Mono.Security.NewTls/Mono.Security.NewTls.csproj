@@ -150,6 +150,20 @@
     <Compile Include="BouncyCastle\math\ec\multiplier\WTauNafMultiplier.cs" />
     <Compile Include="BouncyCastle\math\ec\multiplier\WTauNafPreCompInfo.cs" />
     <Compile Include="BouncyCastle\math\ec\x9\X9IntegerConverter.cs" />
+    <Compile Include="Mono.Security.NewTls.Cipher\SecureRandomGenerator.cs" />
+    <Compile Include="Mono.Security.NewTls.EC\ECCurveType.cs" />
+    <Compile Include="Mono.Security.NewTls.EC\NamedCurveHelper.cs" />
+    <Compile Include="Mono.Security.NewTls.EC\SecNamedCurves.cs" />
+    <Compile Include="Mono.Security.NewTls.EC\SecObjectIdentifiers.cs" />
+    <Compile Include="Mono.Security.NewTls.EC\X9ECParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.EC\X9ECParametersHolder.cs" />
+    <Compile Include="Mono.Security.NewTls.EC\X9ObjectIdentifiers.cs" />
+    <Compile Include="BouncyCastle\util\Strings.cs" />
+    <Compile Include="BouncyCastle\util\encoders\Hex.cs" />
+    <Compile Include="BouncyCastle\util\encoders\HexEncoder.cs" />
+    <Compile Include="BouncyCastle\util\encoders\IEncoder.cs" />
+    <Compile Include="BouncyCastle\crypto\parameters\ECDomainParameters.cs" />
+    <Compile Include="Mono.Security.NewTls.Cipher\EllipticCurveKeyExchange.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.Security.Providers\common\Consts.cs">

@@ -32,35 +32,39 @@ namespace Mono.Security.NewTls.Cipher
 			switch (code) {
 			// Galois-Counter Cipher Suites
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm256, HashAlgorithmType.Sha384, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm256, HashAlgorithmType.Sha384, ExchangeAlgorithmType.Dhe);
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.Dhe);
 
 			// Diffie-Hellman Cipher Suites
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha256, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha256, ExchangeAlgorithmType.Dhe);
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.Dhe);
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Dhe);
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Dhe);
 
 			// Galois-Counter with Legacy RSA Key Exchange
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_GCM_SHA256:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.Rsa);
 			case CipherSuiteCode.TLS_RSA_WITH_AES_256_GCM_SHA384:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm256, HashAlgorithmType.Sha384, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.AesGcm256, HashAlgorithmType.Sha384, ExchangeAlgorithmType.Rsa);
 
 			// AES Cipher Suites
 			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha256, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha256, ExchangeAlgorithmType.Rsa);
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.Rsa);
 			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Rsa);
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
-				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Rsa);
+
+			// EXPERIMENTAL
+			case CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
+				return new TlsCipherSuite12 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha256, ExchangeAlgorithmType.EcDhe);
 
 			default:
 				throw new TlsException (AlertDescription.InsuficientSecurity, "Unknown cipher suite: {0}", code);
@@ -75,13 +79,13 @@ namespace Mono.Security.NewTls.Cipher
 
 			switch (code) {
 			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA:
-				return new TlsCipherSuite11 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite11 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Rsa);
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
-				return new TlsCipherSuite11 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite11 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Rsa);
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
-				return new TlsCipherSuite11 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite11 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Dhe);
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
-				return new TlsCipherSuite11 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite11 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Dhe);
 			default:
 				throw new TlsException (AlertDescription.InsuficientSecurity, "Unknown cipher suite: {0}", code);
 			}
@@ -95,13 +99,13 @@ namespace Mono.Security.NewTls.Cipher
 
 			switch (code) {
 			case CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA:
-				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Rsa);
 			case CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA:
-				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.RsaSign);
+				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Rsa);
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
-				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes256, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Dhe);
 			case CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
-				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.DiffieHellman);
+				return new TlsCipherSuite10 (code, CipherAlgorithmType.Aes128, HashAlgorithmType.Sha1, ExchangeAlgorithmType.Dhe);
 			default:
 				throw new TlsException (AlertDescription.InsuficientSecurity, "Unknown cipher suite: {0}", code);
 			}
@@ -173,7 +177,10 @@ namespace Mono.Security.NewTls.Cipher
 			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256,
 			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256,
 			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
-			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA,
+
+			// EXPERIMENTAL
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
 		};
 
 		static readonly CipherSuiteCode[] SupportedCiphersTls10 = {

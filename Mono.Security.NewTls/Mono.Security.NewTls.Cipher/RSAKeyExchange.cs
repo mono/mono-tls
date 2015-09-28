@@ -34,7 +34,7 @@ namespace Mono.Security.NewTls.Cipher
 		byte[] encryptedPreMasterSecret;
 
 		public override ExchangeAlgorithmType ExchangeAlgorithm {
-			get { return ExchangeAlgorithmType.RsaSign; }
+			get { return ExchangeAlgorithmType.Rsa; }
 		}
 
 		public override void GenerateClient (TlsContext ctx)
@@ -69,10 +69,10 @@ namespace Mono.Security.NewTls.Cipher
 			encryptedPreMasterSecret = incoming.ReadBytes (incoming.ReadInt16 ());
 		}
 
-		public override void HandleClient (TlsContext ctx, KeyExchange serverExchange)
+		public override void HandleClient (TlsContext ctx, KeyExchange clientExchange)
 		{
 			// Read client premaster secret
-			var encryptedPreMaster = ((RSAKeyExchange)serverExchange).encryptedPreMasterSecret;
+			var encryptedPreMaster = ((RSAKeyExchange)clientExchange).encryptedPreMasterSecret;
 
 			if (!ctx.Configuration.HasCredentials)
 				throw new TlsException (AlertDescription.BadCertificate, "Server certificate Private Key unavailable.");

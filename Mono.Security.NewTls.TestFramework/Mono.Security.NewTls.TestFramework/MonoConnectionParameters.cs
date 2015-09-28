@@ -43,6 +43,9 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			if (other.ClientCiphers != null)
 				ClientCiphers = new List<CipherSuiteCode> (other.ClientCiphers);
+			ClientNamedCurve = other.ClientNamedCurve;
+			ServerNamedCurve = other.ServerNamedCurve;
+
 			ExpectedClientCipher = other.ExpectedClientCipher;
 			ExpectClientAlert = other.ExpectClientAlert;
 
@@ -53,6 +56,14 @@ namespace Mono.Security.NewTls.TestFramework
 		}
 
 		public ICollection<CipherSuiteCode> ClientCiphers {
+			get; set;
+		}
+
+		public NamedCurve? ClientNamedCurve {
+			get; set;
+		}
+
+		public NamedCurve? ServerNamedCurve {
 			get; set;
 		}
 

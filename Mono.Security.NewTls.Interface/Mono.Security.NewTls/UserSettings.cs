@@ -92,6 +92,10 @@ namespace Mono.Security.NewTls
 			}
 		}
 
+		public NamedCurve? NamedCurve {
+			get; set;
+		}
+
 		#if INSTRUMENTATION
 
 		public Instrumentation Instrumentation {

@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;NET_4_5;MOBILE;INSIDE_MONO_SECURITY;INSTRUMENTATION;INSIDE_MONO_NEWTLS</DefineConstants>
+    <DefineConstants>DEBUG;NET_4_5;MOBILE;INSIDE_MONO_SECURITY;INSTRUMENTATION;INSIDE_MONO_NEWTLS;DEBUG_FULL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -181,6 +181,9 @@
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\DiffieHellmanKeyExchange.cs">
       <Link>Mono.Security.NewTls.Cipher\DiffieHellmanKeyExchange.cs</Link>
     </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\EllipticCurveKeyExchange.cs">
+      <Link>Mono.Security.NewTls.Cipher\EllipticCurveKeyExchange.cs</Link>
+    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\GaloisCounterCipher.cs">
       <Link>Mono.Security.NewTls.Cipher\GaloisCounterCipher.cs</Link>
     </Compile>
@@ -340,14 +343,111 @@
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\SignatureTls11.cs">
       <Link>Mono.Security.NewTls.Cipher\SignatureTls11.cs</Link>
     </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\ECAlgorithms.cs">
+      <Link>BouncyCastle\math\ec\ECAlgorithms.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\ECCurve.cs">
+      <Link>BouncyCastle\math\ec\ECCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\ECFieldElement.cs">
+      <Link>BouncyCastle\math\ec\ECFieldElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\ECPoint.cs">
+      <Link>BouncyCastle\math\ec\ECPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\IntArray.cs">
+      <Link>BouncyCastle\math\ec\IntArray.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\abc\SimpleBigDecimal.cs">
+      <Link>BouncyCastle\math\ec\abc\SimpleBigDecimal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\abc\Tnaf.cs">
+      <Link>BouncyCastle\math\ec\abc\Tnaf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\abc\ZTauElement.cs">
+      <Link>BouncyCastle\math\ec\abc\ZTauElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\ECMultiplier.cs">
+      <Link>BouncyCastle\math\ec\multiplier\ECMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\FpNafMultiplier.cs">
+      <Link>BouncyCastle\math\ec\multiplier\FpNafMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\PreCompInfo.cs">
+      <Link>BouncyCastle\math\ec\multiplier\PreCompInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\ReferenceMultiplier.cs">
+      <Link>BouncyCastle\math\ec\multiplier\ReferenceMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\WNafMultiplier.cs">
+      <Link>BouncyCastle\math\ec\multiplier\WNafMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\WNafPreCompInfo.cs">
+      <Link>BouncyCastle\math\ec\multiplier\WNafPreCompInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\WTauNafMultiplier.cs">
+      <Link>BouncyCastle\math\ec\multiplier\WTauNafMultiplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\WTauNafPreCompInfo.cs">
+      <Link>BouncyCastle\math\ec\multiplier\WTauNafPreCompInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\Mono.Security.Providers\common\Consts.cs">
       <Link>common\Consts.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\..\..\Users\martin\Documents\MartinContext.cs">
       <Link>Mono.Security.NewTls\MartinContext.cs</Link>
     </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\parameters\ECDomainParameters.cs">
+      <Link>BouncyCastle\crypto\parameters\ECDomainParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\util\encoders\Hex.cs">
+      <Link>BouncyCastle\util\encoders\Hex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\util\encoders\IEncoder.cs">
+      <Link>BouncyCastle\util\encoders\IEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\util\Strings.cs">
+      <Link>BouncyCastle\util\Strings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\util\encoders\HexEncoder.cs">
+      <Link>BouncyCastle\util\encoders\HexEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\IDigest.cs">
+      <Link>BouncyCastle\crypto\IDigest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\SecureRandomGenerator.cs">
+      <Link>Mono.Security.NewTls.Cipher\SecureRandomGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\SecNamedCurves.cs">
+      <Link>Mono.Security.NewTls.EC\SecNamedCurves.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\SecObjectIdentifiers.cs">
+      <Link>Mono.Security.NewTls.EC\SecObjectIdentifiers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\NamedCurveHelper.cs">
+      <Link>Mono.Security.NewTls.EC\NamedCurveHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\X9ObjectIdentifiers.cs">
+      <Link>Mono.Security.NewTls.EC\X9ObjectIdentifiers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\X9ECParameters.cs">
+      <Link>Mono.Security.NewTls.EC\X9ECParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\X9ECParametersHolder.cs">
+      <Link>Mono.Security.NewTls.EC\X9ECParametersHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.EC\ECCurveType.cs">
+      <Link>Mono.Security.NewTls.EC\ECCurveType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\x9\X9IntegerConverter.cs">
+      <Link>BouncyCastle\math\ec\x9\X9IntegerConverter.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="BouncyCastle\security\" />
+    <Folder Include="Mono.Security.NewTls.EC\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
       <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>

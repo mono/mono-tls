@@ -189,17 +189,18 @@ namespace Mono.Security.NewTls.Negotiation
 
 		protected virtual TlsServerKeyExchange GenerateServerKeyExchange ()
 		{
-			if (PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.RsaSign) {
+			if (PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.Rsa) {
 				HandshakeParameters.KeyExchange = new RSAKeyExchange ();
 				return null;
-			} else if (PendingCrypto.Cipher.ExchangeAlgorithmType != ExchangeAlgorithmType.DiffieHellman) {
+			} else if (PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.Dhe) {
+				HandshakeParameters.KeyExchange = new DiffieHellmanKeyExchange (Context);
+			} else if (PendingCrypto.Cipher.ExchangeAlgorithmType == ExchangeAlgorithmType.EcDhe) {
+				HandshakeParameters.KeyExchange = new EllipticCurveKeyExchange (Context);
+			} else {
 				throw new InvalidOperationException ();
 			}
 
-			var dh = new DiffieHellmanKeyExchange (Context);
-			HandshakeParameters.KeyExchange = dh;
-
-			return new TlsServerKeyExchange (dh);
+			return new TlsServerKeyExchange (HandshakeParameters.KeyExchange);
 		}
 
 		protected virtual TlsCertificateRequest GenerateCertificateRequest ()
