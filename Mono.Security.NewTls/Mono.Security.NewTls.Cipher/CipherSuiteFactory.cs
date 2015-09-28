@@ -165,9 +165,19 @@ namespace Mono.Security.NewTls.Cipher
 		}
 
 		static readonly CipherSuiteCode[] SupportedCiphersTls12 = {
+			// ECDHE Galois-Counter Cipher Suites
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+
 			// Galois-Counter Cipher Suites
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
+
+			// ECDHE Cipher Suites
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
 
 			// Diffie-Hellman Cipher Suites
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,
@@ -187,15 +197,7 @@ namespace Mono.Security.NewTls.Cipher
 			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA256,
 			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA256,
 			CipherSuiteCode.TLS_RSA_WITH_AES_256_CBC_SHA,
-			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA,
-
-			// ECDHE Cipher Suites
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+			CipherSuiteCode.TLS_RSA_WITH_AES_128_CBC_SHA
 		};
 
 		static readonly CipherSuiteCode[] SupportedCiphersTls10 = {
