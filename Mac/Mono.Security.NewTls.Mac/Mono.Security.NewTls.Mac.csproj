@@ -29,9 +29,10 @@
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
-    <XamMacArch>x86_64</XamMacArch>
+    <XamMacArch>i386</XamMacArch>
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <PackageSigningKey>Developer ID Installer</PackageSigningKey>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -46,6 +47,7 @@
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
     <DefineConstants>MACUI;HAVE_OPENSSL</DefineConstants>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
