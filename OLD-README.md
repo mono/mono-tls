@@ -16,15 +16,6 @@ Dependencies:
 
   Minimum required version is commit [87ecbc9](https://github.com/mono/mono/commit/87ecbc9ce17b4d66201555d8f7fed8f15dcffd18) from October 21st 2015.
   
-  At the moment, this custom prefix must be `/Workspace/INSTALL` - this is unfortunately hardcoded in the [native Xcode project](https://github.com/mono/mono-tls/blob/master/NativeOpenSsl/NativeOpenSsl.xcodeproj/project.pbxproj) at the moment.
-  
-  FIXME: To use a different prefix, need to make sure we find the
-  openssl shared libraries at runtime.
-  
-  This version of Mono must be selected as current runtime in
-  Xamarin Studio (go to Preferences / .NET Runtime to install it,
-  then select via Project / Active Runtime ...).
-
 * OpenSsl 1.0.1.
 
   The default version of OpenSsl on OS X is too old and it's also not built as shared library.  You need to download the openssl 1.0.1 sources, then configure and compile with:
@@ -41,6 +32,9 @@ Dependencies:
 ```
     $ make CC='cc -g -O0 -DKSSL_DEBUG -DNDEBUG -DCRYPTO_MDEBUG -DTLS_DEBUG'
 ```
+
+  At the moment, this needs to be installed in `/Workspace/INSTALL` because the installation prefix is hardcoded in the [native Xcode project](https://github.com/mono/mono-tls/blob/master/NativeOpenSsl/NativeOpenSsl.xcodeproj/project.pbxproj) at the moment.  This requirement only exists because I did not know how to use a dynamic prefix for both openssl and the native wrapper library - if anyone has some suggestion, please let me know.
+
   
 * Xcode
 
@@ -49,9 +43,6 @@ Dependencies:
 ```
   $ make -f Makefile.native
 ```
-
-* Open `MartinsPlayground.sln` in Xamarin Studio and select `/Workspace/INSTALL` as current runtime.
-
 
 Android and iOS
 ---------------
