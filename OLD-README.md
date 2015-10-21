@@ -4,17 +4,17 @@ Mono's New TLS Implementation
 Dependencies:
 -------------
 
-* Xamarin.AsyncTests from the [martin-newtls](https://github.com/xamarin/web-tests/tree/martin-newtls) branch.  This is included as a submodule.
+* The `Xamarin.AsyncTests` framework from the [stable](https://github.com/xamarin/web-tests/tree/stable) branch.  This is included as a submodule.
   
-* Mono 4.2.0 from the `mono-4.2.0-pre2-branch` must be installed as system-default Mono in `/Library/Frameworks/Mono.framework`.
+* Mono 4.2.0 or a more recent version must be installed as system-default Mono in `/Library/Frameworks/Mono.framework`.
   
   This is required because some internals in the binary serialization
   format have changed, which Xamarin Studio uses to communicate to the
   external `mdtool` build process when building against a custom runtime.
   
-* Mono from the [work-newtls](https://github.com/mono/mono/tree/work-newtls) branch installed into a custom prefix.
+* Mono from [mono/master](https://github.com/mono/mono/tree/master) branch installed into a custom prefix.
 
-  Minimum required version is commit `466d6df659894eed1a4b2bc9cafa1ce0b9ce670d`.
+  Minimum required version is commit [87ecbc9](https://github.com/mono/mono/commit/87ecbc9ce17b4d66201555d8f7fed8f15dcffd18) from October 21st 2015.
   
   At the moment, this custom prefix must be `/Workspace/INSTALL` - this is unfortunately hardcoded in the [native Xcode project](https://github.com/mono/mono-tls/blob/master/NativeOpenSsl/NativeOpenSsl.xcodeproj/project.pbxproj) at the moment.
   
@@ -25,13 +25,13 @@ Dependencies:
   Xamarin Studio (go to Preferences / .NET Runtime to install it,
   then select via Project / Active Runtime ...).
 
-* Shared-library build of OpenSsl 1.0.1.
+* OpenSsl 1.0.1.
 
   The default version of OpenSsl on OS X is too old and it's also not built as shared library.  You need to download the openssl 1.0.1 sources, then configure and compile with:
   
 ```
     $ ./config -t
-    $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL -shared
+    $ ./Configure darwin-i386-cc --prefix=/Workspace/INSTALL
     $ make
     $ make install
 ```
