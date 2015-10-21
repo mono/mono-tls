@@ -4,7 +4,7 @@ Mono's New TLS Implementation
 Dependencies:
 -------------
 
-* The `Xamarin.AsyncTests` framework from the [stable](https://github.com/xamarin/web-tests/tree/stable) branch.  This is included as a submodule.
+* The `Xamarin.AsyncTests` framework from the [stable](https://github.com/xamarin/web-tests/tree/stable) branch of `xamarin/web-tests`.  This is included as a submodule.
   
 * Mono 4.2.0 or a more recent version must be installed as system-default Mono in `/Library/Frameworks/Mono.framework`.
   
@@ -44,11 +44,24 @@ Dependencies:
   $ make -f Makefile.native
 ```
 
-Android and iOS
----------------
+Console
+-------
 
-For Android and iOS you will need a custom build of Xamarin.Android / Xamarin.iOS with Mono from the
-`work-newtls` branch.  You also need to build `mcs/class/Mono.Security.Providers` and install the binaries.
+Simply open the `MartinsPlayground.sln` in Xamarin Studio and set the prefix where you installed `mono/master` as custom runtime.
+
+Android, iOS and XamMac
+-----------------------
+
+For Android and iOS you will need a custom build of Xamarin.Android / Xamarin.iOS / Xamarin.Mac with is built with a recent enough `mono/master`.  There is a custom XS solution for each of the mobile products, but Android may not build at the moment.
+
+
+Last changed October 21st, 2015
+Martin Baulig <martin.baulig@xamarin.com>
+
+
+CLEANUP NEEDED BELOW THIS POINT
+===============================
+
 
 Reference Source and how the pieces fit together
 ------------------------------------------------
