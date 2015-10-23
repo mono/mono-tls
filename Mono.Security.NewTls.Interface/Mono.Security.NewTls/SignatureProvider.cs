@@ -113,7 +113,7 @@ namespace Mono.Security.NewTls
 					return algorithm;
 			}
 
-			throw new TlsException (AlertDescription.HandshakeFailure, "No supported signature type available.");
+			throw new TlsException (AlertDescription.IlegalParameter, "No supported signature type available.");
 		}
 
 		public virtual SignatureAndHashAlgorithm SelectClientSignatureAlgorithm (ITlsContext ctx)

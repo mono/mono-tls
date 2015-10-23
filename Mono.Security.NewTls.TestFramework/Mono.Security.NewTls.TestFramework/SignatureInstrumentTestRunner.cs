@@ -233,7 +233,7 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ClientSignatureParameters.Add (HashAlgorithmType.Unknown, SignatureAlgorithmType.Dsa);
 				parameters.ExpectServerSignatureAlgorithm = new SignatureAndHashAlgorithm (HashAlgorithmType.Sha1);
 				parameters.ClientCiphers = new CipherSuiteCode[] { CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_CBC_SHA };
-				parameters.ExpectServerAlert = AlertDescription.HandshakeFailure;
+				parameters.ExpectServerAlert = AlertDescription.IlegalParameter;
 				break;
 
 			case SignatureInstrumentType.Tls10WithRsaExchange:
@@ -284,7 +284,7 @@ namespace Mono.Security.NewTls.TestFramework
 				parameters.ServerCertificateParameters = new ClientCertificateParameters ();
 				parameters.ServerCertificateParameters.SignatureParameters.Add (HashAlgorithmType.Unknown);
 				parameters.ExpectCertificateVerifySignatureAlgorithm = SignatureParameters.DefaultAlgorithm;
-				parameters.ExpectClientAlert = AlertDescription.HandshakeFailure;
+				parameters.ExpectClientAlert = AlertDescription.IlegalParameter;
 				break;
 
 			case SignatureInstrumentType.ClientSendsCertificateVerifyWithUnrequestedAlgorithm:
