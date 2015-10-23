@@ -17,8 +17,9 @@ Mono.Net.Security
 -----------------
 
 `Mono.Net.Security` provides the internal implementation and lives
-inside `System.dll` as private and internal APIs.  `Mono.Security.dll`
-uses reflection to access these.
+inside `System.dll` as private and internal APIs.  There's an
+internal helper class called `NoReflectionHelper`, which allows
+`Mono.Security.dll` to access these without using reflection.
 
 On Mobile, the `Mono.Security.Interface` APIs are included as public
 APIs in `System.dll`.
