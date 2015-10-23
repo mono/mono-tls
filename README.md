@@ -9,10 +9,8 @@ security issues, anything in it - but do not use it in production environment un
 
 
 
-For the old version in this file, see the commit history.
-https://github.com/mono/mono-tls/blob/bc4e77604e17a52efe8b0223ccb1998350e1cbc3/README.md.  This file
-has now been re-added as [OLD-README.md](https://github.com/mono/mono-tls/blob/master/OLD-README.md)
-and will shortly be updated with build instructions and additional information.
+See [ARCHITECTURE.md](https://github.com/mono/mono-tls/blob/master/ARCHITECTURE.md) for
+an overview of the project, build instructions additional more information.
 
 Last changed October 21st, 2015
 Martin Baulig <martin.baulig@xamarin.com>
