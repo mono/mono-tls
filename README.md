@@ -13,5 +13,10 @@ security issues, anything in it - but do not use it in production environment un
 See [ARCHITECTURE.md](https://github.com/mono/mono-tls/blob/master/ARCHITECTURE.md) for
 an overview of the project, build instructions additional more information.
 
+Build
+=====
+
+To build this module, open the solution .sln file in this directory and compile it.
+
 Last changed October 21st, 2015
 Martin Baulig <martin.baulig@xamarin.com>
