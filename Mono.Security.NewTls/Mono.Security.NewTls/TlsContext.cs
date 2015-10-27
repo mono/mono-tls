@@ -19,12 +19,8 @@ namespace Mono.Security.NewTls
 	 * You are very welcome to use this module to test the new TLS code, find bugs, problems,
 	 * security issues, anything in it - but do not use it in production environment until it is ready.
 	 *
-	 *
-	 * 'MartinContext' is an empty interface.  It only exists to ensure people read the above message
-	 * prior to building the module.
-	 *
 	 */
-	public class TlsContext : MartinContext, ITlsContext
+	public class TlsContext : ITlsContext
 	{
 		readonly bool isServer;
 		readonly TlsConfiguration configuration;

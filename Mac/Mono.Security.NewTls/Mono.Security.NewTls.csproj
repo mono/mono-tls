@@ -394,9 +394,6 @@
     <Compile Include="..\..\Mono.Security.Providers\common\Consts.cs">
       <Link>common\Consts.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\..\Users\martin\Documents\MartinContext.cs">
-      <Link>Mono.Security.NewTls\MartinContext.cs</Link>
-    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\parameters\ECDomainParameters.cs">
       <Link>BouncyCastle\crypto\parameters\ECDomainParameters.cs</Link>
     </Compile>

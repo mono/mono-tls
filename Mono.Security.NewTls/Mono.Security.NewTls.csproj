@@ -130,9 +130,6 @@
     <Compile Include="Mono.Security.Cryptography\SHA224Managed.cs" />
     <Compile Include="Mono.Security.Cryptography\SHA224.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\SignatureTls11.cs" />
-    <Compile Include="..\..\..\Users\martin\Documents\MartinContext.cs">
-      <Link>Mono.Security.NewTls\MartinContext.cs</Link>
-    </Compile>
     <Compile Include="BouncyCastle\math\ec\ECAlgorithms.cs" />
     <Compile Include="BouncyCastle\math\ec\ECCurve.cs" />
     <Compile Include="BouncyCastle\math\ec\ECFieldElement.cs" />
