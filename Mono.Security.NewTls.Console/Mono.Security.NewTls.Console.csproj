@@ -74,6 +74,8 @@
     <Reference Include="Mono.Security.Providers.NewSystemSource">
       <Aliases>NewSystemSource</Aliases>
     </Reference>
+    <Reference Include="Mono.Security.Providers.OldTls" />
+    <Reference Include="Mono.Security.Providers.Dotnet" />
     <ProjectReference Include="..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls.csproj">
       <Project>{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}</Project>
       <Name>Mono.Security.Providers.NewTls</Name>

@@ -35,6 +35,8 @@ using Xamarin.WebTests.Server;
 
 using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
+using Mono.Security.Providers.DotNet;
+using Mono.Security.Providers.OldTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -54,6 +56,9 @@ namespace Mono.Security.NewTls.TestProvider
 				MonoTlsProviderFactory.InstallProvider (newTlsProvider);
 				return newTlsProvider;
 			});
+
+			DependencyInjector.RegisterDependency<OldTlsProvider> (() => new OldTlsProvider ());
+			DependencyInjector.RegisterDependency<DotNetTlsProvider> (() => new DotNetTlsProvider ());
 
 			DependencyInjector.RegisterDependency<IPortableSupport> (() => new PortableSupportImpl ());
 

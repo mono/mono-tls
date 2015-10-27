@@ -31,6 +31,7 @@ using Xamarin.WebTests.Server;
 
 using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
+using Mono.Security.Providers.OldTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -39,10 +40,12 @@ namespace Mono.Security.NewTls.TestProvider
 	class MonoConnectionProviderFactory : ConnectionProviderFactory
 	{
 		readonly MSI.MonoTlsProvider newTlsProvider;
+		readonly MSI.MonoTlsProvider oldTlsProvider;
 		readonly DefaultHttpProvider dotNetHttpProvider;
 		readonly DotNetSslStreamProvider dotNetStreamProvider;
 		readonly DotNetConnectionProvider dotNetConnectionProvider;
 		readonly MonoConnectionProvider newTlsConnectionProvider;
+		readonly MonoConnectionProvider oldTlsConnectionProvider;
 		readonly MonoConnectionProvider monoWithNewTlsConnectionProvider;
 		#if !__MOBILE__
 		readonly OpenSslConnectionProvider openSslConnectionProvider;
@@ -59,6 +62,10 @@ namespace Mono.Security.NewTls.TestProvider
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
 			newTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.NewTLS, newTlsProvider, false);
 			Install (newTlsConnectionProvider);
+
+			oldTlsProvider = DependencyInjector.Get<OldTlsProvider> ();
+			oldTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithOldTLS, oldTlsProvider, false);
+			Install (oldTlsConnectionProvider);
 
 			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithNewTLS, newTlsProvider, true);
 			Install (monoWithNewTlsConnectionProvider);
