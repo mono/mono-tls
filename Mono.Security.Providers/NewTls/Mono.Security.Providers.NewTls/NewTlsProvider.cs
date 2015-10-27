@@ -45,11 +45,6 @@ using SSCX = System.Security.Cryptography.X509Certificates;
 
 namespace Mono.Security.Providers.NewTls
 {
-	/*
-	 * This provider only uses the public .NET APIs from System.dll.
-	 * 
-	 * It is primarily intended for testing.
-	 */
 	public class NewTlsProvider : MSI.MonoTlsProvider
 	{
 		public override bool SupportsSslStream {
