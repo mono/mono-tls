@@ -51,7 +51,7 @@ Dependencies:
   $ make -f Makefile.native
 ```
 
-* Open `MartinsPlayground.sln` in Xamarin Studio and select `/Workspace/INSTALL` as current runtime.
+* Open `Mono.Security.NewTls.sln` in Xamarin Studio and select `/Workspace/INSTALL` as current runtime.
 
 
 Android and iOS

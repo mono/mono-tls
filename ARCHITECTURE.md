@@ -87,11 +87,11 @@ When Mono's existing web-stack attempts to make a TLS call, it will query `MonoT
 Installation and hooking things up
 ==================================
 
-To use the new code, you need to build the [mono-tls](https://github.com/mono/mono-tls) module.  There is a Xamarin Studio [solution](https://github.com/mono/mono-tls/blob/master/MartinsPlayground.sln) that you can use to build, see the
+To use the new code, you need to build the [mono-tls](https://github.com/mono/mono-tls) module.  There is a Xamarin Studio [solution](https://github.com/mono/mono-tls/blob/master/Mono.Security.NewTls.sln) that you can use to build, see the
 [OLD-README.md](https://github.com/mono/mono-tls/blob/master/OLD-README.md) for details.
 
 If you're only interested in testing the new TLS implementation, then you don't need to build the native openssl or any
-of the test pieces, so all that you need from the `MartinsPlayground.sln` are the following projects:
+of the test pieces, so all that you need from the `Mono.Security.NewTls.sln` are the following projects:
 
 * `Mono.Security.NewTls`
 * `Mono.Security.NewTls.Interface`
