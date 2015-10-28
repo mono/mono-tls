@@ -34,16 +34,28 @@ using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.TestRunners;
 
 namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 	using TestFeatures;
 
-	[Martin]
 	[AsyncTestFixture]
 	public class MartinTest
 	{
+		[Martin]
+		[AsyncTest]
+		[ConnectionTestCategory (ConnectionTestCategory.HttpsWithMono)]
+		public async Task TestMonoConnection (TestContext ctx, CancellationToken cancellationToken,
+			[ConnectionTestProvider ("MonoWithOldTLS:MonoWithOldTLS")] ConnectionTestProvider provider,
+			SslStreamTestParameters parameters,
+			SslStreamTestRunner runner)
+		{
+			await runner.Run (ctx, cancellationToken);
+		}
+
+		// [Martin]
 		[AsyncTest]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public Task Test (TestContext ctx, CancellationToken cancellationToken,
