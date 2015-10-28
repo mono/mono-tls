@@ -79,7 +79,7 @@ namespace Mono.Security.NewTls.TestProvider
 			if (validator == null)
 				return;
 
-			settings.ServerCertificateValidationCallback = (s, c, ch, e) => {
+			settings.RemoteCertificateValidationCallback = (s, c, ch, e) => {
 				return ((CertificateValidator)validator).ValidationCallback (s, c, ch, (SslPolicyErrors)e);
 			};
 		}
