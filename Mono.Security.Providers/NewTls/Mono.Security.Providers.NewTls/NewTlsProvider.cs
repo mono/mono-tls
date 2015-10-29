@@ -72,7 +72,7 @@ namespace Mono.Security.Providers.NewTls
 			Stream innerStream, bool leaveInnerStreamOpen,
 			MSI.MonoTlsSettings settings = null)
 		{
-			return MonoNewTlsStreamFactory.CreateSslStream (innerStream, leaveInnerStreamOpen, settings);
+			return MonoNewTlsStreamFactory.CreateSslStream (innerStream, leaveInnerStreamOpen, this, settings);
 		}
 
 		public override MSI.IMonoTlsContext CreateTlsContext (
