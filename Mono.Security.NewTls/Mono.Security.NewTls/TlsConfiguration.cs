@@ -60,7 +60,7 @@ namespace Mono.Security.NewTls
 		public TlsConfiguration (TlsProtocols protocols, MonoTlsSettings settings, string targetHost)
 		{
 			supportedProtocols = protocols;
-			requestedProtocol = CheckProtocol (ref supportedProtocols, false);
+			requestedProtocol = CheckProtocol (settings, ref supportedProtocols, false);
 			TlsSettings = settings;
 			TargetHost = targetHost;
 
@@ -75,7 +75,7 @@ namespace Mono.Security.NewTls
 		public TlsConfiguration (TlsProtocols protocols, MonoTlsSettings settings, MX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
 		{
 			supportedProtocols = protocols;
-			requestedProtocol = CheckProtocol (ref supportedProtocols, true);
+			requestedProtocol = CheckProtocol (settings, ref supportedProtocols, true);
 			TlsSettings = settings;
 			Certificate = certificate;
 			PrivateKey = privateKey;
@@ -90,8 +90,11 @@ namespace Mono.Security.NewTls
 
 		#region Protocol Versions
 
-		static TlsProtocolCode CheckProtocol (ref TlsProtocols protocols, bool isServer)
+		static TlsProtocolCode CheckProtocol (MonoTlsSettings settings, ref TlsProtocols protocols, bool isServer)
 		{
+			if (settings != null && settings.EnabledProtocols != null)
+				protocols = (TlsProtocols)settings.EnabledProtocols.Value;
+
 			if (isServer)
 				protocols &= TlsProtocols.ServerMask;
 			else
