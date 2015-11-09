@@ -33,8 +33,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls;
-using Mono.Security.NewTls.TestFramework;
-using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -297,7 +295,7 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var ret = native_openssl_set_dh_params (handle, p, p.Length, g, g.Length);
 			if (ret != 0)
-				throw new ConnectionException ("native_openssl_set_dh_params() failed.");
+				throw new IOException ("native_openssl_set_dh_params() failed.");
 		}
 
 		public void SetNamedCurve (string curve)
@@ -324,7 +322,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var ret = native_openssl_write (handle, buffer, offset, size);
 			Debug ("WRITE DONE: {0}", ret);
 			if (ret != size)
-				throw new ConnectionException ("Write failed.");
+				throw new IOException ("Write failed.");
 		}
 
 		public override IAsyncResult BeginWrite (byte[] buffer, int offset, int count, AsyncCallback callback, object state)
@@ -436,7 +434,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 			handle = native_openssl_initialize (debug ? 1 : 0, protocol, debug_callback, message_callback);
 			if (handle.IsInvalid)
-				throw new ConnectionException ("Handle invalid.");
+				throw new InvalidOperationException ("Handle invalid.");
 
 			var ret = native_openssl_create_context (handle, !isServer);
 			CheckError (ret);
