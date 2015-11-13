@@ -25,7 +25,7 @@ namespace Mono.Security.NewTls
 					scerts.Add (new X509Certificate2 (certificates [i].RawData));
 			}
 
-			var result = helper.ValidateChain (config.TargetHost, scerts);
+			var result = helper.ValidateCertificate (config.TargetHost, false, scerts);
 			if (result != null && result.Trusted && !result.UserDenied)
 				return;
 
@@ -62,7 +62,7 @@ namespace Mono.Security.NewTls
 					scerts.Add (new X509Certificate2 (certificates [i].RawData));
 			}
 
-			var result = helper.ValidateClientCertificate (scerts);
+			var result = helper.ValidateCertificate (string.Empty, true, scerts);
 			if (result == null || !result.Trusted || result.UserDenied)
 				throw new TlsException (AlertDescription.CertificateUnknown);
 		}
