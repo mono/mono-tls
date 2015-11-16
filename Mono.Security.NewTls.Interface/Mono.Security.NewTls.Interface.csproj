@@ -69,6 +69,9 @@
     <Compile Include="Mono.Security.NewTls\InstrumentationEventSink.cs" />
     <Compile Include="Mono.Security.NewTls\NamedCurve.cs" />
     <Compile Include="Mono.Security.NewTls\ILogger.cs" />
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs">
+      <Link>Mono.Security.NewTls\CipherAlgorithmType.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

@@ -29,6 +29,7 @@
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -44,6 +45,7 @@
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -162,9 +164,6 @@
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CbcBlockCipher.cs">
       <Link>Mono.Security.NewTls.Cipher\CbcBlockCipher.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs">
-      <Link>Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherSuite.cs">
       <Link>Mono.Security.NewTls.Cipher\CipherSuite.cs</Link>
