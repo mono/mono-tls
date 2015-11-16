@@ -526,8 +526,12 @@ namespace Mono.Security.NewTls
 				throw new TlsException (AlertDescription.ProtocolVersion);
 			}
 
+			var cipher = Session.CurrentCrypto.Cipher;
 			connectionInfo = new TlsConnectionInfo {
-				CipherSuiteCode = Session.CurrentCrypto.Cipher.Code, ProtocolVersion = protocol
+				CipherSuiteCode = cipher.Code, ProtocolVersion = protocol,
+				CipherAlgorithmType = cipher.CipherAlgorithmType,
+				HashAlgorithmType = cipher.HashAlgorithmType,
+				ExchangeAlgorithmType = cipher.ExchangeAlgorithmType
 			};
 		}
 

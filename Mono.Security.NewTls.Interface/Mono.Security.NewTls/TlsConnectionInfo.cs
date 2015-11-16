@@ -12,6 +12,18 @@ namespace Mono.Security.NewTls
 			get; set;
 		}
 
+		public CipherAlgorithmType CipherAlgorithmType {
+			get; set;
+		}
+
+		public HashAlgorithmType HashAlgorithmType {
+			get; set;
+		}
+
+		public ExchangeAlgorithmType ExchangeAlgorithmType {
+			get; set;
+		}
+
 		public override string ToString ()
 		{
 			return string.Format ("[TlsConnectionInfo: {0}:{1}]", ProtocolVersion, CipherSuiteCode);
