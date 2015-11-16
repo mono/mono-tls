@@ -26,12 +26,7 @@ using System;
 
 namespace Mono.Security.NewTls.Cipher
 {
-#if INSIDE_SYSTEM
-	internal
-#else
-	public
-#endif
-	enum CipherAlgorithmType
+	public enum CipherAlgorithmType
 	{
 		Des,
 		None,

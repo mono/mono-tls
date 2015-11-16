@@ -26,12 +26,7 @@ using System;
 
 namespace Mono.Security.NewTls
 {
-#if INSIDE_SYSTEM
-	internal
-#else
-	public
-#endif
-	enum ExchangeAlgorithmType
+	public enum ExchangeAlgorithmType
 	{
 		None,
 		Dhe,
