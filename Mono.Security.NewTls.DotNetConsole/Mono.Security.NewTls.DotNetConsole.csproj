@@ -51,9 +51,6 @@
     <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CbcBlockCipher.cs">
       <Link>Mono.Security.NewTls.Cipher\CbcBlockCipher.cs</Link>
     </Compile>
-    <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs">
-      <Link>Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs</Link>
-    </Compile>
     <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherSuite.cs">
       <Link>Mono.Security.NewTls.Cipher\CipherSuite.cs</Link>
     </Compile>

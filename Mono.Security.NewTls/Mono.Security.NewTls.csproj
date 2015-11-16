@@ -71,7 +71,6 @@
     <Compile Include="Mono.Security.NewTls.Cipher\BlockCipher.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\BlockCipherWithHMac.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\CbcBlockCipher.cs" />
-    <Compile Include="Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\CipherSuite.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\CipherSuiteCollection.cs" />
     <Compile Include="Mono.Security.NewTls.Cipher\CipherSuiteFactory.cs" />
