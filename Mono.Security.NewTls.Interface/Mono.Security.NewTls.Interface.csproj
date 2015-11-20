@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Mono.Security.NewTls.Interface</RootNamespace>
     <AssemblyName>Mono.Security.NewTls.Interface</AssemblyName>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile24</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\new-tls.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
