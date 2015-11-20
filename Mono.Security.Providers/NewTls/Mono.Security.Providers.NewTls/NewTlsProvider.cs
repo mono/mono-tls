@@ -47,6 +47,16 @@ namespace Mono.Security.Providers.NewTls
 {
 	public class NewTlsProvider : MSI.MonoTlsProvider
 	{
+		static readonly Guid id = new Guid ("e5ff34f1-8b7a-4aa6-aff9-24719d709693");
+
+		public override Guid ID {
+			get { return id; }
+		}
+
+		public override string Name {
+			get { return "newtls"; }
+		}
+
 		public override bool SupportsSslStream {
 			get { return true; }
 		}

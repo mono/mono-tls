@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Security;
 using System.Security.Cryptography;
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 using MX = Mono.Security.X509;
 using SSCX = System.Security.Cryptography.X509Certificates;
 
@@ -24,7 +24,7 @@ namespace Mono.Security.NewTls
 			get { return requestedProtocol; }
 		}
 
-		public MonoTlsSettings TlsSettings {
+		public MSI.MonoTlsSettings TlsSettings {
 			get;
 			private set;
 		}
@@ -57,7 +57,7 @@ namespace Mono.Security.NewTls
 
 		internal const RenegotiationFlags DefaultRenegotiationFlags = RenegotiationFlags.SecureRenegotiation | RenegotiationFlags.SendClientHelloExtension;
 
-		public TlsConfiguration (TlsProtocols protocols, MonoTlsSettings settings, string targetHost)
+		public TlsConfiguration (TlsProtocols protocols, MSI.MonoTlsSettings settings, string targetHost)
 		{
 			supportedProtocols = protocols;
 			requestedProtocol = CheckProtocol (settings, ref supportedProtocols, false);
@@ -72,7 +72,7 @@ namespace Mono.Security.NewTls
 			RenegotiationFlags = DefaultRenegotiationFlags;
 		}
 
-		public TlsConfiguration (TlsProtocols protocols, MonoTlsSettings settings, MX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
+		public TlsConfiguration (TlsProtocols protocols, MSI.MonoTlsSettings settings, MX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
 		{
 			supportedProtocols = protocols;
 			requestedProtocol = CheckProtocol (settings, ref supportedProtocols, true);
@@ -90,7 +90,7 @@ namespace Mono.Security.NewTls
 
 		#region Protocol Versions
 
-		static TlsProtocolCode CheckProtocol (MonoTlsSettings settings, ref TlsProtocols protocols, bool isServer)
+		static TlsProtocolCode CheckProtocol (MSI.MonoTlsSettings settings, ref TlsProtocols protocols, bool isServer)
 		{
 			if (settings != null && settings.EnabledProtocols != null)
 				protocols = (TlsProtocols)settings.EnabledProtocols.Value;
