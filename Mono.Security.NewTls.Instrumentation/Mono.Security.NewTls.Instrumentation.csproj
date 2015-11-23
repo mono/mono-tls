@@ -58,7 +58,6 @@
     <Compile Include="Mono.Security.NewTls\SignatureProvider.cs" />
     <Compile Include="Mono.Security.NewTls\TlsBuffer.cs" />
     <Compile Include="Mono.Security.NewTls\TlsMultiBuffer.cs" />
-    <Compile Include="Mono.Security.NewTls\TlsProtocolCode.cs" />
     <Compile Include="Mono.Security.NewTls\TlsStream.cs" />
     <Compile Include="Mono.Security.NewTls\UserSettings.cs" />
   </ItemGroup>
