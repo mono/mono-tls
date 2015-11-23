@@ -674,6 +674,11 @@ namespace Mono.Security.NewTls
 			return message.Type == HandshakeType.Finished ? SecurityStatus.OK : SecurityStatus.ContinueNeeded;
 		}
 
+		internal byte[] EncodeRecord (ContentType contentType, byte[] buffer)
+		{
+			return EncodeRecord (contentType, new BufferOffsetSize (buffer));
+		}
+
 		internal byte[] EncodeRecord (ContentType contentType, IBufferOffsetSize buffer)
 		{
 			int fragmentSize = MAX_FRAGMENT_SIZE;

@@ -124,7 +124,8 @@ namespace Mono.Security.NewTls.TestFramework
 			LogDebug (ctx, 2, "ExpectBlob #1", connection, type, ret);
 
 			if (ctx.Expect (ret, Is.GreaterThan (0), "read success")) {
-				var result = new BufferOffsetSize (buffer, 0, ret);
+				var result = new byte [ret];
+				Buffer.BlockCopy (buffer, 0, result, 0, ret);
 
 				ctx.Expect (result, new IsEqualBlob (blob), "blob");
 			}
@@ -139,7 +140,7 @@ namespace Mono.Security.NewTls.TestFramework
 			LogDebug (ctx, 2, "WriteBlob", connection, type);
 
 			var blob = Instrumentation.GetTextBuffer (type);
-			await connection.Stream.WriteAsync (blob.Buffer, blob.Offset, blob.Size, cancellationToken);
+			await connection.Stream.WriteAsync (blob, 0, blob.Length, cancellationToken);
 
 			LogDebug (ctx, 2, "WriteBlob done", connection, type);
 		}

@@ -121,6 +121,10 @@
       <Project>{49780FD0-2761-4C20-ACC5-5956FFEBD51F}</Project>
       <Name>Xamarin.AsyncTests.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
+      <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
+      <Name>Mono.Security.NewTls.Instrumentation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\Info.plist">

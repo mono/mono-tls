@@ -48,6 +48,26 @@ namespace Mono.Security.NewTls.Cipher
 				return false;
 			}
 		}
+
+		public static SignatureAndHashAlgorithm DecodeSignatureAndHashAlgorithm (TlsBuffer buffer)
+		{
+			var hash = (HashAlgorithmType)buffer.ReadByte ();
+			var signature = (SignatureAlgorithmType)buffer.ReadByte ();
+			return new SignatureAndHashAlgorithm (hash, signature);
+		}
+
+		public static void EncodeSignatureAndHashAlgorithm (SignatureAndHashAlgorithm algorithm, TlsStream stream)
+		{
+			stream.Write ((byte)algorithm.Hash);
+			stream.Write ((byte)algorithm.Signature);
+		}
+
+		public static void EncodeSignatureAndHashAlgorithm (SignatureAndHashAlgorithm algorithm, TlsBuffer buffer)
+		{
+			buffer.Write ((byte)algorithm.Hash);
+			buffer.Write ((byte)algorithm.Signature);
+		}
+
 	}
 }
 

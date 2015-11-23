@@ -96,6 +96,10 @@
       <Project>{85371459-6509-4D96-A95D-862399E0F0BE}</Project>
       <Name>Xamarin.WebTests.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
+      <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
+      <Name>Mono.Security.NewTls.Instrumentation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\lib\libNativeOpenSsl.dylib">

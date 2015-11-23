@@ -5,24 +5,6 @@
 		public readonly HashAlgorithmType Hash;
 		public readonly SignatureAlgorithmType Signature;
 
-		internal SignatureAndHashAlgorithm (TlsBuffer buffer)
-		{
-			Hash = (HashAlgorithmType)buffer.ReadByte ();
-			Signature = (SignatureAlgorithmType)buffer.ReadByte ();
-		}
-
-		internal void Encode (TlsStream stream)
-		{
-			stream.Write ((byte)Hash);
-			stream.Write ((byte)Signature);
-		}
-
-		internal void Encode (TlsBuffer buffer)
-		{
-			buffer.Write ((byte)Hash);
-			buffer.Write ((byte)Signature);
-		}
-
 		public SignatureAndHashAlgorithm (HashAlgorithmType hash, SignatureAlgorithmType signature)
 		{
 			Hash = hash;

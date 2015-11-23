@@ -33,43 +33,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mono.Security.NewTls\Alert.cs" />
-    <Compile Include="Mono.Security.NewTls\BufferOffsetSize.cs" />
-    <Compile Include="Mono.Security.NewTls\ClientCertificateParameters.cs" />
-    <Compile Include="Mono.Security.NewTls\ClientCertificateType.cs" />
-    <Compile Include="Mono.Security.NewTls\ContentType.cs" />
-    <Compile Include="Mono.Security.NewTls\DebugHelper.cs" />
-    <Compile Include="Mono.Security.NewTls\DisposeContext.cs" />
-    <Compile Include="Mono.Security.NewTls\ExchangeAlgorithmType.cs" />
-    <Compile Include="Mono.Security.NewTls\HandshakeHashType.cs" />
-    <Compile Include="Mono.Security.NewTls\HashAlgorithmType.cs" />
-    <Compile Include="Mono.Security.NewTls\RenegotiationFlags.cs" />
-    <Compile Include="Mono.Security.NewTls\SecretParameters.cs" />
-    <Compile Include="Mono.Security.NewTls\SecureBuffer.cs" />
-    <Compile Include="Mono.Security.NewTls\SecurityStatus.cs" />
-    <Compile Include="Mono.Security.NewTls\SignatureAlgorithmType.cs" />
-    <Compile Include="Mono.Security.NewTls\SignatureAndHashAlgorithm.cs" />
-    <Compile Include="Mono.Security.NewTls\TlsBuffer.cs" />
-    <Compile Include="Mono.Security.NewTls\TlsConnectionInfo.cs" />
-    <Compile Include="Mono.Security.NewTls\TlsException.cs" />
-    <Compile Include="Mono.Security.NewTls\TlsMultiBuffer.cs" />
-    <Compile Include="Mono.Security.NewTls\TlsProtocolCode.cs" />
-    <Compile Include="Mono.Security.NewTls\TlsStream.cs" />
-    <Compile Include="Mono.Security.NewTls\IBufferOffsetSize.cs" />
     <Compile Include="Mono.Security.NewTls\CipherSuiteCode.cs" />
+    <Compile Include="Mono.Security.NewTls\Alert.cs" />
+    <Compile Include="Mono.Security.NewTls\TlsException.cs" />
+    <Compile Include="Mono.Security.NewTls\TlsConnectionInfo.cs" />
     <Compile Include="Mono.Security.NewTls\TlsProtocols.cs" />
-    <Compile Include="Mono.Security.NewTls\SignatureParameters.cs" />
-    <Compile Include="Mono.Security.NewTls\IHashAlgorithm.cs" />
-    <Compile Include="Mono.Security.NewTls\SignatureProvider.cs" />
-    <Compile Include="Mono.Security.NewTls\ITlsContext.cs" />
-    <Compile Include="Mono.Security.NewTls\UserSettings.cs" />
-    <Compile Include="Mono.Security.NewTls\SettingsProvider.cs" />
-    <Compile Include="Mono.Security.NewTls\Instrumentation.cs" />
-    <Compile Include="Mono.Security.NewTls\HandshakeInstrumentType.cs" />
-    <Compile Include="Mono.Security.NewTls\InstrumentationEventSink.cs" />
-    <Compile Include="Mono.Security.NewTls\NamedCurve.cs" />
-    <Compile Include="Mono.Security.NewTls\ILogger.cs" />
     <Compile Include="Mono.Security.NewTls\CipherAlgorithmType.cs" />
+    <Compile Include="Mono.Security.NewTls\ExchangeAlgorithmType.cs" />
+    <Compile Include="Mono.Security.NewTls\HashAlgorithmType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Mono.Security.NewTls\" />
+  </ItemGroup>
 </Project>

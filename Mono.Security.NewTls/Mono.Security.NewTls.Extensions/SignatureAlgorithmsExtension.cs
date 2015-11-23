@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Mono.Security.NewTls.Extensions
 {
+	using Cipher;
+
 	public class SignatureAlgorithmsExtension : TlsExtension
 	{
 		public override ExtensionType ExtensionType {
@@ -24,7 +26,7 @@ namespace Mono.Security.NewTls.Extensions
 
 			var count = length >> 1;
 			for (int i = 0; i < count; i++) {
-				SignatureParameters.SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (incoming));
+				SignatureParameters.SignatureAndHashAlgorithms.Add (SignatureHelper.DecodeSignatureAndHashAlgorithm (incoming));
 			}
  		}
 
@@ -40,7 +42,7 @@ namespace Mono.Security.NewTls.Extensions
 			buffer.Write ((short)(algorithms.Count * 2 + 2));
 			buffer.Write ((short)(algorithms.Count * 2));
 			foreach (var algorithm in algorithms)
-				algorithm.Encode (buffer);
+				SignatureHelper.EncodeSignatureAndHashAlgorithm (algorithm, buffer);
 		}
 
 		public override bool ProcessClient (TlsContext context)

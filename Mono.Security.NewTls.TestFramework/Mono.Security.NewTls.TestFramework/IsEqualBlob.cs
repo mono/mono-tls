@@ -31,12 +31,12 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public class IsEqualBlob : Constraint
 	{
-		public IBufferOffsetSize Expected {
+		public byte[] Expected {
 			get;
 			private set;
 		}
 
-		public IsEqualBlob (IBufferOffsetSize expected)
+		public IsEqualBlob (byte[] expected)
 		{
 			Expected = expected;
 		}
@@ -45,11 +45,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			var buffer = actual as byte[];
 			if (buffer != null)
-				return CompareBuffer (new BufferOffsetSize (buffer), out message);
-
-			var bos = actual as IBufferOffsetSize;
-			if (bos != null)
-				return CompareBuffer (bos, out message);
+				return CompareBuffer (buffer, out message);
 
 			if (actual == null) {
 				message = string.Format ("Expected blob, got null.");
@@ -62,20 +58,20 @@ namespace Mono.Security.NewTls.TestFramework
 
 		public override string Print ()
 		{
-			return string.Format ("IsEqualBlob({0} bytes)", Expected.Size);
+			return string.Format ("IsEqualBlob({0} bytes)", Expected.Length);
 		}
 
-		bool CompareBuffer (IBufferOffsetSize actual, out string message)
+		bool CompareBuffer (byte[] actual, out string message)
 		{
-			if (Expected.Size != actual.Size) {
+			if (Expected.Length != actual.Length) {
 				message = string.Format (
-					"Blobs differ in size: expected {0}, got {1}.", Expected.Size, actual.Size);
+					"Blobs differ in size: expected {0}, got {1}.", Expected.Length, actual.Length);
 				return false;
 			}
 
-			for (int i = 0; i < Expected.Size; i++) {
-				var e = Expected.Buffer [Expected.Offset + i];
-				var a = actual.Buffer [actual.Offset + i];
+			for (int i = 0; i < Expected.Length; i++) {
+				var e = Expected [i];
+				var a = actual [i];
 				if (e == a)
 					continue;
 

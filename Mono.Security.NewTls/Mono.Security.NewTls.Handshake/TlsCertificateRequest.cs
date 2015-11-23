@@ -3,6 +3,7 @@ using System.Text;
 
 namespace Mono.Security.NewTls.Handshake
 {
+	using Cipher;
 	using X509;
 
 	class TlsCertificateRequest : HandshakeMessage
@@ -43,7 +44,7 @@ namespace Mono.Security.NewTls.Handshake
 				var count = Parameters.HasSignatureParameters ? Parameters.SignatureParameters.SignatureAndHashAlgorithms.Count : 0;
 				stream.Write ((short)(count * 2));
 				for (int i = 0; i < count; i++)
-					Parameters.SignatureParameters.SignatureAndHashAlgorithms [i].Encode (stream);
+					SignatureHelper.EncodeSignatureAndHashAlgorithm (Parameters.SignatureParameters.SignatureAndHashAlgorithms [i], stream);
 			}
 
 			var startPos = stream.Position;
@@ -71,7 +72,7 @@ namespace Mono.Security.NewTls.Handshake
 					throw new TlsException (AlertDescription.IlegalParameter);
 				var signatureTypes = new SignatureAndHashAlgorithm [length2 >> 1];
 				for (int i = 0; i < signatureTypes.Length; i++)
-					Parameters.SignatureParameters.SignatureAndHashAlgorithms.Add (new SignatureAndHashAlgorithm (incoming));
+					Parameters.SignatureParameters.SignatureAndHashAlgorithms.Add (SignatureHelper.DecodeSignatureAndHashAlgorithm (incoming));
 			}
 
 			var length3 = incoming.ReadInt16 ();

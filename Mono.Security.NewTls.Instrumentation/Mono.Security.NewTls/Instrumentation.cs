@@ -73,11 +73,10 @@ namespace Mono.Security.NewTls
 			0x68, 0x65, 0x20, 0x6c, 0x61, 0x7a, 0x79, 0x20, 0x64, 0x6f, 0x67
 		};
 
-		public static BufferOffsetSize GetTextBuffer (HandshakeInstrumentType type)
+		public static byte[] GetTextBuffer (HandshakeInstrumentType type)
 		{
 			var text = string.Format ("@{0}:{1}", type, TheQuickBrownFox);
-			var buffer = Encoding.UTF8.GetBytes (text);
-			return new BufferOffsetSize (buffer);
+			return Encoding.UTF8.GetBytes (text);
 		}
 	}
 }

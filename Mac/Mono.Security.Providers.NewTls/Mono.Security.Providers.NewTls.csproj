@@ -29,6 +29,7 @@
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -43,6 +44,7 @@
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
@@ -81,6 +83,10 @@
     <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
       <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
       <Name>Mono.Security.NewTls.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
+      <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
+      <Name>Mono.Security.NewTls.Instrumentation</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
