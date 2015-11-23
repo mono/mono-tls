@@ -43,7 +43,6 @@
     <Compile Include="Mono.Security.NewTls\HandshakeInstrumentType.cs" />
     <Compile Include="Mono.Security.NewTls\IBufferOffsetSize.cs" />
     <Compile Include="Mono.Security.NewTls\IHashAlgorithm.cs" />
-    <Compile Include="Mono.Security.NewTls\ILogger.cs" />
     <Compile Include="Mono.Security.NewTls\Instrumentation.cs" />
     <Compile Include="Mono.Security.NewTls\InstrumentationEventSink.cs" />
     <Compile Include="Mono.Security.NewTls\ITlsContext.cs" />

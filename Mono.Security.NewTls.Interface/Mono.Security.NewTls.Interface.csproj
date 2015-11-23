@@ -41,6 +41,7 @@
     <Compile Include="Mono.Security.NewTls\CipherAlgorithmType.cs" />
     <Compile Include="Mono.Security.NewTls\ExchangeAlgorithmType.cs" />
     <Compile Include="Mono.Security.NewTls\HashAlgorithmType.cs" />
+    <Compile Include="Mono.Security.NewTls\ILogger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
