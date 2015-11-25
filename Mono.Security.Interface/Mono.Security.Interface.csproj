@@ -44,6 +44,9 @@
     <Compile Include="Mono.Security.Interface\Alert.cs" />
     <Compile Include="Mono.Security.Interface\TlsException.cs" />
     <Compile Include="System.Security.Authentication\SslProtocols.cs" />
+    <Compile Include="System.Security.Cryptography.X509Certificates\X509Certificate.cs" />
+    <Compile Include="System.Security.Cryptography.X509Certificates\X509KeyStorageFlags.cs" />
+    <Compile Include="System.Security.Cryptography.X509Certificates\X509ContentType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
