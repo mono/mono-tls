@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using SSA = System.Security.Authentication;
 using Mono.Security.Interface;
 
 [assembly: TypeForwardedTo (typeof (Alert))]
@@ -15,3 +16,5 @@ using Mono.Security.Interface;
 [assembly: TypeForwardedTo (typeof (TlsException))]
 [assembly: TypeForwardedTo (typeof (TlsProtocolCode))]
 [assembly: TypeForwardedTo (typeof (TlsProtocols))]
+
+[assembly: TypeForwardedTo (typeof (SSA.SslProtocols))]
