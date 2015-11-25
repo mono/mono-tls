@@ -8,7 +8,7 @@
     <RootNamespace>Mono.Security.Providers.NewTls</RootNamespace>
     <AssemblyName>Mono.Security.Providers.NewTls</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\new-tls.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -35,11 +35,8 @@
     <Compile Include="Mono.Security.Providers.NewTls\NewTlsProvider.cs" />
     <Compile Include="Mono.Security.Providers.NewTls\MonoNewTlsStreamFactory.cs" />
     <Compile Include="Mono.Security.Providers.NewTls\TlsContextWrapper.cs" />
-    <Compile Include="..\common\Consts.cs">
-      <Link>common\Consts.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\MonoNewTlsStream.cs">
+    <Compile Include="..\Mono.Security.NewTls\Mono.Security.NewTls\MonoNewTlsStream.cs">
       <Link>Mono.Security.Providers.NewTls\MonoNewTlsStream.cs</Link>
     </Compile>
     <Compile Include="Mono.Security.Providers.NewTls\MonoSslStreamImpl.cs" />
@@ -58,17 +55,17 @@
     <Folder Include="Mono.Security.Providers.NewTls\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
       <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
-      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
-      <Name>Mono.Security.NewTls.Interface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
+    <ProjectReference Include="..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
       <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
       <Name>Mono.Security.NewTls.Instrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Console\Mono.Security.Interface.Facade\Mono.Security.Interface.Facade.csproj">
+      <Project>{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}</Project>
+      <Name>Mono.Security.Interface.Facade</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

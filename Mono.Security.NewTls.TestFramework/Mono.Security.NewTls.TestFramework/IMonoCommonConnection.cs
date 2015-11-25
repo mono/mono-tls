@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -33,7 +34,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get;
 		}
 
-		TlsConnectionInfo GetConnectionInfo ();
+		MonoTlsConnectionInfo GetConnectionInfo ();
 
 		bool SupportsInstrumentation {
 			get;

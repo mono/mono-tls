@@ -1,6 +1,7 @@
 ﻿using System;
 using Mono.Security.Cryptography;
 using System.Security.Cryptography;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Handshake
 {

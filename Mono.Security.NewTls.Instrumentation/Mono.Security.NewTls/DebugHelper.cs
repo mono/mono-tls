@@ -25,6 +25,7 @@
 using System;
 using System.Text;
 using System.Diagnostics;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls
 {

@@ -29,6 +29,7 @@ using System.Security.Cryptography;
 
 using Mono.Security;
 using Mono.Security.Cryptography;
+using Mono.Security.Interface;
 using M = Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher

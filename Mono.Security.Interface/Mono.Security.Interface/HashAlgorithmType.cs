@@ -1,10 +1,10 @@
 //
-// CipherAlgorithmType.cs
+// HashAlgorithmType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2015 Xamarin, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,22 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
 
-namespace Mono.Security.NewTls
+namespace Mono.Security.Interface
 {
-	public enum CipherAlgorithmType
+	public enum HashAlgorithmType
 	{
-		None,
-		Aes128,
-		Aes256,
-		AesGcm128,
-		AesGcm256
+		// These values refer to the @HashAlgorithm enumeration in the TLS 1.2 spec.
+		None	= 0,
+		Md5	= 1,
+		Sha1	= 2,
+		Sha224	= 3,
+		Sha256	= 4,
+		Sha384	= 5,
+		Sha512	= 6,
+		Unknown	= 255,
+
+		// Mono-specific addition, allowing us to reuse it IHashAlgorithm API for TLS 1.0 / 1.1.
+		Md5Sha1	= 254
 	}
 }

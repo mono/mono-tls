@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Handshake
 {

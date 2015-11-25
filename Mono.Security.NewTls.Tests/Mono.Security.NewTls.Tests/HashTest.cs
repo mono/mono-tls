@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Linq;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 

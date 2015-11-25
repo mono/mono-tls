@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Mono.Security.Interface;
 using MSC = Mono.Security.Cryptography;
 
 namespace Mono.Security.NewTls.Cipher

@@ -103,7 +103,7 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return monoNewTlsStream != null; }
 		}
 
-		public TlsConnectionInfo GetConnectionInfo ()
+		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
 		{
 			return monoNewTlsStream.GetConnectionInfo ();
 		}

@@ -1,5 +1,5 @@
-﻿//
-// IBufferOffsetSize.cs
+//
+// AssemblyInfo.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -23,21 +23,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-namespace Mono.Security.NewTls
-{
-	public interface IBufferOffsetSize
-	{
-		byte[] Buffer {
-			get;
-		}
+using System;
+using System.Reflection;
+using System.Resources;
+using System.Security;
+using System.Security.Permissions;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
-		int Offset {
-			get;
-		}
+// General Information about the system assembly
 
-		int Size {
-			get;
-		}
-	}
-}
+[assembly: AssemblyVersion ("1.0.*")]
+
+[assembly: AssemblyCompany ("Xamarin")]
+[assembly: AssemblyCopyright ("(c) 2015 Xamarin")]
+[assembly: AssemblyDescription ("Mono.Security.Providers.dll")]
+[assembly: AssemblyProduct ("MONO CLI")]
+[assembly: AssemblyTitle ("Mono.Security.Providers.dll")]
+[assembly: CLSCompliant (false)]
+[assembly: ComVisible (false)]
+[assembly: NeutralResourcesLanguage ("en-US")]
 

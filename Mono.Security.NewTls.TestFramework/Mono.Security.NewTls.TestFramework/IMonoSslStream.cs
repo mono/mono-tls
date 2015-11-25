@@ -26,6 +26,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -35,7 +36,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get;
 		}
 
-		TlsConnectionInfo GetConnectionInfo ();
+		MonoTlsConnectionInfo GetConnectionInfo ();
 
 		bool SupportsRenegotiation {
 			get;

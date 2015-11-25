@@ -39,7 +39,7 @@ namespace Mono.Security.NewTls
 
 		NegotiationHandler negotiationHandler;
 
-		TlsConnectionInfo connectionInfo;
+		MonoTlsConnectionInfo connectionInfo;
 
 		TlsBuffer cachedFragment;
 		int skipToOffset = -1;
@@ -527,7 +527,7 @@ namespace Mono.Security.NewTls
 			}
 
 			var cipher = Session.CurrentCrypto.Cipher;
-			connectionInfo = new TlsConnectionInfo {
+			connectionInfo = new MonoTlsConnectionInfo {
 				CipherSuiteCode = cipher.Code, ProtocolVersion = protocol,
 				CipherAlgorithmType = cipher.CipherAlgorithmType,
 				HashAlgorithmType = cipher.HashAlgorithmType,
@@ -535,7 +535,7 @@ namespace Mono.Security.NewTls
 			};
 		}
 
-		public TlsConnectionInfo ConnectionInfo {
+		public MonoTlsConnectionInfo ConnectionInfo {
 			get { return connectionInfo; }
 		}
 

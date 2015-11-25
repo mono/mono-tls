@@ -1,4 +1,5 @@
 ﻿using System;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Cipher
 {

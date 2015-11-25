@@ -60,18 +60,18 @@ namespace Mono.Security.Providers.NewTls
 			get { return base.IsClosed; }
 		}
 
-		new public TlsException LastError {
-			get { return (TlsException)base.LastError; }
+		new public MSI.TlsException LastError {
+			get { return (MSI.TlsException)base.LastError; }
 		}
 
-		public TlsConnectionInfo GetConnectionInfo ()
+		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
 		{
 			var info = GetMonoConnectionInfo ();
 			if (info == null)
 				return null;
-			return new TlsConnectionInfo {
-				CipherSuiteCode = (CipherSuiteCode)info.CipherSuiteCode,
-				ProtocolVersion = (TlsProtocols)info.ProtocolVersion
+			return new MSI.MonoTlsConnectionInfo {
+				CipherSuiteCode = (MSI.CipherSuiteCode)info.CipherSuiteCode,
+				ProtocolVersion = (MSI.TlsProtocols)info.ProtocolVersion
 			};
 		}
 

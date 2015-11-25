@@ -1,10 +1,10 @@
 //
-// ExchangeAlgorithmType.cs
+// MonoTlsConnectionInfo.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2015 Xamarin, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,34 @@
 // THE SOFTWARE.
 using System;
 
-namespace Mono.Security.NewTls
+namespace Mono.Security.Interface
 {
-	public enum ExchangeAlgorithmType
+	public class MonoTlsConnectionInfo
 	{
-		None,
-		Dhe,
-		Rsa,
-		EcDhe
+		public CipherSuiteCode CipherSuiteCode {
+			get; set;
+		}
+
+		public TlsProtocols ProtocolVersion {
+			get; set;
+		}
+
+		public CipherAlgorithmType CipherAlgorithmType {
+			get; set;
+		}
+
+		public HashAlgorithmType HashAlgorithmType {
+			get; set;
+		}
+
+		public ExchangeAlgorithmType ExchangeAlgorithmType {
+			get; set;
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[MonoTlsConnectionInfo: {0}:{1}]", ProtocolVersion, CipherSuiteCode);
+		}
 	}
 }
+

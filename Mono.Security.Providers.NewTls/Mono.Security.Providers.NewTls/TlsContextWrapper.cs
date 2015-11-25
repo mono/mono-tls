@@ -127,7 +127,7 @@ namespace Mono.Security.Providers.NewTls
 			return (int)retval;
 		}
 
-		class BOSWrapper : MSI.IBufferOffsetSize, IBufferOffsetSize
+		class BOSWrapper : MSI.IBufferOffsetSize
 		{
 			public byte[] Buffer {
 				get;
@@ -155,16 +155,11 @@ namespace Mono.Security.Providers.NewTls
 			{
 				return bos != null ? new BOSWrapper (bos.Buffer, bos.Offset, bos.Size) : null;
 			}
-
-			public static BOSWrapper Wrap (IBufferOffsetSize bos)
-			{
-				return bos != null ? new BOSWrapper (bos.Buffer, bos.Offset, bos.Size) : null;
-			}
 		}
 
 		public byte[] CreateCloseNotify ()
 		{
-			return Context.CreateAlert (new Alert (AlertLevel.Warning, AlertDescription.CloseNotify));
+			return Context.CreateAlert (new MSI.Alert (MSI.AlertLevel.Warning, MSI.AlertDescription.CloseNotify));
 		}
 
 		public byte[] CreateHelloRequest ()
@@ -210,12 +205,7 @@ namespace Mono.Security.Providers.NewTls
 
 		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
 		{
-			var info = Context.ConnectionInfo;
-			if (info == null)
-				return null;
-			return new MSI.MonoTlsConnectionInfo {
-				CipherSuiteCode = (short)info.CipherSuiteCode, ProtocolVersion = (MSI.TlsProtocols)info.ProtocolVersion
-			};
+			return Context.ConnectionInfo;
 		}
 	}
 }

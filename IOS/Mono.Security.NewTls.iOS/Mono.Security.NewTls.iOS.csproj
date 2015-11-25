@@ -29,14 +29,12 @@
     <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>i386</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <MtouchLink>None</MtouchLink>
     <AssemblyName>MonoSecurityNewTlsIOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
@@ -107,16 +105,20 @@
     <Reference Include="Mono.Security.Providers.OldTls" />
     <Reference Include="Mono.Security.Providers.DotNet" />
     <Reference Include="Xamarin.Forms.Platform.iOS">
-      <HintPath>..\..\..\packages\Xamarin.Forms.2.0.0.6482\lib\Xamarin.iOS10\Xamarin.Forms.Platform.iOS.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.0.0.6484\lib\Xamarin.iOS10\Xamarin.Forms.Platform.iOS.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Core">
-      <HintPath>..\..\..\packages\Xamarin.Forms.2.0.0.6482\lib\Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.0.0.6484\lib\Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml">
-      <HintPath>..\..\..\packages\Xamarin.Forms.2.0.0.6482\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.0.0.6484\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform">
-      <HintPath>..\..\..\packages\Xamarin.Forms.2.0.0.6482\lib\Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.0.0.6484\lib\Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +143,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.1.5.1.6471\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.1.5.1.6471\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Import Project="..\..\..\packages\Xamarin.Forms.2.0.0.6482\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\..\packages\Xamarin.Forms.2.0.0.6482\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  <Import Project="..\..\packages\Xamarin.Forms.2.0.0.6484\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.0.0.6484\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <ItemGroup>
     <Reference Include="Mono.Security.Providers.NewSystemSource">
       <Aliases>NewSystemSource</Aliases>
@@ -161,10 +164,6 @@
       <Project>{6534ECF8-C035-496D-899F-B454CEDFA989}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
-      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
-      <Name>Mono.Security.NewTls.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
       <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
       <Name>Mono.Security.NewTls.TestFramework</Name>
@@ -184,6 +183,10 @@
     <ProjectReference Include="..\..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
       <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
       <Name>Mono.Security.NewTls.Instrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mono.Security.Interface.Facade\Mono.Security.Interface.Facade.csproj">
+      <Project>{C38F2801-D820-4CCE-92E9-62D4C4FFA2FF}</Project>
+      <Name>Mono.Security.Interface.Facade</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

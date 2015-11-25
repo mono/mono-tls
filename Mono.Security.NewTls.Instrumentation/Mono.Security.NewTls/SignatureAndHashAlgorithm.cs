@@ -1,4 +1,7 @@
-﻿namespace Mono.Security.NewTls
+﻿using System;
+using Mono.Security.Interface;
+
+namespace Mono.Security.NewTls
 {
 	public struct SignatureAndHashAlgorithm
 	{

@@ -1,10 +1,10 @@
 //
-// AssemblyInfo.cs
+// CipherAlgorithmType.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin, Inc.
+// Copyright (c) 2015 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +23,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
-using System.Reflection;
-using System.Resources;
-using System.Security;
-using System.Security.Permissions;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
-// General Information about the system assembly
-
-[assembly: AssemblyVersion (Consts.FxVersion)]
-
-[assembly: AssemblyCompany ("MONO development team")]
-[assembly: AssemblyCopyright ("(c) 2015 Xamarin")]
-[assembly: AssemblyDescription ("Mono.Security.Providers.dll")]
-[assembly: AssemblyProduct ("MONO CLI")]
-[assembly: AssemblyTitle ("Mono.Security.Providers.dll")]
-[assembly: CLSCompliant (false)]
-[assembly: ComVisible (false)]
-[assembly: NeutralResourcesLanguage ("en-US")]
-
+namespace Mono.Security.Interface
+{
+	public enum CipherAlgorithmType
+	{
+		None,
+		Aes128,
+		Aes256,
+		AesGcm128,
+		AesGcm256
+	}
+}

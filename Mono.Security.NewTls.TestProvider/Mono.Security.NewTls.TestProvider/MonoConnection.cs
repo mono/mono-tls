@@ -75,7 +75,7 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return provider.IsNewTls; }
 		}
 
-		public TlsConnectionInfo GetConnectionInfo ()
+		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
 		{
 			return monoSslStream.GetConnectionInfo ();
 		}
@@ -103,12 +103,14 @@ namespace Mono.Security.NewTls.TestProvider
 		protected sealed override async Task<ISslStream> Start (TestContext ctx, Stream stream, CancellationToken cancellationToken)
 		{
 			UserSettings userSettings = new UserSettings ();
+			#if DEBUG
 			if (SupportsInstrumentation && InstrumentationProvider != null) {
 				var instrumentation = InstrumentationProvider.CreateInstrument (ctx);
 				if (instrumentation != null && instrumentation.HasSettingsInstrument)
 					userSettings = instrumentation.SettingsInstrument.UserSettings;
 				userSettings.Instrumentation = instrumentation;
 			}
+			#endif
 
 			GetSettings (userSettings);
 

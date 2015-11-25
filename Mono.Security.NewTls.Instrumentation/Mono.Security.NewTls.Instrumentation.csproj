@@ -41,7 +41,6 @@
     <Compile Include="Mono.Security.NewTls\DisposeContext.cs" />
     <Compile Include="Mono.Security.NewTls\HandshakeHashType.cs" />
     <Compile Include="Mono.Security.NewTls\HandshakeInstrumentType.cs" />
-    <Compile Include="Mono.Security.NewTls\IBufferOffsetSize.cs" />
     <Compile Include="Mono.Security.NewTls\IHashAlgorithm.cs" />
     <Compile Include="Mono.Security.NewTls\Instrumentation.cs" />
     <Compile Include="Mono.Security.NewTls\InstrumentationEventSink.cs" />
@@ -60,12 +59,13 @@
     <Compile Include="Mono.Security.NewTls\TlsMultiBuffer.cs" />
     <Compile Include="Mono.Security.NewTls\TlsStream.cs" />
     <Compile Include="Mono.Security.NewTls\UserSettings.cs" />
+    <Compile Include="Mono.Security.NewTls\ILogger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
-      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
-      <Name>Mono.Security.NewTls.Interface</Name>
+    <ProjectReference Include="..\Mono.Security.Interface\Mono.Security.Interface.csproj">
+      <Project>{21155A4B-F209-4525-9B6D-718C09B5B948}</Project>
+      <Name>Mono.Security.Interface</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -52,16 +52,16 @@
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\MonoNewTlsStream.cs">
       <Link>MonoNewTlsStream.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls\MonoNewTlsStreamFactory.cs">
+    <Compile Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls\MonoNewTlsStreamFactory.cs">
       <Link>MonoNewTlsStreamFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls\NewTlsProvider.cs">
+    <Compile Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls\NewTlsProvider.cs">
       <Link>NewTlsProvider.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls\TlsContextWrapper.cs">
+    <Compile Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls\TlsContextWrapper.cs">
       <Link>TlsContextWrapper.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls\MonoSslStreamImpl.cs">
+    <Compile Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls\MonoSslStreamImpl.cs">
       <Link>MonoSslStreamImpl.cs</Link>
     </Compile>
   </ItemGroup>

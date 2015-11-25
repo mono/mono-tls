@@ -27,6 +27,7 @@ using System;
 using System.Text;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Tests
 {

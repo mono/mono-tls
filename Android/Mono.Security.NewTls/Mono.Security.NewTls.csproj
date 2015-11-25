@@ -361,11 +361,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Mono.Security.Providers\common\Consts.cs">
-      <Link>common\Consts.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
   </ItemGroup>
   <ItemGroup>

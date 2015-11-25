@@ -59,10 +59,6 @@
       <Project>{C577448D-707B-4DDD-83DC-9CB758FC6DE5}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
-      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
-      <Name>Mono.Security.NewTls.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
       <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
       <Name>Mono.Security.NewTls.TestFramework</Name>
@@ -76,7 +72,7 @@
     </Reference>
     <Reference Include="Mono.Security.Providers.OldTls" />
     <Reference Include="Mono.Security.Providers.Dotnet" />
-    <ProjectReference Include="..\..\Mono.Security.Providers\NewTls\Mono.Security.Providers.NewTls.csproj">
+    <ProjectReference Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj">
       <Project>{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}</Project>
       <Name>Mono.Security.Providers.NewTls</Name>
     </ProjectReference>
@@ -99,6 +95,10 @@
     <ProjectReference Include="..\..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
       <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
       <Name>Mono.Security.NewTls.Instrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mono.Security.Interface.Facade\Mono.Security.Interface.Facade.csproj">
+      <Project>{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}</Project>
+      <Name>Mono.Security.Interface.Facade</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

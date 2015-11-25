@@ -26,6 +26,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.ConnectionFramework;
