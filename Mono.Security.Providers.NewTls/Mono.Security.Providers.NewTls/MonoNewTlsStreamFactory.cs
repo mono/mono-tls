@@ -48,12 +48,11 @@ namespace Mono.Security.Providers.NewTls
 {
 	public static class MonoNewTlsStreamFactory
 	{
-		internal static MonoSslStream CreateSslStream (
+		internal static IMonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
 			MonoTlsProvider provider, MonoTlsSettings settings = null)
 		{
-			var stream = new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, provider, settings);
-			return new MonoSslStreamImpl (stream);
+			return new MonoNewTlsStream (innerStream, leaveInnerStreamOpen, provider, settings);
 		}
 
 		public static MonoNewTlsStream CreateServer (

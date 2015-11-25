@@ -73,7 +73,7 @@ namespace Mono.Security.Providers.NewTls
 			get { return SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls; }
 		}
 
-		public override MSI.MonoSslStream CreateSslStream (
+		public override MSI.IMonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
 			MSI.MonoTlsSettings settings = null)
 		{
@@ -98,16 +98,6 @@ namespace Mono.Security.Providers.NewTls
 			}
 
 			return new TlsContextWrapper (config, serverMode);
-		}
-
-		public static bool IsNewTlsStream (MSI.MonoSslStream stream)
-		{
-			return stream is MonoSslStreamImpl;
-		}
-
-		public static MonoNewTlsStream GetNewTlsStream (MSI.MonoSslStream stream)
-		{
-			return ((MonoSslStreamImpl)stream).Impl;
 		}
 	}
 }

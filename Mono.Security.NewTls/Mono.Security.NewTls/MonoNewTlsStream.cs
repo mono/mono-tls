@@ -40,11 +40,14 @@ using MSI = PrebuiltSystem::Mono.Security.Interface;
 using MSI = Mono.Security.Interface;
 #endif
 
+using XAuthenticatedStream = PrebuiltSystem::System.Net.Security.AuthenticatedStream;
+using System.Security.Cryptography.X509Certificates;
+
 using Mono.Security.NewTls;
 
 namespace Mono.Security.Providers.NewTls
 {
-	public class MonoNewTlsStream : SslStream
+	public class MonoNewTlsStream : SslStream, MSI.IMonoSslStream
 	{
 		internal MonoNewTlsStream (Stream innerStream, MSI.MonoTlsProvider provider, MSI.MonoTlsSettings settings)
 			: this (innerStream, false, provider, settings)
@@ -83,6 +86,14 @@ namespace Mono.Security.Providers.NewTls
 		public Task RequestRenegotiation ()
 		{
 			return Task.Factory.FromAsync ((state, result) => BeginRenegotiate (state, result), EndRenegotiate, null);
+		}
+
+		 X509Certificate MSI.IMonoSslStream.InternalLocalCertificate {
+			get { return InternalLocalCertificate; }
+		}
+
+		XAuthenticatedStream MSI.IMonoSslStream.AuthenticatedStream {
+			get { return this; }
 		}
 	}
 }

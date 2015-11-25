@@ -41,15 +41,13 @@ namespace Mono.Security.NewTls.TestProvider
 
 	class MonoSslStream : ISslStream, IMonoSslStream
 	{
-		readonly MSI.MonoSslStream stream;
+		readonly MSI.IMonoSslStream stream;
 		readonly MonoNewTlsStream monoNewTlsStream;
 
-		public MonoSslStream (MSI.MonoSslStream stream)
+		public MonoSslStream (MSI.IMonoSslStream stream)
 		{
 			this.stream = stream;
-
-			if (NewTlsProvider.IsNewTlsStream (stream))
-				monoNewTlsStream = NewTlsProvider.GetNewTlsStream (stream);
+			this.monoNewTlsStream = stream as MonoNewTlsStream;
 		}
 
 		public bool IsAuthenticated {
