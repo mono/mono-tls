@@ -55,6 +55,10 @@
     <Compile Include="System.Collections\CollectionBase.cs" />
     <Compile Include="Mono.Security.Interface\IMonoSslStream.cs" />
     <Compile Include="System.Security.Cryptography.X509Certificates\X509Chain.cs" />
+    <Compile Include="Mono.Security.Interface\CertificateValidationHelper.cs" />
+    <Compile Include="Mono.Security.Interface\MonoTlsProvider.cs" />
+    <Compile Include="Mono.Security.Interface\MonoTlsProviderFactory.cs" />
+    <Compile Include="Mono.Security.Interface\MonoTlsSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
