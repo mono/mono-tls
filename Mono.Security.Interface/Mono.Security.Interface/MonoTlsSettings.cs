@@ -32,134 +32,75 @@ namespace Mono.Security.Interface
 	public sealed class MonoTlsSettings
 	{
 		public MonoRemoteCertificateValidationCallback RemoteCertificateValidationCallback {
-			get; set;
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		public MonoLocalCertificateSelectionCallback ClientCertificateSelectionCallback {
-			get; set;
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		public bool CheckCertificateName {
-			get { return checkCertName; }
-			set { checkCertName = value; }
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		public bool CheckCertificateRevocationStatus {
-			get { return checkCertRevocationStatus; }
-			set { checkCertRevocationStatus = value; }
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		public bool UseServicePointManagerCallback {
-			get { return useServicePointManagerCallback; }
-			set { useServicePointManagerCallback = value; }
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		public bool SkipSystemValidators {
-			get { return skipSystemValidators; }
-			set { skipSystemValidators = value; }
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		public bool CallbackNeedsCertificateChain {
-			get { return callbackNeedsChain; }
-			set { callbackNeedsChain = value; }
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		/*
 		 * This is only supported if CertificateValidationHelper.SupportsTrustAnchors is true.
 		 */
 		public X509CertificateCollection TrustAnchors {
-			get; set;
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		public object UserSettings {
-			get; set;
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		/*
 		 * If you set this here, then it will override 'ServicePointManager.SecurityProtocol'.
 		 */
 		public TlsProtocols? EnabledProtocols {
-			get; set;
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
-
-		bool cloned = false;
-		bool checkCertName = true;
-		bool checkCertRevocationStatus = false;
-		bool useServicePointManagerCallback = true;
-		bool skipSystemValidators = false;
-		bool callbackNeedsChain = true;
-		ICertificateValidator certificateValidator;
 
 		public MonoTlsSettings ()
 		{
+			throw new NotImplementedException ();
 		}
 
-		volatile static MonoTlsSettings defaultSettings;
-
 		public static MonoTlsSettings DefaultSettings {
-			get {
-				if (defaultSettings == null)
-					Interlocked.CompareExchange (ref defaultSettings, new MonoTlsSettings (), null);
-				return defaultSettings;
-			}
-			set {
-				defaultSettings = value ?? new MonoTlsSettings ();
-			}
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		public static MonoTlsSettings CopyDefaultSettings ()
 		{
-			return DefaultSettings.Clone ();
+			throw new NotImplementedException ();
 		}
-
-		#region Private APIs
-
-		/*
-		 * Private APIs - do not use!
-		 * 
-		 * This is only public to avoid making our internals visible to System.dll.
-		 * 
-		 */
-
-		[Obsolete ("Do not use outside System.dll!")]
-		public ICertificateValidator CertificateValidator {
-			get { return certificateValidator; }
-		}
-
-		[Obsolete ("Do not use outside System.dll!")]
-		public MonoTlsSettings CloneWithValidator (ICertificateValidator validator)
-		{
-			if (cloned) {
-				this.certificateValidator = validator;
-				return this;
-			}
-
-			var copy = new MonoTlsSettings (this);
-			copy.certificateValidator = validator;
-			return copy;
-		}
-
-		public MonoTlsSettings Clone ()
-		{
-			return new MonoTlsSettings (this);
-		}
-
-		MonoTlsSettings (MonoTlsSettings other)
-		{
-			RemoteCertificateValidationCallback = other.RemoteCertificateValidationCallback;
-			ClientCertificateSelectionCallback = other.ClientCertificateSelectionCallback;
-			checkCertName = other.checkCertName;
-			checkCertRevocationStatus = other.checkCertRevocationStatus;
-			UseServicePointManagerCallback = other.useServicePointManagerCallback;
-			skipSystemValidators = other.skipSystemValidators;
-			callbackNeedsChain = other.callbackNeedsChain;
-			UserSettings = other.UserSettings;
-			EnabledProtocols = other.EnabledProtocols;
-			TrustAnchors = other.TrustAnchors;
-			cloned = true;
-		}
-
-		#endregion
 	}
 }
 

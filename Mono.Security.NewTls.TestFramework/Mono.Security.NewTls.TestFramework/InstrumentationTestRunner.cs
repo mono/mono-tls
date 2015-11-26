@@ -35,13 +35,14 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.HttpFramework;
-using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 using Xamarin.WebTests.TestRunners;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using Xamarin.WebTests.Portable;
+
 	public abstract class InstrumentationTestRunner : ClientAndServer, InstrumentationProvider
 	{
 		new public InstrumentationParameters Parameters {

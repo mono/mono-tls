@@ -25,7 +25,6 @@
 // THE SOFTWARE.
 using System;
 using System.Net;
-using Mono.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Mono.Security.Interface
@@ -44,7 +43,7 @@ namespace Mono.Security.Interface
 		 */
 		public static MonoTlsProvider GetProvider ()
 		{
-			return (MonoTlsProvider)NoReflectionHelper.GetProvider ();
+			throw new NotImplementedException ();
 		}
 
 		/*
@@ -54,7 +53,7 @@ namespace Mono.Security.Interface
 		 */
 		public static MonoTlsProvider GetDefaultProvider ()
 		{
-			return (MonoTlsProvider)NoReflectionHelper.GetDefaultProvider ();
+			throw new NotImplementedException ();
 		}
 
 		/*
@@ -65,9 +64,7 @@ namespace Mono.Security.Interface
 		 *
 		 */
 		public static bool HasProvider {
-			get {
-				return NoReflectionHelper.HasProvider;
-			}
+			get { throw new NotImplementedException (); }
 		}
 
 		/*
@@ -78,7 +75,7 @@ namespace Mono.Security.Interface
 		 */
 		public static void InstallProvider (MonoTlsProvider provider)
 		{
-			NoReflectionHelper.InstallProvider (provider);
+			throw new NotImplementedException ();
 		}
 
 		/*
@@ -90,12 +87,7 @@ namespace Mono.Security.Interface
 		 */
 		public static HttpWebRequest CreateHttpsRequest (System.Uri requestUri, MonoTlsProvider provider, MonoTlsSettings settings = null)
 		{
-			return NoReflectionHelper.CreateHttpsRequest (requestUri, provider, settings);
-		}
-
-		public static HttpListener CreateHttpListener (X509Certificate certificate, MonoTlsProvider provider = null, MonoTlsSettings settings = null)
-		{
-			return (HttpListener)NoReflectionHelper.CreateHttpListener (certificate, provider, settings);
+			throw new NotImplementedException ();
 		}
 	}
 }

@@ -30,7 +30,6 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using Mono.Security.Protocol.Tls;
 
 namespace Mono.Security.Interface
 {
@@ -119,7 +118,7 @@ namespace Mono.Security.Interface
 		 * Allows a TLS provider to provide a custom system certificiate validator.
 		 */
 		public virtual bool HasCustomSystemCertificateValidator {
-			get { return false; }
+			get { throw new NotImplementedException (); }
 		}
 
 		/*
@@ -136,27 +135,8 @@ namespace Mono.Security.Interface
 			X509CertificateCollection certificates, X509Chain chain, out bool success,
 			ref MonoSslPolicyErrors errors, ref int status11)
 		{
-			success = false;
-			return false;
+			throw new NotImplementedException ();
 		}
-
-#endregion
-
-#region Manged SSPI
-
-		/*
-		 * The managed SSPI implementation from the new TLS code.
-		 */
-
-		public abstract bool SupportsTlsContext {
-			get;
-		}
-
-		public abstract IMonoTlsContext CreateTlsContext (
-			string hostname, bool serverMode, TlsProtocols protocolFlags,
-			X509Certificate serverCertificate, X509CertificateCollection clientCertificates,
-			bool remoteCertRequired, MonoEncryptionPolicy encryptionPolicy,
-			MonoTlsSettings settings);
 
 #endregion
 	}

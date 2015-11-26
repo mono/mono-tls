@@ -30,50 +30,30 @@ using System.Net;
 using System.Net.Security;
 using System.Threading;
 using System.Security.Cryptography.X509Certificates;
-using Mono.Security.Protocol.Tls;
-using MX = Mono.Security.X509;
-using Mono.Net.Security;
 
 namespace Mono.Security.Interface
 {
-	#if (!MONOTOUCH && !MONODROID) || INSIDE_SYSTEM
 	public class ValidationResult
 	{
-		bool trusted;
-		bool user_denied;
-		int error_code;
-		MonoSslPolicyErrors? policy_errors;
-
 		public ValidationResult (bool trusted, bool user_denied, int error_code, MonoSslPolicyErrors? policy_errors)
 		{
-			this.trusted = trusted;
-			this.user_denied = user_denied;
-			this.error_code = error_code;
-			this.policy_errors = policy_errors;
-		}
-
-		internal ValidationResult (bool trusted, bool user_defined, int error_code)
-		{
-			this.trusted = trusted;
-			this.user_denied = user_denied;
-			this.error_code = error_code;
-			this.policy_errors = policy_errors;
+			throw new NotImplementedException ();
 		}
 
 		public bool Trusted {
-			get { return trusted; }
+			get { throw new NotImplementedException (); }
 		}
 
 		public bool UserDenied {
-			get { return user_denied; }
+			get { throw new NotImplementedException (); }
 		}
 
 		public int ErrorCode {
-			get { return error_code; }
+			get { throw new NotImplementedException (); }
 		}
 
 		public MonoSslPolicyErrors? PolicyErrors {
-			get { return policy_errors; }
+			get { throw new NotImplementedException (); }
 		}
 	}
 
@@ -108,40 +88,17 @@ namespace Mono.Security.Interface
 
 	public static class CertificateValidationHelper
 	{
-		const string SecurityLibrary = "/System/Library/Frameworks/Security.framework/Security";
-		static readonly bool noX509Chain;
-		static readonly bool supportsTrustAnchors;
-
-		static CertificateValidationHelper ()
-		{
-			#if MONOTOUCH || XAMMAC
-			noX509Chain = true;
-			supportsTrustAnchors = true;
-			#elif MONODROID
-			noX509Chain = true;
-			supportsTrustAnchors = false;
-			#else
-			if (File.Exists (SecurityLibrary)) {
-				noX509Chain = true;
-				supportsTrustAnchors = true;
-			} else {
-				noX509Chain = false;
-				supportsTrustAnchors = false;
-			}
-			#endif
-		}
-
 		public static bool SupportsX509Chain {
-			get { return !noX509Chain; }
+			get { throw new NotImplementedException (); }
 		}
 
 		public static bool SupportsTrustAnchors {
-			get { return supportsTrustAnchors; }
+			get { throw new NotImplementedException (); }
 		}
 
 		static ICertificateValidator GetDefaultValidator (MonoTlsProvider provider, MonoTlsSettings settings)
 		{
-			return (ICertificateValidator)NoReflectionHelper.GetDefaultCertificateValidator (provider, settings);
+			throw new NotImplementedException ();
 		}
 
 		/*
@@ -149,7 +106,7 @@ namespace Mono.Security.Interface
 		 */
 		public static ICertificateValidator GetValidator (MonoTlsProvider provider, MonoTlsSettings settings)
 		{
-			return GetDefaultValidator (provider, settings);
+			throw new NotImplementedException ();
 		}
 
 		/*
@@ -157,8 +114,7 @@ namespace Mono.Security.Interface
 		 */
 		public static ICertificateValidator GetValidator (MonoTlsSettings settings)
 		{
-			return GetDefaultValidator (null, settings);
+			throw new NotImplementedException ();
 		}
 	}
-#endif
 }

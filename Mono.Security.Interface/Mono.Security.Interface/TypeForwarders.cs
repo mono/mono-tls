@@ -23,6 +23,17 @@ using Mono.Security.Interface;
 [assembly: TypeForwardedTo (typeof (TlsProtocolCode))]
 [assembly: TypeForwardedTo (typeof (TlsProtocols))]
 
+[assembly: TypeForwardedTo (typeof (MonoTlsProviderFactory))]
+[assembly: TypeForwardedTo (typeof (MonoSslPolicyErrors))]
+[assembly: TypeForwardedTo (typeof (MonoEncryptionPolicy))]
+[assembly: TypeForwardedTo (typeof (MonoRemoteCertificateValidationCallback))]
+[assembly: TypeForwardedTo (typeof (MonoLocalCertificateSelectionCallback))]
+[assembly: TypeForwardedTo (typeof (MonoTlsProvider))]
+[assembly: TypeForwardedTo (typeof (MonoTlsSettings))]
+[assembly: TypeForwardedTo (typeof (ValidationResult))]
+[assembly: TypeForwardedTo (typeof (ICertificateValidator))]
+[assembly: TypeForwardedTo (typeof (CertificateValidationHelper))]
+
 #endregion
 
 #region .NET 4.5 APIs
