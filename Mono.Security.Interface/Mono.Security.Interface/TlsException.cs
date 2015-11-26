@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // TlsException.cs
 //
@@ -82,3 +83,4 @@ namespace Mono.Security.Interface
 		#endregion
 	}
 }
+#endif

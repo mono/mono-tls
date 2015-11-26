@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // CipherSuiteCode.cs
 //
@@ -396,3 +397,4 @@ namespace Mono.Security.Interface
 		*/
 	}
 }
+#endif

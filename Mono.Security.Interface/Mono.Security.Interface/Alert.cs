@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // Alert.cs
 //
@@ -275,3 +276,4 @@ namespace Mono.Security.Interface
 		#endregion
 	}
 }
+#endif

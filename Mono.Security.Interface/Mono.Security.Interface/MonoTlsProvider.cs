@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // MonoTlsProvider.cs
 //
@@ -141,3 +142,4 @@ namespace Mono.Security.Interface
 #endregion
 	}
 }
+#endif

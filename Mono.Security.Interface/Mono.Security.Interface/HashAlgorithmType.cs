@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // HashAlgorithmType.cs
 //
@@ -42,3 +43,4 @@ namespace Mono.Security.Interface
 		Md5Sha1	= 254
 	}
 }
+#endif

@@ -1,4 +1,5 @@
-﻿//
+﻿#if !MONO_FEATURE_NEWTLS
+//
 // TlsProtocolCode.cs
 //
 // Author:
@@ -36,3 +37,4 @@ namespace Mono.Security.Interface
 	}
 }
 
+#endif

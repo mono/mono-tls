@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // TlsProtocols.cs
 //
@@ -47,3 +48,4 @@ namespace Mono.Security.Interface
 	};
 }
 
+#endif

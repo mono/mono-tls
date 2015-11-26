@@ -1,4 +1,4 @@
-#if !MARTIN_FIXME
+#if !MONO_FEATURE_NEWTLS
 //
 // IMonoSslStream.cs
 //

@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // ExchangeAlgorithmType.cs
 //
@@ -36,3 +37,4 @@ namespace Mono.Security.Interface
 		EcDhe
 	}
 }
+#endif

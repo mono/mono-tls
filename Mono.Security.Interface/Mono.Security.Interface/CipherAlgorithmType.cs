@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // CipherAlgorithmType.cs
 //
@@ -37,3 +38,4 @@ namespace Mono.Security.Interface
 		AesGcm256
 	}
 }
+#endif

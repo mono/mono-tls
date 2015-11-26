@@ -53,10 +53,55 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\TypeForwarders.cs">
-      <Link>TypeForwarders.cs</Link>
+      <Link>Mono.Security.Interface\TypeForwarders.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.Interface\Properties\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\Alert.cs">
+      <Link>Mono.Security.Interface\Alert.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\CertificateValidationHelper.cs">
+      <Link>Mono.Security.Interface\CertificateValidationHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\CipherAlgorithmType.cs">
+      <Link>Mono.Security.Interface\CipherAlgorithmType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\CipherSuiteCode.cs">
+      <Link>Mono.Security.Interface\CipherSuiteCode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\ExchangeAlgorithmType.cs">
+      <Link>Mono.Security.Interface\ExchangeAlgorithmType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\HashAlgorithmType.cs">
+      <Link>Mono.Security.Interface\HashAlgorithmType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\IBufferOffsetSize.cs">
+      <Link>Mono.Security.Interface\IBufferOffsetSize.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\IMonoSslStream.cs">
+      <Link>Mono.Security.Interface\IMonoSslStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\MonoTlsConnectionInfo.cs">
+      <Link>Mono.Security.Interface\MonoTlsConnectionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\MonoTlsProvider.cs">
+      <Link>Mono.Security.Interface\MonoTlsProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\MonoTlsProviderFactory.cs">
+      <Link>Mono.Security.Interface\MonoTlsProviderFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\MonoTlsSettings.cs">
+      <Link>Mono.Security.Interface\MonoTlsSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\TlsException.cs">
+      <Link>Mono.Security.Interface\TlsException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\TlsProtocolCode.cs">
+      <Link>Mono.Security.Interface\TlsProtocolCode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\TlsProtocols.cs">
+      <Link>Mono.Security.Interface\TlsProtocols.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>

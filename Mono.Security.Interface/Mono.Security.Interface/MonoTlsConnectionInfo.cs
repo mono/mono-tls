@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // MonoTlsConnectionInfo.cs
 //
@@ -55,4 +56,5 @@ namespace Mono.Security.Interface
 		}
 	}
 }
+#endif
 

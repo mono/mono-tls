@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // CertificateValidationHelper.cs
 //
@@ -118,3 +119,4 @@ namespace Mono.Security.Interface
 		}
 	}
 }
+#endif

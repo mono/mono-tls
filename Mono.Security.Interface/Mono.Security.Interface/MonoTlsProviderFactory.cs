@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // MonoTlsProviderFactory.cs
 //
@@ -92,3 +93,4 @@ namespace Mono.Security.Interface
 	}
 }
 
+#endif

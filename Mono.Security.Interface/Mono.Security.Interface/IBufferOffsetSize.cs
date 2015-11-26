@@ -1,3 +1,4 @@
+#if !MONO_FEATURE_NEWTLS
 //
 // IBufferOffsetSize.cs
 //
@@ -41,3 +42,4 @@ namespace Mono.Security.Interface
 	}
 }
 
+#endif
