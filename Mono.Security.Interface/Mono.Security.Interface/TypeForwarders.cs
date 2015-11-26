@@ -6,6 +6,7 @@ using SSA = System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.Interface;
 
+#if MONO_FEATURE_NEWTLS
 #region New Mono 4.3.1 APIs
 
 [assembly: TypeForwardedTo (typeof (Alert))]
@@ -35,6 +36,7 @@ using Mono.Security.Interface;
 [assembly: TypeForwardedTo (typeof (CertificateValidationHelper))]
 
 #endregion
+#endif
 
 #region .NET 4.5 APIs
 
