@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Security;
 using System.Runtime.CompilerServices;
 using SSA = System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
@@ -19,6 +20,8 @@ using Mono.Security.Interface;
 [assembly: TypeForwardedTo (typeof (TlsProtocols))]
 
 [assembly: TypeForwardedTo (typeof (SSA.SslProtocols))]
+
+[assembly: TypeForwardedTo (typeof (AuthenticatedStream))]
 
 [assembly: TypeForwardedTo (typeof (X509Certificate))]
 [assembly: TypeForwardedTo (typeof (X509ContentType))]
