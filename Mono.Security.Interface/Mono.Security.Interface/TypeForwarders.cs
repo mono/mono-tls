@@ -38,6 +38,7 @@ using Mono.Security.Interface;
 
 [assembly: TypeForwardedTo (typeof (X509Certificate))]
 [assembly: TypeForwardedTo (typeof (X509CertificateCollection))]
+[assembly: TypeForwardedTo (typeof (X509Chain))]
 [assembly: TypeForwardedTo (typeof (X509ContentType))]
 [assembly: TypeForwardedTo (typeof (X509KeyStorageFlags))]
 
