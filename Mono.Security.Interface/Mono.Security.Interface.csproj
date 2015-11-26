@@ -51,9 +51,12 @@
     <Compile Include="System.Security.Authentication\CipherAlgorithmType.cs" />
     <Compile Include="System.Security.Authentication\ExchangeAlgorithmType.cs" />
     <Compile Include="System.Security.Authentication\HashAlgorithmType.cs" />
+    <Compile Include="System.Security.Cryptography.X509Certificates\X509CertificateCollection.cs" />
+    <Compile Include="System.Collections\CollectionBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Mono.Security.Interface\" />
+    <Folder Include="System.Collections\" />
   </ItemGroup>
 </Project>
