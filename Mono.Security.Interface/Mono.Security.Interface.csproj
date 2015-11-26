@@ -53,6 +53,7 @@
     <Compile Include="System.Security.Authentication\HashAlgorithmType.cs" />
     <Compile Include="System.Security.Cryptography.X509Certificates\X509CertificateCollection.cs" />
     <Compile Include="System.Collections\CollectionBase.cs" />
+    <Compile Include="Mono.Security.Interface\IMonoSslStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
