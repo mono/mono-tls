@@ -48,6 +48,9 @@
     <Compile Include="System.Security.Cryptography.X509Certificates\X509KeyStorageFlags.cs" />
     <Compile Include="System.Security.Cryptography.X509Certificates\X509ContentType.cs" />
     <Compile Include="System.Net.Security\AuthenticatedStream.cs" />
+    <Compile Include="System.Security.Authentication\CipherAlgorithmType.cs" />
+    <Compile Include="System.Security.Authentication\ExchangeAlgorithmType.cs" />
+    <Compile Include="System.Security.Authentication\HashAlgorithmType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
