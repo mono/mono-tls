@@ -1,0 +1,23 @@
+<CustomAssemblyDefinition>
+    <Name>Mono.Security.Interface</Name>
+    <Version>2.0.5.0</Version>
+    <PclVersion>v4.0</PclVersion>
+    <Profile>Profile24</Profile>
+    <PublicKeyToken>84e3aee7225169c2</PublicKeyToken>
+    <PublicKey>
+002400000480000094000000060200000024000052534131000400001100000003336d6aed4162
+4ca156ab579881fe90a576f1dfec48378fc94e4e440f4556776224e2d70c18996d91f36227f539
+fdb44340e07651f1455a489b29a7e6219a8f85e52b0f8588b4f8a857746a8468d37b556223d145
+2f3fcbaf0f269cdf1900ceb68f69485dc5887750d19571030c732331e00387d9b813a9ad528910
+87301793
+    </PublicKey>
+    <InputAssembly>Mono.Security</InputAssembly>
+    <ProfileReference>mscorlib</ProfileReference>
+    <ProfileReference>System</ProfileReference>
+    <ProfileReference>Xamarin.WebTests.PortableSecurity</ProfileReference>
+    <ImportAssembly>mscorlib</ImportAssembly>
+    <ImportAssembly>System</ImportAssembly>
+    <IncludeTypes>
+        <Type Match="namespace">Mono.Security.Interface</Type>
+    </IncludeTypes>
+</CustomAssemblyDefinition>

@@ -1,0 +1,41 @@
+<CustomAssemblyDefinition>
+    <Name>Xamarin.WebTests.PortableSecurity</Name>
+    <Version>2.0.5.0</Version>
+    <PclVersion>v4.0</PclVersion>
+    <Profile>Profile24</Profile>
+    <PublicKeyToken>3bd78831b6502434</PublicKeyToken>
+    <PublicKey>
+0024000004800000940000000602000000240000525341310004000011000000e912509e2434b3
+e4a7486b5fa61bc82849e54c98df8761ea4017c6b8f49e25c65d79c120e7941c953630525ef6fd
+666443609ee467f3480991cb46129a5f941feb90bb7e3c87eadf52346887c51d7606c7981fe496
+399d051d59e37b96fb28cca7922905b94909b171fdf0e380882112a38ccfcfc2e05129bc6e5ee0
+d0e61bdd
+    </PublicKey>
+    <InputAssembly>System</InputAssembly>
+    <ProfileReference>mscorlib</ProfileReference>
+    <ProfileReference>System</ProfileReference>
+    <ImportAssembly>mscorlib</ImportAssembly>
+    <ImportAssembly>System</ImportAssembly>
+    <IncludeTypes>
+        <Type>System.Security.Authentication.CipherAlgorithmType</Type>
+        <Type>System.Security.Authentication.ExchangeAlgorithmType</Type>
+        <Type>System.Security.Authentication.HashAlgorithmType</Type>
+        <Type>System.Security.Authentication.SslProtocols</Type>
+        <Type>System.Collections.CollectionBase</Type>
+        <Type>System.Net.Security.AuthenticatedStream</Type>
+        <Type>System.Net.Security.SslPolicyErrors</Type>
+        <Type>System.Net.Security.SslStream</Type>
+        <Type>System.Net.Security.RemoteCertificateValidationCallback</Type>
+        <Type>System.Net.Security.LocalCertificateSelectionCallback</Type>
+        <Type>System.Security.Cryptography.X509Certificates.X509Certificate</Type>
+        <Type>System.Security.Cryptography.X509Certificates.X509CertificateCollection</Type>
+        <Type>System.Security.Cryptography.X509Certificates.X509Chain</Type>
+        <Type>System.Security.Cryptography.X509Certificates.X509ContentType</Type>
+        <Type>System.Security.Cryptography.X509Certificates.X509KeyStorageFlags</Type>
+        <Type>System.Net.HttpListener</Type>
+        <Type>System.Net.HttpListenerPrefixCollection</Type>
+        <Type>System.Net.HttpListenerContext</Type>
+        <Type>System.Net.HttpListenerRequest</Type>
+        <Type>System.Net.HttpListenerResponse</Type>
+    </IncludeTypes>
+</CustomAssemblyDefinition>
