@@ -27,9 +27,9 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.AsyncTests.Portable
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Instrumentation", "Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj", "{F533A15D-8651-43F4-B293-7934638C592B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface.Facade", "Mac\Mono.Security.Interface.Facade\Mono.Security.Interface.Facade.csproj", "{D8CF5744-B13E-4134-A4BF-9E219261C1BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface", "Mac\Mono.Security.Interface\Mono.Security.Interface.csproj", "{D8CF5744-B13E-4134-A4BF-9E219261C1BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface", "Mono.Security.Interface\Mono.Security.Interface.csproj", "{21155A4B-F209-4525-9B6D-718C09B5B948}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.PortableSecurity", "Mac\Xamarin.WebTests.PortableSecurity\Xamarin.WebTests.PortableSecurity.csproj", "{BC0385D6-52A8-41D1-9E72-3AF768C42661}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,14 +47,6 @@ Global
 		{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 		{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21155A4B-F209-4525-9B6D-718C09B5B948}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
-		{21155A4B-F209-4525-9B6D-718C09B5B948}.AppStore|Any CPU.Build.0 = Debug|Any CPU
-		{21155A4B-F209-4525-9B6D-718C09B5B948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21155A4B-F209-4525-9B6D-718C09B5B948}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21155A4B-F209-4525-9B6D-718C09B5B948}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
-		{21155A4B-F209-4525-9B6D-718C09B5B948}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
-		{21155A4B-F209-4525-9B6D-718C09B5B948}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21155A4B-F209-4525-9B6D-718C09B5B948}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49780FD0-2761-4C20-ACC5-5956FFEBD51F}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
 		{49780FD0-2761-4C20-ACC5-5956FFEBD51F}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 		{49780FD0-2761-4C20-ACC5-5956FFEBD51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -95,6 +87,14 @@ Global
 		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
 		{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 		{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

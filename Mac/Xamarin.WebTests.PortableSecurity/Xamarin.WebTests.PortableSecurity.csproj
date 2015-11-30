@@ -4,32 +4,32 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{A3824ECB-B185-48C8-96F2-F4B5171366FB}</ProjectGuid>
+    <ProjectGuid>{BC0385D6-52A8-41D1-9E72-3AF768C42661}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Mono.Security.Providers.NewTls</RootNamespace>
+    <RootNamespace>Xamarin.WebTests.PortableSecurity</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
-    <AssemblyName>Mono.Security.Providers.NewTls</AssemblyName>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <AssemblyName>Xamarin.WebTests.PortableSecurity</AssemblyName>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\external\web-tests\Xamarin.AsyncTests.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <Profiling>false</Profiling>
     <UseRefCounting>false</UseRefCounting>
     <UseSGen>false</UseSGen>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
-    <Profiling>false</Profiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -38,52 +38,29 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <Profiling>false</Profiling>
     <UseRefCounting>false</UseRefCounting>
     <UseSGen>false</UseSGen>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
-    <Profiling>false</Profiling>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
-    <Reference Include="System">
-      <Aliases>PrebuiltSystem</Aliases>
-    </Reference>
-    <Reference Include="Mono.Security" />
-    <Reference Include="Mono.Security.Providers.NewSystemSource">
-      <Aliases>NewSystemSource</Aliases>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls\MonoNewTlsStream.cs">
-      <Link>MonoNewTlsStream.cs</Link>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\PCL\Xamarin.WebTests.PortableSecurity.AssemblyInfo.cs">
+      <Link>Xamarin.WebTests.PortableSecurity.AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls\MonoNewTlsStreamFactory.cs">
-      <Link>MonoNewTlsStreamFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls\NewTlsProvider.cs">
-      <Link>NewTlsProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls\TlsContextWrapper.cs">
-      <Link>TlsContextWrapper.cs</Link>
+    <Compile Include="..\..\PCL\Xamarin.WebTests.PortableSecurity.TypeForwarders.cs">
+      <Link>Xamarin.WebTests.PortableSecurity.TypeForwarders.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
-      <Project>{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}</Project>
-      <Name>Mono.Security.NewTls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
-      <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
-      <Name>Mono.Security.NewTls.Instrumentation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mono.Security.Interface\Mono.Security.Interface.csproj">
-      <Project>{D8CF5744-B13E-4134-A4BF-9E219261C1BF}</Project>
-      <Name>Mono.Security.Interface</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
