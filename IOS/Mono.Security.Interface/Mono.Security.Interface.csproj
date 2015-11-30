@@ -41,11 +41,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="..\..\Mono.Security.Interface\Mono.Security.Interface\TypeForwarders.cs">
-      <Link>TypeForwarders.cs</Link>
+    <Compile Include="..\..\PCL\Mono.Security.Interface.AssemblyInfo.cs">
+      <Link>Mono.Security.Interface.AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.Interface\Properties\AssemblyInfo.cs">
-      <Link>AssemblyInfo.cs</Link>
+    <Compile Include="..\..\PCL\Mono.Security.Interface.TypeForwarders.cs">
+      <Link>Mono.Security.Interface.TypeForwarders.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>
