@@ -52,11 +52,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="..\..\Mono.Security.Interface\Properties\AssemblyInfo.cs">
-      <Link>AssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\PCL\Mono.Security.Interface.TypeForwarders.cs">
       <Link>Mono.Security.Interface.TypeForwarders.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PCL\Mono.Security.Interface.AssemblyInfo.cs">
+      <Link>Mono.Security.Interface.AssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>

@@ -32,8 +32,13 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="..\..\PCL\Xamarin.WebTests.PortableSecurity.AssemblyInfo.cs">
+      <Link>Xamarin.WebTests.PortableSecurity.AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PCL\Xamarin.WebTests.PortableSecurity.TypeForwarders.cs">
+      <Link>Xamarin.WebTests.PortableSecurity.TypeForwarders.cs</Link>
+    </Compile>
+  </ItemGroup>
 </Project>
