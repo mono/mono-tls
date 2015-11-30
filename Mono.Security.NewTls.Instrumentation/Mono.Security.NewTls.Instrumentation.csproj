@@ -63,12 +63,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Mono.Security.Interface\Mono.Security.Interface.csproj">
-      <Project>{21155A4B-F209-4525-9B6D-718C09B5B948}</Project>
-      <Name>Mono.Security.Interface</Name>
-    </ProjectReference>
+    <Folder Include="Mono.Security.NewTls\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mono.Security.NewTls\" />
+    <Reference Include="Xamarin.WebTests.PortableSecurity">
+      <HintPath>..\PCL\Xamarin.WebTests.PortableSecurity.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security.Interface">
+      <HintPath>..\PCL\Mono.Security.Interface.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
