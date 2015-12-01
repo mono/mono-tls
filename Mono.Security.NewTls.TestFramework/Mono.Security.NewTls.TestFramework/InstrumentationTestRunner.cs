@@ -146,7 +146,7 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 		}
 
-		protected static ICertificateValidator AcceptAnyCertificate {
+		protected static CertificateValidator AcceptAnyCertificate {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptAll (); }
 		}
 

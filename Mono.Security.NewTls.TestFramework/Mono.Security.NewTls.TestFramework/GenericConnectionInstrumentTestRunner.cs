@@ -135,11 +135,11 @@ namespace Mono.Security.NewTls.TestFramework
 			};
 		}
 
-		protected static ICertificateValidator AcceptFromLocalCA {
+		protected static CertificateValidator AcceptFromLocalCA {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptFromCA (ResourceManager.LocalCACertificate); }
 		}
 
-		protected static ICertificateValidator AcceptSelfSigned {
+		protected static CertificateValidator AcceptSelfSigned {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptThisCertificate (ResourceManager.SelfSignedServerCertificate); }
 		}
 

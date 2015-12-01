@@ -74,23 +74,23 @@ namespace Mono.Security.NewTls.TestProvider
 			return clientCertificateCollection;
 		}
 
-		internal static void AddCertificateValidator (MSI.MonoTlsSettings settings, ICertificateValidator validator)
+		internal static void AddCertificateValidator (MSI.MonoTlsSettings settings, CertificateValidator validator)
 		{
 			if (validator == null)
 				return;
 
 			settings.RemoteCertificateValidationCallback = (s, c, ch, e) => {
-				return ((CertificateValidator)validator).ValidationCallback (s, c, ch, (SslPolicyErrors)e);
+				return validator.ValidationCallback (s, c, ch, (SslPolicyErrors)e);
 			};
 		}
 
-		internal static void AddCertificateSelector (MSI.MonoTlsSettings settings, ICertificateSelector selector)
+		internal static void AddCertificateSelector (MSI.MonoTlsSettings settings, CertificateSelector selector)
 		{
 			if (selector == null)
 				return;
 
 			settings.ClientCertificateSelectionCallback = (t, lc, rc, ai) => {
-				return ((CertificateSelector)selector).SelectionCallback (null, t, lc, rc, ai);
+				return selector.SelectionCallback (null, t, lc, rc, ai);
 			};
 		}
 	}
