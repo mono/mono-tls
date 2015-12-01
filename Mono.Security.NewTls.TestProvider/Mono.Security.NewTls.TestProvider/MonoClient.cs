@@ -1,6 +1,4 @@
-﻿extern alias NewSystemSource;
-
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,10 +10,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Authentication;
 
-using NewSslPolicyErrors = NewSystemSource::System.Net.Security.SslPolicyErrors;
-using SslProtocols = System.Security.Authentication.SslProtocols;
-using EncryptionPolicy = NewSystemSource::System.Net.Security.EncryptionPolicy;
-
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
@@ -26,9 +20,6 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
-
-using SSCX = System.Security.Cryptography.X509Certificates;
-using MX = Mono.Security.X509;
 
 namespace Mono.Security.NewTls.TestProvider
 {
