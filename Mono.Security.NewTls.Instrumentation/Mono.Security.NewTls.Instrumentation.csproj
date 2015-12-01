@@ -67,10 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.WebTests.PortableSecurity">
-      <HintPath>..\PCL\Xamarin.WebTests.PortableSecurity.dll</HintPath>
+      <HintPath>..\external\web-tests\PCL\Xamarin.WebTests.PortableSecurity.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security.Interface">
-      <HintPath>..\PCL\Mono.Security.Interface.dll</HintPath>
+      <HintPath>..\external\web-tests\PCL\Mono.Security.Interface.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

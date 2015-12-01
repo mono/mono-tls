@@ -54,10 +54,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="..\..\PCL\Mono.Security.Interface.AssemblyInfo.cs">
+    <Compile Include="..\..\external\web-tests\PCL\Mono.Security.Interface.AssemblyInfo.cs">
       <Link>Mono.Security.Interface.AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\PCL\Mono.Security.Interface.TypeForwarders.cs">
+    <Compile Include="..\..\external\web-tests\PCL\Mono.Security.Interface.TypeForwarders.cs">
       <Link>Mono.Security.Interface.TypeForwarders.cs</Link>
     </Compile>
   </ItemGroup>

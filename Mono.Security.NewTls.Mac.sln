@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Instru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface", "Mac\Mono.Security.Interface\Mono.Security.Interface.csproj", "{D8CF5744-B13E-4134-A4BF-9E219261C1BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.PortableSecurity", "Mac\Xamarin.WebTests.PortableSecurity\Xamarin.WebTests.PortableSecurity.csproj", "{BC0385D6-52A8-41D1-9E72-3AF768C42661}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.PortableSecurity.Mac", "external\web-tests\Mac\Xamarin.WebTests.PortableSecurity.Mac\Xamarin.WebTests.PortableSecurity.Mac.csproj", "{BC0385D6-52A8-41D1-9E72-3AF768C42661}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

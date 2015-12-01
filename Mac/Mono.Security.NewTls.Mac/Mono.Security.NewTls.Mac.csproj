@@ -127,6 +127,10 @@
       <Project>{D8CF5744-B13E-4134-A4BF-9E219261C1BF}</Project>
       <Name>Mono.Security.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Mac\Xamarin.WebTests.PortableSecurity.Mac\Xamarin.WebTests.PortableSecurity.Mac.csproj">
+      <Project>{BC0385D6-52A8-41D1-9E72-3AF768C42661}</Project>
+      <Name>Xamarin.WebTests.PortableSecurity.Mac</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\Info.plist">

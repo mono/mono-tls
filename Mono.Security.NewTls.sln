@@ -29,7 +29,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.AsyncTests.Portable
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface", "Console\Mono.Security.Interface\Mono.Security.Interface.csproj", "{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.PortableSecurity", "Console\Xamarin.WebTests.PortableSecurity\Xamarin.WebTests.PortableSecurity.csproj", "{926ED252-2819-43C0-A534-F662F4E4F87B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.PortableSecurity.Console", "external\web-tests\Console\Xamarin.WebTests.PortableSecurity.Console\Xamarin.WebTests.PortableSecurity.Console.csproj", "{926ED252-2819-43C0-A534-F662F4E4F87B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

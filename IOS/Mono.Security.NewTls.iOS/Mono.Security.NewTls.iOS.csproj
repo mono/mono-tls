@@ -188,5 +188,9 @@
       <Project>{C38F2801-D820-4CCE-92E9-62D4C4FFA2FF}</Project>
       <Name>Mono.Security.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\IOS\Xamarin.WebTests.PortableSecurity.iOS\Xamarin.WebTests.PortableSecurity.iOS.csproj">
+      <Project>{D2ADF33E-0152-4AFB-BF71-588BCCB5DEE7}</Project>
+      <Name>Xamarin.WebTests.PortableSecurity.iOS</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
