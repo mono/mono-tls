@@ -30,7 +30,6 @@ using System.Net.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using MSI = Mono.Security.Interface;
-using Mono.Security.Providers.NewTls;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
@@ -40,7 +39,7 @@ using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.HttpClient;
 using Xamarin.WebTests.Server;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	using TestFramework;
 
@@ -65,7 +64,8 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public IHttpWebRequest CreateWebRequest (HttpWebRequest request)
 		{
-			return new HttpWebRequestImpl (request);
+			var provider = DependencyInjector.Get<IPortableWebSupport> ();
+			return provider.DefaultHttpProvider.CreateWebRequest (request);
 		}
 
 		public HttpServer CreateServer (IPortableEndPoint clientAndPoint, IPortableEndPoint listenAddress, ListenerFlags flags, ConnectionParameters parameters = null)

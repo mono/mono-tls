@@ -10,10 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\CryptoProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeCryptoProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeOpenSsl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeOpenSslError.cs" />
@@ -22,14 +18,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\SymmetricAlgorithmProxy.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoHttpProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\CallbackHelpers.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoSslStream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslConnectionProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeOpenSslProtocol.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\NativeCryptoHashType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnectionProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NewTlsDependencyProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoProviderExtensions.cs" />
   </ItemGroup>
 </Project>

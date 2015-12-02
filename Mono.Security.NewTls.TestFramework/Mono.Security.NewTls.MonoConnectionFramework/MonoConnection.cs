@@ -37,7 +37,6 @@ using System.Security.Cryptography.X509Certificates;
 
 using Mono.Security.NewTls;
 using MSI = Mono.Security.Interface;
-using Mono.Security.Providers.NewTls;
 using Mono.Security.NewTls.TestFramework;
 
 using Xamarin.AsyncTests;
@@ -45,7 +44,7 @@ using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	using TestFramework;
 

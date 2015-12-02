@@ -12,8 +12,6 @@ using System.Security.Authentication;
 
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
-using Mono.Security.NewTls.TestProvider;
-using Mono.Security.Providers.NewTls;
 using MSI = Mono.Security.Interface;
 
 using Xamarin.AsyncTests;
@@ -21,7 +19,7 @@ using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	class MonoClient : MonoConnection, IMonoClient
 	{

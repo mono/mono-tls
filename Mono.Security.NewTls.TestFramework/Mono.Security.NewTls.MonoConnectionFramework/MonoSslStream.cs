@@ -33,21 +33,22 @@ using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.ConnectionFramework;
 
 using MSI = Mono.Security.Interface;
-using Mono.Security.Providers.NewTls;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	using TestFramework;
 
-	class MonoSslStream : ISslStream, IMonoSslStream
+	public class MonoSslStream : ISslStream, IMonoSslStream
 	{
+		readonly MonoConnectionProvider provider;
+		readonly IMonoNewTlsStream monoNewTlsStream;
 		readonly MSI.IMonoSslStream stream;
-		readonly MonoNewTlsStream monoNewTlsStream;
 
-		public MonoSslStream (MSI.IMonoSslStream stream)
+		public MonoSslStream (MSI.IMonoSslStream stream, IMonoProviderExtensions monoExtensions = null)
 		{
+			if (monoExtensions != null)
+				monoNewTlsStream = null;
 			this.stream = stream;
-			this.monoNewTlsStream = stream as MonoNewTlsStream;
 		}
 
 		public bool IsAuthenticated {
@@ -82,7 +83,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public bool SupportsCleanShutdown {
-			get { return monoNewTlsStream != null; }
+			get { return monoExtensions != null; }
 		}
 
 		public ProtocolVersions ProtocolVersion {
@@ -91,26 +92,26 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public Exception LastError {
 			get {
-				if (monoNewTlsStream != null)
-					return monoNewTlsStream.LastError;
+				if (monoExtensions != null)
+					return monoExtensions.LastError;
 				return null;
 			}
 		}
 
 		public bool SupportsConnectionInfo {
-			get { return monoNewTlsStream != null; }
+			get { return monoExtensions != null; }
 		}
 
 		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
 		{
-			return monoNewTlsStream.GetConnectionInfo ();
+			return monoExtensions.GetConnectionInfo ();
 		}
 
 		public async Task<bool> TryCleanShutdown ()
 		{
-			if (monoNewTlsStream == null)
+			if (monoExtensions == null)
 				return false;
-			await monoNewTlsStream.Shutdown ();
+			await monoExtensions.Shutdown ();
 			return true;
 		}
 
@@ -120,12 +121,12 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public bool SupportsRenegotiation {
-			get { return monoNewTlsStream != null; }
+			get { return monoExtensions != null; }
 		}
 
 		public Task RequestRenegotiation ()
 		{
-			return monoNewTlsStream.RequestRenegotiation ();
+			return monoExtensions.RequestRenegotiation ();
 		}
 	}
 }

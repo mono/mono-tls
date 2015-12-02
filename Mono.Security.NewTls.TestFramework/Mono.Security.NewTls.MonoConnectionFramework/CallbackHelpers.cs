@@ -35,7 +35,7 @@ using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	static class CallbackHelpers
 	{
@@ -62,13 +62,13 @@ namespace Mono.Security.NewTls.TestProvider
 			return ((CertificateValidator)validator).ValidationCallback;
 		}
 
-		internal static X509Certificate2Collection GetClientCertificates (ConnectionParameters parameters)
+		internal static X509CertificateCollection GetClientCertificates (ConnectionParameters parameters)
 		{
 			if (parameters.ClientCertificate == null)
 				return null;
 
-			var clientCertificateCollection = new X509Certificate2Collection ();
-			var certificate = (X509Certificate2)CertificateProvider.GetCertificate (parameters.ClientCertificate);
+			var clientCertificateCollection = new X509CertificateCollection ();
+			var certificate = parameters.ClientCertificate.Certificate;
 			clientCertificateCollection.Add (certificate);
 
 			return clientCertificateCollection;

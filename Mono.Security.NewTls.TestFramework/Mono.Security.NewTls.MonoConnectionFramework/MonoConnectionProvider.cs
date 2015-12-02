@@ -34,40 +34,35 @@ using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Server;
 
 using MSI = Mono.Security.Interface;
-using Mono.Security.Providers.NewTls;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	using TestFramework;
 
-	class MonoConnectionProvider : ConnectionProvider, IMonoConnectionProvider, ISslStreamProvider
+	public class MonoConnectionProvider : ConnectionProvider, IMonoConnectionProvider, ISslStreamProvider
 	{
 		readonly MSI.MonoTlsProvider tlsProvider;
+		readonly IMonoProviderExtensions monoExtensions;
 		readonly MonoHttpProvider httpProvider;
-		readonly bool enableMonoExtensions;
 
-		public MonoConnectionProvider (MonoConnectionProviderFactory factory, ConnectionProviderType type, MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
-			: base (factory, type, GetFlags (tlsProvider, enableMonoExtensions))
+		public MonoConnectionProvider (ConnectionProviderFactory factory, ConnectionProviderType type, ConnectionProviderFlags flags, MSI.MonoTlsProvider tlsProvider, IMonoProviderExtensions monoExtensions)
+			: base (factory, type, flags)
 		{
 			this.tlsProvider = tlsProvider;
 			this.httpProvider = new MonoHttpProvider (this);
-			this.enableMonoExtensions = enableMonoExtensions;
-		}
-
-		static ConnectionProviderFlags GetFlags (MSI.MonoTlsProvider tlsProvider, bool enableMonoExtensions)
-		{
-			var flags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
-			if (tlsProvider is NewTlsProvider)
-				flags |= ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers;
-			return flags;
+			this.monoExtensions = monoExtensions;
 		}
 
 		public bool SupportsMonoExtensions {
-			get { return enableMonoExtensions; }
+			get { return monoExtensions != null; }
 		}
 
 		public bool SupportsInstrumentation {
-			get { return enableMonoExtensions && (tlsProvider is NewTlsProvider); }
+			get { return monoExtensions != null && monoExtensions.SupportsInstrumentation; }
+		}
+
+		public IMonoProviderExtensions MonoExtensions {
+			get { return monoExtensions; }
 		}
 
 		public override ProtocolVersions SupportedProtocols {
@@ -107,7 +102,7 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		public bool IsNewTls {
-			get { return tlsProvider is NewTlsProvider; }
+			get { return monoExtensions != null && monoExtensions.IsNewTls; }
 		}
 
 		protected override ISslStreamProvider GetSslStreamProvider ()
@@ -143,7 +138,7 @@ namespace Mono.Security.NewTls.TestProvider
 		public MonoSslStream CreateServerStream (Stream stream, ConnectionParameters parameters)
 		{
 			var settings = new MSI.MonoTlsSettings ();
-			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
+			var certificate = parameters.ServerCertificate.Certificate;
 
 			var protocol = GetProtocol (parameters, true);
 			CallbackHelpers.AddCertificateValidator (settings, parameters.ServerCertificateValidator);
@@ -153,7 +148,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
 			sslStream.AuthenticateAsServer (certificate, askForCert, protocol, false);
 
-			return new MonoSslStream (sslStream);
+			return new MonoSslStream (sslStream, monoExtensions);
 		}
 
 		async Task<ISslStream> ISslStreamProvider.CreateServerStreamAsync (Stream stream, ConnectionParameters parameters, CancellationToken cancellationToken)
@@ -168,14 +163,14 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public async Task<MonoSslStream> CreateServerStreamAsync (Stream stream, ConnectionParameters parameters, MSI.MonoTlsSettings settings, CancellationToken cancellationToken)
 		{
-			var certificate = CertificateProvider.GetCertificate (parameters.ServerCertificate);
+			var certificate = parameters.ServerCertificate.Certificate;
 			var protocol = GetProtocol (parameters, true);
 
 			CallbackHelpers.AddCertificateValidator (settings, parameters.ServerCertificateValidator);
 
 			var askForCert = parameters.AskForClientCertificate || parameters.RequireClientCertificate;
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
-			var monoSslStream = new MonoSslStream (sslStream);
+			var monoSslStream = new MonoSslStream (sslStream, monoExtensions);
 
 			try {
 				await sslStream.AuthenticateAsServerAsync (certificate, askForCert, protocol, false).ConfigureAwait (false);
@@ -208,7 +203,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var clientCertificates = CallbackHelpers.GetClientCertificates (parameters);
 
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
-			var monoSslStream = new MonoSslStream (sslStream);
+			var monoSslStream = new MonoSslStream (sslStream, monoExtensions);
 
 			try {
 				await sslStream.AuthenticateAsClientAsync (targetHost, clientCertificates, protocol, false).ConfigureAwait (false);

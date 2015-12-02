@@ -10,8 +10,6 @@ using System.Collections.Generic;
 
 using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
-using Mono.Security.NewTls.TestProvider;
-using Mono.Security.Providers.NewTls;
 using MSI = Mono.Security.Interface;
 
 using SSCX = System.Security.Cryptography.X509Certificates;
@@ -22,7 +20,7 @@ using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	class MonoServer : MonoConnection, IMonoServer
 	{

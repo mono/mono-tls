@@ -35,6 +35,7 @@ using Mono.Security.Providers.OldTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
+	using MonoConnectionFramework;
 	using TestFramework;
 
 	class MonoConnectionProviderFactory : ConnectionProviderFactory
@@ -51,6 +52,10 @@ namespace Mono.Security.NewTls.TestProvider
 		readonly OpenSslConnectionProvider openSslConnectionProvider;
 		#endif
 		readonly ManualConnectionProvider manualConnectionProvider;
+		readonly MonoProviderExtensions monoExtensions;
+
+		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
+		const ConnectionProviderFlags NewTlsFlags = DefaultFlags | ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers;
 
 		internal MonoConnectionProviderFactory ()
 		{
@@ -60,14 +65,15 @@ namespace Mono.Security.NewTls.TestProvider
 			Install (dotNetConnectionProvider);
 
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
-			newTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.NewTLS, newTlsProvider, false);
+			monoExtensions = new MonoProviderExtensions (newTlsProvider);
+			newTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.NewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
 			Install (newTlsConnectionProvider);
 
 			oldTlsProvider = DependencyInjector.Get<OldTlsProvider> ();
-			oldTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithOldTLS, oldTlsProvider, false);
+			oldTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithOldTLS, DefaultFlags, oldTlsProvider, null);
 			Install (oldTlsConnectionProvider);
 
-			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithNewTLS, newTlsProvider, true);
+			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithNewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
 			Install (monoWithNewTlsConnectionProvider);
 
 			#if !__MOBILE__
