@@ -70,11 +70,6 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			throw new InvalidOperationException ();
 		}
-
-		protected override IHttpProvider GetHttpProvider ()
-		{
-			throw new InvalidOperationException ();
-		}
 	}
 }
 

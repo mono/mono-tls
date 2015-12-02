@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.Console"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.Framework", "external\web-tests\Xamarin.WebTests.Framework\Xamarin.WebTests.Framework.csproj", "{85371459-6509-4D96-A95D-862399E0F0BE}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.WebTests.PortableImpl", "external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.shproj", "{D578985A-B8C0-4083-8F3E-1AE2B680E85B}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{C0AB21A9-9053-49F2-9B4C-C90CF22263A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Instrumentation", "Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj", "{F533A15D-8651-43F4-B293-7934638C592B}"
@@ -31,12 +29,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.PortableSecurity.Console", "external\web-tests\Console\Xamarin.WebTests.PortableSecurity.Console\Xamarin.WebTests.PortableSecurity.Console.csproj", "{926ED252-2819-43C0-A534-F662F4E4F87B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.TestProvider.Console", "external\web-tests\Console\Xamarin.WebTests.TestProvider.Console\Xamarin.WebTests.TestProvider.Console.csproj", "{142D593E-5162-4C41-94CD-9656052F58EC}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.WebTests.TestProvider", "external\web-tests\Xamarin.WebTests.TestProvider\Xamarin.WebTests.TestProvider.shproj", "{D578985A-B8C0-4083-8F3E-1AE2B680E85B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{142D593E-5162-4C41-94CD-9656052F58EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142D593E-5162-4C41-94CD-9656052F58EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142D593E-5162-4C41-94CD-9656052F58EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142D593E-5162-4C41-94CD-9656052F58EC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}.Debug|Any CPU.ActiveCfg = DebugNewTls|Any CPU
 		{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}.Debug|Any CPU.Build.0 = DebugNewTls|Any CPU
 		{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}.Release|Any CPU.ActiveCfg = ReleaseNewTls|Any CPU

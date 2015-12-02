@@ -13,6 +13,7 @@ using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -42,8 +43,9 @@ namespace Mono.Security.NewTls.TestProvider
 		{
 			var endpoint = GetEndPoint ();
 			if (Parameters.ClientCertificate != null) {
+				var provider = DependencyInjector.Get<ICertificateProvider> ();
 				string password;
-				var data = CertificateProvider.GetRawCertificateData (Parameters.ClientCertificate, out password);
+				var data = provider.GetRawCertificateData (Parameters.ClientCertificate, out password);
 				openssl.SetCertificate (data, password);
 			}
 

@@ -14,6 +14,8 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		bool SupportsInstrumentation {
 			get;
 		}
+
+		IMonoNewTlsStream GetStreamExtension (IMonoSslStream stream);
 	}
 }
 

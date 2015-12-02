@@ -42,7 +42,6 @@ using Xamarin.WebTests.Resources;
 [assembly: RequireDependency (typeof (ICryptoProvider))]
 [assembly: RequireDependency (typeof (ICertificateProvider))]
 [assembly: RequireDependency (typeof (IPortableSupport))]
-[assembly: RequireDependency (typeof (IPortableWebSupport))]
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -107,11 +106,6 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		protected override bool HasMonoVersion (Version version)
-		{
-			return true;
-		}
-
-		protected override bool IsNetworkAvailable ()
 		{
 			return true;
 		}

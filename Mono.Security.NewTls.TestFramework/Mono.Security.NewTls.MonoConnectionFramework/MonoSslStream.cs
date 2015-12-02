@@ -40,14 +40,13 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 
 	public class MonoSslStream : ISslStream, IMonoSslStream
 	{
-		readonly MonoConnectionProvider provider;
 		readonly IMonoNewTlsStream monoNewTlsStream;
 		readonly MSI.IMonoSslStream stream;
 
 		public MonoSslStream (MSI.IMonoSslStream stream, IMonoProviderExtensions monoExtensions = null)
 		{
 			if (monoExtensions != null)
-				monoNewTlsStream = null;
+				monoNewTlsStream = monoExtensions.GetStreamExtension (stream);
 			this.stream = stream;
 		}
 
@@ -83,7 +82,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		}
 
 		public bool SupportsCleanShutdown {
-			get { return monoExtensions != null; }
+			get { return monoNewTlsStream != null; }
 		}
 
 		public ProtocolVersions ProtocolVersion {
@@ -92,26 +91,26 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 
 		public Exception LastError {
 			get {
-				if (monoExtensions != null)
-					return monoExtensions.LastError;
+				if (monoNewTlsStream != null)
+					return monoNewTlsStream.LastError;
 				return null;
 			}
 		}
 
 		public bool SupportsConnectionInfo {
-			get { return monoExtensions != null; }
+			get { return monoNewTlsStream != null; }
 		}
 
 		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
 		{
-			return monoExtensions.GetConnectionInfo ();
+			return monoNewTlsStream.GetConnectionInfo ();
 		}
 
 		public async Task<bool> TryCleanShutdown ()
 		{
-			if (monoExtensions == null)
+			if (monoNewTlsStream == null)
 				return false;
-			await monoExtensions.Shutdown ();
+			await monoNewTlsStream.Shutdown ();
 			return true;
 		}
 
@@ -121,12 +120,12 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		}
 
 		public bool SupportsRenegotiation {
-			get { return monoExtensions != null; }
+			get { return monoNewTlsStream != null; }
 		}
 
 		public Task RequestRenegotiation ()
 		{
-			return monoExtensions.RequestRenegotiation ();
+			return monoNewTlsStream.RequestRenegotiation ();
 		}
 	}
 }

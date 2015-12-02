@@ -56,21 +56,9 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			get { return true; }
 		}
 
-		public IHttpWebRequest CreateWebRequest (Uri uri)
+		public HttpWebRequest CreateWebRequest (Uri uri)
 		{
-			var request = MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, connectionProvider.MonoTlsProvider);
-			return CreateWebRequest (request);
-		}
-
-		public IHttpWebRequest CreateWebRequest (HttpWebRequest request)
-		{
-			var provider = DependencyInjector.Get<IPortableWebSupport> ();
-			return provider.DefaultHttpProvider.CreateWebRequest (request);
-		}
-
-		public HttpServer CreateServer (IPortableEndPoint clientAndPoint, IPortableEndPoint listenAddress, ListenerFlags flags, ConnectionParameters parameters = null)
-		{
-			return new HttpServer (this, clientAndPoint, listenAddress, flags, parameters);
+			return MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, connectionProvider.MonoTlsProvider);
 		}
 
 		public bool SupportsHttpClient {
@@ -82,8 +70,8 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			throw new InvalidOperationException ();
 		}
 
-		public ISslStreamProvider SslStreamProvider {
-			get { return connectionProvider.SslStreamProvider; }
+		public bool SupportsPerRequestCertificateValidator {
+			get { return true; }
 		}
 	}
 }

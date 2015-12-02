@@ -12,6 +12,7 @@ using Xamarin.AsyncTests;
 using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -40,8 +41,10 @@ namespace Mono.Security.NewTls.TestProvider
 			if (!IPAddress.IsLoopback (endpoint.Address) && endpoint.Address != IPAddress.Any)
 				throw new InvalidOperationException ();
 
+			var provider = DependencyInjector.Get<ICertificateProvider> ();
+
 			string password;
-			var data = CertificateProvider.GetRawCertificateData (Certificate, out password);
+			var data = provider.GetRawCertificateData (Certificate, out password);
 			openssl.SetCertificate (data, password);
 			openssl.Bind (endpoint);
 		}

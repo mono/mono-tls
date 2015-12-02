@@ -114,11 +114,6 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			get { return tlsProvider; }
 		}
 
-		protected override IHttpProvider GetHttpProvider ()
-		{
-			return httpProvider;
-		}
-
 		SslProtocols GetProtocol (ConnectionParameters parameters, bool server)
 		{
 			var protocol = (ProtocolVersions)tlsProvider.SupportedProtocols;
@@ -128,6 +123,15 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			if (protocol == ProtocolVersions.Unspecified)
 				throw new NotSupportedException ();
 			return (SslProtocols)protocol;
+		}
+
+		public bool SupportsWebRequest {
+			get { return true; }
+		}
+
+		public HttpWebRequest CreateWebRequest (Uri uri)
+		{
+			return MSI.MonoTlsProviderFactory.CreateHttpsRequest (uri, tlsProvider);
 		}
 
 		ISslStream ISslStreamProvider.CreateServerStream (Stream stream, ConnectionParameters parameters)
