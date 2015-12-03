@@ -38,52 +38,58 @@ namespace Mono.Security.NewTls.TestProvider
 	using MonoConnectionFramework;
 	using TestFramework;
 
-	class MonoConnectionProviderFactory : ConnectionProviderFactory
+	class MonoConnectionProviderFactory : IConnectionProviderFactoryExtension, IDefaultHttpSettings
 	{
-		readonly MSI.MonoTlsProvider newTlsProvider;
-		readonly MSI.MonoTlsProvider oldTlsProvider;
-		readonly DotNetSslStreamProvider dotNetStreamProvider;
-		readonly DotNetConnectionProvider dotNetConnectionProvider;
-		readonly MonoConnectionProvider newTlsConnectionProvider;
-		readonly MonoConnectionProvider oldTlsConnectionProvider;
-		readonly MonoConnectionProvider monoWithNewTlsConnectionProvider;
+		MSI.MonoTlsProvider newTlsProvider;
+		MSI.MonoTlsProvider oldTlsProvider;
+		DotNetSslStreamProvider dotNetStreamProvider;
+		DotNetConnectionProvider dotNetConnectionProvider;
+		MonoConnectionProvider newTlsConnectionProvider;
+		MonoConnectionProvider oldTlsConnectionProvider;
+		MonoConnectionProvider monoWithNewTlsConnectionProvider;
 		#if !__MOBILE__
-		readonly OpenSslConnectionProvider openSslConnectionProvider;
+		OpenSslConnectionProvider openSslConnectionProvider;
 		#endif
-		readonly ManualConnectionProvider manualConnectionProvider;
-		readonly MonoProviderExtensions monoExtensions;
+		ManualConnectionProvider manualConnectionProvider;
+		MonoProviderExtensions monoExtensions;
 
 		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
 		const ConnectionProviderFlags NewTlsFlags = DefaultFlags | ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers;
 
-		internal MonoConnectionProviderFactory ()
+		public void Initialize (ConnectionProviderFactory factory)
 		{
 			dotNetStreamProvider = new DotNetSslStreamProvider ();
-			dotNetConnectionProvider = new DotNetConnectionProvider (this, ConnectionProviderType.DotNet, dotNetStreamProvider);
-			Install (dotNetConnectionProvider);
+			dotNetConnectionProvider = new DotNetConnectionProvider (factory, ConnectionProviderType.DotNet, dotNetStreamProvider);
+			factory.Install (dotNetConnectionProvider);
 
 			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
 			monoExtensions = new MonoProviderExtensions (newTlsProvider);
-			newTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.NewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
-			Install (newTlsConnectionProvider);
+			newTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.NewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
+			factory.Install (newTlsConnectionProvider);
 
 			oldTlsProvider = DependencyInjector.Get<OldTlsProvider> ();
-			oldTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithOldTLS, DefaultFlags, oldTlsProvider, null);
-			Install (oldTlsConnectionProvider);
+			oldTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithOldTLS, DefaultFlags, oldTlsProvider, null);
+			factory.Install (oldTlsConnectionProvider);
 
-			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (this, ConnectionProviderType.MonoWithNewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
-			Install (monoWithNewTlsConnectionProvider);
+			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithNewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
+			factory.Install (monoWithNewTlsConnectionProvider);
 
 			#if !__MOBILE__
-			openSslConnectionProvider = new OpenSslConnectionProvider (this);
-			Install (openSslConnectionProvider);
+			openSslConnectionProvider = new OpenSslConnectionProvider (factory);
+			factory.Install (openSslConnectionProvider);
 			#endif
 
-			manualConnectionProvider = new ManualConnectionProvider (this, ConnectionProviderFlags.IsExplicit);
-			Install (manualConnectionProvider);
+			manualConnectionProvider = new ManualConnectionProvider (factory, ConnectionProviderFlags.IsExplicit);
+			factory.Install (manualConnectionProvider);
+
+			DependencyInjector.RegisterDefaults<IDefaultHttpSettings> (2, () => this);
 		}
 
-		public override ISslStreamProvider DefaultSslStreamProvider {
+		public bool InstallDefaultCertificateValidator {
+			get { return false; }
+		}
+
+		public ISslStreamProvider DefaultSslStreamProvider {
 			get { return newTlsConnectionProvider; }
 		}
 	}

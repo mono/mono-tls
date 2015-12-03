@@ -46,7 +46,8 @@ namespace Mono.Security.NewTls.TestProvider
 	{
 		protected virtual ConnectionProviderFactory CreateConnectionProviderFactory ()
 		{
-			return new MonoConnectionProviderFactory ();
+			// return new MonoConnectionProviderFactory ();
+			throw new InvalidOperationException ();
 		}
 
 		public virtual void Initialize ()
