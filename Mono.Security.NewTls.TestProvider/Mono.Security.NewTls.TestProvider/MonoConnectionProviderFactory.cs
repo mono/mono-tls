@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Net;
+using System.Net.Security;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
@@ -62,12 +64,14 @@ namespace Mono.Security.NewTls.TestProvider
 			dotNetConnectionProvider = new DotNetConnectionProvider (factory, ConnectionProviderType.DotNet, dotNetStreamProvider);
 			factory.Install (dotNetConnectionProvider);
 
-			newTlsProvider = DependencyInjector.Get<NewTlsProvider> ();
+			newTlsProvider = new NewTlsProvider ();
+			MSI.MonoTlsProviderFactory.InstallProvider (newTlsProvider);
+
 			monoExtensions = new MonoProviderExtensions (newTlsProvider);
 			newTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.NewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
 			factory.Install (newTlsConnectionProvider);
 
-			oldTlsProvider = DependencyInjector.Get<OldTlsProvider> ();
+			oldTlsProvider = new OldTlsProvider ();
 			oldTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithOldTLS, DefaultFlags, oldTlsProvider, null);
 			factory.Install (oldTlsConnectionProvider);
 
@@ -83,6 +87,8 @@ namespace Mono.Security.NewTls.TestProvider
 			factory.Install (manualConnectionProvider);
 
 			DependencyInjector.RegisterDefaults<IDefaultHttpSettings> (2, () => this);
+
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 		}
 
 		public bool InstallDefaultCertificateValidator {

@@ -44,28 +44,9 @@ namespace Mono.Security.NewTls.TestProvider
 
 	public abstract class NewTlsDependencyProvider : IDependencyProvider
 	{
-		protected virtual ConnectionProviderFactory CreateConnectionProviderFactory ()
-		{
-			// return new MonoConnectionProviderFactory ();
-			throw new InvalidOperationException ();
-		}
-
 		public virtual void Initialize ()
 		{
-			DependencyInjector.RegisterDependency<NewTlsProvider> (() => {
-				var newTlsProvider = new NewTlsProvider ();
-				MonoTlsProviderFactory.InstallProvider (newTlsProvider);
-				return newTlsProvider;
-			});
-
-			DependencyInjector.RegisterDependency<OldTlsProvider> (() => new OldTlsProvider ());
-			DependencyInjector.RegisterDependency<DotNetTlsProvider> (() => new DotNetTlsProvider ());
-
-			// DependencyInjector.RegisterDependency<ConnectionProviderFactory> (() => CreateConnectionProviderFactory ());
-
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 		}
 	}
 }

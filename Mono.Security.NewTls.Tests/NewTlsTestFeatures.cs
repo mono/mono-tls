@@ -63,7 +63,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	public class NewTlsTestFeatures : SharedWebTestFeatures
+	public class NewTlsTestFeatures : SharedWebTestFeatures, ISingletonInstance
 	{
 		public static NewTlsTestFeatures Instance {
 			get { return DependencyInjector.Get<NewTlsTestFeatures> (); }
