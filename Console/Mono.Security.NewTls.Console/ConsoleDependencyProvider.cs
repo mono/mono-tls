@@ -26,6 +26,7 @@
 using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Console;
+using Xamarin.WebTests.TestProvider;
 using Mono.Security.NewTls.TestProvider;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
@@ -38,6 +39,7 @@ namespace Mono.Security.NewTls.Console
 		static void Main (string[] args)
 		{
 			DependencyInjector.RegisterAssembly (typeof(ConsoleDependencyProvider).Assembly);
+			DependencyInjector.RegisterAssembly (typeof(WebDependencyProvider).Assembly);
 			Program.Run (typeof (ConsoleDependencyProvider).Assembly, args);
 		}
 	}

@@ -25,6 +25,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoConnectionProviderFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoCryptoProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoProviderExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoDefaultHttpSettings.cs" />
   </ItemGroup>
 </Project>

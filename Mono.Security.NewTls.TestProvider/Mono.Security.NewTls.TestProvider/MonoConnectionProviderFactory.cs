@@ -87,8 +87,6 @@ namespace Mono.Security.NewTls.TestProvider
 			factory.Install (manualConnectionProvider);
 
 			DependencyInjector.RegisterDefaults<IDefaultHttpSettings> (2, () => this);
-
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 		}
 
 		public bool InstallDefaultCertificateValidator {
@@ -97,6 +95,10 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public ISslStreamProvider DefaultSslStreamProvider {
 			get { return newTlsConnectionProvider; }
+		}
+
+		public SecurityProtocolType? SecurityProtocol {
+			get { return SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12; }
 		}
 	}
 }
