@@ -30,15 +30,14 @@ using Xamarin.WebTests.TestProvider;
 using Mono.Security.NewTls.TestProvider;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.Console.ConsoleDependencyProvider))]
 
 namespace Mono.Security.NewTls.Console
 {
-	public class ConsoleDependencyProvider : NewTlsDependencyProvider
+	public class ConsoleDependencyProvider
 	{
 		static void Main (string[] args)
 		{
-			DependencyInjector.RegisterAssembly (typeof(ConsoleDependencyProvider).Assembly);
+			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
 			DependencyInjector.RegisterAssembly (typeof(WebDependencyProvider).Assembly);
 			Program.Run (typeof (ConsoleDependencyProvider).Assembly, args);
 		}

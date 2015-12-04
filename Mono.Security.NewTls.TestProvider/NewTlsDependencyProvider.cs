@@ -38,15 +38,18 @@ using Mono.Security.Providers.NewTls;
 using Mono.Security.Providers.DotNet;
 using Mono.Security.Providers.OldTls;
 
+[assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
+
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public abstract class NewTlsDependencyProvider : IDependencyProvider
+	public sealed class NewTlsDependencyProvider : IDependencyProvider
 	{
-		public virtual void Initialize ()
+		public void Initialize ()
 		{
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
+			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new MonoConnectionProviderFactory ());
 		}
 	}
 }
