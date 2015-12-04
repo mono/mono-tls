@@ -47,9 +47,6 @@ namespace Mono.Security.NewTls.TestProvider
 		MonoConnectionProvider newTlsConnectionProvider;
 		MonoConnectionProvider oldTlsConnectionProvider;
 		MonoConnectionProvider monoWithNewTlsConnectionProvider;
-		#if !__MOBILE__
-		OpenSslConnectionProvider openSslConnectionProvider;
-		#endif
 		MonoProviderExtensions monoExtensions;
 
 		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
@@ -70,11 +67,6 @@ namespace Mono.Security.NewTls.TestProvider
 
 			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithNewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
 			factory.Install (monoWithNewTlsConnectionProvider);
-
-			#if !__MOBILE__
-			openSslConnectionProvider = new OpenSslConnectionProvider (factory);
-			factory.Install (openSslConnectionProvider);
-			#endif
 
 			DependencyInjector.RegisterDefaults<IDefaultHttpSettings> (2, () => this);
 		}

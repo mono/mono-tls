@@ -1,5 +1,6 @@
-﻿//
-// ConsoleMain.cs
+﻿#if !__MOBILE__
+//
+// OpenSslConnectionProviderFactory.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,25 +25,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Net;
+using System.Net.Security;
 using Xamarin.AsyncTests;
-using Xamarin.AsyncTests.Console;
+using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
-using Xamarin.WebTests.TestProvider;
-using Mono.Security.NewTls.TestProvider;
+using Xamarin.WebTests.Server;
 
-[assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
+using MSI = Mono.Security.Interface;
+using Mono.Security.Providers.NewTls;
+using Mono.Security.Providers.OldTls;
 
-namespace Mono.Security.NewTls.Console
+namespace Mono.Security.NewTls.TestProvider
 {
-	public class ConsoleDependencyProvider
+	using MonoConnectionFramework;
+	using TestFramework;
+
+	class OpenSslConnectionProviderFactory : IConnectionProviderFactoryExtension
 	{
-		static void Main (string[] args)
+		OpenSslConnectionProvider openSslConnectionProvider;
+
+		public void Initialize (ConnectionProviderFactory factory)
 		{
-			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
-			DependencyInjector.RegisterAssembly (typeof(WebDependencyProvider).Assembly);
-			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new OpenSslConnectionProviderFactory ());
-			Program.Run (typeof (ConsoleDependencyProvider).Assembly, args);
+			openSslConnectionProvider = new OpenSslConnectionProvider (factory);
+			factory.Install (openSslConnectionProvider);
 		}
 	}
 }
+#endif
 
