@@ -18,7 +18,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		{
 		}
 
-		public void Initialize (ConnectionProviderFactory factory)
+		public void Initialize (ConnectionProviderFactory factory, IDefaultConnectionSettings settings)
 		{
 			if (Interlocked.Exchange (ref initialized, 1) != 0)
 				throw new InvalidOperationException ();

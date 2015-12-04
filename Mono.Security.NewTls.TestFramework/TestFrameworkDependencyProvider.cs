@@ -16,14 +16,14 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	using MonoConnectionFramework;
 
-	public class TestFrameworkDependencyProvider : IDefaultHttpSettings, IDependencyProvider
+	public class TestFrameworkDependencyProvider : IDefaultConnectionSettings, IDependencyProvider
 	{
 		public void Initialize ()
 		{
 			var monoFactory = new MonoConnectionProviderFactory ();
 			DependencyInjector.RegisterDependency<MonoConnectionProviderFactory> (() => monoFactory);
 			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (monoFactory);
-			DependencyInjector.RegisterDefaults<IDefaultHttpSettings> (2, () => this);
+			DependencyInjector.RegisterDefaults<IDefaultConnectionSettings> (2, () => this);
 		}
 
 		public bool InstallDefaultCertificateValidator {

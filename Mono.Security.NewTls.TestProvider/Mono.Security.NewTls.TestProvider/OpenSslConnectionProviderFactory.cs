@@ -45,7 +45,7 @@ namespace Mono.Security.NewTls.TestProvider
 	{
 		OpenSslConnectionProvider openSslConnectionProvider;
 
-		public void Initialize (ConnectionProviderFactory factory)
+		public void Initialize (ConnectionProviderFactory factory, IDefaultConnectionSettings settings)
 		{
 			openSslConnectionProvider = new OpenSslConnectionProvider (factory);
 			factory.Install (openSslConnectionProvider);
