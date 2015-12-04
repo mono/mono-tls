@@ -33,7 +33,7 @@ using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Server;
 
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using Mono.Security.Providers.DotNet;
 using Mono.Security.Providers.OldTls;
@@ -45,20 +45,39 @@ namespace Mono.Security.NewTls.TestProvider
 	using MonoConnectionFramework;
 	using TestFramework;
 
-	public sealed class NewTlsDependencyProvider : IDependencyProvider, IExtensionProvider<MonoTlsProvider>
+	public sealed class NewTlsDependencyProvider : IDependencyProvider, IExtensionProvider<MSI.MonoTlsProvider>, IExtensionProvider<MSI.IMonoSslStream>
 	{
 		public void Initialize ()
 		{
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-			DependencyInjector.RegisterExtension<MonoTlsProvider> (this);
+			DependencyInjector.RegisterExtension<MSI.MonoTlsProvider> (this);
+			DependencyInjector.RegisterExtension<MSI.IMonoSslStream> (this);
 			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new MonoConnectionProviderFactory ());
 		}
 
-		public IExtensionObject<MonoTlsProvider> GetExtensionObject (MonoTlsProvider provider)
+		public IMonoTlsProviderExtensions GetExtensionObject (MSI.MonoTlsProvider provider)
 		{
 			if (provider.ID == MonoConnectionProviderFactory.NewTlsID)
 				return new MonoTlsProviderExtensions (provider);
 			return null;
+		}
+
+		IExtensionObject<MSI.MonoTlsProvider> IExtensionProvider<MSI.MonoTlsProvider>.GetExtensionObject (MSI.MonoTlsProvider provider)
+		{
+			return GetExtensionObject (provider);
+		}
+
+		public IMonoSslStreamExtensions GetExtensionObject (MSI.IMonoSslStream stream)
+		{
+			var monoNewTlsStream = stream as MonoNewTlsStream;
+			if (monoNewTlsStream == null)
+				return null;
+			return new MonoSslStreamExtensions (monoNewTlsStream);
+		}
+
+		IExtensionObject<MSI.IMonoSslStream> IExtensionProvider<MSI.IMonoSslStream>.GetExtensionObject (MSI.IMonoSslStream stream)
+		{
+			return GetExtensionObject (stream);
 		}
 	}
 }

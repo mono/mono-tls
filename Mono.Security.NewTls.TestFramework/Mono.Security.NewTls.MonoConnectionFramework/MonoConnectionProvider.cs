@@ -154,7 +154,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
 			sslStream.AuthenticateAsServer (certificate, askForCert, protocol, false);
 
-			return new MonoSslStream (sslStream, monoExtensions);
+			return new MonoSslStream (sslStream);
 		}
 
 		async Task<ISslStream> ISslStreamProvider.CreateServerStreamAsync (Stream stream, ConnectionParameters parameters, CancellationToken cancellationToken)
@@ -176,7 +176,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 
 			var askForCert = parameters.AskForClientCertificate || parameters.RequireClientCertificate;
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
-			var monoSslStream = new MonoSslStream (sslStream, monoExtensions);
+			var monoSslStream = new MonoSslStream (sslStream);
 
 			try {
 				await sslStream.AuthenticateAsServerAsync (certificate, askForCert, protocol, false).ConfigureAwait (false);
@@ -209,7 +209,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			var clientCertificates = CallbackHelpers.GetClientCertificates (parameters);
 
 			var sslStream = tlsProvider.CreateSslStream (stream, false, settings);
-			var monoSslStream = new MonoSslStream (sslStream, monoExtensions);
+			var monoSslStream = new MonoSslStream (sslStream);
 
 			try {
 				await sslStream.AuthenticateAsClientAsync (targetHost, clientCertificates, protocol, false).ConfigureAwait (false);

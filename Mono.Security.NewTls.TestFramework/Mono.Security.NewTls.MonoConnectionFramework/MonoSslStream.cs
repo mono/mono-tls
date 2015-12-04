@@ -40,14 +40,13 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 
 	public class MonoSslStream : ISslStream, IMonoSslStream
 	{
-		readonly IMonoNewTlsStream monoNewTlsStream;
+		readonly IMonoSslStreamExtensions streamExtensions;
 		readonly MSI.IMonoSslStream stream;
 
-		public MonoSslStream (MSI.IMonoSslStream stream, IMonoTlsProviderExtensions monoExtensions = null)
+		public MonoSslStream (MSI.IMonoSslStream stream)
 		{
-			if (monoExtensions != null)
-				monoNewTlsStream = monoExtensions.GetStreamExtension (stream);
 			this.stream = stream;
+			streamExtensions = DependencyInjector.GetExtension<MSI.IMonoSslStream,IMonoSslStreamExtensions> (stream);
 		}
 
 		public bool IsAuthenticated {
@@ -82,7 +81,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		}
 
 		public bool SupportsCleanShutdown {
-			get { return monoNewTlsStream != null; }
+			get { return streamExtensions != null; }
 		}
 
 		public ProtocolVersions ProtocolVersion {
@@ -91,26 +90,26 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 
 		public Exception LastError {
 			get {
-				if (monoNewTlsStream != null)
-					return monoNewTlsStream.LastError;
+				if (streamExtensions != null)
+					return streamExtensions.LastError;
 				return null;
 			}
 		}
 
 		public bool SupportsConnectionInfo {
-			get { return monoNewTlsStream != null; }
+			get { return streamExtensions != null; }
 		}
 
 		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
 		{
-			return monoNewTlsStream.GetConnectionInfo ();
+			return streamExtensions.GetConnectionInfo ();
 		}
 
 		public async Task<bool> TryCleanShutdown ()
 		{
-			if (monoNewTlsStream == null)
+			if (streamExtensions == null)
 				return false;
-			await monoNewTlsStream.Shutdown ();
+			await streamExtensions.Shutdown ();
 			return true;
 		}
 
@@ -120,12 +119,12 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		}
 
 		public bool SupportsRenegotiation {
-			get { return monoNewTlsStream != null; }
+			get { return streamExtensions != null; }
 		}
 
 		public Task RequestRenegotiation ()
 		{
-			return monoNewTlsStream.RequestRenegotiation ();
+			return streamExtensions.RequestRenegotiation ();
 		}
 	}
 }
