@@ -43,7 +43,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		readonly IMonoNewTlsStream monoNewTlsStream;
 		readonly MSI.IMonoSslStream stream;
 
-		public MonoSslStream (MSI.IMonoSslStream stream, IMonoProviderExtensions monoExtensions = null)
+		public MonoSslStream (MSI.IMonoSslStream stream, IMonoTlsProviderExtensions monoExtensions = null)
 		{
 			if (monoExtensions != null)
 				monoNewTlsStream = monoExtensions.GetStreamExtension (stream);

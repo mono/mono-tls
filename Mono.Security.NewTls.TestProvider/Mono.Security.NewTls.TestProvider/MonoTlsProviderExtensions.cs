@@ -8,12 +8,12 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	using MonoConnectionFramework;
 
-	class MonoProviderExtensions : IMonoProviderExtensions
+	class MonoTlsProviderExtensions : IMonoTlsProviderExtensions
 	{
 		MonoTlsProvider provider;
 		NewTlsProvider newTls;
 
-		public MonoProviderExtensions (MonoTlsProvider provider)
+		public MonoTlsProviderExtensions (MonoTlsProvider provider)
 		{
 			this.provider = provider;
 			global::System.Console.WriteLine ("PROVIDER: {0} {1}", provider.ID, provider);

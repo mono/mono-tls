@@ -43,7 +43,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 	public class MonoConnectionProvider : ConnectionProvider, IMonoConnectionProvider, ISslStreamProvider
 	{
 		readonly MSI.MonoTlsProvider tlsProvider;
-		readonly IMonoProviderExtensions monoExtensions;
+		readonly IMonoTlsProviderExtensions monoExtensions;
 		readonly MonoHttpProvider httpProvider;
 
 		public MonoConnectionProvider (ConnectionProviderFactory factory, ConnectionProviderType type, ConnectionProviderFlags flags, MSI.MonoTlsProvider tlsProvider)
@@ -52,18 +52,18 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			this.tlsProvider = tlsProvider;
 			this.httpProvider = new MonoHttpProvider (this);
 
-			monoExtensions = DependencyInjector.GetExtension<MSI.MonoTlsProvider,IMonoProviderExtensions> (tlsProvider);
+			monoExtensions = DependencyInjector.GetExtension<MSI.MonoTlsProvider,IMonoTlsProviderExtensions> (tlsProvider);
 		}
 
 		public bool SupportsMonoExtensions {
-			get { return monoExtensions != null && monoExtensions.SupportsMonoExtensions; }
+			get { return monoExtensions != null; }
 		}
 
 		public bool SupportsInstrumentation {
 			get { return monoExtensions != null && monoExtensions.SupportsInstrumentation; }
 		}
 
-		public IMonoProviderExtensions MonoExtensions {
+		public IMonoTlsProviderExtensions MonoExtensions {
 			get { return monoExtensions; }
 		}
 

@@ -6,13 +6,9 @@ using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.MonoConnectionFramework
 {
-	public interface IMonoProviderExtensions : IExtensionObject<MonoTlsProvider>
+	public interface IMonoTlsProviderExtensions : IExtensionObject<MonoTlsProvider>
 	{
 		bool IsNewTls {
-			get;
-		}
-
-		bool SupportsMonoExtensions {
 			get;
 		}
 

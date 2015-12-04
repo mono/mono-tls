@@ -45,13 +45,20 @@ namespace Mono.Security.NewTls.TestProvider
 	using MonoConnectionFramework;
 	using TestFramework;
 
-	public sealed class NewTlsDependencyProvider : IDependencyProvider
+	public sealed class NewTlsDependencyProvider : IDependencyProvider, IExtensionProvider<MonoTlsProvider>
 	{
 		public void Initialize ()
 		{
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-			DependencyInjector.RegisterExtension<MonoTlsProvider> (new MonoTlsProviderExtensionFactory ());
+			DependencyInjector.RegisterExtension<MonoTlsProvider> (this);
 			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new MonoConnectionProviderFactory ());
+		}
+
+		public IExtensionObject<MonoTlsProvider> GetExtensionObject (MonoTlsProvider provider)
+		{
+			if (provider.ID == MonoConnectionProviderFactory.NewTlsID)
+				return new MonoTlsProviderExtensions (provider);
+			return null;
 		}
 	}
 }
