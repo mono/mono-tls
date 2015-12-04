@@ -72,7 +72,6 @@
     <Compile Include="Mono.Security.NewTls.TestFeatures\CipherInstrumentParametersAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\CipherInstrumentTestRunnerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IsEqualBlob.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationTestFeatures.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentParameters.cs" />

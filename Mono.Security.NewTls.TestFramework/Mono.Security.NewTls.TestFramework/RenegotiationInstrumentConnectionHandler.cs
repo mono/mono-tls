@@ -39,6 +39,8 @@ using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using MonoConnectionFramework;
+
 	public class RenegotiationInstrumentConnectionHandler : ConnectionInstrumentConnectionHandler
 	{
 		new public RenegotiationInstrumentTestRunner Runner {
@@ -137,7 +139,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			if (Parameters.RequestClientRenegotiation) {
 				LogDebug (ctx, 1, "HandleClient - waiting for renegotiation");
-				var monoSslStream = (IMonoSslStream)Client.SslStream;
+				var monoSslStream = (MonoSslStream)Client.SslStream;
 				await monoSslStream.RequestRenegotiation ();
 				LogDebug (ctx, 1, "HandleClient - done waiting for renegotiation");
 
@@ -155,7 +157,7 @@ namespace Mono.Security.NewTls.TestFramework
 
 			if (Parameters.RequestServerRenegotiation) {
 				LogDebug (ctx, 1, "HandleServer - waiting for renegotiation");
-				var monoSslStream = (IMonoSslStream)Server.SslStream;
+				var monoSslStream = (MonoSslStream)Server.SslStream;
 				await monoSslStream.RequestRenegotiation ();
 				LogDebug (ctx, 1, "HandleServer - done waiting for renegotiation");
 			}

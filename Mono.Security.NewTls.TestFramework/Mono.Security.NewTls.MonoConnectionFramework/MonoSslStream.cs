@@ -38,7 +38,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	using TestFramework;
 
-	public class MonoSslStream : ISslStream, IMonoSslStream
+	public class MonoSslStream : ISslStream
 	{
 		readonly IMonoSslStreamExtensions streamExtensions;
 		readonly MSI.IMonoSslStream stream;
