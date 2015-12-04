@@ -45,14 +45,17 @@ namespace Mono.Security.NewTls.TestProvider
 	using MonoConnectionFramework;
 	using TestFramework;
 
-	public sealed class NewTlsDependencyProvider : IDependencyProvider, IExtensionProvider<MonoTlsProvider>, IExtensionProvider<IMonoSslStream>
+	public sealed class NewTlsDependencyProvider : IDependencyProvider,
+		IExtensionProvider<MonoTlsProvider>, IExtensionProvider<IMonoSslStream>
 	{
 		public void Initialize ()
 		{
+			DependencyInjector.RegisterAssembly (typeof(TestFrameworkDependencyProvider).Assembly);
+
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
 			DependencyInjector.RegisterExtension<MonoTlsProvider> (this);
 			DependencyInjector.RegisterExtension<IMonoSslStream> (this);
-			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new MonoConnectionProviderFactory ());
+
 			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new OldMonoConnectionProviderFactory ());
 		}
 

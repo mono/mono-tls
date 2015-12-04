@@ -40,7 +40,7 @@ namespace Mono.Security.NewTls.TestProvider
 	using MonoConnectionFramework;
 	using TestFramework;
 
-	class OldMonoConnectionProviderFactory : IConnectionProviderFactoryExtension, IDefaultHttpSettings
+	class OldMonoConnectionProviderFactory : IConnectionProviderFactoryExtension
 	{
 		MSI.MonoTlsProvider newTlsProvider;
 		MSI.MonoTlsProvider oldTlsProvider;
@@ -65,24 +65,6 @@ namespace Mono.Security.NewTls.TestProvider
 
 			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithNewTLS, NewTlsFlags, newTlsProvider);
 			factory.Install (monoWithNewTlsConnectionProvider);
-
-			DependencyInjector.RegisterDefaults<IDefaultHttpSettings> (2, () => this);
-		}
-
-		public bool InstallDefaultCertificateValidator {
-			get { return false; }
-		}
-
-		public ISslStreamProvider DefaultSslStreamProvider {
-			get { return newTlsConnectionProvider; }
-		}
-
-		public SecurityProtocolType? SecurityProtocol {
-			get { return SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12; }
-		}
-
-		public Guid? InstallTlsProvider {
-			get { throw new NotImplementedException (); }
 		}
 	}
 }
