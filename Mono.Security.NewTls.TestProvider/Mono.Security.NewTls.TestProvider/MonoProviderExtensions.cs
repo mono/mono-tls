@@ -10,14 +10,25 @@ namespace Mono.Security.NewTls.TestProvider
 
 	class MonoProviderExtensions : IMonoProviderExtensions
 	{
+		MonoTlsProvider provider;
 		NewTlsProvider newTls;
 
 		public MonoProviderExtensions (MonoTlsProvider provider)
 		{
+			this.provider = provider;
+			global::System.Console.WriteLine ("PROVIDER: {0} {1}", provider.ID, provider);
 			newTls = provider as NewTlsProvider;
 		}
 
+		public MonoTlsProvider Object {
+			get { return provider; }
+		}
+
 		public bool IsNewTls {
+			get { return newTls != null; }
+		}
+
+		public bool SupportsMonoExtensions {
 			get { return newTls != null; }
 		}
 

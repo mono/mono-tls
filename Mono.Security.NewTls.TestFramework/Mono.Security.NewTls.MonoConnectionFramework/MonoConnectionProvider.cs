@@ -29,6 +29,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Security.Authentication;
+using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Server;
@@ -45,16 +46,17 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		readonly IMonoProviderExtensions monoExtensions;
 		readonly MonoHttpProvider httpProvider;
 
-		public MonoConnectionProvider (ConnectionProviderFactory factory, ConnectionProviderType type, ConnectionProviderFlags flags, MSI.MonoTlsProvider tlsProvider, IMonoProviderExtensions monoExtensions)
+		public MonoConnectionProvider (ConnectionProviderFactory factory, ConnectionProviderType type, ConnectionProviderFlags flags, MSI.MonoTlsProvider tlsProvider)
 			: base (factory, type, flags)
 		{
 			this.tlsProvider = tlsProvider;
 			this.httpProvider = new MonoHttpProvider (this);
-			this.monoExtensions = monoExtensions;
+
+			monoExtensions = DependencyInjector.GetExtension<MSI.MonoTlsProvider,IMonoProviderExtensions> (tlsProvider);
 		}
 
 		public bool SupportsMonoExtensions {
-			get { return monoExtensions != null; }
+			get { return monoExtensions != null && monoExtensions.SupportsMonoExtensions; }
 		}
 
 		public bool SupportsInstrumentation {

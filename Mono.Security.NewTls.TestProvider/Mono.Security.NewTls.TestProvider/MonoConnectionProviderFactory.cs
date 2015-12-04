@@ -47,7 +47,9 @@ namespace Mono.Security.NewTls.TestProvider
 		MonoConnectionProvider newTlsConnectionProvider;
 		MonoConnectionProvider oldTlsConnectionProvider;
 		MonoConnectionProvider monoWithNewTlsConnectionProvider;
-		MonoProviderExtensions monoExtensions;
+
+		public static readonly Guid NewTlsID = new Guid ("e5ff34f1-8b7a-4aa6-aff9-24719d709693");
+		public static readonly Guid OldTlsID = new Guid ("cf8baa0d-c6ed-40ae-b512-dec8d097e9af");
 
 		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
 		const ConnectionProviderFlags NewTlsFlags = DefaultFlags | ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers;
@@ -57,15 +59,14 @@ namespace Mono.Security.NewTls.TestProvider
 			newTlsProvider = new NewTlsProvider ();
 			MSI.MonoTlsProviderFactory.InstallProvider (newTlsProvider);
 
-			monoExtensions = new MonoProviderExtensions (newTlsProvider);
-			newTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.NewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
+			newTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.NewTLS, NewTlsFlags, newTlsProvider);
 			factory.Install (newTlsConnectionProvider);
 
 			oldTlsProvider = new OldTlsProvider ();
-			oldTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithOldTLS, DefaultFlags, oldTlsProvider, null);
+			oldTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithOldTLS, DefaultFlags, oldTlsProvider);
 			factory.Install (oldTlsConnectionProvider);
 
-			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithNewTLS, NewTlsFlags, newTlsProvider, monoExtensions);
+			monoWithNewTlsConnectionProvider = new MonoConnectionProvider (factory, ConnectionProviderType.MonoWithNewTLS, NewTlsFlags, newTlsProvider);
 			factory.Install (monoWithNewTlsConnectionProvider);
 
 			DependencyInjector.RegisterDefaults<IDefaultHttpSettings> (2, () => this);

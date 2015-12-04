@@ -42,6 +42,7 @@ using Mono.Security.Providers.OldTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
+	using MonoConnectionFramework;
 	using TestFramework;
 
 	public sealed class NewTlsDependencyProvider : IDependencyProvider
@@ -49,6 +50,7 @@ namespace Mono.Security.NewTls.TestProvider
 		public void Initialize ()
 		{
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
+			DependencyInjector.RegisterExtension<MonoTlsProvider> (new MonoTlsProviderExtensionFactory ());
 			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new MonoConnectionProviderFactory ());
 		}
 	}
