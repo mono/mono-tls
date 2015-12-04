@@ -82,6 +82,10 @@ namespace Mono.Security.NewTls.TestProvider
 		public SecurityProtocolType? SecurityProtocol {
 			get { return SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12; }
 		}
+
+		public Guid? InstallTlsProvider {
+			get { throw new NotImplementedException (); }
+		}
 	}
 }
 
