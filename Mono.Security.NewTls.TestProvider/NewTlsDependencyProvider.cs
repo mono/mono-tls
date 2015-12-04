@@ -48,6 +48,9 @@ namespace Mono.Security.NewTls.TestProvider
 	public sealed class NewTlsDependencyProvider : IDependencyProvider,
 		IExtensionProvider<MonoTlsProvider>, IExtensionProvider<IMonoSslStream>
 	{
+		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
+		const ConnectionProviderFlags NewTlsFlags = DefaultFlags | ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers;
+
 		public void Initialize ()
 		{
 			DependencyInjector.RegisterAssembly (typeof(TestFrameworkDependencyProvider).Assembly);
@@ -56,7 +59,16 @@ namespace Mono.Security.NewTls.TestProvider
 			DependencyInjector.RegisterExtension<MonoTlsProvider> (this);
 			DependencyInjector.RegisterExtension<IMonoSslStream> (this);
 
-			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new OldMonoConnectionProviderFactory ());
+
+			var factory = DependencyInjector.Get<MonoConnectionProviderFactory> ();
+
+			var newTlsProvider = new NewTlsProvider ();
+			factory.RegisterProvider (newTlsProvider, ConnectionProviderType.NewTLS, NewTlsFlags);
+
+			var oldTlsProvider = new OldTlsProvider ();
+			factory.RegisterProvider (oldTlsProvider, ConnectionProviderType.MonoWithOldTLS, DefaultFlags);
+
+			factory.RegisterProvider (newTlsProvider, ConnectionProviderType.MonoWithNewTLS, NewTlsFlags);
 		}
 
 		public IMonoTlsProviderExtensions GetExtensionObject (MonoTlsProvider provider)

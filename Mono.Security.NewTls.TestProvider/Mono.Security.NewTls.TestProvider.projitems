@@ -26,6 +26,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OpenSslConnectionProviderFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoTlsProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\MonoSslStreamExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mono.Security.NewTls.TestProvider\OldMonoConnectionProviderFactory.cs" />
   </ItemGroup>
 </Project>
