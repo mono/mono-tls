@@ -106,6 +106,8 @@
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\CallbackHelpers.cs" />
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\IMonoTlsProviderExtensions.cs" />
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\IMonoSslStreamExtensions.cs" />
+    <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\IMonoTlsProviderFactory.cs" />
+    <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\MonoConnectionProviderFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />

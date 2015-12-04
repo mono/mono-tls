@@ -53,6 +53,7 @@ namespace Mono.Security.NewTls.TestProvider
 			DependencyInjector.RegisterExtension<MonoTlsProvider> (this);
 			DependencyInjector.RegisterExtension<IMonoSslStream> (this);
 			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new MonoConnectionProviderFactory ());
+			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new OldMonoConnectionProviderFactory ());
 		}
 
 		public IMonoTlsProviderExtensions GetExtensionObject (MonoTlsProvider provider)

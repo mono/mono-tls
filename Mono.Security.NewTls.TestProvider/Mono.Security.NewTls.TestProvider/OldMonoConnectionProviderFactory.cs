@@ -40,16 +40,13 @@ namespace Mono.Security.NewTls.TestProvider
 	using MonoConnectionFramework;
 	using TestFramework;
 
-	class MonoConnectionProviderFactory : IConnectionProviderFactoryExtension, IDefaultHttpSettings
+	class OldMonoConnectionProviderFactory : IConnectionProviderFactoryExtension, IDefaultHttpSettings
 	{
 		MSI.MonoTlsProvider newTlsProvider;
 		MSI.MonoTlsProvider oldTlsProvider;
 		MonoConnectionProvider newTlsConnectionProvider;
 		MonoConnectionProvider oldTlsConnectionProvider;
 		MonoConnectionProvider monoWithNewTlsConnectionProvider;
-
-		public static readonly Guid NewTlsID = new Guid ("e5ff34f1-8b7a-4aa6-aff9-24719d709693");
-		public static readonly Guid OldTlsID = new Guid ("cf8baa0d-c6ed-40ae-b512-dec8d097e9af");
 
 		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
 		const ConnectionProviderFlags NewTlsFlags = DefaultFlags | ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers;
