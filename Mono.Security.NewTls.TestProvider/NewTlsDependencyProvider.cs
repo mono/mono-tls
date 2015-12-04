@@ -33,7 +33,7 @@ using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Server;
 
-using MSI = Mono.Security.Interface;
+using Mono.Security.Interface;
 using Mono.Security.Providers.NewTls;
 using Mono.Security.Providers.DotNet;
 using Mono.Security.Providers.OldTls;
@@ -45,29 +45,29 @@ namespace Mono.Security.NewTls.TestProvider
 	using MonoConnectionFramework;
 	using TestFramework;
 
-	public sealed class NewTlsDependencyProvider : IDependencyProvider, IExtensionProvider<MSI.MonoTlsProvider>, IExtensionProvider<MSI.IMonoSslStream>
+	public sealed class NewTlsDependencyProvider : IDependencyProvider, IExtensionProvider<MonoTlsProvider>, IExtensionProvider<IMonoSslStream>
 	{
 		public void Initialize ()
 		{
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
-			DependencyInjector.RegisterExtension<MSI.MonoTlsProvider> (this);
-			DependencyInjector.RegisterExtension<MSI.IMonoSslStream> (this);
+			DependencyInjector.RegisterExtension<MonoTlsProvider> (this);
+			DependencyInjector.RegisterExtension<IMonoSslStream> (this);
 			DependencyInjector.RegisterCollection<IConnectionProviderFactoryExtension> (new MonoConnectionProviderFactory ());
 		}
 
-		public IMonoTlsProviderExtensions GetExtensionObject (MSI.MonoTlsProvider provider)
+		public IMonoTlsProviderExtensions GetExtensionObject (MonoTlsProvider provider)
 		{
 			if (provider.ID == MonoConnectionProviderFactory.NewTlsID)
 				return new MonoTlsProviderExtensions (provider);
 			return null;
 		}
 
-		IExtensionObject<MSI.MonoTlsProvider> IExtensionProvider<MSI.MonoTlsProvider>.GetExtensionObject (MSI.MonoTlsProvider provider)
+		IExtensionObject<MonoTlsProvider> IExtensionProvider<MonoTlsProvider>.GetExtensionObject (MonoTlsProvider provider)
 		{
 			return GetExtensionObject (provider);
 		}
 
-		public IMonoSslStreamExtensions GetExtensionObject (MSI.IMonoSslStream stream)
+		public IMonoSslStreamExtensions GetExtensionObject (IMonoSslStream stream)
 		{
 			var monoNewTlsStream = stream as MonoNewTlsStream;
 			if (monoNewTlsStream == null)
@@ -75,7 +75,7 @@ namespace Mono.Security.NewTls.TestProvider
 			return new MonoSslStreamExtensions (monoNewTlsStream);
 		}
 
-		IExtensionObject<MSI.IMonoSslStream> IExtensionProvider<MSI.IMonoSslStream>.GetExtensionObject (MSI.IMonoSslStream stream)
+		IExtensionObject<IMonoSslStream> IExtensionProvider<IMonoSslStream>.GetExtensionObject (IMonoSslStream stream)
 		{
 			return GetExtensionObject (stream);
 		}
