@@ -27,6 +27,9 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			foreach (var provider in providers) {
 				var monoProvider = new MonoConnectionProvider (factory, provider.ConnectionProviderType, provider.ConnectionProviderFlags, provider.Provider);
 				factory.Install (monoProvider);
+
+				if (settings.InstallTlsProvider != null && provider.Provider.ID == settings.InstallTlsProvider.Value)
+					MonoTlsProviderFactory.InstallProvider (provider.Provider);
 			}
 		}
 
