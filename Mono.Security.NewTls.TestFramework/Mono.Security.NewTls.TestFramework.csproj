@@ -100,7 +100,6 @@
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\MonoClient.cs" />
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\MonoConnection.cs" />
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\MonoConnectionProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\MonoHttpProvider.cs" />
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\MonoServer.cs" />
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\MonoSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.MonoConnectionFramework\CallbackHelpers.cs" />
