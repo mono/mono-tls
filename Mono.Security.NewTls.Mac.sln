@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.UI", "ex
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{C0AB21A9-9053-49F2-9B4C-C90CF22263A0}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.WebTests.PortableImpl", "external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.shproj", "{D578985A-B8C0-4083-8F3E-1AE2B680E85B}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.AsyncTests.PortableImpl", "external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.shproj", "{4D53941A-ABBE-4B89-A362-C56F7BC0B20A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Instrumentation", "Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj", "{F533A15D-8651-43F4-B293-7934638C592B}"
@@ -30,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface", "Mac\Mono.Security.Interface\Mono.Security.Interface.csproj", "{D8CF5744-B13E-4134-A4BF-9E219261C1BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.PortableSecurity.Mac", "external\web-tests\Mac\Xamarin.WebTests.PortableSecurity.Mac\Xamarin.WebTests.PortableSecurity.Mac.csproj", "{BC0385D6-52A8-41D1-9E72-3AF768C42661}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.TestProvider.Mac", "external\web-tests\Mac\Xamarin.WebTests.TestProvider.Mac\Xamarin.WebTests.TestProvider.Mac.csproj", "{9390670C-C319-4817-95FC-7C83E9B708E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +63,14 @@ Global
 		{85371459-6509-4D96-A95D-862399E0F0BE}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 		{85371459-6509-4D96-A95D-862399E0F0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85371459-6509-4D96-A95D-862399E0F0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9390670C-C319-4817-95FC-7C83E9B708E3}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{9390670C-C319-4817-95FC-7C83E9B708E3}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{9390670C-C319-4817-95FC-7C83E9B708E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9390670C-C319-4817-95FC-7C83E9B708E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9390670C-C319-4817-95FC-7C83E9B708E3}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{9390670C-C319-4817-95FC-7C83E9B708E3}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{9390670C-C319-4817-95FC-7C83E9B708E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9390670C-C319-4817-95FC-7C83E9B708E3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
 		{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 		{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

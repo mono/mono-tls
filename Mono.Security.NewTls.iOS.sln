@@ -23,13 +23,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.iOS", 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mono.Security.NewTls.TestProvider", "Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.shproj", "{C0AB21A9-9053-49F2-9B4C-C90CF22263A0}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xamarin.WebTests.PortableImpl", "external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.shproj", "{D578985A-B8C0-4083-8F3E-1AE2B680E85B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Instrumentation", "Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj", "{F533A15D-8651-43F4-B293-7934638C592B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface", "IOS\Mono.Security.Interface\Mono.Security.Interface.csproj", "{C38F2801-D820-4CCE-92E9-62D4C4FFA2FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.PortableSecurity.iOS", "external\web-tests\IOS\Xamarin.WebTests.PortableSecurity.iOS\Xamarin.WebTests.PortableSecurity.iOS.csproj", "{D2ADF33E-0152-4AFB-BF71-588BCCB5DEE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.TestProvider.iOS", "external\web-tests\IOS\Xamarin.WebTests.TestProvider.iOS\Xamarin.WebTests.TestProvider.iOS.csproj", "{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +44,24 @@ Global
 		AppStore|iPhone = AppStore|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Release|iPhone.Build.0 = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{1C192D5C-CD9D-41E4-8272-DC7A93E05E25}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{51DDB0E5-25CE-41C4-BDD0-EB5976A67BAD}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
 		{51DDB0E5-25CE-41C4-BDD0-EB5976A67BAD}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
 		{51DDB0E5-25CE-41C4-BDD0-EB5976A67BAD}.AppStore|iPhone.ActiveCfg = Debug|Any CPU

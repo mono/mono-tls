@@ -25,23 +25,24 @@
 // THE SOFTWARE.
 using System;
 using Xamarin.AsyncTests;
+using Xamarin.WebTests.TestProvider;
 using Mono.Security.NewTls.TestProvider;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.Tests;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.iOS.MobileDependencyProvider))]
 
 namespace Mono.Security.NewTls.iOS
 {
 	using Xamarin.AsyncTests;
 	using Xamarin.AsyncTests.Framework;
 
-	public class MobileDependencyProvider : NewTlsDependencyProvider
+	public class MobileDependencyProvider
 	{
 		public static TestFramework GetFramework ()
 		{
-			DependencyInjector.RegisterAssembly (typeof(MobileDependencyProvider).Assembly);
+			DependencyInjector.RegisterAssembly (typeof(WebDependencyProvider).Assembly);
+			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
 
 			return TestFramework.GetLocalFramework (typeof(NewTlsTestFeatures).Assembly);
 		}

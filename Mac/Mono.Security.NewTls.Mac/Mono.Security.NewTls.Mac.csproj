@@ -75,7 +75,6 @@
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems" Label="Shared" Condition="Exists('..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems')" />
-  <Import Project="..\..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
@@ -130,6 +129,10 @@
     <ProjectReference Include="..\..\external\web-tests\Mac\Xamarin.WebTests.PortableSecurity.Mac\Xamarin.WebTests.PortableSecurity.Mac.csproj">
       <Project>{BC0385D6-52A8-41D1-9E72-3AF768C42661}</Project>
       <Name>Xamarin.WebTests.PortableSecurity.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Mac\Xamarin.WebTests.TestProvider.Mac\Xamarin.WebTests.TestProvider.Mac.csproj">
+      <Project>{9390670C-C319-4817-95FC-7C83E9B708E3}</Project>
+      <Name>Xamarin.WebTests.TestProvider.Mac</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
