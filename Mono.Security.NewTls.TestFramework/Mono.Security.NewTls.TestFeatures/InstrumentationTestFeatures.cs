@@ -64,8 +64,6 @@ namespace Mono.Security.NewTls.TestFeatures
 			case ConnectionProviderType.OpenSsl:
 				return server ? openSslServerFeature : openSslClientFeature;
 			case ConnectionProviderType.NewTLS:
-				return server ? dotNetServerFeature : dotNetClientFeature;
-			case ConnectionProviderType.MonoWithNewTLS:
 				return server ? monoServerFeature : monoClientFeature;
 			default:
 				return null;

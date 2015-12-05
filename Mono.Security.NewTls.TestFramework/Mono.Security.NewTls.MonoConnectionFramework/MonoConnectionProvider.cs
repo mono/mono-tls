@@ -75,10 +75,8 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		{
 			switch (type) {
 			case ConnectionProviderType.NewTLS:
-			case ConnectionProviderType.MonoWithNewTLS:
 				return IsNewTls;
 			case ConnectionProviderType.OldTLS:
-			case ConnectionProviderType.MonoWithOldTLS:
 				return !IsNewTls;
 			case ConnectionProviderType.OpenSsl:
 				return true;
