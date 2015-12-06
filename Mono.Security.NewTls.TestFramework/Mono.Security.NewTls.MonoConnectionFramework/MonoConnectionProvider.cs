@@ -68,20 +68,6 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			get { return (ProtocolVersions)tlsProvider.SupportedProtocols; }
 		}
 
-		public override bool IsCompatibleWith (ConnectionProviderType type)
-		{
-			switch (type) {
-			case ConnectionProviderType.NewTLS:
-				return IsNewTls;
-			case ConnectionProviderType.OldTLS:
-				return !IsNewTls;
-			case ConnectionProviderType.OpenSsl:
-				return true;
-			default:
-				return false;
-			}
-		}
-
 		public override IClient CreateClient (ConnectionParameters parameters)
 		{
 			if (SupportsMonoExtensions)
@@ -96,10 +82,6 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 				return new MonoServer (this, parameters);
 			else
 				return new DotNetServer (this, parameters, this);
-		}
-
-		public bool IsNewTls {
-			get { return monoExtensions != null && monoExtensions.IsNewTls; }
 		}
 
 		protected override ISslStreamProvider GetSslStreamProvider ()

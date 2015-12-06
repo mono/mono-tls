@@ -65,11 +65,11 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		}
 
 		public override bool SupportsCleanShutdown {
-			get { return provider.IsNewTls; }
+			get { return provider.SupportsMonoExtensions; }
 		}
 
 		public bool SupportsConnectionInfo {
-			get { return provider.IsNewTls; }
+			get { return provider.SupportsMonoExtensions; }
 		}
 
 		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
@@ -78,7 +78,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 		}
 
 		public bool SupportsInstrumentation {
-			get { return provider.IsNewTls; }
+			get { return provider.SupportsInstrumentation; }
 		}
 
 		public InstrumentationProvider InstrumentationProvider {
@@ -111,7 +111,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 
 			GetSettings (userSettings);
 
-			if (ConnectionProvider.IsNewTls) {
+			if (ConnectionProvider.SupportsMonoExtensions) {
 				settings = new MSI.MonoTlsSettings ();
 				settings.UserSettings = userSettings;
 			}
