@@ -27,6 +27,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -63,14 +64,13 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			get { return stream.RemoteCertificate != null; }
 		}
 
-		public ICertificate RemoteCertificate {
+		public X509Certificate RemoteCertificate {
 			get {
 				var certificate = stream.RemoteCertificate;
 				if (certificate == null)
 					throw new InvalidOperationException ();
 
-				var provider = DependencyInjector.Get<ICertificateProvider> ();
-				return provider.GetCertificateFromData (certificate.GetRawCertData ());
+				return certificate;
 			}
 		}
 
