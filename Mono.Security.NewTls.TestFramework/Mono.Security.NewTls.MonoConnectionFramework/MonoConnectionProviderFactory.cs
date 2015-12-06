@@ -25,7 +25,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 
 			var providers = DependencyInjector.GetCollection<IMonoTlsProviderFactory> ();
 			foreach (var provider in providers) {
-				var monoProvider = new MonoConnectionProvider (factory, provider.ConnectionProviderType, provider.ConnectionProviderFlags, provider.Provider);
+				var monoProvider = new MonoConnectionProvider (factory, provider.ConnectionProviderType, provider.ConnectionProviderFlags, provider.Name, provider.Provider);
 				factory.Install (monoProvider);
 
 				if (settings.InstallTlsProvider != null && provider.Provider.ID == settings.InstallTlsProvider.Value)
@@ -41,13 +41,18 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 			DependencyInjector.RegisterCollection<IMonoTlsProviderFactory> (factory);
 		}
 
-		public void RegisterProvider (MonoTlsProvider provider, ConnectionProviderType type, ConnectionProviderFlags flags)
+		public void RegisterProvider (string name, MonoTlsProvider provider, ConnectionProviderType type, ConnectionProviderFlags flags)
 		{
-			RegisterProvider (new FactoryImpl (provider, type, flags));
+			RegisterProvider (new FactoryImpl (name, provider, type, flags));
 		}
 
 		class FactoryImpl : IMonoTlsProviderFactory
 		{
+			public string Name {
+				get;
+				private set;
+			}
+
 			public MonoTlsProvider Provider {
 				get;
 				private set;
@@ -63,8 +68,9 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 				private set;
 			}
 
-			public FactoryImpl (MonoTlsProvider provider, ConnectionProviderType type, ConnectionProviderFlags flags)
+			public FactoryImpl (string name, MonoTlsProvider provider, ConnectionProviderType type, ConnectionProviderFlags flags)
 			{
+				Name = name;
 				Provider = provider;
 				ConnectionProviderType = type;
 				ConnectionProviderFlags = flags;

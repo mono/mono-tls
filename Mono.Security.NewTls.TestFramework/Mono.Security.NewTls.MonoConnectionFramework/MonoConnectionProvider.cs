@@ -43,13 +43,19 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 	{
 		readonly MSI.MonoTlsProvider tlsProvider;
 		readonly IMonoTlsProviderExtensions monoExtensions;
+		readonly string name;
 
-		public MonoConnectionProvider (ConnectionProviderFactory factory, ConnectionProviderType type, ConnectionProviderFlags flags, MSI.MonoTlsProvider tlsProvider)
+		public MonoConnectionProvider (ConnectionProviderFactory factory, ConnectionProviderType type, ConnectionProviderFlags flags, string name, MSI.MonoTlsProvider tlsProvider)
 			: base (factory, type, flags)
 		{
+			this.name = name;
 			this.tlsProvider = tlsProvider;
 
 			monoExtensions = DependencyInjector.GetExtension<MSI.MonoTlsProvider,IMonoTlsProviderExtensions> (tlsProvider);
+		}
+
+		public override string Name {
+			get { return name; }
 		}
 
 		public bool SupportsMonoExtensions {

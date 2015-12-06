@@ -62,10 +62,10 @@ namespace Mono.Security.NewTls.TestProvider
 			var factory = DependencyInjector.Get<MonoConnectionProviderFactory> ();
 
 			var newTlsProvider = new NewTlsProvider ();
-			factory.RegisterProvider (newTlsProvider, ConnectionProviderType.NewTLS, NewTlsFlags);
+			factory.RegisterProvider ("NewTLS", newTlsProvider, ConnectionProviderType.NewTLS, NewTlsFlags);
 
 			var oldTlsProvider = new OldTlsProvider ();
-			factory.RegisterProvider (oldTlsProvider, ConnectionProviderType.OldTLS, DefaultFlags);
+			factory.RegisterProvider ("OldTLS", oldTlsProvider, ConnectionProviderType.OldTLS, DefaultFlags);
 		}
 
 		public IMonoTlsProviderExtensions GetExtensionObject (MonoTlsProvider provider)

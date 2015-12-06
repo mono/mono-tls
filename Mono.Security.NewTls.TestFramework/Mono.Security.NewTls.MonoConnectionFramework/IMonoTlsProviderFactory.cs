@@ -7,6 +7,10 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	public interface IMonoTlsProviderFactory : IExtensionCollection
 	{
+		string Name {
+			get;
+		}
+
 		MonoTlsProvider Provider {
 			get;
 		}
