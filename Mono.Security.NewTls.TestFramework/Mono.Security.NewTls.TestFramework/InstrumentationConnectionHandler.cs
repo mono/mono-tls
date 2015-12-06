@@ -29,6 +29,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
@@ -74,7 +75,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			if (NeedCustomCertificateSelectionCallback) {
 				var provider = DependencyInjector.Get<ICertificateProvider> ();
-				var selector = provider.GetCustomCertificateSelector ((t, lc, rc, ai) => OnCertificateSelectionCallback (ctx, t, lc, rc, ai));
+				var selector = provider.GetCustomCertificateSelector ((s, t, lc, rc, ai) => OnCertificateSelectionCallback (ctx, t, lc, rc, ai));
 				Parameters.ClientCertificateSelector = selector;
 			}
 		}
@@ -83,9 +84,9 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return false; }
 		}
 
-		protected virtual ICertificate OnCertificateSelectionCallback (
-			TestContext ctx, string targetHost, ICertificate[] localCertificates,
-			ICertificate remoteCertificate, string[] acceptableIssuers)
+		protected virtual X509Certificate OnCertificateSelectionCallback (
+			TestContext ctx, string targetHost, X509CertificateCollection localCertificates,
+			X509Certificate remoteCertificate, string[] acceptableIssuers)
 		{
 			// Derived classes must override this when using 'NeedCustomCertificateSelectionCallback'.
 			throw new NotImplementedException ();

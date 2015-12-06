@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
@@ -33,7 +34,7 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public abstract class MonoConnectionParameters : ConnectionParameters
 	{
-		public MonoConnectionParameters (string identifier, ICertificate certificate)
+		public MonoConnectionParameters (string identifier, X509Certificate certificate)
 			: base (identifier, certificate)
 		{
 		}

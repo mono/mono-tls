@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
 
@@ -40,7 +41,7 @@ namespace Mono.Security.NewTls.TestFramework
 			private set;
 		}
 
-		public SimpleConnectionParameters (InstrumentationCategory category, SimpleConnectionType type, string identifier, ICertificate certificate)
+		public SimpleConnectionParameters (InstrumentationCategory category, SimpleConnectionType type, string identifier, X509Certificate certificate)
 			: base (category, identifier, certificate)
 		{
 			Type = type;

@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
@@ -42,7 +43,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get; set;
 		}
 
-		public InstrumentationParameters (InstrumentationCategory category, string identifier, ICertificate certificate)
+		public InstrumentationParameters (InstrumentationCategory category, string identifier, X509Certificate certificate)
 			: base (identifier, certificate)
 		{
 			Category = category;

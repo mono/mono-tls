@@ -30,6 +30,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
@@ -63,12 +64,12 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.NeedCustomCertificateSelectionCallback; }
 		}
 
-		protected override ICertificate OnCertificateSelectionCallback (
-			TestContext ctx, string targetHost, ICertificate[] localCertificates,
-			ICertificate remoteCertificate, string[] acceptableIssuers)
+		protected override X509Certificate OnCertificateSelectionCallback (
+			TestContext ctx, string targetHost, X509CertificateCollection localCertificates,
+			X509Certificate remoteCertificate, string[] acceptableIssuers)
 		{
 			LogDebug (ctx, 1, "CertificateSelectionCallback", renegotiationStartedTcs.Task.Status, targetHost,
-				localCertificates != null ? localCertificates.Length : -1, remoteCertificate,
+				localCertificates != null ? localCertificates.Count : -1, remoteCertificate,
 				acceptableIssuers != null ? acceptableIssuers.Length : -1);
 			if (renegotiationStartedTcs.Task.IsCompleted) {
 				ctx.Assert (remoteCertificate, Is.Not.Null, "have remote certificate");

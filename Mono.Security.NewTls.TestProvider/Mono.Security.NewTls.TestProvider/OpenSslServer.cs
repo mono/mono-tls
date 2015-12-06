@@ -16,10 +16,6 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class OpenSslServer : OpenSslConnection, IMonoServer
 	{
-		public ICertificate Certificate {
-			get { return Parameters.ServerCertificate; }
-		}
-
 		public MonoConnectionParameters MonoParameters {
 			get { return base.Parameters as MonoConnectionParameters; }
 		}
@@ -42,7 +38,7 @@ namespace Mono.Security.NewTls.TestProvider
 			var provider = DependencyInjector.Get<ICertificateProvider> ();
 
 			string password;
-			var data = provider.GetRawCertificateData (Certificate, out password);
+			var data = provider.GetRawCertificateData (Parameters.ServerCertificate, out password);
 			openssl.SetCertificate (data, password);
 			openssl.Bind (endpoint);
 		}
