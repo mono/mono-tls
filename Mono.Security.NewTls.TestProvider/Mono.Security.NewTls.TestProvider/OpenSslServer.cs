@@ -16,7 +16,7 @@ namespace Mono.Security.NewTls.TestProvider
 {
 	public class OpenSslServer : OpenSslConnection, IMonoServer
 	{
-		public IServerCertificate Certificate {
+		public ICertificate Certificate {
 			get { return Parameters.ServerCertificate; }
 		}
 

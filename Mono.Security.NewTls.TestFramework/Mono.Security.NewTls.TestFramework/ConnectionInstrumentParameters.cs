@@ -32,7 +32,7 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public abstract class ConnectionInstrumentParameters : InstrumentationParameters
 	{
-		public ConnectionInstrumentParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
+		public ConnectionInstrumentParameters (InstrumentationCategory category, string identifier, ICertificate certificate)
 			: base (category, identifier, certificate)
 		{
 		}

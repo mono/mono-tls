@@ -42,7 +42,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get; set;
 		}
 
-		public InstrumentationParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
+		public InstrumentationParameters (InstrumentationCategory category, string identifier, ICertificate certificate)
 			: base (identifier, certificate)
 		{
 			Category = category;

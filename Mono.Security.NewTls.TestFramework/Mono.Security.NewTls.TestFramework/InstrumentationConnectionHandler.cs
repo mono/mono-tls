@@ -83,7 +83,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return false; }
 		}
 
-		protected virtual IClientCertificate OnCertificateSelectionCallback (
+		protected virtual ICertificate OnCertificateSelectionCallback (
 			TestContext ctx, string targetHost, ICertificate[] localCertificates,
 			ICertificate remoteCertificate, string[] acceptableIssuers)
 		{

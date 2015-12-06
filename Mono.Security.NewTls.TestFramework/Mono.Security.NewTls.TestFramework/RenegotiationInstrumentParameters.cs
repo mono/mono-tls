@@ -40,7 +40,7 @@ namespace Mono.Security.NewTls.TestFramework
 			private set;
 		}
 
-		public RenegotiationInstrumentParameters (InstrumentationCategory category, RenegotiationInstrumentType type, string identifier, IServerCertificate certificate)
+		public RenegotiationInstrumentParameters (InstrumentationCategory category, RenegotiationInstrumentType type, string identifier, ICertificate certificate)
 			: base (category, identifier, certificate)
 		{
 			Type = type;

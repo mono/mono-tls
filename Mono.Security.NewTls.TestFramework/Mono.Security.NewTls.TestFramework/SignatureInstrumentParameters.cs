@@ -40,7 +40,7 @@ namespace Mono.Security.NewTls.TestFramework
 			private set;
 		}
 
-		public SignatureInstrumentParameters (InstrumentationCategory category, SignatureInstrumentType type, string identifier, IServerCertificate certificate)
+		public SignatureInstrumentParameters (InstrumentationCategory category, SignatureInstrumentType type, string identifier, ICertificate certificate)
 			: base (category, identifier, certificate)
 		{
 			Type = type;

@@ -165,17 +165,17 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-		public class SelectServerCertificateAttribute : TestParameterAttribute, ITestParameterSource<ServerCertificateType>
+		public class SelectServerCertificateAttribute : TestParameterAttribute, ITestParameterSource<CertificateResourceType>
 		{
 			public SelectServerCertificateAttribute (string filter = null, TestFlags flags = TestFlags.Browsable)
 				: base (filter, flags)
 			{
 			}
 
-			public IEnumerable<ServerCertificateType> GetParameters (TestContext ctx, string filter)
+			public IEnumerable<CertificateResourceType> GetParameters (TestContext ctx, string filter)
 			{
-				yield return ServerCertificateType.LocalCA;
-				yield return ServerCertificateType.SelfSigned;
+				yield return CertificateResourceType.ServerCertificateFromLocalCA;
+				yield return CertificateResourceType.SelfSignedServerCertificate;
 			}
 		}
 	}

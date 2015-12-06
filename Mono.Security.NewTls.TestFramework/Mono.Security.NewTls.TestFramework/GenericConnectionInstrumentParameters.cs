@@ -40,7 +40,7 @@ namespace Mono.Security.NewTls.TestFramework
 			private set;
 		}
 
-		public GenericConnectionInstrumentParameters (InstrumentationCategory category, GenericConnectionInstrumentType type, string identifier, IServerCertificate certificate)
+		public GenericConnectionInstrumentParameters (InstrumentationCategory category, GenericConnectionInstrumentType type, string identifier, ICertificate certificate)
 			: base (category, identifier, certificate)
 		{
 			Type = type;

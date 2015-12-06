@@ -33,7 +33,7 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public abstract class MonoConnectionParameters : ConnectionParameters
 	{
-		public MonoConnectionParameters (string identifier, IServerCertificate certificate)
+		public MonoConnectionParameters (string identifier, ICertificate certificate)
 			: base (identifier, certificate)
 		{
 		}

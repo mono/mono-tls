@@ -63,7 +63,7 @@ namespace Mono.Security.NewTls.TestFramework
 			get { return Parameters.NeedCustomCertificateSelectionCallback; }
 		}
 
-		protected override IClientCertificate OnCertificateSelectionCallback (
+		protected override ICertificate OnCertificateSelectionCallback (
 			TestContext ctx, string targetHost, ICertificate[] localCertificates,
 			ICertificate remoteCertificate, string[] acceptableIssuers)
 		{

@@ -23,7 +23,7 @@ namespace Mono.Security.NewTls.MonoConnectionFramework
 {
 	class MonoServer : MonoConnection, IMonoServer
 	{
-		public IServerCertificate Certificate {
+		public ICertificate Certificate {
 			get { return Parameters.ServerCertificate; }
 		}
 
