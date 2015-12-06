@@ -28,8 +28,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.ConnectionFramework;
 
 using MSI = Mono.Security.Interface;

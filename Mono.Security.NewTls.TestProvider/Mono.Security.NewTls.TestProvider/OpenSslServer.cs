@@ -9,10 +9,8 @@ using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {

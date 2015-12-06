@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.ConnectionFramework;
 using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.MonoConnectionFramework

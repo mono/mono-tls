@@ -29,8 +29,6 @@ using System.Threading;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Server;
 
 using Mono.Security.Interface;

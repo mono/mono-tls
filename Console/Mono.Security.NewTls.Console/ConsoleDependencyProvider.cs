@@ -26,7 +26,7 @@
 using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Console;
-using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.TestProvider;
 using Mono.Security.NewTls.TestProvider;
 

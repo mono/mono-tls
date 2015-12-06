@@ -33,8 +33,6 @@ using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.Resources;
 using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
-using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.Tests
 {

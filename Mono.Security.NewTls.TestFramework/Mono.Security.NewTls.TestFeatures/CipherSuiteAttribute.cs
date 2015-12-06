@@ -28,7 +28,6 @@ using System.Linq;
 using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
 using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.TestFeatures
