@@ -44,13 +44,21 @@ namespace Mono.Security.NewTls
 
 		public virtual bool AskForClientCertificate {
 			get {
+				#if FIXME
 				return askForClientCertificate ?? settings.Settings.AskForClientCertificate ?? RequireClientCertificate;
+				#else
+				return askForClientCertificate ?? RequireClientCertificate;
+				#endif
 			}
 		}
 
 		public virtual bool RequireClientCertificate {
 			get {
+				#if FIXME
 				return settings.Settings.RequireClientCertificate ?? false;
+				#else
+				return false;
+				#endif
 			}
 		}
 
@@ -61,7 +69,13 @@ namespace Mono.Security.NewTls
 		}
 
 		public virtual ICollection<CipherSuiteCode> RequestedCiphers {
-			get { return settings.Settings.RequestCipherSuites; }
+			get {
+				#if FIXME
+				return settings.Settings.RequestCipherSuites;
+				#else
+				return null;
+				#endif
+			}
 		}
 
 		public virtual bool HasClientSignatureParameters {
