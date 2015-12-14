@@ -29,6 +29,8 @@ using System.Threading;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.Server;
 
 using Mono.Security.Interface;
@@ -40,11 +42,10 @@ using Mono.Security.Providers.OldTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	using MonoConnectionFramework;
+	using ConnectionFramework;
 	using TestFramework;
 
-	public sealed class NewTlsDependencyProvider : IDependencyProvider,
-		IExtensionProvider<MonoTlsProvider>, IExtensionProvider<IMonoSslStream>
+	public sealed class NewTlsDependencyProvider : IDependencyProvider, IExtensionProvider<MonoTlsProvider>
 	{
 		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
 		const ConnectionProviderFlags NewTlsFlags = DefaultFlags | ConnectionProviderFlags.SupportsTls12 |
@@ -53,11 +54,10 @@ namespace Mono.Security.NewTls.TestProvider
 
 		public void Initialize ()
 		{
-			DependencyInjector.RegisterAssembly (typeof(TestFrameworkDependencyProvider).Assembly);
+			DependencyInjector.RegisterAssembly (typeof(MonoTestFrameworkDependencyProvider).Assembly);
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
 			DependencyInjector.RegisterExtension<MonoTlsProvider> (this);
-			DependencyInjector.RegisterExtension<IMonoSslStream> (this);
 
 			var factory = DependencyInjector.Get<MonoConnectionProviderFactory> ();
 
@@ -78,19 +78,6 @@ namespace Mono.Security.NewTls.TestProvider
 		IExtensionObject<MonoTlsProvider> IExtensionProvider<MonoTlsProvider>.GetExtensionObject (MonoTlsProvider provider)
 		{
 			return GetExtensionObject (provider);
-		}
-
-		public IMonoSslStreamExtensions GetExtensionObject (IMonoSslStream stream)
-		{
-			var monoNewTlsStream = stream as MonoNewTlsStream;
-			if (monoNewTlsStream == null)
-				return null;
-			return new MonoSslStreamExtensions (monoNewTlsStream);
-		}
-
-		IExtensionObject<IMonoSslStream> IExtensionProvider<IMonoSslStream>.GetExtensionObject (IMonoSslStream stream)
-		{
-			return GetExtensionObject (stream);
 		}
 	}
 }

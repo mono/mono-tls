@@ -68,6 +68,10 @@
       <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
       <Name>Mono.Security.NewTls.Instrumentation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\external\web-tests\Xamarin.WebTests.MonoFramework\Xamarin.WebTests.MonoFramework.csproj">
+      <Project>{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}</Project>
+      <Name>Xamarin.WebTests.MonoFramework</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mono.Security.NewTls.Tests\" />

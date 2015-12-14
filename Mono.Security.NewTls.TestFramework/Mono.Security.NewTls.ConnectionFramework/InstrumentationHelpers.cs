@@ -1,10 +1,10 @@
 ﻿//
-// IMonoServer.cs
+// InstrumentationHelpers.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin, Inc.
+// Copyright (c) 2015 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Security.Interface;
+using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoConnectionFramework;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.ConnectionFramework
 {
-	public interface IMonoServer : IServer, IMonoCommonConnection
+	using TestFramework;
+
+	public static class InstrumentationHelpers
 	{
+		public static void InstallInstrumentationProvider (this MonoConnection connection, InstrumentationProvider provider)
+		{
+			var extension = (InstrumentationConnectionExtension)connection.ConnectionExtensions;
+			extension.InstrumentationProvider = provider;
+		}
+
+		public static IMonoTlsProviderExtensions GetTlsProviderExtension (this ConnectionProvider provider)
+		{
+			var tlsProvider = ((MonoConnectionProvider)provider).MonoTlsProvider;
+			return DependencyInjector.GetExtension<MonoTlsProvider,IMonoTlsProviderExtensions> (tlsProvider);
+		}
 	}
 }
 

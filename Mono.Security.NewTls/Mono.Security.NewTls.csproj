@@ -176,7 +176,7 @@
       <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
       <Name>Mono.Security.NewTls.Instrumentation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Console\Mono.Security.Interface\Mono.Security.Interface.csproj">
+    <ProjectReference Include="..\external\web-tests\Console\Mono.Security.Interface\Mono.Security.Interface.csproj">
       <Project>{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}</Project>
       <Name>Mono.Security.Interface</Name>
     </ProjectReference>

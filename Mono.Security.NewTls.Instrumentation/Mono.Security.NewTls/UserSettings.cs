@@ -29,10 +29,19 @@ using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls
 {
-	public class UserSettings
+	public sealed class UserSettings
 	{
-		bool askForCert;
-		bool requireCert;
+		public UserSettings (MonoTlsSettings settings)
+		{
+			this.settings = settings;
+			settings.UserSettings = this;
+		}
+
+		public MonoTlsSettings Settings {
+			get { return settings; }
+		}
+
+		MonoTlsSettings settings;
 
 		ClientCertificateParameters clientCertParams;
 		SignatureParameters signatureParameters;
@@ -40,24 +49,6 @@ namespace Mono.Security.NewTls
 		bool hasClientCertParameters;
 
 		public bool EnableDebugging {
-			get; set;
-		}
-
-		public bool AskForClientCertificate {
-			get { return askForCert || requireCert; }
-			set { askForCert = value; }
-		}
-
-		public bool RequireClientCertificate {
-			get { return requireCert; }
-			set {
-				requireCert = value;
-				if (value)
-					askForCert = true;
-			}
-		}
-
-		public ICollection<CipherSuiteCode> RequestedCiphers {
 			get; set;
 		}
 

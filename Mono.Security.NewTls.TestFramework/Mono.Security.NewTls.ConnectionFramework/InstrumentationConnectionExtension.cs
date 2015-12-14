@@ -1,10 +1,10 @@
 ﻿//
-// OpenSslConnectionProvider.cs
+// InstrumentationConnectionExtension.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin, Inc.
+// Copyright (c) 2015 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,45 +24,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Security.Interface;
+using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoConnectionFramework;
 
-namespace Mono.Security.NewTls.TestProvider
+namespace Mono.Security.NewTls.ConnectionFramework
 {
 	using TestFramework;
 
-	public sealed class OpenSslConnectionProvider : ConnectionProvider
+	class InstrumentationConnectionExtension : IMonoConnectionExtensions
 	{
-		public OpenSslConnectionProvider (ConnectionProviderFactory factory)
-			: base (factory, ConnectionProviderType.OpenSsl,
-				ConnectionProviderFlags.SupportsTls12 | ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers)
+		public ConnectionParameters Parameters {
+			get;
+			private set;
+		}
+
+		public InstrumentationConnectionExtension (MonoConnectionProvider provider, ConnectionParameters parameters)
 		{
+			Parameters = parameters;
 		}
 
-		public bool SupportsMonoExtensions {
-			get { return true; }
+		InstrumentationProvider instrumentationProvider;
+
+		public InstrumentationProvider InstrumentationProvider {
+			get { return instrumentationProvider; }
+			set { instrumentationProvider = value; }
 		}
 
-		public bool SupportsInstrumentation {
-			get { return false; }
-		}
-
-		public override ProtocolVersions SupportedProtocols {
-			get { return ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12; }
-		}
-
-		public override IClient CreateClient (ConnectionParameters parameters)
+		public void GetSettings (TestContext ctx, MonoTlsSettings settings)
 		{
-			return new OpenSslClient (this, parameters);
-		}
-
-		public override IServer CreateServer (ConnectionParameters parameters)
-		{
-			return new OpenSslServer (this, parameters);
-		}
-
-		protected override ISslStreamProvider GetSslStreamProvider ()
-		{
-			throw new InvalidOperationException ();
+			#if DEBUG
+			if (InstrumentationProvider != null) {
+				UserSettings userSettings;
+				var instrumentation = InstrumentationProvider.CreateInstrument (ctx, settings);
+				if (instrumentation != null && instrumentation.HasSettingsInstrument)
+					userSettings = instrumentation.SettingsInstrument.UserSettings;
+				else
+					userSettings = new UserSettings (settings);
+				userSettings.Instrumentation = instrumentation;
+			}
+			#endif
 		}
 	}
 }

@@ -36,6 +36,8 @@ using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.Server;
 using Mono.Security.Cryptography;
 using Mono.Security.Interface;
@@ -86,15 +88,6 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected abstract bool IsServer {
 			get;
-		}
-
-		bool IMonoCommonConnection.SupportsInstrumentation {
-			get { return false; }
-		}
-
-		InstrumentationProvider IMonoCommonConnection.InstrumentationProvider {
-			get { throw new NotSupportedException (); }
-			set { throw new NotSupportedException (); }
 		}
 
 		public ProtocolVersions ProtocolVersion {

@@ -43,11 +43,15 @@ namespace Mono.Security.NewTls
 		}
 
 		public virtual bool AskForClientCertificate {
-			get { return askForClientCertificate ?? settings.AskForClientCertificate; }
+			get {
+				return askForClientCertificate ?? settings.Settings.AskForClientCertificate ?? RequireClientCertificate;
+			}
 		}
 
 		public virtual bool RequireClientCertificate {
-			get { return settings.RequireClientCertificate; }
+			get {
+				return settings.Settings.RequireClientCertificate ?? false;
+			}
 		}
 
 		protected internal virtual void Initialize (ITlsContext ctx)
@@ -57,7 +61,7 @@ namespace Mono.Security.NewTls
 		}
 
 		public virtual ICollection<CipherSuiteCode> RequestedCiphers {
-			get { return settings.RequestedCiphers; }
+			get { return settings.Settings.RequestCipherSuites; }
 		}
 
 		public virtual bool HasClientSignatureParameters {

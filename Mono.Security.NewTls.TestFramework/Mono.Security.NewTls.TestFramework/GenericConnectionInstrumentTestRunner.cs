@@ -34,6 +34,7 @@ using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.Resources;
 using Xamarin.AsyncTests.Portable;
 
@@ -49,7 +50,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
-		protected override InstrumentationConnectionHandler CreateConnectionHandler ()
+		protected override MonoConnectionHandler CreateConnectionHandler ()
 		{
 			return new ConnectionInstrumentConnectionHandler (this);
 		}

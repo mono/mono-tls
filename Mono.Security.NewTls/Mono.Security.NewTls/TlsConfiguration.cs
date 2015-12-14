@@ -67,7 +67,7 @@ namespace Mono.Security.NewTls
 			if (settings != null)
 				UserSettings = (UserSettings)settings.UserSettings;
 			if (UserSettings == null)
-				UserSettings = new UserSettings ();
+				UserSettings = new UserSettings (settings);
 
 			RenegotiationFlags = DefaultRenegotiationFlags;
 		}
@@ -83,7 +83,7 @@ namespace Mono.Security.NewTls
 			if (settings != null)
 				UserSettings = (UserSettings)settings.UserSettings;
 			if (UserSettings == null)
-				UserSettings = new UserSettings ();
+				UserSettings = new UserSettings (settings);
 
 			RenegotiationFlags = DefaultRenegotiationFlags;
 		}

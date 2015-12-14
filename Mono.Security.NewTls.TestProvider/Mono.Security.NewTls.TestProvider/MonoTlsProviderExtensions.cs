@@ -6,7 +6,7 @@ using Mono.Security.Providers.NewTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	using MonoConnectionFramework;
+	using ConnectionFramework;
 
 	class MonoTlsProviderExtensions : IMonoTlsProviderExtensions
 	{
@@ -28,17 +28,35 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return newTls != null; }
 		}
 
-		public bool SupportsMonoExtensions {
+		public bool SupportsRenegotiation {
 			get { return newTls != null; }
-		}
-
-		public MonoTlsConnectionInfo GetConnectionInfo ()
-		{
-			throw new NotImplementedException ();
 		}
 
 		public bool SupportsInstrumentation {
 			get { return newTls != null; }
+		}
+
+		public bool SupportsMonoExtensions {
+			get { return newTls != null; }
+		}
+
+		public bool SupportsConnectionInfo {
+			get { return true; }
+		}
+
+		public MonoTlsConnectionInfo GetConnectionInfo (IMonoSslStream stream)
+		{
+			return stream.GetConnectionInfo ();
+		}
+
+		public Task Shutdown (IMonoSslStream stream)
+		{
+			return ((MonoNewTlsStream)stream).Shutdown ();
+		}
+
+		public Task RequestRenegotiation (IMonoSslStream stream)
+		{
+			return ((MonoNewTlsStream)stream).RequestRenegotiation ();
 		}
 	}
 }

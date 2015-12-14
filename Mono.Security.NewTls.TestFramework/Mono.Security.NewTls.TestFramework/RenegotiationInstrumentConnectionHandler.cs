@@ -31,6 +31,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
@@ -38,7 +39,7 @@ using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	using MonoConnectionFramework;
+	using ConnectionFramework;
 
 	public class RenegotiationInstrumentConnectionHandler : ConnectionInstrumentConnectionHandler
 	{
@@ -138,8 +139,8 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 			if (Parameters.RequestClientRenegotiation) {
 				LogDebug (ctx, 1, "HandleClient - waiting for renegotiation");
-				var monoSslStream = (MonoSslStream)Client.SslStream;
-				await monoSslStream.RequestRenegotiation ();
+				var extension = Client.Provider.GetTlsProviderExtension ();
+				await extension.RequestRenegotiation ((IMonoSslStream)Client.SslStream);
 				LogDebug (ctx, 1, "HandleClient - done waiting for renegotiation");
 
 				if (!Parameters.ServerWriteDuringClientRenegotiation)
@@ -156,8 +157,8 @@ namespace Mono.Security.NewTls.TestFramework
 
 			if (Parameters.RequestServerRenegotiation) {
 				LogDebug (ctx, 1, "HandleServer - waiting for renegotiation");
-				var monoSslStream = (MonoSslStream)Server.SslStream;
-				await monoSslStream.RequestRenegotiation ();
+				var extension = Server.Provider.GetTlsProviderExtension ();
+				await extension.RequestRenegotiation ((IMonoSslStream)Server.SslStream);
 				LogDebug (ctx, 1, "HandleServer - done waiting for renegotiation");
 			}
 
@@ -172,7 +173,7 @@ namespace Mono.Security.NewTls.TestFramework
 			}
 		}
 
-		internal protected override void OnShutdown (TestContext ctx)
+		protected override void OnShutdown (TestContext ctx)
 		{
 			renegotiationCompletedTcs.TrySetCanceled ();
 		}

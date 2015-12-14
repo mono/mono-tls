@@ -61,6 +61,10 @@ namespace Mono.Security.Providers.NewTls
 			get { return true; }
 		}
 
+		public override bool SupportsConnectionInfo {
+			get { return true; }
+		}
+
 		public override bool SupportsMonoExtensions {
 			get { return true; }
 		}

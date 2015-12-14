@@ -1,10 +1,10 @@
 ﻿//
-// IMonoCommonConnection.cs
+// IMonoTlsProviderExtensions.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin, Inc.
+// Copyright (c) 2015 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +24,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Xamarin.AsyncTests;
 using Mono.Security.Interface;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.ConnectionFramework
 {
-	public interface IMonoCommonConnection
+	public interface IMonoTlsProviderExtensions : IExtensionObject<MonoTlsProvider>
 	{
-		bool SupportsConnectionInfo {
+		bool IsNewTls {
 			get;
 		}
-
-		MonoTlsConnectionInfo GetConnectionInfo ();
 
 		bool SupportsInstrumentation {
 			get;
 		}
 
-		InstrumentationProvider InstrumentationProvider {
-			get; set;
+		bool SupportsConnectionInfo {
+			get;
 		}
+
+		bool SupportsRenegotiation {
+			get;
+		}
+
+		MonoTlsConnectionInfo GetConnectionInfo (IMonoSslStream stream);
+
+		Task Shutdown (IMonoSslStream stream);
+
+		Task RequestRenegotiation (IMonoSslStream stream);
 	}
 }
 

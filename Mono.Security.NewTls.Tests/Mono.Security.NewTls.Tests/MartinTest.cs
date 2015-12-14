@@ -42,7 +42,7 @@ namespace Mono.Security.NewTls.Tests
 	[AsyncTestFixture]
 	public class MartinTest
 	{
-		[Martin]
+		// [Martin]
 		[AsyncTest]
 		[ConnectionTestCategory (ConnectionTestCategory.HttpsWithMono)]
 		public async Task TestMonoConnection (TestContext ctx, CancellationToken cancellationToken,
@@ -53,8 +53,9 @@ namespace Mono.Security.NewTls.Tests
 			await runner.Run (ctx, cancellationToken);
 		}
 
-		// [Martin]
+		[Martin]
 		[AsyncTest]
+		[InstrumentationConnectionFlags (InstrumentationConnectionFlags.Instrumentation)]
 		[InstrumentationCategory (InstrumentationCategory.MartinTest)]
 		public Task Test (TestContext ctx, CancellationToken cancellationToken,
 			InstrumentationConnectionProvider provider,

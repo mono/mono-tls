@@ -1,10 +1,10 @@
 ﻿//
-// IMonoClient.cs
+// IConnectionProviderExtensions.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2015 Xamarin, Inc.
+// Copyright (c) 2015 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
 
-namespace Mono.Security.NewTls.TestFramework
+namespace Mono.Security.NewTls.ConnectionFramework
 {
-	public interface IMonoClient : IClient, IMonoCommonConnection
+	public interface IConnectionProviderExtensions : IExtensionObject<ConnectionProvider>
 	{
+		bool SupportsInstrumentation {
+			get;
+		}
 	}
 }
 

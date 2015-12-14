@@ -49,6 +49,8 @@ namespace Mono.Security.Providers.NewTls
 {
 	public class MonoNewTlsStream : SslStream, MSI.IMonoSslStream
 	{
+		MSI.MonoTlsProvider provider;
+
 		internal MonoNewTlsStream (Stream innerStream, MSI.MonoTlsProvider provider, MSI.MonoTlsSettings settings)
 			: this (innerStream, false, provider, settings)
 		{
@@ -57,25 +59,20 @@ namespace Mono.Security.Providers.NewTls
 		internal MonoNewTlsStream (Stream innerStream, bool leaveOpen, MSI.MonoTlsProvider provider, MSI.MonoTlsSettings settings)
 			: base (innerStream, leaveOpen, EncryptionPolicy.RequireEncryption, provider, settings)
 		{
+			this.provider = provider;
+		}
+
+		public MSI.MonoTlsProvider Provider {
+			get { return provider; }
 		}
 
 		new public bool IsClosed {
 			get { return base.IsClosed; }
 		}
 
-		new public MSI.TlsException LastError {
-			get { return (MSI.TlsException)base.LastError; }
-		}
-
 		public MSI.MonoTlsConnectionInfo GetConnectionInfo ()
 		{
-			var info = GetMonoConnectionInfo ();
-			if (info == null)
-				return null;
-			return new MSI.MonoTlsConnectionInfo {
-				CipherSuiteCode = (MSI.CipherSuiteCode)info.CipherSuiteCode,
-				ProtocolVersion = (MSI.TlsProtocols)info.ProtocolVersion
-			};
+			return GetMonoConnectionInfo ();
 		}
 
 		public Task Shutdown ()

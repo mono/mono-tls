@@ -37,7 +37,6 @@ using Mono.Security.Providers.OldTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
-	using MonoConnectionFramework;
 	using TestFramework;
 
 	class OpenSslConnectionProviderFactory : IConnectionProviderFactoryExtension

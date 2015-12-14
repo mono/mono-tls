@@ -29,13 +29,7 @@ namespace Mono.Security.NewTls.TestFramework
 {
 	public enum InstrumentationCategory
 	{
-		AllClientSignatureAlgorithms,
-		AllServerSignatureAlgorithms,
-
-		ClientSignatureParameters,
-		ServerSignatureParameters,
-
-		SignatureAlgorithms,
+		#region Inherited from MonoConnectionTestCategory
 
 		ClientConnection,
 		ServerConnection,
@@ -52,13 +46,23 @@ namespace Mono.Security.NewTls.TestFramework
 		SelectServerCipher,
 		SelectCipher,
 
+		MartinTestClient,
+		MartinTestServer,
+		MartinTest,
+
+		#endregion
+
+		AllClientSignatureAlgorithms,
+		AllServerSignatureAlgorithms,
+
+		ClientSignatureParameters,
+		ServerSignatureParameters,
+
+		SignatureAlgorithms,
+
 		ClientRenegotiation,
 		ServerRenegotiation,
 		Renegotiation,
-
-		MartinTestClient,
-		MartinTestServer,
-		MartinTest
 	}
 }
 

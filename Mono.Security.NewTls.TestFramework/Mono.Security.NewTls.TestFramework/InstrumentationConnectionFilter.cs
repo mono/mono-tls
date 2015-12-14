@@ -26,9 +26,13 @@
 using System;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoConnectionFramework;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using ConnectionFramework;
+
 	public class InstrumentationConnectionFilter : ConnectionProviderFilter
 	{
 		public InstrumentationCategory Category {
@@ -54,13 +58,18 @@ namespace Mono.Security.NewTls.TestFramework
 
 		static bool SupportsInstrumentation (ConnectionProvider provider)
 		{
-			var monoProvider = provider as IMonoConnectionProvider;
-			return monoProvider != null && monoProvider.SupportsInstrumentation;
+			var monoProvider = provider as MonoConnectionProvider;
+			if (monoProvider == null)
+				return false;
+
+			var tlsProvider = monoProvider.MonoTlsProvider;
+			var extensions = DependencyInjector.GetExtension<MonoTlsProvider,IMonoTlsProviderExtensions> (tlsProvider);
+			return extensions != null && extensions.SupportsInstrumentation;
 		}
 
 		static bool SupportsMonoExtensions (ConnectionProvider provider)
 		{
-			var monoProvider = provider as IMonoConnectionProvider;
+			var monoProvider = provider as MonoConnectionProvider;
 			return monoProvider != null && monoProvider.SupportsMonoExtensions;
 		}
 
