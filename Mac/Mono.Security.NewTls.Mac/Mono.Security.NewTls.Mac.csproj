@@ -122,10 +122,6 @@
       <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
       <Name>Mono.Security.NewTls.Instrumentation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mono.Security.Interface\Mono.Security.Interface.csproj">
-      <Project>{D8CF5744-B13E-4134-A4BF-9E219261C1BF}</Project>
-      <Name>Mono.Security.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\external\web-tests\Mac\Xamarin.WebTests.PortableSecurity.Mac\Xamarin.WebTests.PortableSecurity.Mac.csproj">
       <Project>{BC0385D6-52A8-41D1-9E72-3AF768C42661}</Project>
       <Name>Xamarin.WebTests.PortableSecurity.Mac</Name>
@@ -133,6 +129,10 @@
     <ProjectReference Include="..\..\external\web-tests\Mac\Xamarin.WebTests.TestProvider.Mac\Xamarin.WebTests.TestProvider.Mac.csproj">
       <Project>{9390670C-C319-4817-95FC-7C83E9B708E3}</Project>
       <Name>Xamarin.WebTests.TestProvider.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Mac\Mono.Security.Interface\Mono.Security.Interface.csproj">
+      <Project>{D8CF5744-B13E-4134-A4BF-9E219261C1BF}</Project>
+      <Name>Mono.Security.Interface</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
