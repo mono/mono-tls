@@ -42,7 +42,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IRandomNumberGenerator.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\IsSupportedConstraint.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationTestRunner.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\ProtocolVersionsAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrument.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationProvider.cs" />
@@ -87,7 +86,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationConnectionProviderAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationConnectionFlagsAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\CipherSuiteAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.ConnectionFramework\IConnectionProviderExtensions.cs" />
     <Compile Include="Mono.Security.NewTls.ConnectionFramework\InstrumentationConnectionExtension.cs" />
     <Compile Include="Mono.Security.NewTls.ConnectionFramework\InstrumentationHelpers.cs" />
