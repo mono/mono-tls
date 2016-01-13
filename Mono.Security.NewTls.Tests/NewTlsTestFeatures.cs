@@ -61,7 +61,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	public class NewTlsTestFeatures : SharedWebTestFeatures, ISingletonInstance
+	public class NewTlsTestFeatures : ITestConfigurationProvider, ISingletonInstance
 	{
 		public static NewTlsTestFeatures Instance {
 			get { return DependencyInjector.Get<NewTlsTestFeatures> (); }
@@ -99,20 +99,12 @@ namespace Mono.Security.NewTls.Tests
 		public readonly TestFeature HttpsWithOldTLS = new TestFeature ("HttpsWithOldTLS", "Use Mono's existing web stack with the old TLS", false);
 		public readonly TestFeature HttpsWithNewTLS = new TestFeature ("HttpsWithNewTLS", "Use Mono's existing web stack with the new TLS", true);
 
-		public override string Name {
+		public string Name {
 			get { return "Mono.Security.NewTls.Tests"; }
 		}
 
-		protected override bool HasMonoVersion (Version version)
-		{
-			return true;
-		}
-
-		public override IEnumerable<TestFeature> Features {
+		public IEnumerable<TestFeature> Features {
 			get {
-				foreach (var feature in base.Features)
-					yield return feature;
-
 				yield return Hello;
 				yield return DotNetCryptoProvider;
 				yield return MonoCryptoProvider;
@@ -126,11 +118,8 @@ namespace Mono.Security.NewTls.Tests
 			}
 		}
 
-		public override IEnumerable<TestCategory> Categories {
+		public IEnumerable<TestCategory> Categories {
 			get {
-				foreach (var category in base.Categories)
-					yield return category;
-
 				yield return RenegotiationAttribute.Instance;
 			}
 		}
