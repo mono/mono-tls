@@ -39,7 +39,7 @@ using MX = Mono.Security.X509;
 
 namespace Mono.Security.Providers.NewTls
 {
-	class TlsContextWrapper : SecretParameters, MSI.IMonoTlsContext
+	class TlsContextWrapper : MSI.SecretParameters, MSI.IMonoTlsContext
 	{
 		TlsConfiguration config;
 		TlsContext context;
@@ -102,8 +102,8 @@ namespace Mono.Security.Providers.NewTls
 
 		public int GenerateNextToken (MSI.IBufferOffsetSize incoming, out MSI.IBufferOffsetSize outgoing)
 		{
-			var input = incoming != null ? new TlsBuffer (BOSWrapper.Wrap (incoming)) : null;
-			TlsMultiBuffer output = new TlsMultiBuffer ();
+			var input = incoming != null ? new MSI.TlsBuffer (BOSWrapper.Wrap (incoming)) : null;
+			MSI.TlsMultiBuffer output = new MSI.TlsMultiBuffer ();
 			var retval = Context.GenerateNextToken (input, output);
 			if (output.IsEmpty)
 				outgoing = null;
@@ -113,7 +113,7 @@ namespace Mono.Security.Providers.NewTls
 
 		public int EncryptMessage (ref MSI.IBufferOffsetSize incoming)
 		{
-			var buffer = new TlsBuffer (BOSWrapper.Wrap (incoming));
+			var buffer = new MSI.TlsBuffer (BOSWrapper.Wrap (incoming));
 			var retval = Context.EncryptMessage (ref buffer);
 			incoming = BOSWrapper.Wrap (buffer.GetRemaining ());
 			return (int)retval;
@@ -121,7 +121,7 @@ namespace Mono.Security.Providers.NewTls
 
 		public int DecryptMessage (ref MSI.IBufferOffsetSize incoming)
 		{
-			var buffer = new TlsBuffer (BOSWrapper.Wrap (incoming));
+			var buffer = new MSI.TlsBuffer (BOSWrapper.Wrap (incoming));
 			var retval = Context.DecryptMessage (ref buffer);
 			incoming = buffer != null ? BOSWrapper.Wrap (buffer.GetRemaining ()) : null;
 			return (int)retval;

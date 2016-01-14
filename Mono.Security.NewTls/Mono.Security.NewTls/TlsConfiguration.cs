@@ -11,7 +11,7 @@ namespace Mono.Security.NewTls
 	public delegate bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);
 	public delegate SSCX.X509Certificate LocalCertSelectionCallback (string targetHost, SSCX.X509CertificateCollection localCertificates, SSCX.X509Certificate remoteCertificate, string[] acceptableIssuers);
 
-	public class TlsConfiguration : SecretParameters
+	public class TlsConfiguration : MSI.SecretParameters
 	{
 		readonly MSI.TlsProtocols supportedProtocols;
 		readonly MSI.TlsProtocolCode requestedProtocol;

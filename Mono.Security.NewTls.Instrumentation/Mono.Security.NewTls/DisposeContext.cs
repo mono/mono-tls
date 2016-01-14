@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls
 {
