@@ -1,8 +1,13 @@
-﻿using System;
+﻿extern alias NewSystemSource;
+
+using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Net.Security;
 using System.Security.Cryptography;
 using Mono.Security.Interface;
+
+using MNS = NewSystemSource::Mono.Net.Security;
 
 namespace Mono.Security.NewTls
 {
@@ -20,7 +25,7 @@ namespace Mono.Security.NewTls
 	 * security issues, anything in it - but do not use it in production environment until it is ready.
 	 *
 	 */
-	public class TlsContext : ITlsContext
+	public class TlsContext : SecretParameters, ITlsContext, MNS.ITlsContext
 	{
 		readonly bool isServer;
 		readonly TlsConfiguration configuration;
@@ -196,7 +201,7 @@ namespace Mono.Security.NewTls
 				throw new TlsException (AlertDescription.InternalError, "The session is no longer valid.");
 		}
 
-		public void Clear ()
+		protected override void Clear ()
 		{
 			negotiationHandler = null;
 			if (handshakeParameters != null) {
@@ -315,6 +320,11 @@ namespace Mono.Security.NewTls
 		#endregion
 
 		#region Main Loop
+
+		int MNS.ITlsContext.GenerateNextToken (TlsBuffer incoming, TlsMultiBuffer outgoing)
+		{
+			return (int)GenerateNextToken (incoming, outgoing);
+		}
 
 		public SecurityStatus GenerateNextToken (TlsBuffer incoming, TlsMultiBuffer outgoing)
 		{
@@ -543,6 +553,11 @@ namespace Mono.Security.NewTls
 
 		#region Crypto
 
+		int MNS.ITlsContext.DecryptMessage (ref TlsBuffer incoming)
+		{
+			return (int)DecryptMessage (ref incoming);
+		}
+
 		public SecurityStatus DecryptMessage (ref TlsBuffer incoming)
 		{
 			try {
@@ -598,6 +613,11 @@ namespace Mono.Security.NewTls
 			}
 
 			throw new TlsException (AlertDescription.UnexpectedMessage, "Unknown content type {0}", contentType);
+		}
+
+		int MNS.ITlsContext.EncryptMessage (ref TlsBuffer incoming)
+		{
+			return (int)EncryptMessage (ref incoming);
 		}
 
 		public SecurityStatus EncryptMessage (ref TlsBuffer incoming)

@@ -69,7 +69,7 @@ namespace Mono.Security.Providers.NewTls
 		protected override void Clear ()
 		{
 			if (context != null) {
-				context.Clear ();
+				context.Dispose ();
 				context = null;
 			}
 		}
