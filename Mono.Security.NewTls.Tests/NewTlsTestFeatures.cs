@@ -27,6 +27,7 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.Tests;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.HttpFramework;
@@ -34,8 +35,9 @@ using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.Resources;
 
-[assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeaturesProvider))]
+[assembly: AsyncTestSuite (typeof (NewTlsTestFeatures), "NewTls", typeof (SharedWebTestFeatures))]
+
+[assembly: DependencyProvider (typeof (NewTlsTestFeaturesProvider))]
 [assembly: RequireDependency (typeof (ConnectionProviderFactory))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
 [assembly: RequireDependency (typeof (ICertificateProvider))]
