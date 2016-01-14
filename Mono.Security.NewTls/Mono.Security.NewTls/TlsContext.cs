@@ -1,13 +1,11 @@
-﻿extern alias NewSystemSource;
-
-using System;
+﻿using System;
 using System.Net;
 using System.Collections.Generic;
 using System.Net.Security;
 using System.Security.Cryptography;
 using Mono.Security.Interface;
 
-using MNS = NewSystemSource::Mono.Net.Security;
+using XITlsContext = Mono.Security.Providers.NewTls.ITlsContext;
 
 namespace Mono.Security.NewTls
 {
@@ -25,7 +23,7 @@ namespace Mono.Security.NewTls
 	 * security issues, anything in it - but do not use it in production environment until it is ready.
 	 *
 	 */
-	public class TlsContext : SecretParameters, ITlsContext, MNS.ITlsContext
+	public class TlsContext : SecretParameters, ITlsContext, XITlsContext
 	{
 		readonly bool isServer;
 		readonly TlsConfiguration configuration;
@@ -321,7 +319,7 @@ namespace Mono.Security.NewTls
 
 		#region Main Loop
 
-		int MNS.ITlsContext.GenerateNextToken (TlsBuffer incoming, TlsMultiBuffer outgoing)
+		int XITlsContext.GenerateNextToken (TlsBuffer incoming, TlsMultiBuffer outgoing)
 		{
 			return (int)GenerateNextToken (incoming, outgoing);
 		}
@@ -553,7 +551,7 @@ namespace Mono.Security.NewTls
 
 		#region Crypto
 
-		int MNS.ITlsContext.DecryptMessage (ref TlsBuffer incoming)
+		int XITlsContext.DecryptMessage (ref TlsBuffer incoming)
 		{
 			return (int)DecryptMessage (ref incoming);
 		}
@@ -615,7 +613,7 @@ namespace Mono.Security.NewTls
 			throw new TlsException (AlertDescription.UnexpectedMessage, "Unknown content type {0}", contentType);
 		}
 
-		int MNS.ITlsContext.EncryptMessage (ref TlsBuffer incoming)
+		int XITlsContext.EncryptMessage (ref TlsBuffer incoming)
 		{
 			return (int)EncryptMessage (ref incoming);
 		}

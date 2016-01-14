@@ -1,13 +1,11 @@
-﻿extern alias NewSystemSource;
-
-using System;
+﻿using System;
 using System.Net.Security;
 using System.Security.Cryptography;
 using MSI = Mono.Security.Interface;
 using MX = Mono.Security.X509;
 using SSCX = System.Security.Cryptography.X509Certificates;
 
-using MNS = NewSystemSource::Mono.Net.Security;
+using XITlsConfiguration = Mono.Security.Providers.NewTls.ITlsConfiguration;
 
 namespace Mono.Security.NewTls
 {
@@ -15,7 +13,7 @@ namespace Mono.Security.NewTls
 	public delegate bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);
 	public delegate SSCX.X509Certificate LocalCertSelectionCallback (string targetHost, SSCX.X509CertificateCollection localCertificates, SSCX.X509Certificate remoteCertificate, string[] acceptableIssuers);
 
-	public class TlsConfiguration : MSI.SecretParameters, MNS.ITlsConfiguration
+	public class TlsConfiguration : MSI.SecretParameters, XITlsConfiguration
 	{
 		readonly MSI.TlsProtocols supportedProtocols;
 		readonly MSI.TlsProtocolCode requestedProtocol;
