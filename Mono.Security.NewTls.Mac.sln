@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls", "Mac\Mono.Security.NewTls\Mono.Security.NewTls.csproj", "{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Providers.NewTls", "Mac\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj", "{A3824ECB-B185-48C8-96F2-F4B5171366FB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests", "external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj", "{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AsyncTests.Framework", "external\web-tests\Xamarin.AsyncTests.Framework\Xamarin.AsyncTests.Framework.csproj", "{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}"
@@ -30,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.TestProvider.Mac", "external\web-tests\Mac\Xamarin.WebTests.TestProvider.Mac\Xamarin.WebTests.TestProvider.Mac.csproj", "{9390670C-C319-4817-95FC-7C83E9B708E3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Interface", "external\web-tests\Mac\Mono.Security.Interface\Mono.Security.Interface.csproj", "{D8CF5744-B13E-4134-A4BF-9E219261C1BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.WebTests.MonoFramework", "external\web-tests\Xamarin.WebTests.MonoFramework\Xamarin.WebTests.MonoFramework.csproj", "{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,14 +87,6 @@ Global
 		{97CF1313-8F68-49E2-A93B-5A7EB4BACD5C}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 		{97CF1313-8F68-49E2-A93B-5A7EB4BACD5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97CF1313-8F68-49E2-A93B-5A7EB4BACD5C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.AppStore|Any CPU.Build.0 = Debug|Any CPU
-		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
-		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3824ECB-B185-48C8-96F2-F4B5171366FB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 		{BC0385D6-52A8-41D1-9E72-3AF768C42661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -143,5 +135,13 @@ Global
 		{F533A15D-8651-43F4-B293-7934638C592B}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 		{F533A15D-8651-43F4-B293-7934638C592B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F533A15D-8651-43F4-B293-7934638C592B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

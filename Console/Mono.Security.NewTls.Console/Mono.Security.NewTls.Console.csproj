@@ -69,11 +69,8 @@
       <Aliases>NewSystemSource</Aliases>
     </Reference>
     <Reference Include="Mono.Security.Providers.OldTls" />
-    <Reference Include="Mono.Security.Providers.Dotnet" />
-    <ProjectReference Include="..\..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj">
-      <Project>{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}</Project>
-      <Name>Mono.Security.Providers.NewTls</Name>
-    </ProjectReference>
+    <Reference Include="Mono.Security.Providers.DotNet" />
+    <Reference Include="Mono.Security.Providers.NewTls" />
     <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
       <Name>Mono.Security.NewTls.Tests</Name>

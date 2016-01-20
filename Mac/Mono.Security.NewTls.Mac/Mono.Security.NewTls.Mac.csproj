@@ -33,6 +33,7 @@
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <PackageSigningKey>Developer ID Installer</PackageSigningKey>
     <Profiling>false</Profiling>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -50,6 +51,7 @@
     <Profiling>false</Profiling>
     <LinkMode>SdkOnly</LinkMode>
     <XamMacArch>x86_64</XamMacArch>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -62,6 +64,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="Mono.Security.Providers.OldTls" />
     <Reference Include="Mono.Security.Providers.DotNet" />
+    <Reference Include="Mono.Security.Providers.NewTls" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\AppDelegate.cs">
@@ -98,10 +101,6 @@
       <Project>{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}</Project>
       <Name>Mono.Security.NewTls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj">
-      <Project>{A3824ECB-B185-48C8-96F2-F4B5171366FB}</Project>
-      <Name>Mono.Security.Providers.NewTls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
       <Name>Mono.Security.NewTls.Tests</Name>
@@ -133,6 +132,10 @@
     <ProjectReference Include="..\..\external\web-tests\Mac\Mono.Security.Interface\Mono.Security.Interface.csproj">
       <Project>{D8CF5744-B13E-4134-A4BF-9E219261C1BF}</Project>
       <Name>Mono.Security.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.MonoFramework\Xamarin.WebTests.MonoFramework.csproj">
+      <Project>{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}</Project>
+      <Name>Xamarin.WebTests.MonoFramework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

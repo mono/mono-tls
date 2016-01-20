@@ -36,6 +36,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Mono.Security" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Mono.Security.Providers.NewTls" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />

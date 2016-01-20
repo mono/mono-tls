@@ -30,6 +30,7 @@
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
     <Profiling>false</Profiling>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -45,12 +46,14 @@
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
     <Profiling>false</Profiling>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
     <Reference Include="Mono.Security" />
+	<Reference Include="Mono.Security.Providers.NewTls" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Mono.Security.NewTls\Properties\AssemblyInfo.cs">

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls", "Mono.Security.NewTls\Mono.Security.NewTls.csproj", "{C577448D-707B-4DDD-83DC-9CB758FC6DE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.Providers.NewTls", "Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj", "{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.TestFramework", "Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj", "{EA1D2205-446B-4B54-823A-94985CC36A17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security.NewTls.Tests", "Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj", "{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}"
@@ -59,14 +57,6 @@ Global
 		{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}.ReleaseNewTls|Any CPU.ActiveCfg = ReleaseNewTls|Any CPU
 		{26D9F399-1FD5-4796-AE59-E42D0FBA0EF2}.ReleaseNewTls|Any CPU.Build.0 = ReleaseNewTls|Any CPU
-		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.DebugNewTls|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.DebugNewTls|Any CPU.Build.0 = Debug|Any CPU
-		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.ReleaseNewTls|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B5EDBC8-F8EA-48E4-AA87-A3FC52202F01}.ReleaseNewTls|Any CPU.Build.0 = Debug|Any CPU
 		{85371459-6509-4D96-A95D-862399E0F0BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{85371459-6509-4D96-A95D-862399E0F0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85371459-6509-4D96-A95D-862399E0F0BE}.DebugNewTls|Any CPU.ActiveCfg = Debug|Any CPU
