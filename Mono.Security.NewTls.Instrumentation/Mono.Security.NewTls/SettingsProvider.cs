@@ -69,13 +69,7 @@ namespace Mono.Security.NewTls
 		}
 
 		public virtual ICollection<CipherSuiteCode> RequestedCiphers {
-			get {
-				#if FIXME
-				return settings.Settings.RequestCipherSuites;
-				#else
-				return null;
-				#endif
-			}
+			get { return settings.Settings.EnabledCiphers; }
 		}
 
 		public virtual bool HasClientSignatureParameters {
