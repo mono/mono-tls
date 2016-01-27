@@ -49,7 +49,7 @@ namespace Mono.Security.NewTls.TestProvider
 	{
 		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
 		const ConnectionProviderFlags NewTlsFlags = DefaultFlags | ConnectionProviderFlags.SupportsTls12 |
-			ConnectionProviderFlags.SupportsAeadCiphers | ConnectionProviderFlags.SupportsEcDheCiphers |
+			ConnectionProviderFlags.SupportsAeadCiphers | // ConnectionProviderFlags.SupportsEcDheCiphers |
 			ConnectionProviderFlags.SupportsClientCertificates;
 
 		public void Initialize ()
