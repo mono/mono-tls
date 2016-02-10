@@ -34,9 +34,6 @@ using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.Server;
 
 using Mono.Security.Interface;
-using Mono.Security.Providers.NewTls;
-using Mono.Security.Providers.DotNet;
-using Mono.Security.Providers.OldTls;
 
 [assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
 
@@ -61,10 +58,10 @@ namespace Mono.Security.NewTls.TestProvider
 
 			var factory = DependencyInjector.Get<MonoConnectionProviderFactory> ();
 
-			var newTlsProvider = new NewTlsProvider ();
+			var newTlsProvider = MonoTlsProviderFactory.GetProvider ("newtls");
 			factory.RegisterProvider ("NewTLS", newTlsProvider, ConnectionProviderType.NewTLS, NewTlsFlags);
 
-			var oldTlsProvider = new OldTlsProvider ();
+			var oldTlsProvider = MonoTlsProviderFactory.GetProvider ("oldtls");
 			factory.RegisterProvider ("OldTLS", oldTlsProvider, ConnectionProviderType.OldTLS, DefaultFlags);
 		}
 

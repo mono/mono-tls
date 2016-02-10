@@ -32,8 +32,6 @@ using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.Server;
 
 using MSI = Mono.Security.Interface;
-using Mono.Security.Providers.NewTls;
-using Mono.Security.Providers.OldTls;
 
 namespace Mono.Security.NewTls.TestProvider
 {
