@@ -29,9 +29,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFramework
@@ -54,12 +57,12 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
-		protected override InstrumentationConnectionHandler CreateConnectionHandler ()
+		protected override MonoConnectionHandler CreateConnectionHandler ()
 		{
-			return new DefaultInstrumentationConnectionHandler (this);
+			return new DefaultMonoConnectionHandler (this);
 		}
 
-		public override Instrumentation CreateInstrument (TestContext ctx)
+		public override Instrumentation CreateInstrument (TestContext ctx, MonoTlsSettings settings)
 		{
 			var instrumentation = new Instrumentation ();
 			instrumentation.SignatureInstrument = new SignatureInstrument (ctx, this);

@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using Xamarin.AsyncTests;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.TestFramework
 {

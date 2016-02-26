@@ -33,12 +33,12 @@ using System.Runtime.InteropServices;
 
 // General Information about the system assembly
 
-[assembly: AssemblyVersion (Consts.FxVersion)]
+[assembly: AssemblyVersion ("1.0.*")]
 
-[assembly: AssemblyCompany ("MONO development team")]
+[assembly: AssemblyCompany ("Xamarin")]
 [assembly: AssemblyCopyright ("(c) 2015 Xamarin")]
 [assembly: AssemblyDescription ("Mono.Security.NewTls.dll")]
-[assembly: AssemblyProduct ("MONO CLI")]
+[assembly: AssemblyProduct ("MONO TLS")]
 [assembly: AssemblyTitle ("Mono.Security.NewTls.dll")]
 [assembly: CLSCompliant (false)]
 [assembly: ComVisible (false)]

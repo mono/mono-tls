@@ -29,7 +29,6 @@ using System.Collections.Generic;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Framework;
 using Xamarin.AsyncTests.Portable;
-using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestFeatures
 {

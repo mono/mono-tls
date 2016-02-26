@@ -26,24 +26,38 @@
 using System;
 using Xamarin.AsyncTests;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.TestFramework;
-using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestFramework
 {
+	using ConnectionFramework;
 	using TestFeatures;
 
 	[InstrumentationConnectionProvider (Identifier = "ClientAndServerProvider")]
-	public class InstrumentationConnectionProvider : ClientAndServerProvider
+	public class InstrumentationConnectionProvider : MonoConnectionTestProvider
 	{
-		public InstrumentationCategory Category {
-			get;
-			private set;
+		new public InstrumentationCategory Category {
+			get { return (InstrumentationCategory)base.Category; }
 		}
 
-		public InstrumentationConnectionFlags Flags {
-			get;
-			private set;
+		new public InstrumentationConnectionFlags Flags {
+			get { return (InstrumentationConnectionFlags)base.Flags; }
+		}
+
+		public override IClient CreateClient (ConnectionParameters parameters)
+		{
+			var provider = (MonoConnectionProvider)Client;
+			var instrumentationExtension = new InstrumentationConnectionExtension (provider, parameters);
+			return provider.CreateMonoClient (parameters, instrumentationExtension);
+		}
+
+		public override IServer CreateServer (ConnectionParameters parameters)
+		{
+			var provider = (MonoConnectionProvider)Server;
+			var instrumentationExtension = new InstrumentationConnectionExtension (provider, parameters);
+			return provider.CreateMonoServer (parameters, instrumentationExtension);
 		}
 
 		static string GetFlagsName (InstrumentationConnectionFlags flags)
@@ -51,16 +65,14 @@ namespace Mono.Security.NewTls.TestFramework
 			if ((flags & InstrumentationConnectionFlags.ManualClient) != 0)
 				return ":ManualClient";
 			else if ((flags & InstrumentationConnectionFlags.ManualServer) != 0)
-				return ":ManuelServer";
+				return ":ManualServer";
 			else
 				return string.Empty;
 		}
 
 		public InstrumentationConnectionProvider (ConnectionProvider client, ConnectionProvider server, InstrumentationCategory category, InstrumentationConnectionFlags flags)
-			: base (client, server, string.Format ("{0}:{1}:{2}{3}", client.Name, server.Name, category, GetFlagsName (flags)))
+			: base (client, server, (MonoConnectionTestCategory)category, (MonoConnectionTestFlags)flags)
 		{
-			Category = category;
-			Flags = flags;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Cipher
 {
@@ -165,19 +166,23 @@ namespace Mono.Security.NewTls.Cipher
 		}
 
 		static readonly CipherSuiteCode[] SupportedCiphersTls12 = {
+			#if FIXME
 			// ECDHE Galois-Counter Cipher Suites
 			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
 			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			#endif
 
 			// Galois-Counter Cipher Suites
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
 
+			#if FIXME
 			// ECDHE Cipher Suites
 			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
 			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
 			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
 			CipherSuiteCode.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+			#endif
 
 			// Diffie-Hellman Cipher Suites
 			CipherSuiteCode.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,

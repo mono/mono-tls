@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net.Security;
 using System.Security.Cryptography;
-using Mono.Security.Interface;
+using MSI = Mono.Security.Interface;
 using MX = Mono.Security.X509;
 using SSCX = System.Security.Cryptography.X509Certificates;
+
+using XITlsConfiguration = Mono.Security.Providers.NewTls.ITlsConfiguration;
 
 namespace Mono.Security.NewTls
 {
@@ -11,20 +13,20 @@ namespace Mono.Security.NewTls
 	public delegate bool ClientCertValidationCallback (ClientCertificateParameters certParams, MX.X509Certificate certificate, MX.X509Chain chain, SslPolicyErrors sslPolicyErrors);
 	public delegate SSCX.X509Certificate LocalCertSelectionCallback (string targetHost, SSCX.X509CertificateCollection localCertificates, SSCX.X509Certificate remoteCertificate, string[] acceptableIssuers);
 
-	public class TlsConfiguration : SecretParameters
+	public class TlsConfiguration : MSI.SecretParameters, XITlsConfiguration
 	{
-		readonly TlsProtocols supportedProtocols;
-		readonly TlsProtocolCode requestedProtocol;
+		readonly MSI.TlsProtocols supportedProtocols;
+		readonly MSI.TlsProtocolCode requestedProtocol;
 
-		public TlsProtocols SupportedProtocols {
+		public MSI.TlsProtocols SupportedProtocols {
 			get { return supportedProtocols; }
 		}
 
-		internal TlsProtocolCode RequestedProtocol {
+		internal MSI.TlsProtocolCode RequestedProtocol {
 			get { return requestedProtocol; }
 		}
 
-		public MonoTlsSettings TlsSettings {
+		public MSI.MonoTlsSettings TlsSettings {
 			get;
 			private set;
 		}
@@ -57,7 +59,7 @@ namespace Mono.Security.NewTls
 
 		internal const RenegotiationFlags DefaultRenegotiationFlags = RenegotiationFlags.SecureRenegotiation | RenegotiationFlags.SendClientHelloExtension;
 
-		public TlsConfiguration (TlsProtocols protocols, MonoTlsSettings settings, string targetHost)
+		public TlsConfiguration (MSI.TlsProtocols protocols, MSI.MonoTlsSettings settings, string targetHost)
 		{
 			supportedProtocols = protocols;
 			requestedProtocol = CheckProtocol (settings, ref supportedProtocols, false);
@@ -67,12 +69,12 @@ namespace Mono.Security.NewTls
 			if (settings != null)
 				UserSettings = (UserSettings)settings.UserSettings;
 			if (UserSettings == null)
-				UserSettings = new UserSettings ();
+				UserSettings = new UserSettings (settings);
 
 			RenegotiationFlags = DefaultRenegotiationFlags;
 		}
 
-		public TlsConfiguration (TlsProtocols protocols, MonoTlsSettings settings, MX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
+		public TlsConfiguration (MSI.TlsProtocols protocols, MSI.MonoTlsSettings settings, MX.X509Certificate certificate, AsymmetricAlgorithm privateKey)
 		{
 			supportedProtocols = protocols;
 			requestedProtocol = CheckProtocol (settings, ref supportedProtocols, true);
@@ -83,65 +85,65 @@ namespace Mono.Security.NewTls
 			if (settings != null)
 				UserSettings = (UserSettings)settings.UserSettings;
 			if (UserSettings == null)
-				UserSettings = new UserSettings ();
+				UserSettings = new UserSettings (settings);
 
 			RenegotiationFlags = DefaultRenegotiationFlags;
 		}
 
 		#region Protocol Versions
 
-		static TlsProtocolCode CheckProtocol (MonoTlsSettings settings, ref TlsProtocols protocols, bool isServer)
+		static MSI.TlsProtocolCode CheckProtocol (MSI.MonoTlsSettings settings, ref MSI.TlsProtocols protocols, bool isServer)
 		{
 			if (settings != null && settings.EnabledProtocols != null)
-				protocols = (TlsProtocols)settings.EnabledProtocols.Value;
+				protocols = (MSI.TlsProtocols)settings.EnabledProtocols.Value;
 
 			if (isServer)
-				protocols &= TlsProtocols.ServerMask;
+				protocols &= MSI.TlsProtocols.ServerMask;
 			else
-				protocols &= TlsProtocols.ClientMask;
+				protocols &= MSI.TlsProtocols.ClientMask;
 
 			if (protocols == 0)
-				throw new TlsException (AlertDescription.ProtocolVersion);
+				throw new MSI.TlsException (MSI.AlertDescription.ProtocolVersion);
 
-			if ((protocols & TlsProtocols.Tls12) != 0)
-				return TlsProtocolCode.Tls12;
-			if ((protocols & TlsProtocols.Tls11) != 0)
-				return TlsProtocolCode.Tls11;
-			if ((protocols & TlsProtocols.Tls10) != 0)
-				return TlsProtocolCode.Tls10;
+			if ((protocols & MSI.TlsProtocols.Tls12) != 0)
+				return MSI.TlsProtocolCode.Tls12;
+			if ((protocols & MSI.TlsProtocols.Tls11) != 0)
+				return MSI.TlsProtocolCode.Tls11;
+			if ((protocols & MSI.TlsProtocols.Tls10) != 0)
+				return MSI.TlsProtocolCode.Tls10;
 
-			throw new TlsException (AlertDescription.ProtocolVersion);
+			throw new MSI.TlsException (MSI.AlertDescription.ProtocolVersion);
 		}
 
-		public bool IsSupportedClientProtocol (TlsProtocolCode protocol)
+		public bool IsSupportedClientProtocol (MSI.TlsProtocolCode protocol)
 		{
 			switch (protocol) {
-			case TlsProtocolCode.Tls10:
-				return (supportedProtocols & TlsProtocols.Tls10Server) != 0;
-			case TlsProtocolCode.Tls11:
-				return (supportedProtocols & TlsProtocols.Tls11Server) != 0;
-			case TlsProtocolCode.Tls12:
-				return (supportedProtocols & TlsProtocols.Tls12Server) != 0;
+			case MSI.TlsProtocolCode.Tls10:
+				return (supportedProtocols & MSI.TlsProtocols.Tls10Server) != 0;
+			case MSI.TlsProtocolCode.Tls11:
+				return (supportedProtocols & MSI.TlsProtocols.Tls11Server) != 0;
+			case MSI.TlsProtocolCode.Tls12:
+				return (supportedProtocols & MSI.TlsProtocols.Tls12Server) != 0;
 			default:
 				return false;
 			}
 		}
 
-		public bool IsSupportedServerProtocol (TlsProtocolCode protocol)
+		public bool IsSupportedServerProtocol (MSI.TlsProtocolCode protocol)
 		{
 			switch (protocol) {
-			case TlsProtocolCode.Tls10:
-				return (supportedProtocols & TlsProtocols.Tls10Client) != 0;
-			case TlsProtocolCode.Tls11:
-				return (supportedProtocols & TlsProtocols.Tls11Client) != 0;
-			case TlsProtocolCode.Tls12:
-				return (supportedProtocols & TlsProtocols.Tls12Client) != 0;
+			case MSI.TlsProtocolCode.Tls10:
+				return (supportedProtocols & MSI.TlsProtocols.Tls10Client) != 0;
+			case MSI.TlsProtocolCode.Tls11:
+				return (supportedProtocols & MSI.TlsProtocols.Tls11Client) != 0;
+			case MSI.TlsProtocolCode.Tls12:
+				return (supportedProtocols & MSI.TlsProtocols.Tls12Client) != 0;
 			default:
 				return false;
 			}
 		}
 
-		public static bool IsTls10OrNewer (TlsProtocolCode protocol)
+		public static bool IsTls10OrNewer (MSI.TlsProtocolCode protocol)
 		{
 			return IsTls10OrNewer ((short)protocol);
 		}
@@ -151,7 +153,7 @@ namespace Mono.Security.NewTls
 			return (code >> 8) == 3 && (code & 0x00ff) > 1;
 		}
 
-		public static bool IsTls12OrNewer (TlsProtocolCode protocol)
+		public static bool IsTls12OrNewer (MSI.TlsProtocolCode protocol)
 		{
 			return IsTls12OrNewer ((short)protocol);
 		}

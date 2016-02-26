@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Mono.Security.NewTls.TestProvider</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
-    <AssemblyName>Mono.Security.NewTls.TestProvider</AssemblyName>
+    <AssemblyName>Mono.Security.NewTls.Mac</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\new-tls.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
@@ -33,6 +33,7 @@
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <PackageSigningKey>Developer ID Installer</PackageSigningKey>
     <Profiling>false</Profiling>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -48,6 +49,9 @@
     <EnablePackageSigning>false</EnablePackageSigning>
     <DefineConstants>MACUI;HAVE_OPENSSL</DefineConstants>
     <Profiling>false</Profiling>
+    <LinkMode>SdkOnly</LinkMode>
+    <XamMacArch>x86_64</XamMacArch>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,6 +62,9 @@
     </Reference>
     <Reference Include="Mono.Security" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="Mono.Security.Providers.OldTls" />
+    <Reference Include="Mono.Security.Providers.DotNet" />
+    <Reference Include="Mono.Security.Providers.NewTls" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\external\web-tests\Xamarin.AsyncTests.MacUI\AppDelegate.cs">
@@ -71,7 +78,6 @@
   </ItemGroup>
   <Import Project="..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.AsyncTests.PortableImpl\Xamarin.AsyncTests.PortableImpl.projitems')" />
   <Import Project="..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems" Label="Shared" Condition="Exists('..\..\Mono.Security.NewTls.TestProvider\Mono.Security.NewTls.TestProvider.projitems')" />
-  <Import Project="..\..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems" Label="Shared" Condition="Exists('..\..\external\web-tests\Xamarin.WebTests.PortableImpl\Xamarin.WebTests.PortableImpl.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
@@ -83,10 +89,6 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
-      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
-      <Name>Mono.Security.NewTls.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.TestFramework\Mono.Security.NewTls.TestFramework.csproj">
       <Project>{EA1D2205-446B-4B54-823A-94985CC36A17}</Project>
       <Name>Mono.Security.NewTls.TestFramework</Name>
@@ -98,10 +100,6 @@
     <ProjectReference Include="..\Mono.Security.NewTls\Mono.Security.NewTls.csproj">
       <Project>{1CEE00D1-175B-41E5-8EB0-D7E1471DF700}</Project>
       <Name>Mono.Security.NewTls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mono.Security.Providers.NewTls\Mono.Security.Providers.NewTls.csproj">
-      <Project>{A3824ECB-B185-48C8-96F2-F4B5171366FB}</Project>
-      <Name>Mono.Security.Providers.NewTls</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Mono.Security.NewTls.Tests\Mono.Security.NewTls.Tests.csproj">
       <Project>{96EBF2A3-C7E8-4295-9715-938E3A1CA4AD}</Project>
@@ -118,6 +116,26 @@
     <ProjectReference Include="..\..\external\web-tests\Xamarin.AsyncTests.UI\Xamarin.AsyncTests.UI.csproj">
       <Project>{49780FD0-2761-4C20-ACC5-5956FFEBD51F}</Project>
       <Name>Xamarin.AsyncTests.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
+      <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
+      <Name>Mono.Security.NewTls.Instrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Mac\Xamarin.WebTests.PortableSecurity.Mac\Xamarin.WebTests.PortableSecurity.Mac.csproj">
+      <Project>{BC0385D6-52A8-41D1-9E72-3AF768C42661}</Project>
+      <Name>Xamarin.WebTests.PortableSecurity.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Mac\Xamarin.WebTests.TestProvider.Mac\Xamarin.WebTests.TestProvider.Mac.csproj">
+      <Project>{9390670C-C319-4817-95FC-7C83E9B708E3}</Project>
+      <Name>Xamarin.WebTests.TestProvider.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Mac\Mono.Security.Interface\Mono.Security.Interface.csproj">
+      <Project>{D8CF5744-B13E-4134-A4BF-9E219261C1BF}</Project>
+      <Name>Mono.Security.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Xamarin.WebTests.MonoFramework\Xamarin.WebTests.MonoFramework.csproj">
+      <Project>{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}</Project>
+      <Name>Xamarin.WebTests.MonoFramework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -27,20 +27,19 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.Resources;
 using Xamarin.WebTests.TestFramework;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
-using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.MonoTestFeatures;
 
 namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 	using TestFeatures;
 
-	[Work]
 	[AsyncTestFixture]
 	public class SelectCiphersTests
 	{

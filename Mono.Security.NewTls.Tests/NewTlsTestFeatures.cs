@@ -27,22 +27,21 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using Mono.Security.NewTls.TestFramework;
+using Mono.Security.NewTls.Tests;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
-using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.HttpFramework;
 using Xamarin.WebTests.ConnectionFramework;
 using Xamarin.WebTests.TestFramework;
-using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 
-[assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures))]
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeaturesProvider))]
+[assembly: AsyncTestSuite (typeof (NewTlsTestFeatures), "NewTls", typeof (SharedWebTestFeatures))]
+
+[assembly: DependencyProvider (typeof (NewTlsTestFeaturesProvider))]
 [assembly: RequireDependency (typeof (ConnectionProviderFactory))]
 [assembly: RequireDependency (typeof (ICryptoProvider))]
 [assembly: RequireDependency (typeof (ICertificateProvider))]
 [assembly: RequireDependency (typeof (IPortableSupport))]
-[assembly: RequireDependency (typeof (IPortableWebSupport))]
 
 namespace Mono.Security.NewTls.Tests
 {
@@ -64,7 +63,7 @@ namespace Mono.Security.NewTls.Tests
 		}
 	}
 
-	public class NewTlsTestFeatures : SharedWebTestFeatures
+	public class NewTlsTestFeatures : ITestConfigurationProvider, ISingletonInstance
 	{
 		public static NewTlsTestFeatures Instance {
 			get { return DependencyInjector.Get<NewTlsTestFeatures> (); }
@@ -102,25 +101,12 @@ namespace Mono.Security.NewTls.Tests
 		public readonly TestFeature HttpsWithOldTLS = new TestFeature ("HttpsWithOldTLS", "Use Mono's existing web stack with the old TLS", false);
 		public readonly TestFeature HttpsWithNewTLS = new TestFeature ("HttpsWithNewTLS", "Use Mono's existing web stack with the new TLS", true);
 
-		public override string Name {
+		public string Name {
 			get { return "Mono.Security.NewTls.Tests"; }
 		}
 
-		protected override bool HasMonoVersion (Version version)
-		{
-			return true;
-		}
-
-		protected override bool IsNetworkAvailable ()
-		{
-			return true;
-		}
-
-		public override IEnumerable<TestFeature> Features {
+		public IEnumerable<TestFeature> Features {
 			get {
-				foreach (var feature in base.Features)
-					yield return feature;
-
 				yield return Hello;
 				yield return DotNetCryptoProvider;
 				yield return MonoCryptoProvider;
@@ -134,11 +120,8 @@ namespace Mono.Security.NewTls.Tests
 			}
 		}
 
-		public override IEnumerable<TestCategory> Categories {
+		public IEnumerable<TestCategory> Categories {
 			get {
-				foreach (var category in base.Categories)
-					yield return category;
-
 				yield return RenegotiationAttribute.Instance;
 			}
 		}
@@ -173,17 +156,17 @@ namespace Mono.Security.NewTls.Tests
 		}
 
 		[AttributeUsage (AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-		public class SelectServerCertificateAttribute : TestParameterAttribute, ITestParameterSource<ServerCertificateType>
+		public class SelectServerCertificateAttribute : TestParameterAttribute, ITestParameterSource<CertificateResourceType>
 		{
 			public SelectServerCertificateAttribute (string filter = null, TestFlags flags = TestFlags.Browsable)
 				: base (filter, flags)
 			{
 			}
 
-			public IEnumerable<ServerCertificateType> GetParameters (TestContext ctx, string filter)
+			public IEnumerable<CertificateResourceType> GetParameters (TestContext ctx, string filter)
 			{
-				yield return ServerCertificateType.LocalCA;
-				yield return ServerCertificateType.SelfSigned;
+				yield return CertificateResourceType.ServerCertificateFromLocalCA;
+				yield return CertificateResourceType.SelfSignedServerCertificate;
 			}
 		}
 	}

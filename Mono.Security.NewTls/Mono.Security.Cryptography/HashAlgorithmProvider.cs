@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using Mono.Security.NewTls;
+using Mono.Security.Interface;
 
 namespace Mono.Security.Cryptography
 {

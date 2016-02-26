@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{F533A15D-8651-43F4-B293-7934638C592B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mono.Security.NewTls.Instrumentation</RootNamespace>
+    <AssemblyName>Mono.Security.NewTls.Instrumentation</AssemblyName>
+    <TargetFrameworkProfile>Profile24</TargetFrameworkProfile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\new-tls.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;INSTRUMENTATION</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Mono.Security.NewTls\ClientCertificateParameters.cs" />
+    <Compile Include="Mono.Security.NewTls\ClientCertificateType.cs" />
+    <Compile Include="Mono.Security.NewTls\ContentType.cs" />
+    <Compile Include="Mono.Security.NewTls\DebugHelper.cs" />
+    <Compile Include="Mono.Security.NewTls\DisposeContext.cs" />
+    <Compile Include="Mono.Security.NewTls\HandshakeHashType.cs" />
+    <Compile Include="Mono.Security.NewTls\HandshakeInstrumentType.cs" />
+    <Compile Include="Mono.Security.NewTls\IHashAlgorithm.cs" />
+    <Compile Include="Mono.Security.NewTls\Instrumentation.cs" />
+    <Compile Include="Mono.Security.NewTls\InstrumentationEventSink.cs" />
+    <Compile Include="Mono.Security.NewTls\ITlsContext.cs" />
+    <Compile Include="Mono.Security.NewTls\NamedCurve.cs" />
+    <Compile Include="Mono.Security.NewTls\RenegotiationFlags.cs" />
+    <Compile Include="Mono.Security.NewTls\SecurityStatus.cs" />
+    <Compile Include="Mono.Security.NewTls\SettingsProvider.cs" />
+    <Compile Include="Mono.Security.NewTls\SignatureAlgorithmType.cs" />
+    <Compile Include="Mono.Security.NewTls\SignatureAndHashAlgorithm.cs" />
+    <Compile Include="Mono.Security.NewTls\SignatureParameters.cs" />
+    <Compile Include="Mono.Security.NewTls\SignatureProvider.cs" />
+    <Compile Include="Mono.Security.NewTls\TlsStream.cs" />
+    <Compile Include="Mono.Security.NewTls\UserSettings.cs" />
+    <Compile Include="Mono.Security.NewTls\ILogger.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Mono.Security.NewTls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Xamarin.WebTests.PortableSecurity">
+      <HintPath>..\external\web-tests\PCL\Xamarin.WebTests.PortableSecurity.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security.Interface">
+      <HintPath>..\external\web-tests\PCL\Mono.Security.Interface.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

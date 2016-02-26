@@ -6,6 +6,7 @@ using Mono.Security.NewTls;
 using Mono.Security.NewTls.TestFramework;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Tests
 {

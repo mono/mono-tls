@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Security.Cryptography;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Cipher
 {
@@ -50,7 +51,7 @@ namespace Mono.Security.NewTls.Cipher
 
 		public SignatureTls12 (TlsBuffer incoming)
 		{
-			SignatureAlgorithm = new SignatureAndHashAlgorithm (incoming);
+			SignatureAlgorithm = SignatureHelper.DecodeSignatureAndHashAlgorithm (incoming);
 			Signature = Add (incoming.ReadSecureBuffer (incoming.ReadInt16 ()));
 		}
 
@@ -61,7 +62,7 @@ namespace Mono.Security.NewTls.Cipher
 
 		public override void Write (TlsStream stream)
 		{
-			SignatureAlgorithm.Encode (stream);
+			SignatureHelper.EncodeSignatureAndHashAlgorithm (SignatureAlgorithm, stream);
 			stream.Write ((short)Signature.Size);
 			stream.Write (Signature.Buffer);
 		}

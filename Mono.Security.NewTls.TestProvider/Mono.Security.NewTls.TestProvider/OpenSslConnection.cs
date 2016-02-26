@@ -36,10 +36,11 @@ using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
-using Xamarin.WebTests.Portable;
+using Xamarin.WebTests.MonoConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.Server;
 using Mono.Security.Cryptography;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.TestProvider
 {
@@ -58,7 +59,7 @@ namespace Mono.Security.NewTls.TestProvider
 
 		protected NativeOpenSsl openssl;
 		OpenSslConnectionProvider provider;
-		TlsConnectionInfo connectionInfo;
+		MonoTlsConnectionInfo connectionInfo;
 		TaskCompletionSource<object> createTcs;
 
 		public ConnectionProvider Provider {
@@ -89,15 +90,6 @@ namespace Mono.Security.NewTls.TestProvider
 			get;
 		}
 
-		bool IMonoCommonConnection.SupportsInstrumentation {
-			get { return false; }
-		}
-
-		InstrumentationProvider IMonoCommonConnection.InstrumentationProvider {
-			get { throw new NotSupportedException (); }
-			set { throw new NotSupportedException (); }
-		}
-
 		public ProtocolVersions ProtocolVersion {
 			get {
 				switch (openssl.Protocol) {
@@ -113,12 +105,12 @@ namespace Mono.Security.NewTls.TestProvider
 			}
 		}
 
-		public TlsConnectionInfo GetConnectionInfo ()
+		public MonoTlsConnectionInfo GetConnectionInfo ()
 		{
 			if (connectionInfo != null)
 				return connectionInfo;
 
-			connectionInfo = new TlsConnectionInfo {
+			connectionInfo = new MonoTlsConnectionInfo {
 				CipherSuiteCode = (CipherSuiteCode)openssl.CurrentCipher
 			};
 

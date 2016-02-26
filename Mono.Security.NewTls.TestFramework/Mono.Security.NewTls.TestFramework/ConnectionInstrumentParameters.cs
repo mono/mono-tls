@@ -25,15 +25,15 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
 	public abstract class ConnectionInstrumentParameters : InstrumentationParameters
 	{
-		public ConnectionInstrumentParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
+		public ConnectionInstrumentParameters (InstrumentationCategory category, string identifier, X509Certificate certificate)
 			: base (category, identifier, certificate)
 		{
 		}

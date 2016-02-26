@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Cipher
 {

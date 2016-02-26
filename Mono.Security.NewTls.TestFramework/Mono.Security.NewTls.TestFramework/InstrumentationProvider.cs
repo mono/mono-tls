@@ -25,12 +25,13 @@
 // THE SOFTWARE.
 using System;
 using Xamarin.AsyncTests;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.TestFramework
 {
 	public interface InstrumentationProvider
 	{
-		Instrumentation CreateInstrument (TestContext ctx);
+		Instrumentation CreateInstrument (TestContext ctx, MonoTlsSettings settings);
 	}
 }
 

@@ -25,13 +25,12 @@
 // THE SOFTWARE.
 using System;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	using TestFramework;
 
-	public sealed class OpenSslConnectionProvider : ConnectionProvider, IMonoConnectionProvider
+	public sealed class OpenSslConnectionProvider : ConnectionProvider
 	{
 		public OpenSslConnectionProvider (ConnectionProviderFactory factory)
 			: base (factory, ConnectionProviderType.OpenSsl,
@@ -51,11 +50,6 @@ namespace Mono.Security.NewTls.TestProvider
 			get { return ProtocolVersions.Tls10 | ProtocolVersions.Tls11 | ProtocolVersions.Tls12; }
 		}
 
-		public override bool IsCompatibleWith (ConnectionProviderType type)
-		{
-			return true;
-		}
-
 		public override IClient CreateClient (ConnectionParameters parameters)
 		{
 			return new OpenSslClient (this, parameters);
@@ -67,11 +61,6 @@ namespace Mono.Security.NewTls.TestProvider
 		}
 
 		protected override ISslStreamProvider GetSslStreamProvider ()
-		{
-			throw new InvalidOperationException ();
-		}
-
-		protected override IHttpProvider GetHttpProvider ()
 		{
 			throw new InvalidOperationException ();
 		}

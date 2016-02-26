@@ -29,9 +29,10 @@
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
+    <Profiling>false</Profiling>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -39,17 +40,20 @@
     <ConsolePause>false</ConsolePause>
     <UseRefCounting>false</UseRefCounting>
     <UseSGen>false</UseSGen>
-    <DefineConstants>NET_4_5;MOBILE;INSIDE_MONO_SECURITY</DefineConstants>
+    <DefineConstants>NET_4_5;MOBILE;INSIDE_MONO_SECURITY;INSIDE_MONO_NEWTLS</DefineConstants>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <CreatePackage>false</CreatePackage>
     <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
+    <Profiling>false</Profiling>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
     <Reference Include="Mono.Security" />
+	<Reference Include="Mono.Security.Providers.NewTls" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Mono.Security.NewTls\Properties\AssemblyInfo.cs">
@@ -162,9 +166,6 @@
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CbcBlockCipher.cs">
       <Link>Mono.Security.NewTls.Cipher\CbcBlockCipher.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs">
-      <Link>Mono.Security.NewTls.Cipher\CipherAlgorithmType.cs</Link>
     </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\Mono.Security.NewTls.Cipher\CipherSuite.cs">
       <Link>Mono.Security.NewTls.Cipher\CipherSuite.cs</Link>
@@ -391,9 +392,6 @@
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\math\ec\multiplier\WTauNafPreCompInfo.cs">
       <Link>BouncyCastle\math\ec\multiplier\WTauNafPreCompInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Mono.Security.Providers\common\Consts.cs">
-      <Link>common\Consts.cs</Link>
-    </Compile>
     <Compile Include="..\..\Mono.Security.NewTls\BouncyCastle\crypto\parameters\ECDomainParameters.cs">
       <Link>BouncyCastle\crypto\parameters\ECDomainParameters.cs</Link>
     </Compile>
@@ -446,9 +444,13 @@
     <Folder Include="Mono.Security.NewTls.EC\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
-      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
-      <Name>Mono.Security.NewTls.Interface</Name>
+    <ProjectReference Include="..\..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
+      <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
+      <Name>Mono.Security.NewTls.Instrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\web-tests\Mac\Mono.Security.Interface\Mono.Security.Interface.csproj">
+      <Project>{D8CF5744-B13E-4134-A4BF-9E219261C1BF}</Project>
+      <Name>Mono.Security.Interface</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

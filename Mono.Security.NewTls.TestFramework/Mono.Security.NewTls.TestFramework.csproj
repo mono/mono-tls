@@ -40,12 +40,8 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\IEncryptionTestHost.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IHashTestHost.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\IRandomNumberGenerator.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoCommonConnection.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoServer.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoClient.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\IsSupportedConstraint.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationTestRunner.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\ProtocolVersionsAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrument.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationProvider.cs" />
@@ -55,7 +51,6 @@
     <Compile Include="Mono.Security.NewTls.TestFeatures\SignatureInstrumentTestRunnerAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\SignatureInstrumentType.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationCategory.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionHelper.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrument.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentTestRunner.cs" />
@@ -71,8 +66,6 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\CipherInstrumentParameters.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\CipherInstrumentParametersAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\CipherInstrumentTestRunnerAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IsEqualBlob.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoSslStream.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationTestFeatures.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentTestRunner.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentParameters.cs" />
@@ -87,17 +80,16 @@
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionHandler.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\RenegotiationInstrumentConnectionHandler.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\ConnectionInstrumentConnectionHandler.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\DefaultInstrumentationConnectionHandler.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\RenegotiationAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionFilter.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionFlags.cs" />
     <Compile Include="Mono.Security.NewTls.TestFramework\InstrumentationConnectionProvider.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationConnectionProviderAttribute.cs" />
     <Compile Include="Mono.Security.NewTls.TestFeatures\InstrumentationConnectionFlagsAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\MonoConnectionParameters.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\IMonoConnectionProvider.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFeatures\CipherSuiteAttribute.cs" />
-    <Compile Include="Mono.Security.NewTls.TestFramework\CipherList.cs" />
+    <Compile Include="Mono.Security.NewTls.ConnectionFramework\IConnectionProviderExtensions.cs" />
+    <Compile Include="Mono.Security.NewTls.ConnectionFramework\InstrumentationConnectionExtension.cs" />
+    <Compile Include="Mono.Security.NewTls.ConnectionFramework\InstrumentationHelpers.cs" />
+    <Compile Include="Mono.Security.NewTls.ConnectionFramework\IMonoTlsProviderExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\external\web-tests\build\BuildTools.targets" />
@@ -111,10 +103,6 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <ProjectReference Include="..\Mono.Security.NewTls.Interface\Mono.Security.NewTls.Interface.csproj">
-      <Project>{E471C608-9CA8-4787-B5A8-363CDADD9E82}</Project>
-      <Name>Mono.Security.NewTls.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\external\web-tests\Xamarin.AsyncTests\Xamarin.AsyncTests.csproj">
       <Project>{CE125B3F-AD36-4EDD-B3D5-4CDBE430924A}</Project>
       <Name>Xamarin.AsyncTests</Name>
@@ -127,9 +115,26 @@
       <Project>{BEC2B807-EF3B-4013-B828-B3BB2AC1620D}</Project>
       <Name>Xamarin.AsyncTests.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mono.Security.NewTls.Instrumentation\Mono.Security.NewTls.Instrumentation.csproj">
+      <Project>{F533A15D-8651-43F4-B293-7934638C592B}</Project>
+      <Name>Mono.Security.NewTls.Instrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\external\web-tests\Xamarin.WebTests.MonoFramework\Xamarin.WebTests.MonoFramework.csproj">
+      <Project>{B8CB90A7-E1E9-4104-8E9E-3954FC5FC0FC}</Project>
+      <Name>Xamarin.WebTests.MonoFramework</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mono.Security.NewTls.TestFramework\" />
     <Folder Include="Mono.Security.NewTls.TestFeatures\" />
+    <Folder Include="Mono.Security.NewTls.ConnectionFramework\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Security.Interface">
+      <HintPath>..\external\web-tests\PCL\Mono.Security.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.WebTests.PortableSecurity">
+      <HintPath>..\external\web-tests\PCL\Xamarin.WebTests.PortableSecurity.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

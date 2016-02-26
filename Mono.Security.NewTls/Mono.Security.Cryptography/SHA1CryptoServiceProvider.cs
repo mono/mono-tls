@@ -38,6 +38,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Mono.Security.NewTls;
+using Mono.Security.Interface;
 
 namespace Mono.Security.Cryptography
 {

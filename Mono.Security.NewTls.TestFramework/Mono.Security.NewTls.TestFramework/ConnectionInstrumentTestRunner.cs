@@ -30,10 +30,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
 using Xamarin.WebTests.Resources;
 
 namespace Mono.Security.NewTls.TestFramework
@@ -54,13 +54,13 @@ namespace Mono.Security.NewTls.TestFramework
 			return new ConnectionInstrument (settings);
 		}
 
-		public sealed override Instrumentation CreateInstrument (TestContext ctx)
+		public sealed override Instrumentation CreateInstrument (TestContext ctx, MonoTlsSettings settings)
 		{
 			var instrumentation = new Instrumentation ();
 
-			var settings = new UserSettings ();
-			settings.EnableDebugging = Parameters.EnableDebugging;
-			var connectionInstrument = CreateConnectionInstrument (ctx, settings);
+			var userSettings = new UserSettings (settings);
+			userSettings.EnableDebugging = Parameters.EnableDebugging;
+			var connectionInstrument = CreateConnectionInstrument (ctx, userSettings);
 
 			instrumentation.SettingsInstrument = connectionInstrument;
 			instrumentation.EventSink = connectionInstrument.EventSink;

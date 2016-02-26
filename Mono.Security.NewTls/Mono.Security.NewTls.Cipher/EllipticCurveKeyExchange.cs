@@ -30,6 +30,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Utilities;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Cipher
 {

@@ -30,13 +30,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Constraints;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.Resources;
 using Xamarin.AsyncTests.Portable;
-using Xamarin.WebTests.Portable;
 
 namespace Mono.Security.NewTls.TestFramework
 {
@@ -50,7 +50,7 @@ namespace Mono.Security.NewTls.TestFramework
 		{
 		}
 
-		protected override InstrumentationConnectionHandler CreateConnectionHandler ()
+		protected override MonoConnectionHandler CreateConnectionHandler ()
 		{
 			return new ConnectionInstrumentConnectionHandler (this);
 		}
@@ -134,11 +134,11 @@ namespace Mono.Security.NewTls.TestFramework
 			};
 		}
 
-		protected static ICertificateValidator AcceptFromLocalCA {
+		protected static CertificateValidator AcceptFromLocalCA {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptFromCA (ResourceManager.LocalCACertificate); }
 		}
 
-		protected static ICertificateValidator AcceptSelfSigned {
+		protected static CertificateValidator AcceptSelfSigned {
 			get { return DependencyInjector.Get<ICertificateProvider> ().AcceptThisCertificate (ResourceManager.SelfSignedServerCertificate); }
 		}
 

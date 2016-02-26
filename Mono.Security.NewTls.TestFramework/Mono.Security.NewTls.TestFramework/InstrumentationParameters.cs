@@ -25,44 +25,33 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using Mono.Security.Interface;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 
 namespace Mono.Security.NewTls.TestFramework
 {
-	public abstract class InstrumentationParameters : MonoConnectionParameters
+	public abstract class InstrumentationParameters : MonoConnectionTestParameters
 	{
-		public InstrumentationCategory Category {
-			get;
-			private set;
+		new public InstrumentationCategory Category {
+			get { return (InstrumentationCategory)base.Category; }
 		}
 
-		public InstrumentationConnectionFlags ConnectionFlags {
-			get; set;
+		new public InstrumentationConnectionFlags ConnectionFlags {
+			get { return (InstrumentationConnectionFlags)base.ConnectionFlags; }
+			set { base.ConnectionFlags = (MonoConnectionTestFlags)value; }
 		}
 
-		public InstrumentationParameters (InstrumentationCategory category, string identifier, IServerCertificate certificate)
-			: base (identifier, certificate)
+		public InstrumentationParameters (InstrumentationCategory category, string identifier, X509Certificate certificate)
+			: base ((MonoConnectionTestCategory)category, identifier, certificate)
 		{
-			Category = category;
 		}
 
 		protected InstrumentationParameters (InstrumentationParameters other)
 			: base (other)
 		{
-			Category = other.Category;
-			ExpectedCipher = other.ExpectedCipher;
-			ConnectionFlags = other.ConnectionFlags;
-			ValidateCipherList = other.ValidateCipherList;
-		}
-
-		public bool ValidateCipherList {
-			get; set;
-		}
-
-		public CipherSuiteCode? ExpectedCipher {
-			get; set;
 		}
 	}
 }

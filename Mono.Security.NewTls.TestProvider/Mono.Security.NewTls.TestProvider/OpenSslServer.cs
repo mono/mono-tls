@@ -9,18 +9,15 @@ using System.Security.Cryptography.X509Certificates;
 using Mono.Security.NewTls.TestFramework;
 using Mono.Security.NewTls.TestProvider;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.Server;
 using Xamarin.WebTests.ConnectionFramework;
+using Xamarin.WebTests.MonoConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 
 namespace Mono.Security.NewTls.TestProvider
 {
 	public class OpenSslServer : OpenSslConnection, IMonoServer
 	{
-		public IServerCertificate Certificate {
-			get { return Parameters.ServerCertificate; }
-		}
-
 		public MonoConnectionParameters MonoParameters {
 			get { return base.Parameters as MonoConnectionParameters; }
 		}
@@ -40,8 +37,10 @@ namespace Mono.Security.NewTls.TestProvider
 			if (!IPAddress.IsLoopback (endpoint.Address) && endpoint.Address != IPAddress.Any)
 				throw new InvalidOperationException ();
 
+			var provider = DependencyInjector.Get<ICertificateProvider> ();
+
 			string password;
-			var data = CertificateProvider.GetRawCertificateData (Certificate, out password);
+			var data = provider.GetRawCertificateData (Parameters.ServerCertificate, out password);
 			openssl.SetCertificate (data, password);
 			openssl.Bind (endpoint);
 		}

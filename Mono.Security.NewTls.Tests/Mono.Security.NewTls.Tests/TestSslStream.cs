@@ -43,6 +43,7 @@ namespace Mono.Security.NewTls.Tests
 {
 	using TestFramework;
 
+	[Work]
 	[AsyncTestFixture (Timeout = 5000)]
 	public class TestSslStream
 	{

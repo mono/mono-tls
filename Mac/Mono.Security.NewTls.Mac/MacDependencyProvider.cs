@@ -26,28 +26,24 @@
 using System;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.MacUI;
+using Xamarin.WebTests.TestProvider;
 
 using AppKit;
 
 [assembly: AsyncTestSuite (typeof (Mono.Security.NewTls.Tests.NewTlsTestFeatures), true)]
-[assembly: DependencyProvider (typeof (Mono.Security.NewTls.Mac.MacDependencyProvider))]
 
 namespace Mono.Security.NewTls.Mac
 {
 	using TestProvider;
 	using Tests;
 
-	public class MacDependencyProvider : NewTlsDependencyProvider
+	public class MacDependencyProvider
 	{
-		public override void Initialize ()
-		{
-			base.Initialize ();
-			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());
-		}
-
 		static void Main (string[] args)
 		{
-			DependencyInjector.RegisterAssembly (typeof(MacDependencyProvider).Assembly);
+			DependencyInjector.RegisterAssembly (typeof(WebDependencyProvider).Assembly);
+			DependencyInjector.RegisterAssembly (typeof(NewTlsDependencyProvider).Assembly);
+			DependencyInjector.RegisterDependency<IBuiltinTestServer> (() => new BuiltinTestServer ());
 
 			NSApplication.Init ();
 			NSApplication.Main (args);

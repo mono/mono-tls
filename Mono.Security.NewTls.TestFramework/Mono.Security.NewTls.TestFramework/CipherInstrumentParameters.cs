@@ -25,8 +25,8 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Xamarin.AsyncTests;
-using Xamarin.WebTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
 
 namespace Mono.Security.NewTls.TestFramework
@@ -41,7 +41,7 @@ namespace Mono.Security.NewTls.TestFramework
 			private set;
 		}
 
-		public CipherInstrumentParameters (InstrumentationCategory category, CipherInstrumentType type, string identifier, IServerCertificate certificate)
+		public CipherInstrumentParameters (InstrumentationCategory category, CipherInstrumentType type, string identifier, X509Certificate certificate)
 			: base (category, identifier, certificate)
 		{
 			Type = type;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Text;
+using Mono.Security.Interface;
 
 namespace Mono.Security.NewTls.Extensions
 {

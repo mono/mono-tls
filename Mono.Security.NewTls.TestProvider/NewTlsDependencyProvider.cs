@@ -29,41 +29,52 @@ using System.Threading;
 using Xamarin.AsyncTests;
 using Xamarin.AsyncTests.Portable;
 using Xamarin.WebTests.ConnectionFramework;
-using Xamarin.WebTests.Portable;
-using Xamarin.WebTests.Providers;
+using Xamarin.WebTests.MonoConnectionFramework;
+using Xamarin.WebTests.MonoTestFramework;
 using Xamarin.WebTests.Server;
 
 using Mono.Security.Interface;
-using Mono.Security.Providers.NewTls;
+
+[assembly: DependencyProvider (typeof (Mono.Security.NewTls.TestProvider.NewTlsDependencyProvider))]
 
 namespace Mono.Security.NewTls.TestProvider
 {
+	using ConnectionFramework;
 	using TestFramework;
 
-	public abstract class NewTlsDependencyProvider : IDependencyProvider
+	public sealed class NewTlsDependencyProvider : IDependencyProvider, IExtensionProvider<MonoTlsProvider>
 	{
-		protected virtual ConnectionProviderFactory CreateConnectionProviderFactory ()
+		const ConnectionProviderFlags DefaultFlags = ConnectionProviderFlags.SupportsSslStream | ConnectionProviderFlags.SupportsHttp;
+		const ConnectionProviderFlags NewTlsFlags = DefaultFlags | ConnectionProviderFlags.SupportsTls12 |
+			ConnectionProviderFlags.SupportsAeadCiphers | // ConnectionProviderFlags.SupportsEcDheCiphers |
+			ConnectionProviderFlags.SupportsClientCertificates;
+
+		public void Initialize ()
 		{
-			return new MonoConnectionProviderFactory ();
-		}
-
-		public virtual void Initialize ()
-		{
-			DependencyInjector.RegisterDependency<NewTlsProvider> (() => {
-				var newTlsProvider = new NewTlsProvider ();
-				MonoTlsProviderFactory.InstallProvider (newTlsProvider);
-				return newTlsProvider;
-			});
-
-			DependencyInjector.RegisterDependency<IPortableSupport> (() => new PortableSupportImpl ());
-
-			DependencyInjector.RegisterDependency<IPortableWebSupport> (() => new PortableWebSupportImpl ());
-			DependencyInjector.RegisterDependency<ICertificateProvider> (() => new CertificateProvider ());
-			DependencyInjector.RegisterDependency<ConnectionProviderFactory> (() => CreateConnectionProviderFactory ());
+			DependencyInjector.RegisterAssembly (typeof(MonoTestFrameworkDependencyProvider).Assembly);
 
 			DependencyInjector.RegisterDependency<ICryptoProvider> (() => new CryptoProvider ());
+			DependencyInjector.RegisterExtension<MonoTlsProvider> (this);
 
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+			var factory = DependencyInjector.Get<MonoConnectionProviderFactory> ();
+
+			var newTlsProvider = MonoTlsProviderFactory.GetProvider ("newtls");
+			factory.RegisterProvider ("NewTLS", newTlsProvider, ConnectionProviderType.NewTLS, NewTlsFlags);
+
+			var oldTlsProvider = MonoTlsProviderFactory.GetProvider ("oldtls");
+			factory.RegisterProvider ("OldTLS", oldTlsProvider, ConnectionProviderType.OldTLS, DefaultFlags);
+		}
+
+		public IMonoTlsProviderExtensions GetExtensionObject (MonoTlsProvider provider)
+		{
+			if (provider.ID == MonoConnectionProviderFactory.NewTlsID)
+				return new MonoTlsProviderExtensions (provider);
+			return null;
+		}
+
+		IExtensionObject<MonoTlsProvider> IExtensionProvider<MonoTlsProvider>.GetExtensionObject (MonoTlsProvider provider)
+		{
+			return GetExtensionObject (provider);
 		}
 	}
 }

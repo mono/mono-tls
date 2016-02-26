@@ -30,18 +30,25 @@ namespace Mono.Security.NewTls.TestFramework
 	[Flags]
 	public enum InstrumentationConnectionFlags
 	{
+		#region Inherited from MonoConnectionTestFlags
+
 		None			= 0,
 
 		RequireMonoClient	= 1,
 		RequireMonoServer	= 2,
-		ClientInstrumentation	= 4,
-		ServerInstrumentation	= 8,
+		RequireMono		= RequireMonoClient | RequireMonoServer,
 
-		ManualClient		= 16,
-		ManualServer		= 32,
+		ManualClient		= 4,
+		ManualServer		= 8,
 
-		RequireTls12		= 64,
-		RequireEcDhe		= 128
+		RequireTls12		= 16,
+		RequireEcDhe		= 32,
+
+		#endregion
+
+		ClientInstrumentation	= 1024,
+		ServerInstrumentation	= 2048,
+		Instrumentation		= ClientInstrumentation | ServerInstrumentation,
 	}
 }
 
